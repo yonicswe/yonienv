@@ -1,0 +1,65 @@
+#!/bin/bash
+# file: svll 
+# svll parameter-completion
+
+repo="svn://snt.nice.com/NiceTrackMC"
+
+gen_svl_comp_strings () 
+{
+    svn ls $repo | while read o ; do 
+        echo -e $repo/$o
+        done
+}
+
+svl_func ()   #  By convention, the function name
+{                 #+ starts with an underscore.
+#     local cur
+    # Pointer to current completion word.
+    # By convention, it's named "cur" but this isn't strictly necessary.
+
+#  set -x
+
+#     COMPREPLY=()   # Array variable storing the possible completions.
+    echo -e "\nEntered $FUNCNAME" 
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    echo -e "\nCOMP_WORDS = ${COMP_WORDS[*]}\n"
+    echo -e "\nCOMP_CWORD = ${COMP_CWORD}\n"
+
+
+    cur="svn:"$cur;
+#     echo -e "\ncur = ${cur}\n"
+    
+    file_list=$(gen_svl_comp_strings)
+#     echo -e "file_list = ${file_list}"
+    COMPREPLY=( $( compgen -W "${file_list}" -- $cur ) );
+
+    echo -e  "\nCOMPREPLY = ${COMPREPLY[*]}\n"
+#     echo -e  "\nCOMP_LINE = ${nCOMP_LINE[*]}\n"
+
+#     case "$cur" in
+#         *)
+#             COMPREPLY=( $( compgen -W "$(svn ls $repo)" -- $cur ) );;
+
+    #       COMPREPLY=( $( compgen -W '-a -d -f -l -t -h --aoption --debug \
+    #                    --file --log --test --help --' -- $cur ) );;
+    #   Generate the completion matches and load them into $COMPREPLY array.
+    #   xx) May add more cases here.
+    #   yy)
+    #   zz)
+
+#     esac
+
+#  set +x
+
+    return 0
+}
+
+complete -F svl_func svll
+
+# function svll () 
+# {
+#     svn ls $1
+# }
+
+alias svll='svn ls '

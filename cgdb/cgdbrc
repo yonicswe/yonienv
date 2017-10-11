@@ -1,0 +1,5 @@
+set as=long
+set ic
+set winsplit=even
+set autosourcereload
+set syn=c

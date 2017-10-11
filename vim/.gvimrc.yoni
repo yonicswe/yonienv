@@ -1,0 +1,47 @@
+colorscheme morning
+winpos 100 55
+
+
+set lines=50
+set columns=200 
+set hlsearch
+set incsearch
+set nowrapscan
+set smartindent 
+set tabstop=3
+set shiftwidth=3
+set ic
+set paste
+set expandtab
+
+map <S-s> :w<CR>
+map <S-t> :tabedit 
+map <S-w> :tabclose<CR> 
+map <S-w> :tabclose<CR> 
+map <S-h> :nohlsearch<CR> 
+map <S-right> :tabnext<CR> 
+map <S-left> :tabprevious<CR> 
+map <C-q><C-a> :qa!<CR>
+
+
+
+vmap / y/<C-R>"<CR>
+
+set wildmenu
+set ruler
+set laststatus=2
+
+inoremap $1 ()<esc>i
+inoremap $2 []<esc>i
+inoremap $3 {}<esc>i
+inoremap $4 {<esc>o}<esc>O
+inoremap $q ''<esc>i
+inoremap $e ""<esc>i
+inoremap $t <><esc>i
+
+"
+"  for vimdiff
+"
+set diffopt+=iwhite
+
+

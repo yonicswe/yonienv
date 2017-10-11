@@ -1,0 +1,1 @@
+complete -W "moshedb ipswinqaDB ipswinqa1 ipswinqa2 orenelkin elkinqadb grably ipswinqa3 smsDB feis sql feis-acs feis-ronz" connect2remoteDesktop

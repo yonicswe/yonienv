@@ -1,0 +1,3 @@
+#!/bin/bash
+# shift 5; /usr/bin/gvimdiff -f "$@" 
+/usr/bin/gvimdiff -f $7 $6 

@@ -1,0 +1,52 @@
+#!/bin/bash
+_svn () 
+{
+ 	local cur cmds cmdOpts pOpts mOpts rOpts qOpts nOpts optsParam opt
+ 	local helpCmds optBase i
+	local path word
+    local file_list
+ 
+ 	COMPREPLY=()
+ 	cur=${COMP_WORDS[COMP_CWORD]}
+ 	if [[ ${COMP_WORDS[1]} != @($helpCmds) ]] && \
+ 	   [[ "$cur" != -* ]] || \
+ 	   [[ ${COMP_WORDS[COMP_CWORD-1]} == @($optsParam) ]] ; then
+
+		case ${COMP_WORDS[1]} in
+		ls)
+			path=${COMP_WORDS[COMP_CWORD]}
+
+            if [ -z ${path} ] ; then 
+                path=svn://snt.nice.com/NiceTrackMC/
+            fi                    
+
+            if [ $(echo $path | grep svn | wc -l ) -eq 0 ] ; then 
+                path=svn:${path}                    
+            fi
+
+			word=$(echo $path | sed 's,.*/,,')
+			path=$(echo $path | sed 's,/'$word'$,,')
+
+            echo "word=${word}"
+            echo "path=${path}"
+
+# 			file_list=( $(svn ls $path 2>/dev/null | \
+# 				grep -e "^$word" | \
+# 				sed -e "s,^,$path/," \
+# 				-e 's,^.*:,,' -e 's, $,,') )
+            file_list=( $(svn ls $path | sed 's|^|svn://snt.nice.com/NiceTrackMC/|g') )
+
+			COMPREPLY=( $(echo ${file_list[*]}) )
+
+            echo "COMPREPLY = ${COMPREPLY[*]} "
+			;;
+            
+
+		esac
+
+ 		return 0
+ 	fi
+ 
+ 	return 0
+ }
+complete -F _svn -o nospace svn

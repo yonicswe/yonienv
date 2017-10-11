@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/home/kuser/rpmbuild/BUILDROOT'
+let g:netrw_dirhist_2='/home/kuser/work/removeThirdParty/src/3d_party_4_5_8/removed/log4cpp-1.0'
+let g:netrw_dirhist_3='/home/kuser/work/removeThirdParty/src/NiceTrackI/Applications/HTTPWebEngine'
+let g:netrw_dirhist_4='/home/kuser/work/icm/config'

@@ -1,0 +1,13 @@
+#!/bin/bash
+# echo $@
+# echo -e "\$1 : $1";
+# echo -e "\$2 : $2";
+# echo -e "\$3 : $3";
+# echo -e "\$4 : $4";
+# echo -e "\$5 : $5";
+# echo -e "\$6 : $6";
+# echo -e "\$7 : $7";
+# echo -e "\$8 : $8";
+# echo -e "\$9 : $9";
+/usr/bin/vimdiff $7 $6 < /dev/tty
+# shift 5; /usr/bin/vimdiff -f "$@" < /dev/tty

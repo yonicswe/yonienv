@@ -1,0 +1,7 @@
+au FileType c   set grepprg=grep\ -nHr\ --include=*\.\[c,h\]\ 
+au FileType cpp set grepprg=grep\ -nHr\ --include=*\.\[c,h\]\ 
+set guifont=VL\ Gothic\ 13
+au FileType c    set guifont=VL\ Gothic\ 13
+au FileType perl set guifont=VL\ Gothic\ 13
+au FileType vim set guifont=VL\ Gothic\ 13
+

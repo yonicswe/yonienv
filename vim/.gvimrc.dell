@@ -1,0 +1,61 @@
+colorscheme yonic
+winpos 100 55
+
+
+set lines=50
+set columns=200 
+set hlsearch
+set incsearch
+set nowrapscan
+set smartindent 
+set cindent 
+set tabstop=3
+set shiftwidth=3
+set ic
+" set paste
+set expandtab
+
+map <S-s> :w<CR>
+map <S-t> :tabedit 
+map <S-w> :tabclose<CR> 
+map <S-w> :tabclose<CR> 
+map <S-h> :nohlsearch<CR> 
+map <S-right> :tabnext<CR> 
+map <S-left> :tabprevious<CR> 
+map <C-q><C-a> :qa!<CR>
+map <C-p> :pwd<CR>
+
+
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+" "let g:mapleader = ","
+
+" Fast saving
+nmap <leader>w :w!<cr>
+
+" Fast editing of the .vimrc
+map <leader>e :tabedit ~/.gvimrc<cr>
+map <leader>f :!figlet -m0 -f small 
+vmap <leader>f y:!figlet -m0 -f small <C-R>"  > x
+
+vmap / y/<C-R>"<CR>
+
+set wildmenu
+set ruler
+set laststatus=2
+
+"
+"  for vimdiff
+"
+set diffopt+=iwhite
+
+
+" Map auto complete of (, ", ', [
+inoremap $1 ()<esc>i
+inoremap $2 []<esc>i
+inoremap $3 {}<esc>i
+inoremap $4 {<esc>o}<esc>O
+inoremap $q ''<esc>i
+inoremap $e ""<esc>i
+inoremap $t <><esc>i

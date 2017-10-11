@@ -1,0 +1,1903 @@
+q
+q
+show user
+q
+show user
+quit
+show user
+show user sb
+q
+q
+q
+:q
+q
+l *(ib_register_device+0x5a4) 
+l
+q
+l *(ib_register_device+0x468) 
+q
+l *(ib_register_device+0x468) 
+q
+l *(ib_register_device+0x54a) 
+l *(ib_register_device+0x5a4) 
+q
+l *(ib_register_device+0x614) 
+q
+l *(ib_register_device+0x614) 
+l
+q
+l *(ib_register_device+0x6df)
+q
+l *(ib_register_device+0x6cd)
+q
+l *(ib_register_device+0x168)
+l *(ib_register_device+0x147)
+q
+l *(ib_register_device+0x5a4)
+q
+l *(rxe_register_device+0x31b)
+q
+l *(rxe_register_device+0x31b)
+q
+l *(ib_register_device+0x5a4)
+q
+l *(ib_register_device+0x415)
+q
+l *(ib_register_device+0x6d3)
+q
+l *(ib_register_device+0x6ff)
+q
+l *(ib_register_device+0x6ff)
+q
+l *(ib_register_device+0x6d3)
+q
+l *(ib_register_device+0x6d3)
+q
+l *(ib_register_device+0xd6)
+file drivers/infiniband/sw/rxe/rdma_rxe.ko 
+y
+l *(rxe_register_device+0x627)
+file drivers/infiniband/core/ib_core.ko 
+y
+l *(ib_register_device+0xd6)
+l *(ib_register_device+0x6d3)
+q
+l *(ib_register_device+0x740)
+q
+l *(ib_register_device+0x56f)
+dissa ib_register_device+0x56f
+disassemble ib_register_device+0x56f
+disassemble ib_register_device
+q
+l *(ib_register_device+0x2fb)
+q
+l *(ib_device_register_sysfs+0x142)
+q
+l *(ib_register_device+0x415)
+q
+l *(ib_register_device+0x415)
+q
+q
+file drivers/infiniband/core/device.c
+file drivers/infiniband/core/ib_core.ko
+l *(ib_register_device+0x5a4)
+file /lib/modules/4.12.0-rc1+/kernel/drivers/infiniband/core/ib_core.ko 
+y
+l *(ib_register_device+0x5a4)
+q
+l *(ib_register_device+0x409)
+l *(ib_mad_post_receive_mads+0xe1)
+q
+b print_hca_cap
+r
+n
+i b 
+r
+y
+s
+s
+up
+fin
+s
+r
+y
+s
+n
+s
+n
+s
+bt
+n
+f
+q
+y
+i b 
+q
+b print_hca_cap
+r
+n
+r
+y
+n
+r
+y
+s
+n
+s
+n
+s
+n
+n
+sb
+q
+y
+i b 
+q
+q
+q
+start
+n
+s
+b thread_main
+c
+q
+y
+b fill_cq
+r
+n
+q
+y
+b fill_cq
+r
+n
+p iter
+p outstand_wr
+p/x outstand_wr
+n
+n
+p iter
+n
+n
+sb
+q
+y
+i b 
+q
+r
+display iter 
+n
+p args
+info  args 
+up
+info  args 
+p argv
+bt
+f 0 
+n
+p tmp 
+p counter
+p cmp_num 
+q
+y
+l *(rxe_skb_tx_dtor+0x15)
+q
+b __ibv_modify_qp
+r
+s
+n
+q
+b __ibv_modify_qp
+r
+s
+s
+n
+c
+n
+c
+n
+bt
+up
+dow
+f 0 
+n
+p attr->qp_state
+n
+c
+q
+y
+r
+s
+n
+s
+s
+n
+p args
+i args 
+up
+dow
+q
+i b 
+i b 
+q
+i b 
+i b
+i args 
+r
+s
+up
+down
+n
+s
+s
+up
+down
+up
+n
+p ne
+n
+n
+i locals 
+n
+p ne 
+n
+n
+ir
+r
+y
+n
+p ne 
+n
+n
+p i 
+ p wc
+p wc[0]
+p wc[1]
+p wc[0]
+p wc[1]
+p nw 
+p ne 
+f 0 
+n
+p wc[1].wr_od
+p wc[1].wr_id
+p/x wc[1].wr_id
+f 0 
+r
+y
+s
+n
+s
+p sizeof(*wc)
+iq
+q
+n
+q
+y
+r
+c
+q
+q
+q
+start
+q
+y
+start
+q
+y
+q
+q
+b thread_main
+b rxe_poll_cq
+r
+q
+b rxe_poll_cq
+r
+n
+p sizeof(struct ibv_wc)
+sb
+q
+y
+r
+i b 
+r
+r
+bt
+u
+yp
+up
+down
+up
+down
+p wc_size
+down
+up
+up
+p sizeof(wc[0])
+q
+y
+i b 
+r
+n
+p src
+n
+p src
+n
+s
+p q
+p *q
+up
+n
+n
+p *q
+n
+p *q
+p/x *q
+n
+p src
+n
+p src
+up
+down
+n
+p wc[0]
+p wc[1]
+n
+r
+y
+n
+n
+p src
+n
+p src
+q
+y
+r
+bt
+up
+down
+q
+y
+q
+i b 
+b rxe_poll_cw
+r
+n
+i b 
+d 1 2
+i b 
+i b 
+c
+c
+c
+r
+n
+i b 
+p npolld
+p npolled 
+p q
+p *q
+n
+p wc
+p *wc
+c
+r
+q
+y
+i b 
+b rxe_poll_cq
+r
+r
+d 1
+i b 
+condition 2 (npolled > 0 ) 
+c
+p npolled 
+n
+p *q
+n
+p wc
+p *wc
+n
+p wc 
+q 
+y
+q
+i b 
+b rxe_poll_cq
+r
+d
+y
+d
+y
+condition 5 (npolled > 0)
+c
+n
+p wc
+p *wc
+h ptype 
+ptype *wc
+q
+y
+q
+q
+r
+n
+r
+y
+s
+n
+s
+n
+r
+y
+s
+n
+s
+n
+p $eax
+n
+p vctx
+r
+y
+n
+s
+s
+p ctx
+p *ctx
+p __VERBS_ABI_IS_EXTENDED
+n
+fin
+n
+p app_ex_ctx 
+n
+fin
+n
+r
+y
+n
+r
+y
+n
+s
+pwd
+i b 
+sb
+s
+n
+p $eax
+info registers 
+p $rax
+p $eax
+p/x $eax
+n
+p/x app_ex_ctx 
+up
+up
+down
+n
+bt
+up
+down
+up
+down
+up
+r
+y
+n
+bt
+c
+n
+up
+down
+n
+p *vctx
+n
+s
+up
+down
+r
+y
+n
+up
+down
+n
+p vctx
+p *vctx
+c
+disa
+c
+r
+y
+c
+r
+y
+q
+r
+c
+disa 3
+c
+s
+n
+s
+n
+s
+i b 
+sb
+q
+y
+q
+q
+q
+start
+c
+s
+bt
+up
+down
+n
+s
+n
+s
+n
+s
+n
+q
+y
+q
+start
+n
+p c
+q
+y
+n
+start
+n
+p c
+q
+y
+start
+n
+p c
+q
+y
+start
+i b 
+enaonly 2
+i b 
+c
+i b 
+b ibv_exp_cmd_modify_qp
+r
+i b 
+start
+n
+enable 
+c
+n
+i b 
+disa
+ena 4 5 
+enable 4 5 
+i b 
+c
+start
+c
+r
+c
+r
+i b 
+q
+start
+i b 
+disa 3 
+i b 
+disable 3.1 3.2 3.3 
+i b
+disable 3.2
+disable 3.3
+i b 
+c
+q
+r
+start
+q
+y
+q
+r
+i b
+q
+r
+start
+n
+i b 
+c
+start
+n
+p servername 
+n
+qq
+q
+y
+r
+q
+r
+n
+q
+y
+q
+b post_send 
+r
+bt
+n
+p iter 
+n
+p iter 
+bt
+up
+down
+n
+p tmp 
+p outstand_wr 
+n
+s
+s
+n
+s
+s
+fin
+s
+c
+n
+s
+s
+c
+c
+up
+p tmp 
+p j
+n
+c
+s
+s
+p wr_list
+p *wr_list
+n
+n
+s
+n
+fin
+n
+c
+s
+s
+n
+s
+n
+s
+up
+c
+cc
+c
+s
+c
+s
+n
+s
+q
+y
+b poll_thread
+r
+i b 
+enaonly 2
+c
+n
+n
+n
+c
+r
+y
+c
+c
+n
+i threads 
+bt 18732
+bt 18733
+bt 18731
+help thread apply 
+thread apply all 
+thread apply all bt
+n
+i thread 
+display count
+display counter 
+n
+display polled_comp 
+n
+n
+r
+y
+c
+s
+q
+y
+i b 
+b poll_thread
+c
+r
+enaonly 2
+c
+c
+s
+s
+n
+p nw 
+p ne
+up
+down
+up
+pwd
+sb
+q
+y
+i b 
+enaonly 3
+c
+r
+s
+n
+display counter 
+q
+y
+enaonly 3
+r
+n
+p polled_comp 
+n
+p count
+p counter 
+n
+p counter 
+p polled_comp 
+n
+n
+p poll_info 
+p *poll_info 
+b check_polling_result 
+sb
+c
+n
+display total_comp_polled 
+n
+n
+s
+n
+s
+n
+n
+bt
+info args
+info argv
+up
+up
+i thread 
+thread apply all bt 
+c
+r
+c
+q
+disable 
+c
+r
+q
+r
+disable 
+c
+r -H rxe0 -n 100
+r -H rxe0 -n 66
+r -H rxe0 -n 65
+i b 
+enable 
+c
+r -H rxe0 -n 66
+c
+i b 
+enaonly 4
+c
+n
+display total_comp_polled 
+n
+n
+i thread 
+r
+y
+n
+r -H rxe0 -n 66
+y
+n
+sb
+q
+y
+q
+i b 
+r
+n
+s
+n
+n
+p poll_cq
+q
+y
+q
+bt
+up
+q
+q
+up
+down
+s
+up
+q
+q
+start
+i b 
+disa
+b rxe_exp_poll_cq
+c
+n
+p sizeof(struct ibv_wc)
+p sizeof struct ibv_exp_wc
+p sizeof(struct ibv_exp_wc)
+ptype struct ibv_exp_wc
+ptype struct ibv_wc
+q
+y
+q
+b rxe_exp_modify_qp
+i b 
+pwd
+q
+start
+i b 
+disable 
+b rxe_exp_modify_qp
+c
+i b 
+i b 
+r
+q
+l *(ib_device_register_sysfs+0x142)
+q
+l *(ib_register_device+0x3af)
+q
+l *(ib_register_device+0x5a4)
+q
+l *(ib_register_device+0x560)
+q
+l *(ib_register_device+0x5c5)
+q
+l *(rxe_completer+0xb6f)
+q
+l *(rxe_completer)
+l *(rxe_completer+0xb6f)
+q
+l *(rxe_send+0x1a5)
+q
+r
+bt
+up
+down
+p status 
+up
+q
+y
+i b 
+r
+n
+up
+r
+y
+i b
+f 0 
+r
+r
+s
+s
+q
+y
+r
+up
+r
+y
+s
+p PINGPONG_SEND_WRID
+n
+p ctx->buf
+xx ctx->buf
+show user 
+xx ctx->buf
+xx &ctx->buf
+x/40xb ctx->buf
+p *ctx
+q
+y
+r
+q
+r
+r
+r
+up
+q
+y
+q
+l *(skb_udp_tunnel_segment+0x4a)
+q
+l *(skb_udp_tunnel_segment+0x4a)
+q
+display/x before 
+display /x before 
+start
+n
+p before 
+p/x before 
+p/x after
+x/16b &before 
+x/16b &after
+q
+y
+start
+n
+x/16b &after
+x/16b &before 
+p before 
+p after 
+x/16xb &before 
+x/16xb &after
+n
+x/16xb &after
+x/16xb &before
+start
+y
+n
+n
+x/16xb &before
+n
+x/16xb &before
+x/16xb &after
+start
+y
+x/16xb &before
+x/16xb &after
+n
+x/16xb &before
+x/16xb &after
+n
+x/16xb &before
+x/16xb &after
+n
+x/16xb &before
+sr
+r
+y
+x/16xb &before 
+n
+x/16xb &before 
+n
+x/16xb &before 
+r
+y
+p before
+n
+p before
+n
+p before
+r
+y
+p before
+n
+p before
+n
+p before
+x/16xb &before 
+r
+y
+n
+x/16xb &before 
+x/16xb &after
+n
+x/16xb &after
+x/16xb &before
+r
+y
+x/16xb &after
+n
+x/16xb &after
+p before
+p &before
+n
+x/16xb &after
+n
+x/16xb &after
+q
+y
+q
+start
+n
+c
+s
+b
+s
+bt
+n
+s
+bt
+n
+n
+f 0 
+n
+q
+y
+c
+run
+s
+n
+r
+y
+s
+n
+r
+y
+n
+s
+n
+s
+n
+n
+n
+enaonly 3
+r
+y
+s
+n
+sb
+ls -l 
+shell ls -l 
+shell ls -l .gdb* 
+shell cat .gdb_breakpoints 
+p cmd_size 
+p context 
+p *context 
+r
+n
+i b 
+enaonly 4
+r
+y
+n
+p errno 
+sb
+q
+y
+i b 
+lb
+q
+i b 
+r
+n
+r
+y
+n
+c
+enable
+i b 
+enaonly 
+enaonly 5
+q
+i b 
+r
+i b 
+n
+fin
+fin
+c
+n
+p attr
+s
+n
+s
+p attr
+enaonly 6
+sb
+n
+r
+r
+n
+p attr
+up
+q
+y
+q
+i b
+r
+n
+i b 
+enaonly 7
+sb
+q
+y
+r
+n
+p errno 
+q
+y
+i b 
+r
+n
+p errno 
+q
+y
+i b 
+r
+n
+q
+y
+r
+q
+r
+n
+p errno
+q
+y
+q
+r
+p errno 
+p cmd_size 
+n
+p ret
+n
+r
+y
+r
+q
+y
+r
+n
+p ret
+p cmd_size 
+p ret
+r
+y
+n
+p cmd_size 
+q
+y
+r
+n
+q
+y
+start
+s
+n
+p ret
+p $eax
+pr
+p x
+n
+s
+n
+p $eax
+q
+y
+r
+n
+p ret
+q
+y
+r
+q
+start
+i b 
+ena
+enable 
+c
+n
+fin
+c
+up
+r
+fin
+i b 
+enaonly 5
+c
+r
+n
+s
+s
+up
+s
+n
+n
+up
+down
+p ret
+i b 
+d 6 
+i b 
+p cmd 
+p *cmd 
+q
+y
+/modify_Cq
+pwd
+q
+i b 
+start
+sb
+enaonly 8
+sb
+c
+s
+s
+s
+enaonly 9
+sb
+c
+s
+n
+p ret
+c
+q
+q
+start
+n
+p x
+p u
+p/x u
+p/b u
+h p 
+h x 
+p/t u
+start
+y
+n
+start
+y
+n
+p/t u
+n
+p/t u
+start
+y
+display/y u
+display/t u
+n
+start
+y
+n
+display/t u
+n
+start
+y
+display/t u
+n
+start
+y
+display/t u
+n
+n
+q
+y
+start
+display/t u
+n
+q
+y
+i b 
+r
+s
+up
+q
+y
+i b 
+sb
+q
+r
+i b 
+r
+q
+r
+q
+r
+start
+c
+r
+n
+r
+y
+s
+s
+n
+p qp 
+enaonly 5
+r
+y
+s
+n
+n
+c
+d 6
+n
+n
+enaonly 7 
+r
+y
+s
+n
+n
+n
+p errno 
+i b 
+d
+y
+sb
+i b 
+q
+y
+r
+q
+y
+i b 
+r
+n
+q
+y
+r
+c
+s
+n
+bt
+bt
+p name 
+p sizeof name 
+p context->device->ibdev_path
+enaonly 3
+r
+y
+s
+up
+bt
+ptype __ibv_query_gid_1_1
+q
+y
+i b 
+r
+c
+n
+s
+enaonly 3
+r
+y
+s
+q
+y
+enaonly 2
+r
+s
+p type
+p *type
+n
+p *type
+fin
+r
+y
+s
+fin
+r
+y
+s
+c
+p $aex
+p $aexx
+n
+p $aex
+p $eax
+n
+r
+y
+n
+r
+y
+n
+n
+p gid_t
+p gid_type 
+q
+y
+r
+c
+s
+fin
+n
+p gid_type 
+q
+y
+start
+n
+p c 
+xx c
+show user xx
+xx &C
+xx &c
+n
+xx &c
+x/40xb c
+x/40xb &c
+p x
+pc 
+p c
+n
+p c
+q
+y
+i b 
+start
+i b 
+enaonly 7 
+c
+s
+n
+bt
+n
+s
+i b 
+up
+sb
+q
+y
+r
+r
+start
+i b 
+enaonly 7
+sb
+q
+y
+i b 
+show user sb
+start
+i b 
+enaonly 7 
+c
+sb
+i b 
+s
+n
+s
+up
+q
+y
+i b 
+start
+enaonly 9
+i b 
+d 5
+enaonly 1
+enaonly 12
+i b 
+sb
+c
+s
+s
+n
+s
+n
+p errno 
+q
+y
+q
+i b 
+start
+sb
+enaonly 12
+r
+n
+c
+s
+up
+q
+y
+stat
+start
+ i b
+b 9
+d 11
+c
+s
+s
+r
+y
+s
+r
+i b 
+r
+s
+p cq->context->ops
+q
+y
+i b 
+r
+s
+n
+q
+y
+i b 
+r
+s
+n
+s
+n
+s
+n
+q
+y
+r
+r
+s
+p device 
+p *device 
+fin
+p dev_list 
+p *dev_list 
+p **dev_list 
+p num_devices
+n
+n
+q
+y
+r
+s
+s
+p $eas
+p res
+p res.ah
+r
+y
+s
+s
+n
+q
+y
+q
+i b 
+enaonly 3
+r
+enable 
+r
+y
+c
+r
+y
+r
+y
+c
+i b 
+up
+q
+y
+i b 
+r
+p res
+n
+q
+y
+i b 
+start
+i b 
+c
+r
+n
+n
+r
+y
+n
+s
+n
+p attr
+p *attr
+p ret
+ptype ibv_device_attr_ex
+ptype struct ibv_device_attr_ex
+p input 
+r 
+y
+n
+s
+n
+s
+n
+i b 
+enaonly 8.1
+r
+y
+n
+i b 
+enaonly 9
+r
+n
+s
+n
+s
+n
+r
+y
+n
+s
+n
+s
+n
+s
+n
+p resp 
+p *resp 
+p err
+p cmd_size 
+q
+y
+i b 
+r
+s
+n
+n
+q
+y
+start
+n
+q
+y
+start
+n
+s
+n
+s
+n
+up
+f 0 
+n
+p argv 
+up
+p argv
+p *argv
+p argv[0]
+p argv[1]
+p argv[2]
+down
+n
+fin
+n
+n
+n
+s
+fin
+s
+n
+p user_param 
+p *user_param 
+n
+p user_param 
+p user_param->connection_type 
+p UD 
+q
+y
+r
+bt
+up
+down
+c
+c
+up
+p curr_mtu
+p user_param->mtu
+p cur
+sb
+down
+p *my_data
+up
+down
+xx cur 
+x/40xb cur 
+up
+xx cur 
+p cur 
+xx &cur
+x cur 
+ptype cur 
+down
+down 
+down
+up
+down
+xx my_data 
+x/8xb my_data
+down
+down
+p size
+up
+up
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 4096 -m 4000 -c UD
+y
+c
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 4096 -m 4000 -c UD
+n
+p size
+up
+c
+c
+c
+disable 
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 4096 -m 2048 -c UD
+y
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 4096 -m 2048 -c UD
+y
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 4096 -m 2048 -c UD
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 1024 -m 4096 -c UD
+sb
+q
+y
+enable 
+i b 
+r
+p size
+c
+c
+p size_of_cur 
+bt
+up
+down
+n
+bt
+up
+up
+f 0 
+d 0 
+f 0 
+r
+y
+r
+s
+p size
+c
+p size 
+c
+c
+s
+p size 
+n
+up
+up
+up
+up
+p 
+p 
+p user_param->mtu 
+down 
+bt
+up
+up
+r
+y
+bt
+up
+i b 
+c
+r
+y
+c
+bt
+c
+bt
+bt
+c
+bt
+n
+bt
+c
+up
+c
+up
+up
+i b 
+disable 4
+i b
+disa 2
+fin
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 1024 -m 2048 -c UD
+y
+bt
+i b 
+disable 3
+fin
+disable 1
+fin
+fin
+n
+r -d mlx4_0 -i 1 dev-l-vrt-145-005 -s 1024 -m 2048 -c UD
+y
+n
+sb
+q
+y
+r
+c
+q
+y
+start
+i b 
+c
+s
+n
+s
+n
+s
+n
+p errno 
+q
+y
+i b 
+r
+n
+q
+y
+r
+n
+q
+y
+r
+s
+n
+s
+s
+n
+q
+y
+r
+s
+n
+s
+n
+p errno 
+q
+y
+r
+q
+r
+s
+n
+s
+n
+s
+n
+n
+p errno 
+q
+y
+r
+s
+n
+q
+y
+r
+n
+p attrx
+s
+n
+s
+n
+s
+n
+q
+n
+n
+s
+p resp 
+ptype resp 
+q
+y

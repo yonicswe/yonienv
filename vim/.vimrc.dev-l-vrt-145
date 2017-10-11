@@ -1,0 +1,15 @@
+" set guifont=* to get a list of options.
+" set guifont=Monospace\ 13
+" set guifont=FreeMono\ 12
+" set guifont=Liberation\ Mono\ 11
+" set guifont=Nimbus\ Mono\ L\ 11
+" set guifont=Nimbus\ Mono\ L\ Bold\ 11
+" au FileType txt  set guifont=set guifont=Fixed\ Bold\ 13
+" au FileType txt  set guifont=VL\ Gothic\ 13
+au FileType txt  set guifont=Monospace\ 11
+au FileType c,cpp,sh    set guifont=VL\ Gothic\ 13
+au FileType perl set guifont=VL\ Gothic\ 13
+au FileType vim set guifont=VL\ Gothic\ 13
+" set guifont=Courier\ 10\ Pitch\ 13
+" au FileType txt set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 12
+set guioptions+=b

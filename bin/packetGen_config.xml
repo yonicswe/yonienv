@@ -1,0 +1,407 @@
+<?xml version="1.0"?>
+<packetGen>
+	<!--
+		Code	Assignment
+		1	Access-Request
+		2	Access-Accept
+		3	Access-Reject
+		4	Accounting-Request
+		5	Accounting-Response
+		11	Access-Challenge
+		12	Status-Server (experimental)
+		13	Status-Client (experimental)
+		255	Reserved
+
+		AVP Type	Assignment
+		1	User-Name				str
+		2	User-Password			int-hex(16 bytes)
+		4	NAS-IP-Address
+		6	Service-Type			int	(2)
+		7	Framed-Protocol			int	(1)
+		8	Framed-IP-Address
+		12	Framed-MTU				int (1500)
+		31	Calling-Station-Id		str
+		44	Acct-Session-Id			str (len=8)
+	-->
+	
+	<flow>	
+
+		<protocol_message name="radius" id="1">
+			
+			<code>access_accept</code>
+			
+			<!--<identifier>	</identifier>--> <!-- similar in request and reply -->
+			<!--<length>	</length>-->	<!-- length of RADIUS data including header-->
+			<!--<authenticator>	<authenticator>-->	<!-- authenticate the reply from RADIUS server. may be constant-->
+			
+			<AVPs>
+				<!--request -->
+				<AVP id="1" type="str">	igalas </AVP>
+				<AVP id="7" type="int">	1 </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="6" type="int">	2 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="31" type="str">	972549950611 </AVP>
+
+				<!--response -->
+				<AVP id="8" type="ip">	10.248.30.100 </AVP>
+				<AVP id="12" type="int">	1500 </AVP>
+			</AVPs>
+			
+		</protocol_message>
+
+
+		<protocol_message name="radius" id="2">
+
+			<code>accounting_request</code>
+			
+			<!--<identifier>	</identifier>--> <!-- similar in request and reply -->
+			<!--<length>	</length>-->	<!-- length of RADIUS data including header-->
+			<!--<authenticator>	<authenticator>-->	<!-- authenticate the reply from RADIUS server. may be constant-->
+			
+ 			<AVPs>
+				<!--request -->
+				<AVP id="44" type="str">	0599C6EF </AVP>
+				<AVP id="1" type="str">	load1 </AVP>
+				<AVP id="8" type="ip">	10.1.1.1 </AVP>
+				<AVP id="7" type="int">	1 </AVP>
+				<AVP id="6" type="int">	2 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="31" type="str">	972549950611 </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+
+				<!--response -->
+				<AVP id="12" type="int">	1500 </AVP>
+			</AVPs>
+
+		</protocol_message>
+
+		
+		<protocol_message name="radius" id="3">
+
+			<code>accounting_response</code>
+			
+			<!--<identifier>	</identifier>--> <!-- similar in request and reply -->
+			<!--<length>	</length>-->	<!-- length of RADIUS data including header-->
+			<!--<authenticator>	<authenticator>-->	<!-- authenticate the reply from RADIUS server. may be constant-->
+			
+ 			<AVPs>
+				<!--request -->
+				<AVP id="44" type="str">	0599C6EF </AVP>
+				<AVP id="12" type="int">	1500 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="7" type="int">	1 </AVP>
+				<AVP id="6" type="int">	2 </AVP>
+			</AVPs>
+
+		</protocol_message>
+
+
+		<protocol_message name="radius" id="4">
+
+			<code>accounting_request</code>
+			
+			<!--<identifier>	</identifier>--> <!-- similar in request and reply -->
+			<!--<length>	</length>-->	<!-- length of RADIUS data including header-->
+			<!--<authenticator>	<authenticator>-->	<!-- authenticate the reply from RADIUS server. may be constant-->
+			
+ 			<AVPs>
+				<!--request -->
+				<AVP id="44" type="str">	0599C6EF </AVP>
+				<AVP id="1" type="str">	load2 </AVP>
+				<AVP id="8" type="ip">	10.1.2.1 </AVP>
+				<AVP id="7" type="int">	1 </AVP>
+				<AVP id="6" type="int">	2 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="31" type="str">	972549950611 </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+
+				<!--response -->
+				<AVP id="12" type="int">	1500 </AVP>
+			</AVPs>
+
+		</protocol_message>
+
+
+		<protocol_message name="radius" id="5">
+
+			<code>accounting_request</code>
+			
+			<!--<identifier>	</identifier>--> <!-- similar in request and reply -->
+			<!--<length>	</length>-->	<!-- length of RADIUS data including header-->
+			<!--<authenticator>	<authenticator>-->	<!-- authenticate the reply from RADIUS server. may be constant-->
+			
+ 			<AVPs>
+				<!--request -->
+				<AVP id="44" type="str">	0599C6EF </AVP>
+				<AVP id="1" type="str">	load3 </AVP>
+				<AVP id="8" type="ip">	10.1.3.1 </AVP>
+				<AVP id="7" type="int">	1 </AVP>
+				<AVP id="6" type="int">	2 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="31" type="str">	972549950611 </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+
+				<!--response -->
+				<AVP id="12" type="int">	1500 </AVP>
+			</AVPs>
+
+		</protocol_message>
+
+		<protocol_message name="radius" id="6">
+
+			<code>accounting_request</code>
+			
+			<!--<identifier>	</identifier>--> <!-- similar in request and reply -->
+			<!--<length>	</length>-->	<!-- length of RADIUS data including header-->
+			<!--<authenticator>	<authenticator>-->	<!-- authenticate the reply from RADIUS server. may be constant-->
+			
+ 			<AVPs>
+				<!--request -->
+				<AVP id="44" type="str">	0599C6EF </AVP>
+				<AVP id="1" type="str">	load0 </AVP>
+				<AVP id="8" type="ip">	10.1.0.2 </AVP>
+				<AVP id="7" type="int">	1 </AVP>
+				<AVP id="6" type="int">	2 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="4" type="ip">	192.168.23.12 </AVP>
+				<AVP id="31" type="str">	972549950611 </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+				<AVP id="2" type="hexbin">	919d8ad2e0c67603f21b89653888cbfb </AVP>
+
+				<!--response -->
+				<AVP id="12" type="int">	1500 </AVP>
+			</AVPs>
+
+		</protocol_message>
+		
+		
+
+		<protocol_message name="dns" id="10">
+			<code>dns_transaction</code>
+
+			<host_name>  edition.cnn.com </host_name>
+			<increament_label_index> 2 </increament_label_index>
+			<addresses> 10.57.23.100, 10.58.23.100 </addresses>
+
+			<cnames>  www.edition.cnn.com, www.edition.cnn.com.vgtf.net, cnnintl-56m.gslb.vgtf.net </cnames>
+						
+		</protocol_message>
+
+
+	</flow>
+
+	
+	<profile>
+
+			<ServerIp>	20.0.0.1	</ServerIp>
+			<ClientIp>	10.0.0.1	</ClientIp>
+			<numOfConnections>	1	</numOfConnections>
+			<numOfFlowsPerConnection>	250	</numOfFlowsPerConnection>
+			<messageIds>	2,3,4,3,5,3,6,3	</messageIds>
+			
+	</profile>	
+	
+</packetGen>

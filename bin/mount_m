@@ -1,0 +1,51 @@
+#!/bin/bash
+
+MOUNT_POINT=
+
+mount_m()
+{
+    local r=0;
+    local mounting_user;
+
+    # check if mount point exists and mounted
+    if ! [ -d ${MOUNT_POINT} ] ; then 
+        mkdir ${MOUNT_POINT};
+    fi
+                        
+    mountpoint -q ${MOUNT_POINT}; 
+    r=$?;
+    if (( 0 == $r )) ; then 
+        echo "already mounted ${MOUNT_POINT}";
+        return 0;
+    fi 
+
+    read -p "Enter user name for mount : " mounting_user;
+
+    echo "Enter root Password"
+    su -c "echo Enter \'${mounting_user}\' mount password ; mount \/\/192.168.253.225/nicetrack/R\&D ${MOUNT_POINT} -t cifs -o soft -o username=${mounting_user}";
+    r=$?
+    if (( 0 != $r )) ; then 
+        echo -e "Failed : mount //192.168.253.225/nicetrack/R\&D ${MOUNT_POINT} -t cifs -o username=${mounting_user}"
+        return 1;
+    fi    
+
+    return 0;        
+}
+
+    
+#
+# Main
+#
+main () 
+{
+    local r=0;
+    MOUNT_POINT=$1
+
+    # mount M:/        
+    mount_m;
+    r=$?;
+    if (( 0 != $r )) ; then 
+        exit 1;
+    fi    
+}
+main $*
