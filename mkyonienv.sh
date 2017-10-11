@@ -32,6 +32,7 @@ main  ()
 
     setup_bash_profile ${yonienv};
     setup_bashrc ${yonienv};
+    setup_vim_env ${yonienv};
 }
 
 main $@;
