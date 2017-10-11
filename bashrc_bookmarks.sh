@@ -222,6 +222,26 @@ pdf ()
 
 BM=~/.bookmarks.${HOSTNAME}
 
+rebash ()
+{
+    unalias -a
+
+    [ -e ~/.inview ] && rm -f ~/.inview 1>/dev/null;
+   \mv ${BM} ${BM}.tmp ; 
+
+#  delete all bookmarks they will be re-created by sourcing the bookmarks file
+   pdc 1>/dev/null ; 
+
+   source ~/.bashrc ;
+   \mv ${BM}.tmp ${BM} ; 
+
+#  create the bookmarks by sourcing the bookmarks file
+   source ${BM} 1>/dev/null
+
+   pdf_complete 1>/dev/null
+   pd_complete 1>/dev/null
+}   
+
 
 alias cddocs='cd ${yonidocs}'
 alias cdcode='cd ${yonicode}'

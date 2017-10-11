@@ -221,7 +221,7 @@ mkinfinibandmlx5 ()
 
 alias mkinfiniband="make M=drivers/infiniband/ modules -j ${ncoresformake}"
 
-source ${yonienv}/cdlinux.bkp
+[ -e ${yonienv}/cdlinux.bkp ] && source ${yonienv}/cdlinux.bkp
 alias cdlinux='cd ${linuxkernelsourcecode}'
 changecdlinux () {
     echo "cdlinux : ${linuxkernelsourcecode}";

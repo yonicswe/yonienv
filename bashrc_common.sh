@@ -31,21 +31,6 @@ print_underline ()
     echo; 
 }
 
-rebash ()
-{
-    unalias -a
-
-    [ -e ~/.inview ] && rm -f ~/.inview 1>/dev/null;
-#    \mv ${BM} ${BM}.tmp ; 
-#    pdc 1>/dev/null ; 
-   source ~/.bashrc ;
-#    \mv ${BM}.tmp ${BM} ; 
-#    source ${BM} 1>/dev/null
-#    pdf_complete 1>/dev/null
-#    pd_complete 1>/dev/null
-}   
-
-
 editbashrc () 
 {
     if [ $(rpm -q vim-X11 | wc -l ) -gt 0 ] ; then 
