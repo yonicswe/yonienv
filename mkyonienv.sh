@@ -16,7 +16,7 @@ setup_bashrc ()
 setup_vim_env () 
 {
     local yonienv=$1;
-    ln -snf $(yonienv)/vim ~/.vim;
+    ln -snf ${yonienv}/vim ~/.vim;
     echo "source ~/.vim/.vimrc" >> ~/.vimrc;
 }
 
@@ -32,6 +32,7 @@ main  ()
 
     setup_bash_profile ${yonienv};
     setup_bashrc ${yonienv};
+    setup_vim_env ${yonienv};
 }
 
 main $@;
