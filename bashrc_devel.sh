@@ -156,43 +156,229 @@ gdbbt ()
 
 alias cdlibmodules='cd /lib/modules/`uname -r`'
 
+
+########################################################################
+# kernel stuff
+########################################################################
+# kernel dynamic debug with pr_debug
+pr_debug_usage ()
+{
+    echo "pr_debug [-f <func>] [-d ] [-e] [-h]";
+    echo "-f <func> [-d]: enable debug prints in func, -d to remove it";
+    echo "-e            : show functions that with enabled pr_debug";
+    echo "-h            : print this help";
+}
+
+pr_debug () 
+{
+    local func="";
+    local delete=0;
+    local show_enabled=0;
+    local usage=0;
+
+    OPTIND=0;
+    while getopts "f:deh" opt; do
+        case $opt in 
+        f)
+            func=${OPTARG}
+            ;;
+        d)
+            delete=1;
+            ;;
+        e)
+            show_enabled=1;                
+            ;;
+        h)  
+            usage=1;                
+            ;;
+        esac;
+    done;
+
+    if [ ${usage} -eq 1 ] ; then 
+        pr_debug_usage;
+        return;
+    fi
+
+    if [ ${show_enabled} -eq 1 ] ; then 
+        sudo cat /sys/kernel/debug/dynamic_debug/control |awk '/.*=pfl/{print $0}';
+        return;
+    fi; 
+
+    if [ -z "${func}" ] ; then 
+        sudo cat /sys/kernel/debug/dynamic_debug/control;
+        return;
+    fi;
+
+    if [ ${delete} -eq 1 ] ; then 
+        su - -c "echo \"func ${func} =_\" > /sys/kernel/debug/dynamic_debug/control";
+    else 
+        for f in ${func} ; do 
+            echo "pr_debug : $f";
+            if [ $(id -u) -eq 0 ] ; then 
+                echo "func ${f} +pfl" > /sys/kernel/debug/dynamic_debug/control;
+            else
+                su - -c "echo \"func ${f} +pfl\" > /sys/kernel/debug/dynamic_debug/control";
+            fi
+        done
+    fi;
+}
+
+# alias listinstalledkernels='ls -ltr /boot/vmlinuz*'
+listinstalledkernels ()
+{
+    local grub=;
+    local libmodules=;
+
+    echo " grub1  modules    /boot/..";
+    sudo find /boot -type f -name "vmlinuz*" -printf "%f\n"  | 
+        while read f ; do 
+            grub=" ";
+            libmodules=" ";
+            if [ -e /boot/grub/grub.conf ] ; then 
+                if [ $(grep -nH $f /boot/grub/grub.conf | wc -l) -gt 0 ] ; then
+                    grub="x";
+                fi
+            fi
+
+            if [ -d /lib/modules/$(echo $f | sed 's/vmlinuz-//g') ] ; then
+                libmodules="x";
+            fi
+
+            t=$(stat --printf "%y" /boot/$f|sed 's/\..*//g')                
+
+            echo "  ${grub}   |   ${libmodules}    | $t | $f";
+
+        done
+}
+
+alias catgrub='cat /boot/grub/grub.conf'
+catgrubvsinstalled ()
+{
+    catgrub | awk '/^kernel/{print $2}' |  sed 's/\///g' |
+        while read k ; do 
+            if [ -e /boot/$k ] ; then 
+                echo "    | /boot/$k";
+            else
+                echo " x  | /boot/$k";
+            fi               
+        done
+}
+
+catgrubsetdefault ()
+{
+   local entry=${1};
+   [ -z ${entry} ] && return;
+   sudo sed -i "s/default.*/default ${entry}/g" /boot/grub/grub.conf
+}
+
+editgrub () 
+{
+    su - -c " gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -10'"
+    # sudo vim /boot/grub/grub.conf +':split' +':e x' +'r!ls -ltr /boot'   
+}
+editgrubvim () 
+{
+    su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -10'"
+}
+
+if [ -e /usr/bin/nproc ] ; then 
+    ncoresformake=$((   $(nproc)-2 )) ;  
+else
+    ncoresformake=4 ; 
+fi
+
+getkernelversionfromMakefile ()
+{
+    awk 'BEGIN{FS = "="} 
+        /^VERSION/{ printf $2"-"}
+        /^PATCHLEVEL/{printf $2"-"}
+        /^SUBLEVEL/{printf $2}
+        /^EXTRAVERSION/{printf $2}' Makefile | sed 's/\ //g'
+}
+
 # build only kernel
-alias mkkernelbuild='make -j ${ncoresformake}'
+mkkernelbuild ()
+{
+    echo -e "=============================================================";
+    echo -e " building only kernel version $(getkernelversionfromMakefile)"; 
+    echo -e "        make -j ${ncoresformake} vmlinux"
+    echo    "=============================================================";
+    /usr/bin/time -f "================================\n--->elapsed time %E" make -j ${ncoresformake} vmlinux
+    echo -e " built kernel version $(getkernelversionfromMakefile)"; 
+    echo    "=============================================================";
+}
 
 # build only modules
-alias mkkernelbuildmodules='make -j ${ncoresformake} modules' 
+mkkernelbuildmodules () 
+{
+    echo -e "=========================================================================";
+    echo -e " building only modules for kernel version $(getkernelversionfromMakefile)"; 
+    echo -e "        make -j ${ncoresformake} modules"
+    echo    "=========================================================================";
+    /usr/bin/time -f "=======================================\n--->elapsed time %E" make -j ${ncoresformake} modules     
+    echo -e " built modules for kernel version $(getkernelversionfromMakefile)"; 
+    echo    "=============================================================";
+}
 
 # build kernel and modules.
 mkkernelbuildall ()
 {
-    echo -e "============================================";
-    echo -e "make -j ${ncoresformake}"
-    echo -e "make -j ${ncoresformake} modules"
-    echo "============================================";
-    make -j ${ncoresformake} && make -j ${ncoresformake} modules
+    echo -e "===============================================================================";
+    echo -e " building kernel and modules for kernel version $(getkernelversionfromMakefile)"; 
+    echo -e "        make -j ${ncoresformake}"
+    echo    "===============================================================================";
+    /usr/bin/time -f "===================================\n--->elapsed time %E" make -j ${ncoresformake} 
+    echo -e          " built kernel and modules for kernel version $(getkernelversionfromMakefile)"; 
+    echo             "================================================";
 }
 
-#==============================================================
-#  _  __                      _ 
-# | |/ / ___  _ _  _ _   ___ | |
-# | ' < / -_)| '_|| ' \ / -_)| |
-# |_|\_\\___||_|  |_||_|\___||_|
-#==============================================================                               
-                              
 # install only kernel
-alias mkkernelinstall='sudo make install'
+mkkernelinstall ()
+{
+    echo -e "============================================";
+    echo -e "installing kernel+modules $(getkernelversionfromMakefile)";
+    echo -e "sudo make -j ${ncoresformake} install"
+    echo -e "============================================";
+    
+    sudo make install;
+
+    echo -e "============================================";
+    echo -e "installed kernel+modules $(getkernelversionfromMakefile)";
+    echo -e "============================================";
+}
 
 # install only modules.
-alias mkkernelinstallmodules='sudo make -j ${ncoresformake} modules_install'
+mkkernelinstallmodules ()
+{
+    echo -e "============================================";
+    echo -e "installing modules for $(getkernelversionfromMakefile)";
+    echo -e "sudo make -j ${ncoresformake} modules_install" 
+    echo -e "============================================";
+    sudo make -j ${ncoresformake} modules_install
+    echo -e "============================================";
+    echo -e "installed modules for $(getkernelversionfromMakefile)";
+    echo -e "============================================";
+}
 
 # install kernel and modules.
 mkkernelinstallall () 
 { 
+    if [ -z "$(redpill)" ] ; then 
+        read -p "This is not VM are you sure ? [y/N]" ans;
+        if [ "$ans" != "y" ] ; then 
+            return;
+        fi
+    fi            
+
     echo -e "============================================";
+    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
     echo -e "sudo make -j ${ncoresformake} modules_install" 
     echo -e "sudo make -j ${ncoresformake} install"
     echo -e "============================================";
     sudo make -j ${ncoresformake} modules_install && sudo make install
+    echo -e "============================================";
+    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
+    echo -e "============================================";
 }
 
 
@@ -218,4 +404,5 @@ mkkernelbuildinstallmodules ()
     make -j ${ncoresformake} modules && sudo make -j ${ncoresformake} modules_install
 }
 
-alias mkkernelheadersinstall='sudo make headers_install INSTALL_HDR_PATH=/usr'
+alias mkkernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=/usr'
+alias forcereboot='su -c "echo b > /proc/sysrq-trigger"'
