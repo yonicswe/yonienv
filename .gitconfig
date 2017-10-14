@@ -1,0 +1,102 @@
+[user]
+	email = yonatanc@mellanox.com
+	name = Yonatan Cohen
+
+# accepted values are two of 
+# normal, black, red, green, yellow, blue, magenta, cyan, white 
+# and optionally one of 
+# bold, dim, ul, blink and reverse
+[color]
+	status = auto
+	branch = auto
+	diff = auto
+
+[color "diff"]
+  meta = yellow
+  frag = magenta bold
+  old = red dim
+  new = blue
+
+[color "status"]
+  added = yellow
+  changed = red
+  untracked = cyan
+
+[alias]
+    s = status -uno
+    su = status -u
+    g = grep
+    # d = diff --color
+    d = diff
+    dc = diff --cached
+    dt = difftool
+    mt = mergetool
+    ds = diff --stat
+    ss = show --stat
+    b = branch -vv
+    r = remote -vv
+    c = checkout
+    t = ls-tree
+    unstage = reset HEAD
+    lp = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+    lp10 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n10
+    lp20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n20
+    lp30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n30
+    lf = log --pretty=short
+    l = log --pretty=oneline
+    l10 = log --pretty=oneline -n10
+    l30 = log --pretty=oneline -n30
+    ll = log --pretty=oneline --graph --decorate --abbrev-commit
+    #ll= log --graph --decorate --pretty=format:"%h %an, %ar - %s"
+    gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
+    gls = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s --simplify-by-decoration
+
+    lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
+    diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
+    format-patch-commit = "!f() { git format-patch $1^..$1 ; }; f"
+
+    lg = !git lg1
+    lg1 = !git lg1-specific --all
+    lg2 = !git lg2-specific --all
+    lg3 = !git lg3-specific --all
+
+    lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim red)- %an%C(reset)%C(yellow)%d%C(reset)'
+    lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset)%n'' %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
+
+
+    rlog = log --show-notes=review
+
+    commitfilelist = show --stat --oneline
+
+    sl = stash list
+
+[core]
+#editor = vim
+
+[diff]
+#    tool = kdiff3
+    tool = gvimdiff
+
+[merge]
+    tool = gvimdiff
+
+
+[difftool]
+	prompt = false
+
+#[commit]
+#template = /fwgwork/guyle/git_commit_template
+
+[credential]
+#	helper = wincred
+
+[push]
+	default = matching
+[core]
+	whitespace = trailing-space,space-before-tab,indent-with-non-tab
+[gc]
+	autoDetach = false
+[grep]	
+	linenumber = true
