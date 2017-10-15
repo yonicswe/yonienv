@@ -5,7 +5,7 @@ alias editbashmain='g ${yonienv}/bashrc_main.sh'
 source ${yonienv}/bashrc_common.sh
 source ${yonienv}/bashrc_misc.sh
 source ${yonienv}/bashrc_fs.sh
-source ${yonienv}/bashrc_screen.sh
+# source ${yonienv}/bashrc_screen.sh
 source ${yonienv}/bashrc_bookmarks.sh
 source ${yonienv}/bashrc_tags.sh
 source ${yonienv}/bashrc_devel.sh

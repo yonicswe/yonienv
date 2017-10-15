@@ -508,6 +508,15 @@ probe_topology ()
     echo
 }
 
+myip ()
+{
+   if [ -z $(echo $(hostname -i | awk '{print $2}') ) ] ; then 
+       echo $(hostname -i)
+   else
+       echo $(hostname -i | awk '{print $2}')
+   fi
+}
+
 alias ethlistroot='echo -n "root " ; su - -c "ethlist"'
 ethlist () 
 {    
