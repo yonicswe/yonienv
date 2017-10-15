@@ -176,9 +176,19 @@ gitpushtogerrit ()
 
 listgitrepos ()
 {
+    echo "yonienv                      : https://github.com/yonicswe/yonienv"; 
+    echo
     echo "linus torvald linux upstream : git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git";
-    echo "mellanox linux upstream      : ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux";
-    echo "mellanox rdmacore            : ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core"; 
+    echo
+    echo "mellanox upstream kernel     : ssh://l-gerrit.mtl.labs.mlnx:29418/upstream/linux"; 
+    echo "mellanox ofed.4 kernel       : ssh://l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0";
+    echo "mellanox ofed.4 libibverbs   : ssh://l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs";
+    echo "mellanox ofed.4 libmlx4      : ssh://l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4";
+    echo "mellanox ofed.4 libmlx5      : ssh://l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5";
+    echo "mellanox rdmacore            : ssh://l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core"; 
+    echo "mellanox regression vrtsdk   : ssh://l-gerrit.mtl.labs.mlnx:29418/vrtsdk"; 
+    echo "mellanox regression network  : ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/networking"; 
+    echo "mellanox regression core     : ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/core"; 
 }
 
 ibmod ()
@@ -341,7 +351,7 @@ findiblibs ()
     count=0;
     for i in ${ib_libs[@]} ; do 
         echo -e "\033[1;35m--- ${i} ----\033[0m"
-        sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app}
+        sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app} 2>/dev/null
         ((count++));
     done
 }
@@ -372,7 +382,7 @@ findibapps ()
     count=0;
     for i in ${ib_apps[@]} ; do 
         echo -e "\033[1;35m--- ${i} ----\033[0m"
-        sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -ls ${delete_app}
+        sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -ls ${delete_app} 2>/dev/null
         ((count++));
     done
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+unalias -a;
 alias editbashcommon='g ${yonienv}/bashrc_common.sh';
 
 export LANG=en_US.UTF-8

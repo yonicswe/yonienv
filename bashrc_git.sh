@@ -12,3 +12,12 @@ gitb ()
     git b | awk '/^\*/{print $1" "$2} !/^\*/{print "  "$1}'
 }
 
+applyPatchList () 
+{
+    start_index=$1
+    end_index=$2
+
+    for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do git am $i*patch ; done
+}
+
+alias gitconfig='g ~/.gitconfig'

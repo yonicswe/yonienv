@@ -20,6 +20,12 @@ setup_vim_env ()
     echo "source ~/.vim/.vimrc" >> ~/.vimrc;
 }
 
+setup_git_env () 
+{
+    local yonienv=$1;
+    ln -snf ${yonienv}/gitconfig ~/.gitconfig;
+}
+
 main  ()
 {
     local yonienv=$1;
@@ -33,6 +39,7 @@ main  ()
     setup_bash_profile ${yonienv};
     setup_bashrc ${yonienv};
     setup_vim_env ${yonienv};
+    setup_git_env ${yonienv};
 }
 
 main $@;

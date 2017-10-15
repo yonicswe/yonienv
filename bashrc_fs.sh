@@ -121,7 +121,6 @@ lld ()
 }
 
 # list hidden files
-unalias la
 la ()
 {
     verbose=0
@@ -193,21 +192,24 @@ t ()
     tree -ACF $opts $dir 
 }
 
-catwhich () 
+# cat which 
+cw () 
 {
     file=${1};
     [ -z ${file} ] && return
     cat $(which ${file});
 }
 
-gvimwhich () 
+# gvim which
+gw () 
 {
     file=${1};
     [ -z ${file} ] && return
     gvim $(which ${file});
 }
 
-rpmwhich () 
+# rpm which 
+rw () 
 {
     file=${1};
     [ -z ${file} ] && return
@@ -321,7 +323,8 @@ psmine ()
     ps aux  |grep ^${USER}
 }
 
-export GREP_OPTIONS="--color --binary-files=without-match -D skip"
+# export GREP_OPTIONS="--color --binary-files=without-match -D skip"
+alias grep='grep -nH --color --binary-files=without-match -D skip'
 
 dirvimdiff () 
 {
