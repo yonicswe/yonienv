@@ -242,6 +242,14 @@ rebash ()
    pd_complete 1>/dev/null
 }   
 
+if [ -e ${BM} ] ; then 
+	if [ $(dirs -l -v | grep -v "^.*0" | wc -l ) -eq 0 ] ; then 
+	   source ${BM} 1>/dev/null
+	fi
+
+	pdf_complete
+	pd_complete
+fi
 
 alias cddocs='cd ${yonidocs}'
 alias cdcode='cd ${yonicode}'

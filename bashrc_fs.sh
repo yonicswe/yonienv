@@ -659,73 +659,70 @@ vncwatcherslist ()
 }
 
 # virtual machine manager : virsh
-vl () 
+vm ()
 {
-    if [ $(rpm -q libvirt-client | wc -l) -eq 0 ] ; then
-        echo libvirt-client is not installed ;
-        return ;
-    fi;
-    
-    if [ $(id -u) -ne 0 ] ; then 
-        echo "you must be root to use virsh";
-        return;
-    fi 
+    if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+    virt-manager
+}
 
-    virsh list --all    
+virsh_complete ()
+{
+#     if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+    complete -W "$(sudo virsh list --inactive | awk '{if (NR > 1 ) print $2}')" vstart
+    complete -W "$(sudo virsh list | awk '{if (NR > 1) print $2}')" vconsole vreset vstop vforcestop
+}
+
+vl ()
+{
+#     if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+
     echo -e "----------------------------------------------------"
-    virsh list --all
+    sudo virsh list --all
     echo -e "----------------------------------------------------"
     echo -e "[vstart] [vconsole] [vreset] [vstop] [vforcest]\n"
-
-    complete -W "$(virsh list --inactive | awk '/.*dev.*/{print $2}')" vstart
-    complete -W "$(virsh list | awk '/.*dev.*/{print $2}')" vconsole vreset vstop vforcestop
-
+    virsh_complete
 }
 
 vstart ()
 {
-    if [ $(id -u) -eq 0 ] ; then 
-        virsh start $1;
-    else
-        echo "you must be root to use virsh";
-    fi
+    if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+
+   sudo virsh start $1
+   virsh_complete
 }
 
 vstop ()
 {
-    if [ $(id -u) -eq 0 ] ; then 
-        virsh shutdown $1;
-    else
-        echo "you must be root to use virsh";
-    fi
+    if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+
+    sudo virsh shutdown $1;
+    virsh_complete;
 }
 
 vforcestop ()
 {
-    if [ $(id -u) -eq 0 ] ; then 
-        virsh destroy $1;
-    else
-        echo "you must be root to use virsh";
-    fi
+    if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+
+    sudo virsh destroy $1;
+    virsh_complete;
 }
 
 vreset ()
 {
-    if [ $(id -u) -eq 0 ] ; then 
-        virsh reset $1;
-    else
-        echo "you must be root to use virsh";
-    fi
+    if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+
+    sudo virsh reset $1;
+    virsh_complete;
 }
 
 vconsole ()
 {
-    if [ $(id -u) -eq 0 ] ; then 
-        virsh console $1;
-    else
-        echo "you must be root to use virsh";
-    fi
+    if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+
+    sudo virsh console $1;
+    virsh_complete;
 }
+
 
 alias isnfsMountPoint='stat -f -L -c %T' 
 
