@@ -52,6 +52,9 @@ alias 1468='ssh  dev-l-vrt-146-008'
 alias 1468root='ssh  root@dev-l-vrt-146-008'
 alias 1468ping='ping  dev-l-vrt-146-008'
 
+alias stm88ping='ping mtl-stm-88'
+alias stm88root='ping root@mtl-stm-88 -l'
+alias stm88='ssh mtl-stm-88'
 
 # performance setup
 alias 94='ssh  dev-l-vrt-094'
