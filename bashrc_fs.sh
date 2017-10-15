@@ -121,6 +121,7 @@ lld ()
 }
 
 # list hidden files
+unalias la
 la ()
 {
     verbose=0
