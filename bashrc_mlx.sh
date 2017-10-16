@@ -632,5 +632,17 @@ instupstreamlib ()
     sudo build=ofed-upstream_last_stable /mswg/release/ofed/ofed_install --all --force --disable-kmp --without-valgrind
 }
 
+listofedversions () 
+{
+    find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"; 
+}
+
+mkofedbuildversion () 
+{
+    local version=${1};
+    if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
+    echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
+}
+
 
 
