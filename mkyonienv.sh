@@ -31,6 +31,12 @@ main  ()
     local yonienv=$1;
 
     if [ -z ${yonienv} ] ; then 
+        yonienv=$(dirname $(readlink -f $0));
+    fi
+
+    echo "yonienv set to ${yonienv}";
+
+    if [ -z ${yonienv} ] ; then 
         echo "you must give the path to yonienv";
         echo "bailing out...";
         return;
