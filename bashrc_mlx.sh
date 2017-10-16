@@ -645,4 +645,10 @@ mkofedbuildversion ()
 }
 
 
+cddevel ()    { cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1; } 
+cdupstream () { cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1; } 
+cdofed  ()    { cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1; } 
+complete -W "$(find ~yonatanc/devel/ -maxdepth 1 -type d  -exec basename {} \;     )" cddevel
+complete -W "$(find ~yonatanc/devel/upstream -maxdepth 1 -type d  -exec basename {} \;     )" cdupstream
+complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
 

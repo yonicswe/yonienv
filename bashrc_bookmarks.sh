@@ -251,9 +251,12 @@ if [ -e ${BM} ] ; then
 	pd_complete
 fi
 
-alias cddocs='cd ${yonidocs}'
-alias cdcode='cd ${yonicode}'
-
+cddocs ()     { cd ${yonidocs}    ; [ -n "$1" ] && cd $1; } 
+complete -W "$(find ${yonidocs} -maxdepth 1 -type d -exec basename {} \; )" cddocs
+cdcode ()     { cd ${yonicode}    ; [ -n "$1" ] && cd "$1"; } 
+complete -W "$(find ${yonicode} -maxdepth 1 -type d -exec basename {} \; )" cdcode
+cdtask ()     { cd ${yonitasks}    ; [ -n "$1" ] && cd "$1"; } 
+complete -W "$(find ${yonitasks} -maxdepth 1 -type d -exec basename {} \; )" cdtask
 
 mktask () 
 {

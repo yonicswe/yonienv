@@ -8,8 +8,9 @@ export LC_ALL=C
 
 alias cdyonienv='cd ${yonienv}'
 
-export yonidocs=~/share/docs
-export yonicode=~/share/code
+export yonidocs=~yonatanc/share/docs
+export yonicode=~yonatanc/share/code
+export yonitasks=~yonatanc/share/tasks
 
 # 
 # e.g print_underline "yoni cohen" =

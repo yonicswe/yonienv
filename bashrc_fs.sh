@@ -606,11 +606,20 @@ extract () {
 
 }
 
-# find out if im a VM or a real machine.
+# find out if I am VM or a real machine.
 redpill () 
 {
-    dmesg | grep -i hypervisor
-    cat /proc/cpuinfo | grep -i hypervisor | sort -u
+#     if [ $(dmesg | grep --color -i hypervisor | wc -l ) -gt 0 ] ; then 
+#         echo "i am a virtual machine (dmesg)";
+#     else
+#         echo "i am a hypervisor (dmesg)";
+#     fi 
+
+    if [ $( cat /proc/cpuinfo | grep --color -i hypervisor | wc -l ) -gt 0 ] ; then 
+        echo "i am a virtual machine";
+    else
+        echo "i am a hypervisor";
+    fi 
 #     if [ $(which virt-what | grep "no virt-what" | wc -l ) -eq  0 ] ; then
 #         su -c "virt-what"
 #     fi
