@@ -605,11 +605,11 @@ mkupstreamlibinitial ()
     make clean
     ./autogen.sh 
     ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 CFLAGS="-g -O0"
-    make -j  CFLAGS="-g -O0"
+    make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1
     sudo make install
 }
 
-alias mkupstreamlib='make -j  CFLAGS="-g -O0"'
+alias mkupstreamlib='make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
 
 alias mkconsolidatedupstreamlib1sttime='rdma-core_build.sh'
 alias mkconsolidatedupstreamlibinstall='sudo make -C build install -s'

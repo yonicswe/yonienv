@@ -19,6 +19,8 @@ setup_gdbinit_dir_search_path ()
             done
 }
 
+alias debug='cgdb --args '
+
 setup_gdbinit () 
 {
     local dir_search_path=${1:-./};
