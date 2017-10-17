@@ -26,6 +26,13 @@ setup_git_env ()
     ln -snf ${yonienv}/gitconfig ~/.gitconfig;
 }
 
+setup_cgdb_env () 
+{
+    local yonienv=$1;
+    ln -snf ${yonienv}/cgdb ~/.cgdb;
+    ln -snf ${yonienv}/gdbinit ~/.gdbinit;
+}
+
 main  ()
 {
     local yonienv=$1;
@@ -46,6 +53,7 @@ main  ()
     setup_bashrc ${yonienv};
     setup_vim_env ${yonienv};
     setup_git_env ${yonienv};
+    setup_cgdb_env ${yonienv};
 }
 
 main $@;
