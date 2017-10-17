@@ -10,7 +10,7 @@ setup_bashrc ()
 {
     local yonienv=$1;
     echo "export yonienv=${yonienv};" >> ~/.bashrc;
-    echo "source ${yonienv}/bashrc_main.sh;" >> ~/.bashrc;
+    echo  'source ${yonienv}/bashrc_main.sh;' >> ~/.bashrc;
 }
 
 setup_vim_env () 
