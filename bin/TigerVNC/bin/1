@@ -1,0 +1,175 @@
+Unrecognized option: --help
+use: X [:<display>] [option]
+-a #                   mouse acceleration (pixels)
+-ac                    disable access control restrictions
+-audit int             set audit trail level
+-auth file             select authorization file
+-br                    create root window with black background
++bs                    enable any backing store support
+-bs                    disable any backing store support
+-c                     turns off key-click
+c #                    key-click volume (0-100)
+-cc int                default color visual class
+-core                  generate core dump on fatal error
+-dpi int               screen resolution in dots per inch
+dpms                   enables VESA DPMS monitor control
+-dpms                  disables VESA DPMS monitor control
+-deferglyphs [none|all|16] defer loading of [no|all|16-bit] glyphs
+-f #                   bell base (0-100)
+-fc string             cursor font
+-fn string             default font name
+-fp string             default font path
+-help                  prints message with these options
+-I                     ignore all remaining arguments
+-ld int                limit data space to N Kb
+-lf int                limit number of open files to N
+-ls int                limit stack space to N Kb
+-logo                  enable logo in screen saver
+nologo                 disable logo in screen saver
+-nolisten string       don't listen on protocol
+-noreset               don't reset after last client exists
+-reset                 reset after last client exists
+-p #                   screen-saver pattern duration (minutes)
+-pn                    accept failure to listen on all ports
+-nopn                  reject failure to listen on all ports
+-r                     turns off auto-repeat
+r                      turns on auto-repeat 
+-render [default|mono|gray|color] set render color alloc policy
+-retro                 start with classic stipple and cursor
+-s #                   screen-saver timeout (minutes)
+-t #                   mouse threshold (pixels)
+-terminate             terminate at server reset
+-to #                  connection time out
+-tst                   disable testing extensions
+ttyxx                  server started from init on /dev/ttyxx
+v                      video blanking for screen-saver
+-v                     screen-saver without video blanking
+-wm                    WhenMapped default backing-store
+-wr                    create root window with white background
+-x string              loads named extension at init time 
+-maxbigreqsize         set maximal bigrequest size 
+-dumbSched             Disable smart scheduling, enable old behavior
+-schedInterval int     Set scheduler interval in msec
++extension name        Enable extension
+-extension name        Disable extension
+-query host-name       contact named host for XDMCP
+-broadcast             broadcast for XDMCP
+-multicast [addr [hops]] IPv6 multicast for XDMCP
+-indirect host-name    contact named host for indirect XDMCP
+-port port-num         UDP port number to send messages to
+-from local-address    specify the local address to connect from
+-once                  Terminate server after one session
+-class display-class   specify display class to send in manage
+-cookie xdm-auth-bits  specify the magic cookie for XDMCP
+-displayID display-id  manufacturer display ID for request
+-kb                    disable the X Keyboard Extension
++kb                    enable the X Keyboard Extension
+[+-]accessx [ timeout [ timeout_mask [ feedback [ options_mask] ] ] ]
+                       enable/disable accessx key sequences
+-ardelay               set XKB autorepeat delay
+-arinterval            set XKB autorepeat interval
+
+Xvnc TigerVNC 1.2.0 - built Mar 13 2012 12:03:19
+Copyright (C) 1999-2011 TigerVNC Team and many others (see README.txt)
+See http://www.tigervnc.org for information on TigerVNC.
+Underlying X server release 10605000, 
+
+-screen scrn WxHxD     set screen's width, height, depth
+-pixdepths list-of-int support given pixmap depths
++/-render		   turn on/off RENDER extension support(default on)
+-linebias n            adjust thin line pixelization
+-blackpixel n          pixel value for black
+-whitepixel n          pixel value for white
+-shmem                 put framebuffers in shared memory
+-geometry WxH          set screen 0's width, height
+-depth D               set screen 0's depth
+-pixelformat fmt       set pixel format (rgbNNN or bgrNNN)
+-inetd                 has been launched from inetd
+-interface IP_address  listen on specified interface
+-noclipboard           disable clipboard settings modification via vncconfig utility
+
+VNC parameters:
+
+Parameters can be turned on with -<param> or off with -<param>=0
+Parameters which take a value can be specified as -<param> <value>
+Other valid forms are <param>=<value> -<param>=<value> --<param>=<value>
+Parameter names are case-insensitive.  The parameters are:
+
+Global Parameters:
+  localhost      - Only allow connections from localhost (default=0)
+  desktop        - Name of VNC desktop (default=x11)
+  rfbport        - TCP port to listen for RFB protocol (default=0)
+  rfbwait        - Alias for ClientWaitTimeMillis
+  httpPort       - TCP port to listen for HTTP (default=0)
+  httpd          - Directory containing files to serve via HTTP (default=)
+  QueryConnectTimeout - Number of seconds to show the Accept Connection dialog
+                   before rejecting the connection (default=10)
+  Log            - Specifies which log output should be directed to which
+                   target logger, and the level of output to log. Format is
+                   <log>:<target>:<level>[, ...]. (default=)
+  QueryConnect   - Prompt the local user to accept or reject incoming
+                   connections. (default=0)
+  SendCutText    - Send clipboard changes to clients. (default=1)
+  AcceptCutText  - Accept clipboard updates from clients. (default=1)
+  AcceptPointerEvents - Accept pointer press and release events from clients.
+                   (default=1)
+  AcceptKeyEvents - Accept key press and release events from clients.
+                   (default=1)
+  DisconnectClients - Disconnect existing clients if an incoming connection is
+                   non-shared. If combined with NeverShared then new
+                   connections will be refused while there is a client active
+                   (default=1)
+  NeverShared    - Never treat incoming connections as shared, regardless of
+                   the client-specified setting (default=0)
+  AlwaysShared   - Always treat incoming connections as shared, regardless of
+                   the client-specified setting (default=0)
+  Protocol3.3    - Always use protocol version 3.3 for backwards compatibility
+                   with badly-behaved clients (default=0)
+  CompareFB      - Perform pixel comparison on framebuffer to reduce
+                   unnecessary updates (0: never, 1: always, 2: auto)
+                   (default=2)
+  ClientWaitTimeMillis - The number of milliseconds to wait for a client which
+                   is no longer responding (default=20000)
+  MaxIdleTime    - Terminate after s seconds of user inactivity (default=0)
+  MaxConnectionTime - Terminate when a client has been connected for s seconds
+                   (default=0)
+  MaxDisconnectionTime - Terminate when no client has been connected for s
+                   seconds (default=0)
+  IdleTimeout    - The number of seconds after which an idle VNC connection
+                   will be dropped (zero means no timeout) (default=0)
+  AlwaysSetDeferUpdateTimer - Always reset the defer update timer on every
+                   change (default=0)
+  DeferUpdate    - Time in milliseconds to defer updates (default=1)
+  BlacklistTimeout - The initial timeout applied when a host is first
+                   black-listed.  The host cannot re-attempt a connection until
+                   the timeout expires. (default=10)
+  BlacklistThreshold - The number of unauthenticated connection attempts
+                   allowed from any individual host before that host is
+                   black-listed (default=5)
+  ImprovedHextile - Use improved compression algorithm for Hextile encoding
+                   which achieves better compression ratios by the cost of
+                   using more CPU time (default=1)
+  RemapKeys      - Comma-separated list of incoming keysyms to remap.  Mappings
+                   are expressed as two hex values, prefixed by 0x, and
+                   separated by -> (default=)
+  PlainUsers     - Users permitted to access via Plain security type (including
+                   TLSPlain, X509Plain etc.) (default=)
+  ZlibLevel      - Zlib compression level (default=-1)
+  pam_service    - service name for pam password validation (default=vnc)
+  MaxCutText     - Maximum permitted length of an incoming clipboard update
+                   (default=262144)
+Server Parameters:
+  SecurityTypes  - Specify which security scheme to use (None, VncAuth)
+                   (default=VncAuth,TLSVnc)
+  Password       - Obfuscated binary encoding of the password which clients
+                   must supply to access the server (default=)
+  rfbauth        - Alias for PasswordFile
+  PasswordFile   - Password file for VNC authentication (default=)
+  x509key        - specifies path to the key of the x509 certificate in PEM
+                   format (default=)
+  x509cert       - specifies path to the x509 certificate in PEM format
+                   (default=)
+
+Fatal server error:
+Unrecognized option: --help
+
