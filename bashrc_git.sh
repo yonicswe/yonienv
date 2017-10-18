@@ -20,4 +20,13 @@ applyPatchList ()
     for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do git am $i*patch ; done
 }
 
-alias gitconfig='g ~/.gitconfig'
+gitconfig ()
+{
+    if [ -e /usr/bin/gvim ] ; then
+        g ~/.gitconfig
+    elif [ -e /usr/bin/vim ] ; then
+        v ~/.gitconfig
+    else
+        echo "you must install vim to see git config file";
+    fi
+}
