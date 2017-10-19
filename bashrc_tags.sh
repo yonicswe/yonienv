@@ -7,7 +7,7 @@ tagcompleteme ()
     complete -W "$(grep ${name_spec} tags | awk '{print $1}')" gt 
 }
 
-alias tagme='cp ~yonatanc/share/ipteam_env/bin/tagme.sh .'
+alias tagme='cp ${yonienv}/bin/tagme.sh .'
 alias cpptags='ctags -R --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")' 
 
 tagcscope () 
