@@ -225,6 +225,25 @@ pr_debug ()
     fi;
 }
 
+
+match_libmodules_to_vmlinuz () 
+{
+    local vmlinuz=$1;
+    local found=0;
+    local vmlinuz_array=( $(find /boot/ -maxdepth 1 -mindepth 1 -type f -name "vmlinuz*" -printf "%f " ) )
+
+    for i in $(find /lib/modules/ -maxdepth 1 -mindepth 1 -type d -printf "%f ")  ; do 
+        found=$( echo ${vmlinuz_array[@]} | grep $i | wc -l );
+        if (( $found > 0 )) ; then 
+# echo "found $i in vmlinuz_arr : ${vmlinuz_array[@]}"
+            return 0;                           
+        fi;
+    done;    
+
+    return 1;
+
+}
+
 # alias listinstalledkernels='ls -ltr /boot/vmlinuz*'
 listinstalledkernels ()
 {
@@ -241,6 +260,9 @@ listinstalledkernels ()
                     grub="x";
                 fi
             fi
+
+#             match_libmodules_to_vmlinuz $f
+#             [ $? -eq 0 ] && libmodules="x";
 
             if [ -d /lib/modules/$(echo $f | sed 's/vmlinuz-//g') ] ; then
                 libmodules="x";
