@@ -207,7 +207,7 @@ ibmod ()
     modules_path+=" ${modules_base_path}/net/ethernet/mellanox"
     find ${modules_path}  -type f -exec basename {} \; | sed 's/\.ko//g' | 
         while read m ; do 
-            lsmod | cut -d' ' -f1  |grep $m |grep "ib\|mlx\|rxe"; 
+            lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe"; 
     done
 }
 alias nox='lspci | grep nox'
