@@ -73,19 +73,19 @@ set encoding=utf-8
 " \__|\___/|_|\___/|_|  /__/
                           
 "
-" colorscheme peaksea
-au FileType c,cpp,sh,perl colorscheme desert
-au FileType vim colorscheme peaksea
+" colorscheme yonic_2
+" au FileType c,cpp,sh,perl colorscheme desert
+" au FileType vim colorscheme peaksea
 " au FileType sh colorscheme peaksea
-au FileType txt colorscheme peachpuff
-au FileType make colorscheme peaksea
-au FileType awk colorscheme peaksea
-au FileType xml colorscheme peaksea
-au FileType xsd colorscheme peaksea
-au FileType python colorscheme peaksea
-au FileType spec colorscheme peaksea
-au FileType diff colorscheme koehler
-au FileType svn colorscheme peaksea
+" au FileType txt colorscheme peachpuff
+" au FileType make colorscheme peaksea
+" au FileType awk colorscheme peaksea
+" au FileType xml colorscheme peaksea
+" au FileType xsd colorscheme peaksea
+" au FileType python colorscheme peaksea
+" au FileType spec colorscheme peaksea
+" au FileType diff colorscheme koehler
+" au FileType svn colorscheme peaksea
 
 
 " if !has("gui_running")
@@ -283,7 +283,7 @@ map <C-j> :set list!<CR>
 " map <leader>j :call ShowTrailingWhiteSpace()<cr>
 "
 " method 1
-function HighlightTrails()  
+function! HighlightTrails()  
     highlight ExtraWhitespace ctermbg=red guibg=red
     " match ExtraWhitespace /\s\+$/
     autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
@@ -291,7 +291,7 @@ function HighlightTrails()
     autocmd InsertLeave * match ExtraWhitespace /\s\+$/
     autocmd BufWinLeave * call clearmatches()
 endfunction  
-autocmd FileType c,cpp call HighlightTrails()
+autocmd FileType c,cpp,gitcommit call HighlightTrails()
          
 
 " With a map leader it's possible to do extra key combinations
@@ -387,7 +387,7 @@ set foldcolumn=1
 "
 " set diffopt+=iwhite
 if &diff 
-    colorscheme koehler
+    colorscheme peaksea
     map [p ]c
     map ]p [c
     map [B ]c
