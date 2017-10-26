@@ -270,14 +270,29 @@ noremap <silent> ,cu :<C-B>silent <C-E>s/^.*\V<C-R>=escape(b:comment_leader,'\/'
 " show/unshow hidded characters.
 map <C-j> :set list!<CR>
 
-" show unwanted trailing white space
-autocmd FileType c,cpp highlight ExtraWhitespace ctermbg=red guibg=red
-function! ShowTrailingWhiteSpace ()
-        :highlight ExtraWhitespace ctermbg=red guibg=red
-        :match ExtraWhitespace /\s\+$/<cr>
-endfunc        
+" --------------------
+" highlight trailing spaces
+" --------------------
+" method 1
+" autocmd FileType c,cpp highlight ExtraWhitespace ctermbg=red guibg=red
+" function! ShowTrailingWhiteSpace ()
+"         :highlight ExtraWhitespace ctermbg=red guibg=red
+"         :match ExtraWhitespace /\s\+$/<cr>
+" endfunc        
 " to switch off do :match<cr>
-map <leader>j :call ShowTrailingWhiteSpace()<cr>
+" map <leader>j :call ShowTrailingWhiteSpace()<cr>
+"
+" method 1
+function HighlightTrails()  
+    highlight ExtraWhitespace ctermbg=red guibg=red
+    " match ExtraWhitespace /\s\+$/
+    autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+    autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+    autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+    autocmd BufWinLeave * call clearmatches()
+endfunction  
+autocmd FileType c,cpp call HighlightTrails()
+         
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
