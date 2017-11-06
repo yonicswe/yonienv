@@ -14,7 +14,7 @@
 [color "diff"]
   meta = yellow
   frag = magenta bold
-  old = red dim
+  old = red
   new = blue
 
 [color "status"]
@@ -77,10 +77,10 @@
 
 [diff]
 #   tool = kdiff3
-    tool = gvimdiff
+    tool = vimdiff
 
 [merge]
-    tool = gvimdiff
+    tool = vimdiff
 
 
 [difftool]

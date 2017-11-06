@@ -74,6 +74,7 @@ set encoding=utf-8
                           
 "
 " colorscheme yonic_2
+colorscheme desert
 " au FileType c,cpp,sh,perl colorscheme desert
 " au FileType vim colorscheme peaksea
 " au FileType sh colorscheme peaksea
@@ -147,17 +148,19 @@ set completeopt=menuone,menu,longest,preview
 " default for complete is to search the /usr/include path 
 " when you click ctrl-p. remove it here to speed up search
 set complete-=i
-"   ___  ___  ___  ___ 
+"   ___  ___  ___  ___
 "  / __|| _ \| __|| _ \
 " | (_ ||   /| _| |  _/
-"  \___||_|_\|___||_|  
-"                      
-" set grepprg=grep\ -nHr\ --exclude=*svn*\ --include=*.cpp\ --include=*\.\[c,h\]\  
-set grepprg=grep\ -nHr\ --exclude=tags\ --exclude=*svn*\  
+"  \___||_|_\|___||_|
+"
+" set grepprg=grep\ -nHr\ --exclude=*svn*\ --include=*.cpp\ --include=*\.\[c,h\]\
+" set grepprg=grep\ -nHr\ --exclude=tags\ --exclude=*svn*\
 " command! Grepc :grep --include=*cpp\ --include=*h\ --include=*hpp\ <cr>
-" au FileType c   set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\ 
-" au FileType cpp set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\ 
-au FileType c,cpp   set grepprg=grep\ -nHr\ --include=*.cpp\ --include=*\.\[c,h\]\  
+" au FileType c   set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
+" au FileType cpp set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
+" au FileType c,cpp   set grepprg=grep\ -nHr\ --include=*.cpp\ --include=*\.\[c,h\]\
+au FileType c,cpp   set grepprg=ag\ --cc\ 
+
 
 
 map <F11> :cp<cr>
@@ -304,7 +307,7 @@ map <leader>gf :e <cfile><cr>
 autocmd FileType xml vmap <leader>a s/<\(.*\)>$/<!--\1-->/
 
 " search for code references 
-map <leader>g  yiw:grep -w <C-R>" .<cr>
+map <leader>g  yiw:grep <C-R>" .<cr>
 map <leader>r  yiw:grep -w <C-R>" drivers/infiniband/sw/rxe/<cr>
 map <leader>rr  yiw:grep -w <C-R>" include drivers/infiniband/ drivers/net/ethernet/mellanox<cr>
 " map <leader>r  yiw:grep -w <C-R>" .<cr>
@@ -463,6 +466,7 @@ set guifont=VL\ Gothic\ 13
 " au FileType perl set guifont=VL\ Gothic\ 13
 " au FileType vim set guifont=VL\ Gothic\ 13
 " au FileType txt set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 12
+au FileType txt set guifont=Monospace\ 12
 " au FileType git,diff    set guifont=VL\ Gothic\ 13
 
 set guioptions+=b
@@ -670,7 +674,7 @@ let hostname=system('hostname -s')
 " let realvim = '~/share/ipteam_env/vim/.vimrc.' . hostname
 let realvim = '/.autodirect/mtrswgwork/yonatanc/ipteam_env/vim/.vimrc.' . hostname
 " execute 'echo realvim'
-exec 'source ' .  realvim
+" exec 'source ' .  realvim
 
 " if filereadable(realvim) 
 " exec 'source ' .  realvim

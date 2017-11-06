@@ -36,6 +36,8 @@ pu ()
    pd_complete
 }
 
+alias pdedit="v ${BM}"
+
 pd () 
 {
     p=$1
