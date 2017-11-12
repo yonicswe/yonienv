@@ -13,7 +13,7 @@ alias gitunstageall='git reset HEAD'
 alias gituncommit='git reset --soft HEAD^'
 gitb () 
 {
-    git b | awk '/^\*/{print "\033[32m-->"$2"\033[0m"} !/^\*/{print "   "$1}' | sort
+    git b | awk '/^\*/{print "\033[32m-->["$2"]\033[0m"} !/^\*/{print "    "$1}'
 }
 
 applyPatchList () 
