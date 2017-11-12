@@ -286,16 +286,16 @@ map <C-j> :set list!<CR>
 " map <leader>j :call ShowTrailingWhiteSpace()<cr>
 "
 " method 1
-function! HighlightTrails()  
-    highlight ExtraWhitespace ctermbg=red guibg=red
+function! HighlightTrails()
+    highlight ExtraWhitespace ctermbg=grey guibg=grey
     " match ExtraWhitespace /\s\+$/
     autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
     autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
     autocmd InsertLeave * match ExtraWhitespace /\s\+$/
     autocmd BufWinLeave * call clearmatches()
-endfunction  
+endfunction
 autocmd FileType c,cpp,gitcommit call HighlightTrails()
-         
+
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file

@@ -16,9 +16,11 @@ alias cpptags='ctags -R --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --ex
 
 tagcscope () 
 {
-    source_path=${1-=.};
+    source_path=${1:-.};
     find ${source_path} -regex ".*\.c\|.*\.h"  -type f > cscope.files;
-    cscope -b;
+    ls cscope.*
+    cscope -vb;
+    ls cscope.*
 }
 
 tagcscopekernel () 

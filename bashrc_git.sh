@@ -10,9 +10,10 @@ alias gitd='git d'
 alias gitdiscardunstaged='git checkout -- .'
 alias gitstashunstaged='git stash --keep-index'
 alias gitunstageall='git reset HEAD'
+alias gituncommit='git reset --soft HEAD^'
 gitb () 
 {
-    git b | awk '/^\*/{print $1" "$2} !/^\*/{print "  "$1}'
+    git b | awk '/^\*/{print "\033[32m-->"$2"\033[0m"} !/^\*/{print "   "$1}' | sort
 }
 
 applyPatchList () 

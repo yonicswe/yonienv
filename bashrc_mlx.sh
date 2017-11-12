@@ -326,11 +326,36 @@ mkvmhelp()
 
 findiblibs ()
 {
-    ib_libs=(libmlx5-rdmav2.so libibacmp.so libibumad.so libibverbs.so) 
-    ib_libs+=(libibcm.so libhns-rdmav2.so libcxgb3-rdmav2.so libcxgb4-rdmav2.so libi40iw-rdmav2.so)
-    ib_libs+=(librdmacm.so libnes-rdmav2.so libmlx4-rdmav2.so libmthca-rdmav2.so libmlx5.so)
-    ib_libs+=(libocrdma-rdmav2.so libhfi1verbs-rdmav2.so libipathverbs-rdmav2.so libqedr-rdmav2.so)
-    ib_libs+=(libvmw_pvrdma-rdmav2.so librxe-rdmav2.so librspreload.so libibacmp.so);
+#     ib_libs=(libmlx5-rdmav2.so libibacmp.so libibumad.so libibverbs.so) 
+#     ib_libs+=(libibcm.so libhns-rdmav2.so libcxgb3-rdmav2.so libcxgb4-rdmav2.so libi40iw-rdmav2.so)
+#     ib_libs+=(librdmacm.so libnes-rdmav2.so libmlx4-rdmav2.so libmthca-rdmav2.so libmlx5.so)
+#     ib_libs+=(libocrdma-rdmav2.so libhfi1verbs-rdmav2.so libipathverbs-rdmav2.so libqedr-rdmav2.so)
+#     ib_libs+=(libvmw_pvrdma-rdmav2.so librxe-rdmav2.so librspreload.so libibacmp.so);
+
+ib_libs=(libibverbs.so)
+ib_libs+=(libmlx4.so)
+ib_libs+=(libmlx4-rdmav2.so)
+ib_libs+=(libmlx5.so)
+ib_libs+=(librxe-rdmav16.so)
+ib_libs+=(librxe-rdmav2.so)
+ib_libs+=(libibumad.so)
+ib_libs+=(libibcm.so)
+ib_libs+=(libipathverbs-rdmav16.so)
+ib_libs+=(libnes-rdmav16.so)
+ib_libs+=(libhfi1verbs-rdmav16.so)
+ib_libs+=(libhns-rdmav16.so)
+ib_libs+=(libocrdma-rdmav16.so)
+ib_libs+=(libi40iw-rdmav16.so)
+ib_libs+=(libbnxt_re-rdmav16.so)
+ib_libs+=(libqedr-rdmav16.so)
+ib_libs+=(libvmw_pvrdma-rdmav16.so)
+ib_libs+=(libcxgb4-rdmav16.so)
+ib_libs+=(libcxgb3-rdmav16.so)
+ib_libs+=(libmthca-rdmav16.so)
+ib_libs+=(librdmacm.so)
+ib_libs+=(libibacmp.so)
+ib_libs+=(librspreload.so)
+
 
     local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/)
 #   local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/ /lib /lib64/)
@@ -351,7 +376,8 @@ findiblibs ()
     count=0;
     for i in ${ib_libs[@]} ; do 
         echo -e "\033[1;35m--- ${i} ----\033[0m"
-        sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app} 2>/dev/null
+#         sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app} 2>/dev/null
+        sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%AD %h/%f\n" ${delete_app} 2>/dev/null
         ((count++));
     done
 }
@@ -606,7 +632,7 @@ mkupstreamlibinitial ()
     ./autogen.sh 
     ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 CFLAGS="-g -O0"
     make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1
-    sudo make install
+    # sudo make install
 }
 
 alias mkupstreamlib='make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
