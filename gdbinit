@@ -36,4 +36,8 @@ end
 document disaonly
 disable only specified breakpoint and enable the rest
 end
+
+define whereami
+    info registers rip
+end
 source .gdb_breakpoints

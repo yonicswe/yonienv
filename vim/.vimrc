@@ -454,7 +454,7 @@ set statusline=%<%F\ %h%m%r%=%-14.(\[%l:%L\]\[%v\]%)\ %P
 
 " set guifont=* to get a list of options.
 " set guifont?  to get the currently used font.
-" set guifont=VL\ Gothic\ 13
+set guifont=VL\ Gothic\ 13
 " set guifont=Monospace\ 13
 " set guifont=FreeMono\ 11
 " set guifont=Courier\ 10\ Pitch\ 13
@@ -598,8 +598,9 @@ set tags=tags
 set complete+=t
 
 function! SetBreakPoint () 
-    let taskpath=$TASK_PATH
-    execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . taskpath . "/.gdb_breakpoints"
+    "let taskpath=$TASK_PATH
+    "     execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . taskpath . "/.gdb_breakpoints"
+    execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . ".gdb_breakpoints"
 endfunc
 " com! B call SetBreakPoint()
 map <S-B> :call SetBreakPoint()<cr>

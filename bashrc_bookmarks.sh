@@ -36,7 +36,6 @@ pu ()
    pd_complete
 }
 
-alias pdedit="v ${BM}"
 
 pd () 
 {
@@ -223,6 +222,7 @@ pdf ()
 }
 
 BM=~/.bookmarks.${HOSTNAME}
+alias pdedit="v ${BM}"
 
 rebash ()
 {
@@ -249,7 +249,7 @@ if [ -e ${BM} ] ; then
 	   source ${BM} 1>/dev/null
 	fi
 
-	pdf_complete
+# 	pdf_complete
 	pd_complete
 fi
 

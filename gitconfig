@@ -35,10 +35,14 @@
     ds = diff --stat
     ss = show --stat
     b = branch -vv
+    branch-delete = branch -D 
+    branch-rename = branch -M
     r = remote -vv
     c = checkout
     t = ls-tree
+    amend = commit --amend --no-edit
     unstage = reset HEAD
+    discardall = checkout HEAD -- .
     lp = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
     lp10 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n10
     lp20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n20
@@ -81,7 +85,7 @@
     tool = vimdiff
 
 [merge]
-    tool = vimdiff
+    tool = gvimdiff
 
 
 [difftool]
