@@ -74,7 +74,13 @@ set encoding=utf-8
                           
 "
 " colorscheme yonic_2
-colorscheme desert
+" colorscheme desert
+" colorscheme desertink
+" colorscheme  molokai
+colorscheme  candycode
+" au FileType c,cpp,h colorscheme candycode
+" colorscheme railcasts
+" colorscheme Benokai
 " au FileType c,cpp,sh,perl colorscheme desert
 " au FileType vim colorscheme peaksea
 " au FileType sh colorscheme peaksea
@@ -390,7 +396,7 @@ set foldcolumn=1
 "
 " set diffopt+=iwhite
 if &diff 
-"     colorscheme peaksea
+    colorscheme molokai
     map [p ]c
     map ]p [c
     map [B ]c
@@ -454,7 +460,6 @@ set statusline=%<%F\ %h%m%r%=%-14.(\[%l:%L\]\[%v\]%)\ %P
 
 " set guifont=* to get a list of options.
 " set guifont?  to get the currently used font.
-set guifont=VL\ Gothic\ 13
 " set guifont=Monospace\ 13
 " set guifont=FreeMono\ 11
 " set guifont=Courier\ 10\ Pitch\ 13
@@ -462,15 +467,16 @@ set guifont=VL\ Gothic\ 13
 " set guifont=Nimbus\ Mono\ L\ 11
 " set guifont=Nimbus\ Mono\ L\ Bold\ 11
 " au FileType txt  set guifont=set guifont=Fixed\ Bold\ 13
-au FileType c,cpp,sh    set guifont=VL\ Gothic\ 13
 " au FileType perl set guifont=VL\ Gothic\ 13
-au FileType vim set guifont=VL\ Gothic\ 13
-au FileType gitconfig set guifont=VL\ Gothic\ 13
-au FileType gitcommit set guifont=VL\ Gothic\ 13
-au FileType conf set guifont=VL\ Gothic\ 13
 " au FileType txt set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 12
-au FileType txt set guifont=Monospace\ 12
 " au FileType git,diff    set guifont=VL\ Gothic\ 13
+set guifont=VL\ Gothic\ 14
+" au FileType c,cpp,sh    set guifont=VL\ Gothic\ 14
+" au FileType vim set guifont=VL\ Gothic\ 14
+" au FileType gitconfig set guifont=VL\ Gothic\ 14
+" au FileType gitcommit set guifont=VL\ Gothic\ 14
+" au FileType conf set guifont=VL\ Gothic\ 14
+au FileType txt set guifont=Monospace\ 14
 
 set guioptions+=b
 

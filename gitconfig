@@ -11,6 +11,11 @@
 	branch = auto
 	diff = auto
 
+[color "grep"]
+    linenumber = yellow bold
+    match = red
+    filename = magenta  
+
 [color "diff"]
   meta = yellow
   frag = magenta bold
@@ -26,7 +31,7 @@
 [alias]
     s = status -uno
     su = status -u
-    g = grep
+    g = grep --color
     # d = diff --color
     d = diff
     dc = diff --cached

@@ -232,7 +232,7 @@ listinstalledkernels ()
     local libmodules=;
 
     echo " grub1  modules    /boot/..";
-    sudo find /boot -type f -name "vmlinuz*" -printf "%f\n"  | 
+    sudo find /boot -type f -name "vmlinuz*" -printf "%f\n" |
         while read f ; do 
             grub=" ";
             libmodules=" ";
@@ -295,7 +295,8 @@ getkernelversionfromMakefile ()
         /^VERSION/{ printf $2"-"}
         /^PATCHLEVEL/{printf $2"-"}
         /^SUBLEVEL/{printf $2}
-        /^EXTRAVERSION/{printf $2}' Makefile | sed 's/\ //g'
+        /^EXTRAVERSION/{printf $2}' Makefile | sed 's/\ //g';
+    echo
 }
 
 # build only kernel
@@ -407,4 +408,6 @@ mkkernelbuildinstallmodules ()
 }
 
 alias mkkernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=/usr'
+
+alias makedebug='make CPPFLAGS="-O0 -g"'
 alias forcereboot='su -c "echo b > /proc/sysrq-trigger"'

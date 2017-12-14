@@ -578,6 +578,11 @@ delete_executables ()
     done
 }
 
+findexecutable ()
+{
+    find -executable | while read f ; do if [ $(file $f | grep ELF.*executable | wc -l ) -ne 0 ] ; then echo $f ; fi ; done
+}
+
 define() { 
     curl -s "http://www.collinsdictionary.com/dictionary/english/$*" | sed -n '/class="def"/p' | awk '{gsub(/.*<span class="def">|<\/span>.*/,"");print}' | sed "s/<[^>]\+>//g"; 
 }

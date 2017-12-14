@@ -34,14 +34,18 @@ print_underline ()
 
 editbashrc () 
 {
+    local bashfile=${1:-bashrc_main.sh};
+
     if [ $(rpm -q vim-X11 | wc -l ) -gt 0 ] ; then 
-        gvim ${yonienv}/bashrc_main.sh
+        gvim ${yonienv}/${bashfile};
     elif [ $(rpm -q vim-enhanced | wc -l ) -gt 0 ] ; then 
-        vim ${yonienv}/bashrc_main.sh
+        vim ${yonienv}/${bashfile};
     else
         echo "please install vim-enhanced or vim-X11"
     fi        
 }
+
+complete -W "$(find  ${yonienv} -maxdepth 1 -name "*bash*" -printf "%f\n")" editbashrc
 
 findyonialias () 
 {

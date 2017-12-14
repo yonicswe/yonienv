@@ -1,9 +1,10 @@
 set auto-load safe-path /
 set print pretty
 set breakpoint pending on
+set print frame-arguments none
 
 define xx
-    x/40xb \$arg0
+    x/40xb $arg0
 end
 
 define sb
@@ -40,4 +41,12 @@ end
 define whereami
     info registers rip
 end
+
+define showmainargs
+    print argv[0]@argc
+end
+document showmainargs
+print the command line arguments
+end
+
 source .gdb_breakpoints

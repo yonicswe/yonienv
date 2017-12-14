@@ -8,6 +8,7 @@ CORES=$(( $(nproc) -1))
 mkdir build
 cd build
 cmake  \
+      -DMLX5_DEBUG=True \
       -DCMAKE_BUILD_TYPE=Debug \
       -DCMAKE_INSTALL_BINDIR:PATH=/usr/bin \
       -DCMAKE_INSTALL_SBINDIR:PATH=/usr/sbin \

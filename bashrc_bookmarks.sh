@@ -222,7 +222,7 @@ pdf ()
 }
 
 BM=~/.bookmarks.${HOSTNAME}
-alias pdedit="v ${BM}"
+alias pdedit="v ${BM} ; cat ${BM}"
 
 rebash ()
 {
@@ -234,7 +234,8 @@ rebash ()
 #  delete all bookmarks they will be re-created by sourcing the bookmarks file
    pdc 1>/dev/null ; 
 
-   source ~/.bashrc ;
+#    source ~/.bashrc ;
+   source ${yonienv}/bashrc_main.sh;
    \mv ${BM}.tmp ${BM} ; 
 
 #  create the bookmarks by sourcing the bookmarks file
@@ -246,7 +247,7 @@ rebash ()
 
 if [ -e ${BM} ] ; then 
 	if [ $(dirs -l -v | grep -v "^.*0" | wc -l ) -eq 0 ] ; then 
-	   source ${BM} 1>/dev/null
+        source ${BM} 1>/dev/null
 	fi
 
 # 	pdf_complete

@@ -3,3 +3,5 @@ set ic
 set winsplit=even
 set autosourcereload
 set syn=c
+set print frame-arguments none
+set output-radix 10

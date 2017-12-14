@@ -5,9 +5,9 @@ tagcompleteme ()
     name_spec=$1;
     # complete -W "$(awk -v n=$name_spec '/${n}/{print $1}' tags )" gt 
     if [ -z ${name_spec}] ; then 
-        complete -W "$(cat tags |               awk '{print $1}')" gt 
+        complete -W "$(cat tags |               awk '{print $1}')" gt vt 
     else
-        complete -W "$(grep ${name_spec} tags | awk '{print $1}')" gt 
+        complete -W "$(grep ${name_spec} tags | awk '{print $1}')" gt vt
     fi
 }
 

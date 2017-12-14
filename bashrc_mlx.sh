@@ -195,6 +195,9 @@ listgitrepos ()
     echo "mellanox rdmacore            : ssh://l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core"; 
     [ "$show_branches" = "yes" ] && echo -e "    stable                      |-master"; 
     [ "$show_branches" = "yes" ] && echo -e "    up to date                  \`-for-upstream";
+
+    echo "jason    rdmacore            : https://github.com/linux-rdma/rdma-core.git"; 
+
     echo "mellanox regression vrtsdk   : ssh://l-gerrit.mtl.labs.mlnx:29418/vrtsdk"; 
     echo "mellanox regression network  : ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/networking"; 
     echo "mellanox regression core     : ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/core"; 
@@ -217,8 +220,9 @@ ibmod ()
     modules_path+=" ${modules_base_path}/net/ethernet/mellanox"
     find ${modules_path}  -type f -exec basename {} \; | sed 's/\.ko//g' | 
         while read m ; do 
-            lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe"; 
-    done
+            lsmod | awk '{print $1" "$3" " }' | \grep $m ; 
+#             lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe"; 
+    done | column -t | sort -h -k2 
 }
 alias nox='lspci | grep nox'
 alias cdregression='cd ~/devel/regression' 
@@ -311,11 +315,28 @@ vlinstall ()
 # you must install mft to be able to change link type.
 mftinstall () 
 {
-    echo "make sure that /lib/modules/$(uname -r)/source -> to a valid kernel source tree"
+    echo -e "\033[1;33;7mmake sure that /lib/modules/$(uname -r)/source -> to a valid kernel source tree\033[0m"
     sudo /mswg/release/mft/mftinstall;
 }
-alias setuplinktypeethernet='sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2'
-alias setuplinktypeinfiniband='sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=1 LINK_TYPE_P2=1'
+
+mftstatus () 
+{
+    echo -e "\033[1;33;7mmake sure that you sudo mst start \033[0m"
+    sudo mst status -vv
+}
+
+alias mftstart='sudo mst start'
+
+alias mftsetlinktypeeth='sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2'
+alias mftsetlinktypeinfiniband='sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=1 LINK_TYPE_P2=1'
+mftgetlinktype ()
+{
+    for d in /dev/mst/* ; do 
+        echo ${d};
+        sudo mlxconfig -d ${d} q | \grep LINK_TYPE;
+    done
+}
+
 checkpatch () 
 {
     if  [ $# -eq 0 ] ; then 
@@ -531,6 +552,8 @@ ib4stop ()
     removemoduleifloaded mlx4_core
 }
 
+alias ib5restart='ib4stop; ib4start'
+
 ib5start () 
 {
     loadmoduleifnotloaded ib_core
@@ -545,6 +568,7 @@ ib5stop ()
     removemoduleifloaded mlx5_ib 
     removemoduleifloaded mlx5_core 
 }
+alias ib5restart='ib5stop; ib5start'
 
 ibstart ()
 { 
@@ -586,6 +610,8 @@ ibstop ()
     removemoduleifloaded mlx5_core
     removemoduleifloaded ib_core
 }
+
+alias ibrestart='ibstop ; ibstart'
 
 rxe ()        { sudo rxe_cfg ;      } 
 rxestart ()
@@ -636,7 +662,7 @@ mkrxelib ()
     sudo make install
 }
 
-mkupstreamlibinitial () 
+mkupstreamlib1sttime () 
 {
     make clean
     ./autogen.sh 
@@ -646,14 +672,16 @@ mkupstreamlibinitial ()
 }
 
 alias mkupstreamlib='make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
+alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
-alias mkconsolidatedupstreamlib1sttime='rdma-core_build.sh'
-alias mkconsolidatedupstreamlibinstall='sudo make -C build install -s'
-alias mkconsolidatedupstreamlib='make -C build -j ${ncoresformake} -s'
-alias mkconsolidatedupstreamlibibverbs='make -C build ibverbs -j ${ncoresformake} -s'
-alias mkconsolidatedupstreamlibmlx4='make -C build mlx4 -j ${ncoresformake} -s'
-alias mkconsolidatedupstreamlibmlx5='make -C build mlx5 -j ${ncoresformake} -s'
-mkconsolidatedupstreamlibapps ()
+alias mkrdmacore='make -C build -j ${ncoresformake} -s'
+alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s'
+alias mkrdmacore1sttime='rdma-core_build.sh'
+alias mkrdmacoreinstall='sudo make -C build install -s'
+alias mkrdmacoreibverbs='make -C build ibverbs -j ${ncoresformake} -s'
+alias mkrdmacoremlx4='make -C build mlx4 -j ${ncoresformake} -s'
+alias mkrdmacoremlx5='make -C build mlx5 -j ${ncoresformake} -s'
+mkrdmacoreapps ()
 {
     make -C build ibv_rc_pingpong -j ${ncoresformake} -s; 
 #   make -C build ibv_ud_pingpong -j ${ncoresformake} -s;
