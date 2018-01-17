@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# this is supposed to expand alias when running a non interactive shell
+# like su -c  "some command"
+shopt -s expand_aliases 
+
 alias editbashmain='g ${yonienv}/bashrc_main.sh'
 
 source ${yonienv}/bashrc_common.sh

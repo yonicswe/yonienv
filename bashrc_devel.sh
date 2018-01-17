@@ -411,3 +411,36 @@ alias mkkernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=/usr'
 
 alias makedebug='make CPPFLAGS="-O0 -g"'
 alias forcereboot='su -c "echo b > /proc/sysrq-trigger"'
+
+#  ___  _____  ___    _    ___  ___ 
+# | __||_   _|| _ \  /_\  / __|| __|
+# | _|   | |  |   / / _ \| (__ | _| 
+# |_|    |_|  |_|_\/_/ \_\\___||___|
+#      
+# kernel debugging with ftrace        
+
+
+ftraceon ()
+{
+    local func_name=${1};
+
+    if [ -z "${func_name}" ] ; then
+        sudo cat /sys/kernel/debug/tracing/available_filter_functions;
+        return;
+    fi
+
+    su -c "echo 1 > /sys/kernel/debug/tracing/tracing_on;
+           echo ${func_name} > /sys/kernel/debug/tracing/set_ftrace_filter;
+           echo function > /sys/kernel/debug/tracing/current_tracer;
+           echo 1 > /sys/kernel/debug/tracing/options/func_stack_trace"
+}
+
+alias ftracedump="sudo cat /sys/kernel/debug/tracing/trace"
+
+ftraceoff ()
+{ 
+    su -c "echo 0 > /sys/kernel/debug/tracing/tracing_on;
+    echo > /sys/kernel/debug/tracing/set_ftrace_filter;
+    echo > /sys/kernel/debug/tracing/current_tracer;
+    echo 0 >  /sys/kernel/debug/tracing/options/func_stack_trace;"
+}

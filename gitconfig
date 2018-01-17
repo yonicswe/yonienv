@@ -2,9 +2,9 @@
 	email = yonatanc@mellanox.com
 	name = Yonatan Cohen
 
-# accepted values are two of 
-# normal, black, red, green, yellow, blue, magenta, cyan, white 
-# and optionally one of 
+# accepted values are two of
+# normal, black, red, green, yellow, blue, magenta, cyan, white
+# and optionally one of
 # bold, dim, ul, blink and reverse
 [color]
 	status = auto
@@ -14,7 +14,7 @@
 [color "grep"]
     linenumber = yellow bold
     match = red
-    filename = magenta  
+    filename = magenta
 
 [color "diff"]
   meta = yellow
@@ -48,14 +48,15 @@
     amend = commit --amend --no-edit
     unstage = reset HEAD
     discardall = checkout HEAD -- .
-    lp = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
-    lp10 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n10
-    lp20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n20
-    lp30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short -n30
+#                                 SHA          date     name             msg
+    l =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+    l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
+    l20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n20
+    l30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n30
     lf = log --pretty=short
-    l = log --pretty=oneline
-    l10 = log --pretty=oneline -n10
-    l30 = log --pretty=oneline -n30
+#   l = log --pretty=format oneline
+#   l10 = log --pretty=oneline -n10
+#   l30 = log --pretty=oneline -n30
     ll = log --pretty=oneline --graph --decorate --abbrev-commit
     #ll= log --graph --decorate --pretty=format:"%h %an, %ar - %s"
     gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
@@ -64,7 +65,9 @@
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
     diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
+    diffcommitfile = "!f() { git difftool $1^..$1 --tool=gvimdiff $2;}; f"
     format-patch-commit = "!f() { git format-patch $1^..$1 ; }; f"
+    edit = "!f() { GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; }; f"
 
     lg = !git lg1
     lg1 = !git lg1-specific --all

@@ -112,6 +112,7 @@ alias f='fg'
 alias b='bg'
 # alias grepc='grep -nH --include=*.c --include=*.h --include=*.cpp --include=*.hpp'
 alias grepc='ag --cc --noheading'
+alias greptxt='grep -nH --include=*.txt'
 alias ag='ag --noheading'
 alias ssh='ssh -X'
 alias pstree='pstree -Uphacl'
@@ -326,7 +327,7 @@ psmine ()
 }
 
 # export GREP_OPTIONS="--color --binary-files=without-match -D skip"
-alias grep='grep -nH --color --binary-files=without-match -D skip'
+alias grepfiles='grep -nH --color --binary-files=without-match -D skip'
 
 dirvimdiff () 
 {

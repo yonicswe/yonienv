@@ -33,8 +33,13 @@ main ()
         INSTALL_SOURCE=(drivers/infiniband/sw/rxe)
     elif [ "${mod}" == "core" ]  ; then             
         INSTALL_SOURCE=(drivers/infiniband/core)
+    elif [ "${mod}" == "mlx5ib" ]  ; then             
+        INSTALL_SOURCE=(drivers/infiniband/hw/mlx5)
+    elif [ "${mod}" == "mlx5core" ]  ; then             
+        INSTALL_SOURCE=(drivers/net/ethernet/mellanox/mlx5/core)
     elif [ "${mod}" == "mlx5" ]  ; then             
         INSTALL_SOURCE=(drivers/infiniband/hw/mlx5)
+        INSTALL_SOURCE+=(drivers/net/ethernet/mellanox/mlx5/core)
     else
         echo "no module specified for install"
         return;

@@ -65,8 +65,13 @@ alias 5180='ssh reg-l-vrt-5180'
 alias 5181='ssh reg-l-vrt-5181'
 alias 51806='ssh reg-l-vrt-5180-006'
 alias 51816='ssh reg-l-vrt-5181-006'
+
+# guy levi setup
+alias 212='ssh dev-l-vrt-212'
+alias 213='ssh dev-l-vrt-213'
 sm () 
 { 
+#   single module install 
     local ans;
 
     complete_words=$(awk '/if.*mod.*==/{print $5}' `which singlemoduleinstall.sh ` | sed 's/"//g')
@@ -91,24 +96,16 @@ sm ()
 
 geometryrestartoffice ()
 {
-    port=${1};
-    [ -z ${port} ] && return;
-    vncserver -kill :${port} ; sleep 10 ; vncserver -geometry 1920x1080 :${port}
+#     port=${1};
+#     [ -z ${port} ] && return;
+#     vncserver -kill :${port} ; sleep 10 ; vncserver -geometry 1920x1080 :${port}
+     xrandr -s "1920x1080"
 }
 
-geometryrestarthome ()
-{
-    port=${1};
-    [ -z ${port} ] && return;
-    vncserver -kill :${port} ; sleep 10 ; vncserver -geometry 1280x1024 :${port}
-}
+alias geometryrestartLaptop='xrandr -s "1280x720"'
+alias geometryrestarthome='xrandr -s "1280x1024"'
+alias geometryrestartLG='xrandr -s "1280x720"'
 
-geometryrestartLG ()
-{
-    port=${1};
-    [ -z ${port} ] && return;
-    vncserver -kill :${port} ; sleep 10 ; vncserver -geometry 1280x720 :${port}
-}
 alias mkgerrithook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
 gitpushtogerrit ()
 {
@@ -327,8 +324,51 @@ mftstatus ()
 
 alias mftstart='sudo mst start'
 
-alias mftsetlinktypeeth='sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=2 LINK_TYPE_P2=2'
-alias mftsetlinktypeinfiniband='sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=1 LINK_TYPE_P2=1'
+if [ -d /dev/mst ] ; then 
+    mst_dev_array=( $(ls /dev/mst/) );
+fi
+mftchoosedev ()
+{
+    local index=0;
+    local dev_num=;
+
+    for i in ${mst_dev_array[@]} ; do 
+        echo "[${index}] ${mst_dev_array[$index]}";
+        ((index++));
+    done
+
+    read -p "choose device: " dev_num;        
+    return ${dev_num};
+}
+
+mftsetlinktypeeth ()
+{
+    local mst_dev=$1;
+
+    if [ -z "${mst_dev}" ] ; then 
+        mftstatus;
+        mftchoosedev;
+        mst_dev=/dev/mst/${mst_dev_array[$?]}
+    fi; 
+
+    echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=2 LINK_TYPE_P2=2";
+    sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=2 LINK_TYPE_P2=2;
+}
+
+mftsetlinktypeinfiniband ()
+{
+    local mst_dev=$1;
+
+    if [ -z "${mst_dev}" ] ; then 
+        mftstatus;
+        mftchoosedev;
+        mst_dev=/dev/mst/${mst_dev_array[$?]}
+    fi; 
+
+    echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1";
+    sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=1 LINK_TYPE_P2=1;
+}
+
 mftgetlinktype ()
 {
     for d in /dev/mst/* ; do 
@@ -337,14 +377,23 @@ mftgetlinktype ()
     done
 }
 
-checkpatch () 
+_checkpatchcomplete ()
 {
-    if  [ $# -eq 0 ] ; then 
-        ls *.patch | tr ' ' '\n';
-        complete -W "$(ls *.patch)" checkpatch;
-        return;
-    fi
+    ls *.patch | tr ' ' '\n';
+    complete -W "$(ls *.patch)" checkpatch;
+    return;
+}
+
+checkpatchkernel () 
+{
+    if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
     ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID $@
+}
+
+checkpatchuserpace () 
+{
+    if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
+    ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID,PREFER_KERNEL_TYPES $@
 }
 
 alias mkvmredhat74='/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l RH_7.4_x86_64_virt_guest -c 16 -r 8192 -d 35'
@@ -674,14 +723,14 @@ mkupstreamlib1sttime ()
 alias mkupstreamlib='make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
 alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
-alias mkrdmacore='make -C build -j ${ncoresformake} -s'
-alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s'
-alias mkrdmacore1sttime='rdma-core_build.sh'
+alias mkrdmacore='make -C build -j ${ncoresformake} -s 1>/dev/null' 
+alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s 1>/dev/null'
+alias mkrdmacore1sttime='rdma-core_build.sh 1>/dev/null'
 alias mkrdmacoreinstall='sudo make -C build install -s'
-alias mkrdmacoreibverbs='make -C build ibverbs -j ${ncoresformake} -s'
-alias mkrdmacoremlx4='make -C build mlx4 -j ${ncoresformake} -s'
-alias mkrdmacoremlx5='make -C build mlx5 -j ${ncoresformake} -s'
-mkrdmacoreapps ()
+alias mkrdmacoreibverbs='make -C build ibverbs -j ${ncoresformake} -s 1>/dev/null'
+alias mkrdmacoremlx4='make -C build mlx4 -j ${ncoresformake} -s 1>/dev/null'
+alias mkrdmacoremlx5='make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
+mkrdmacoreApps ()
 {
     make -C build ibv_rc_pingpong -j ${ncoresformake} -s; 
 #   make -C build ibv_ud_pingpong -j ${ncoresformake} -s;
@@ -709,10 +758,29 @@ mkofedbuildversion ()
 }
 
 
-cddevel ()    { cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1; } 
-cdupstream () { cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1; } 
-cdofed  ()    { cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1; } 
+cddevel () { 
+    cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;  
+}
 complete -W "$(find ~yonatanc/devel/ -maxdepth 1 -type d  -exec basename {} \;     )" cddevel
+cdupstream () { 
+    cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1;  
+}
 complete -W "$(find ~yonatanc/devel/upstream -maxdepth 1 -type d  -exec basename {} \;     )" cdupstream
+cdofed  () { 
+    cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1;  
+}
 complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
 
+alias mkcoverletterrdmacore='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core'
+alias mkcoverletterkernel='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next'
+
+mkkernelbuildmlx5ib () 
+{
+    echo "make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/";
+    make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/;
+}
+mkkernelbuildmlx5core ()
+{ 
+   echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/"
+   make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
+}

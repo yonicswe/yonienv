@@ -5,13 +5,13 @@ set noincsearch
 
 " disable * from jumping with the curser to the next occurence
 nnoremap * *N
-let  @/='hilight_this' 
+let  @/='hilight_this'
 
 set nowrapscan
 set nowrap
 set noswapfile
 
-" replace tabs with spaces. 
+" replace tabs with spaces.
 au FileType c   set noexpandtab
 au FileType cpp set noexpandtab
 au FileType vim set expandtab
@@ -23,7 +23,7 @@ au FileType python set noexpandtab
 au FileType xml set expandtab
 au FileType gdb set expandtab
 
-" show a column marker to help keep the code 
+" show a column marker to help keep the code
 " shorter than 80 chars.
 " to disable set cc=
 " au FileType c,cpp set colorcolumn=80
@@ -32,16 +32,16 @@ au FileType gdb set expandtab
 " show column designator on the cursor
 " set cursorcolumn or cuc
 "
-" another method to be notified about passing the 80 chars line is 
-" to color the passing char 
-au FileType c,cpp call matchadd('ColorColumn', '\%80v', 100)  
+" another method to be notified about passing the 80 chars line is
+" to color the passing char
+au FileType c,cpp call matchadd('ColorColumn', '\%80v', 100)
 
 
-"  __  __                     
-" |  \/  | ___  _  _  ___ ___ 
+"  __  __
+" |  \/  | ___  _  _  ___ ___
 " | |\/| |/ _ \| || |(_-</ -_)
 " |_|  |_|\___/ \_,_|/__/\___|
-"                             
+"
 
 set mouse=a
 if has("mouse_sgr")
@@ -141,6 +141,9 @@ function! Update_dict ()
 endfunc
 source ~/.vim/.vimrc.dictionary
 " set dictionary=/usr/share/dict/words
+"
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
 
 
 
@@ -675,6 +678,18 @@ let g:netrw_list_hide= '\.[ch]$'
 "  cscope
 "  -------------------------
 source /.autodirect/mtrswgwork/yonatanc/ipteam_env/vim/cscope.vim
+
+" ----------------------
+"  enable bash aliases from vim shell
+" ----------------------
+" one way to do this
+" set shellcmdflag=-ic
+"
+" another way is to add to your bashrc
+" the line  : shopt -s expand_aliases
+" and in .vimrc do this :
+"  let $BASH_ENV = "~/.bashrc"
+"
 
 
 " ------------------------------

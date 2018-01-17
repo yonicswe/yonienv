@@ -4,10 +4,10 @@ tagcompleteme ()
 {
     name_spec=$1;
     # complete -W "$(awk -v n=$name_spec '/${n}/{print $1}' tags )" gt 
-    if [ -z ${name_spec}] ; then 
-        complete -W "$(cat tags |               awk '{print $1}')" gt vt 
+    if [ -z "${name_spec}" ] ; then 
+        complete -W "$( awk '{print $1}' tags )" gt vt 
     else
-        complete -W "$(grep ${name_spec} tags | awk '{print $1}')" gt vt
+        complete -W "$(awk '{print $1}' tags | /usr/bin/grep -i ${name_spec} )" gt vt
     fi
 }
 
@@ -25,6 +25,6 @@ tagcscope ()
 
 tagcscopekernel () 
 {
-    find drivers/infiniband/  include/ -regex ".*\.c\|.*\.h"  -type f > cscope.files;
+    find drivers/infiniband/ drivers/net/ethernet/mellanox/ include/ -regex ".*\.c\|.*\.h"  -type f > cscope.files;
     cscope -b;
 }
