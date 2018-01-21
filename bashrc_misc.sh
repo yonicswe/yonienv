@@ -7,3 +7,5 @@ alias yuminfoiniso='yum info --disablerepo=\* --enablerepo=c7-media'
 
 alias sd='echo $TERM'
 alias diff='diff -up'
+
+alias xtermblack="xterm -bg black -fg green -fa 'Monospace' -fs 10 &"
