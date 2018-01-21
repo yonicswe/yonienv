@@ -34,7 +34,9 @@
     g = grep --color
     # d = diff --color
     d = diff
+    dg = difftool --tool=gvimdiff --no-prompt
     dc = diff --cached
+    dcg = difftool --tool=gvimdiff --no-prompt --cached
     dt = difftool
     mt = mergetool
     ds = diff --stat

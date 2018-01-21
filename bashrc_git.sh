@@ -1,7 +1,7 @@
 #!/bin/bash
 
 alias gitdiffvim='git difftool --tool=vimdiff --no-prompt'
-alias gitdiffgvim='git difftool --tool=gvimdiff --no-prompt'
+# alias gitdiffgvim='git difftool --tool=gvimdiff --no-prompt'
 alias gitdiffkdiff='git difftool --tool=kdiff3 --no-prompt'
 alias gitdiffstat='git --no-pager diff --stat'
 alias gitlog='git log --name-status'
