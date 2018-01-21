@@ -120,7 +120,7 @@ alias pstree='pstree -Uphacl'
 # list only directories 
 lld ()
 {
-   ls -ld --color $(ls -l | awk '/^d/{print $9}')
+   ls -ltrd --color $(ls -l | awk '/^d/{print $9}')
 }
 
 # list hidden files
@@ -571,11 +571,12 @@ export -f ethlist
 
 delete_executables ()
 { 
-    local executable_file_list;
-    executable_file_list=$(find . * -exec file {} \; |grep "ELF.*executable"|awk '{print $1}'|sed 's/:$//')
-        for i in ${executable_file_list} ; do
+#     local executable_file_list;
+#     executable_file_list=$(find . -maxdepth 1 -exec file {} \; |\grep "ELF.*executable"|awk '{print $1}'|sed 's/:$//')
+    find . -maxdepth 1 -exec file {} \; |\grep "ELF.*executable"|awk '{print $1}'|sed 's/:$//' | while read i ; do 
+#         for i in ${executable_file_list} ; do
             echo "rm -f $i";
-            rm -f $i;
+        rm -f $i;
     done
 }
 
