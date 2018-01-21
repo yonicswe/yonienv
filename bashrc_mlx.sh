@@ -175,7 +175,9 @@ gitpushtogerrit ()
 
 }
 
+if [ -e .gitpush.log ] ; then 
 complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
+fi
 
 listgitrepos ()
 {
