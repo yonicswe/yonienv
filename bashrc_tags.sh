@@ -18,13 +18,27 @@ tagcscope ()
 {
     source_path=${1:-.};
     find ${source_path} -regex ".*\.c\|.*\.h"  -type f > cscope.files;
-    ls cscope.*
-    cscope -vb;
-    ls cscope.*
+    cscope -vqb;
 }
 
 tagcscopekernel () 
 {
-    find drivers/infiniband/ drivers/net/ethernet/mellanox/ include/ -regex ".*\.c\|.*\.h"  -type f > cscope.files;
-    cscope -b;
+    source_path=${1:-.};
+    find ${source_path} -regex ".*\.c\|.*\.h"  -type f > cscope.files;
+    cscope -vqbk;
 }
+
+tagcscopeinfiniband () 
+{
+    source_path=${1:-.};
+    find ${source_path}/drivers/infiniband/ ${source_path}/drivers/net/ethernet/mellanox/ ${source_path}/include/ -regex ".*\.c\|.*\.h"  -type f > cscope.files;
+    cscope -vkqb;
+}
+
+tagcscopemlx5 () 
+{
+    source_path=${1:-.};
+    find ${source_path}/drivers/infiniband/hw/mlx5/ ${source_path}/drivers/net/ethernet/mellanox/mlx5/ ${source_path}/include/ -regex ".*\.c\|.*\.h"  -type f > cscope.files;
+    cscope -vkqb;
+}
+
