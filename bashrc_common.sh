@@ -54,5 +54,10 @@ findyonialias ()
     grep -l "$1 ()" ${yonienv}bashrc_*sh
 }
 
-
+whichbash ()
+{
+    local yonienv_cmd=${1};
+    [ -z ${yonienv_cmd} ] && return;
+    grep -l ${yonienv_cmd} ${yonienv}/bashrc_* | sort -u | xargs basename
+}
 
