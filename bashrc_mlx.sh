@@ -156,7 +156,11 @@ gitpushtogerrit ()
     fi
     echo "pushing"        
     git push ${remote} ${head}:refs/for/${branch}/${topic}
-    echo "git push ${remote} ${head}:refs/for/${branch}/${topic}" >> .gitpushtogerrit.log
+    echo "git push ${remote} ${head}:refs/for/${branch}/${topic}" >> .gitpush.log
+    cat .gitpush.log | sort -u > .gitpush.log.tmp
+    mv .gitpush.log.tmp .gitpush.log  1>/dev/null
+
+    complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
 
 #     if [ $# -lt 2 ] ; then 
 #          echo "less than 3 params branch=${branch}, topic=${topic}, remote=${remote}" 
@@ -170,6 +174,8 @@ gitpushtogerrit ()
 #     fi
 
 }
+
+complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
 
 listgitrepos ()
 {
