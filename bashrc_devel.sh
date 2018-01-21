@@ -237,7 +237,7 @@ listinstalledkernels ()
             grub=" ";
             libmodules=" ";
             if [ -e /boot/grub/grub.conf ] ; then 
-                if [ $(grep -nH $f /boot/grub/grub.conf | wc -l) -gt 0 ] ; then
+                if [ $(grep -nH "$f" /boot/grub/grub.conf | wc -l) -gt 0 ] ; then
                     grub="x";
                 fi
             fi
@@ -444,3 +444,5 @@ ftraceoff ()
     echo > /sys/kernel/debug/tracing/current_tracer;
     echo 0 >  /sys/kernel/debug/tracing/options/func_stack_trace;"
 }
+
+complete -W "$(find /lib/modules/$(uname -r)/kernel/drivers/net/ethernet/mellanox/ /lib/modules/$(uname -r)/kernel/drivers/infiniband/ -type f -printf "%f " | sed 's/.ko//g')" rmmod insmod modprobe
