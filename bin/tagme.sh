@@ -17,11 +17,19 @@ excludeTagdir=(./build);
 
 printf "tag     : %s\n" ${includeTagdir[@]}
 if [ ${#excludeTagdir[@]} -eq  0 ] ; then
-    ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h")
+    source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h"))
+    ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+    echo > cscope.files
+    for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+    cscope -vkqb
 else 
     printf "exclude : %s\n" ${excludeTagdir[@]/and/}
     prune="-path ${excludeTagdir[@]/and/-o -path}";
-    ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h")
+    source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
+    ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+    echo > cscope.files
+    for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+    cscope -vkqb
 fi    
 exit
 
