@@ -792,3 +792,7 @@ mkkernelbuildmlx5core ()
    echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/"
    make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
 }
+
+alias touchmlx5ib='find drivers/infiniband/hw/mlx5/ -name "*.c" -exec touch {} \;'
+alias touchmlx5core='find drivers/net/ethernet/mellanox/mlx5/ -name "*.c" -exec touch {} \;'
+alias touchmlx5='touchmlx5ib ; touchmlx5core'
