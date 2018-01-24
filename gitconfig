@@ -31,6 +31,8 @@
 [alias]
     s = status -uno
     su = status -u
+    listmodified = diff --name-only
+    listcached = diff --cached --name-only
     g = grep --color
     # d = diff --color
     d = diff
