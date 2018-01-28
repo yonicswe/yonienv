@@ -37,6 +37,7 @@
     # d = diff --color
     d = diff
     dg = difftool --tool=gvimdiff --no-prompt
+    dv = difftool --tool=vimdiff --no-prompt
     dc = diff --cached
     dcg = difftool --tool=gvimdiff --no-prompt --cached
     dt = difftool
@@ -44,8 +45,8 @@
     ds = diff --stat
     ss = show --stat
     b = branch -vv
-    branch-delete = branch -D 
-    branch-rename = branch -M
+    bdelete = branch -D 
+    brename = branch -M
     r = remote -vv
     c = checkout
     t = ls-tree
