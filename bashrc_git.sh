@@ -13,8 +13,13 @@ alias gitunstageall='git reset HEAD'
 alias gituncommit='git reset --soft HEAD^'
 gitb () 
 {
+    local branch="$1"
 #     git b | awk '/^\*/{print "\033[32m-->["$2"]\033[0m"} !/^\*/{print "    "$1}'
-    git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}'
+    if [ -z ${branch} ] ; then   
+        git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}'
+    else
+        git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}' | grep "${branch}"
+    fi
 }
 
 applyPatchList () 

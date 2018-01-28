@@ -397,7 +397,7 @@ set foldcolumn=1
 "  \_/ |_||_|_|_|\__,_||_||_|  |_|  
 "                                   
 "
-" set diffopt+=iwhite
+" to ignore white space :set diffopt+=iwhite
 if &diff 
     colorscheme molokai
     map [p ]c
@@ -423,6 +423,35 @@ endif
 
 " prevent readonly mode. preffered when using git vimdiff 
 set noro
+
+"------- view patch file side by side -------------------------
+" open the patch file and press : ,vd
+function! Vimdiff()
+    let lines = getline(0, '$')
+    let la = []
+    let lb = []
+    for line in lines
+        if line[0] == '-'
+            call add(la, line[1:])
+        elseif line[0] == '+'
+            call add(lb, line[1:])
+        else
+            call add(la, line)
+            call add(lb, line)
+        endif
+    endfor
+    tabnew
+    set bt=nofile
+    vertical new
+    set bt=nofile
+    call append(0, la)
+    diffthis
+    exe "normal \<C-W>l"
+    call append(0, lb)
+    diffthis
+endfunction
+autocmd FileType diff       nnoremap <silent> <leader>vd :call Vimdiff()<CR>
+"------- view patch file side by side -------------------------
 
 
 function! Auto_comp_paren ()
