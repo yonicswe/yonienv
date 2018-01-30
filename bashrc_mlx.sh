@@ -297,7 +297,6 @@ backupgitkernel ()
 
 
 
-alias ofedupstreaminstall='sudo build=latest-upstream /mswg/release/ofed/ofed_install --all --force'
 
 mkofedlinks () 
 {
@@ -310,8 +309,13 @@ alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-us
 
 vlinstall ()
 {
-    echo "make sure that mft installed before you install vl"; 
-    sudo /.autodirect/net_linux_verification/tools/install_vls.sh; 
+    local answer;
+    echo ""; 
+    echo -e "\033[1;33;7mmake sure that mft installed before you install vl\033[0m"
+    read -p "continue ? [y/N] : " answer;
+    if [ "$answer" == "y" ] ; then 
+        sudo /.autodirect/net_linux_verification/tools/install_vls.sh; 
+    fi
 #  another script that could be used.
 #  sudo /mswg/projects/ver_tools/reg2_latest/install.sh;
 
@@ -320,8 +324,12 @@ vlinstall ()
 # you must install mft to be able to change link type.
 mftinstall () 
 {
+    local answer;
     echo -e "\033[1;33;7mmake sure that /lib/modules/$(uname -r)/source -> to a valid kernel source tree\033[0m"
-    sudo /mswg/release/mft/mftinstall;
+    read -p "continue ? [y/N] : " answer;
+    if [ "$answer" == "y" ] ; then 
+        sudo /mswg/release/mft/mftinstall;
+    fi
 }
 
 mftstatus () 
@@ -374,7 +382,7 @@ mftsetlinktypeinfiniband ()
     fi; 
 
     echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1";
-    sudo mlxconfig -d /dev/mst/mt4115_pciconf0 set LINK_TYPE_P1=1 LINK_TYPE_P2=1;
+    sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1;
 }
 
 mftgetlinktype ()
@@ -422,24 +430,24 @@ findiblibs ()
 
 ib_libs=(libibverbs.so)
 ib_libs+=(libmlx4.so)
-ib_libs+=(libmlx4-rdmav2.so)
+ib_libs+=(libmlx4-rdmav*.so)
 ib_libs+=(libmlx5.so)
-ib_libs+=(librxe-rdmav16.so)
-ib_libs+=(librxe-rdmav2.so)
+ib_libs+=(librxe-rdmav*.so)
+ib_libs+=(librxe-rdmav*.so)
 ib_libs+=(libibumad.so)
 ib_libs+=(libibcm.so)
-ib_libs+=(libipathverbs-rdmav16.so)
-ib_libs+=(libnes-rdmav16.so)
-ib_libs+=(libhfi1verbs-rdmav16.so)
-ib_libs+=(libhns-rdmav16.so)
-ib_libs+=(libocrdma-rdmav16.so)
-ib_libs+=(libi40iw-rdmav16.so)
-ib_libs+=(libbnxt_re-rdmav16.so)
-ib_libs+=(libqedr-rdmav16.so)
-ib_libs+=(libvmw_pvrdma-rdmav16.so)
-ib_libs+=(libcxgb4-rdmav16.so)
-ib_libs+=(libcxgb3-rdmav16.so)
-ib_libs+=(libmthca-rdmav16.so)
+ib_libs+=(libipathverbs-rdmav*.so)
+ib_libs+=(libnes-rdmav*.so)
+ib_libs+=(libhfi1verbs-rdmav*.so)
+ib_libs+=(libhns-rdmav*.so)
+ib_libs+=(libocrdma-rdmav*.so)
+ib_libs+=(libi40iw-rdmav*.so)
+ib_libs+=(libbnxt_re-rdmav*.so)
+ib_libs+=(libqedr-rdmav*.so)
+ib_libs+=(libvmw_pvrdma-rdmav*.so)
+ib_libs+=(libcxgb4-rdmav*.so)
+ib_libs+=(libcxgb3-rdmav*.so)
+ib_libs+=(libmthca-rdmav*.so)
 ib_libs+=(librdmacm.so)
 ib_libs+=(libibacmp.so)
 ib_libs+=(librspreload.so)
@@ -747,24 +755,31 @@ mkrdmacoreApps ()
 #   make -C build ibv_xsrq_pingpong -j ${ncoresformake} -s;
 }
 
-instupstreamlib () 
+alias ofedinstallupstream='sudo build=latest-upstream /mswg/release/ofed/ofed_install --all --force'
+ofedinstallupstreamlib () 
 { 
     echo "sudo build=ofed-upstream_last_stable /mswg/release/ofed/ofed_install --all --force --disable-kmp --without-valgrind";
     sudo build=ofed-upstream_last_stable /mswg/release/ofed/ofed_install --all --force --disable-kmp --without-valgrind
 }
 
-listofedversions () 
+ofedlistversions () 
 {
     find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"; 
 }
 
-mkofedbuildversion () 
+ofedbuildversion () 
 {
     local version=${1};
     if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
 }
 
+ofedfindindexforpackage () 
+{
+    local pkg=$1;
+    if [ -z ${pkg} ] ; then echo "ofedfindindexforpackage <pkg>" ; return ; fi 
+    ofed_info |grep -m2  -A1 ${pkg}
+}
 
 cddevel () { 
     cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;  
