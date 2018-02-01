@@ -445,4 +445,13 @@ ftraceoff ()
     echo 0 >  /sys/kernel/debug/tracing/options/func_stack_trace;"
 }
 
-complete -W "$(find /lib/modules/$(uname -r)/kernel/drivers/net/ethernet/mellanox/ /lib/modules/$(uname -r)/kernel/drivers/infiniband/ -type f -printf "%f " | sed 's/.ko//g')" rmmod insmod modprobe
+infiniband_kernel_module_path=
+if [ -d /lib/modules/$(uname -r)/kernel/drivers/infiniband/ ] ; then 
+infiniband_kernel_module_path=" /lib/modules/$(uname -r)/kernel/drivers/infiniband/"
+fi 
+if [ -d /lib/modules/$(uname -r)/kernel/drivers/net/ethernet/mellanox/ ] ; then
+infiniband_kernel_module_path+=" /lib/modules/$(uname -r)/kernel/drivers/net/ethernet/mellanox/"
+fi
+if [ -n "${infiniband_kernel_module_path}" ] ; then
+complete -W "$(find  ${infiniband_kernel_module_path} -name "*ko" -type f -printf "%f " | sed 's/.ko//g')" rmmod insmod modprobe
+fi
