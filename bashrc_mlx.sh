@@ -34,7 +34,7 @@ alias 1459ping='ping  dev-l-vrt-145-009'
 
 alias 146='ssh   dev-l-vrt-146' 
 alias 146root='ssh   root@dev-l-vrt-146'
-alias 1465ping='ping  dev-l-vrt-146-005'
+alias 146ping='ping  dev-l-vrt-146'
 
 alias 1465='ssh  dev-l-vrt-146-005'
 alias 1465root='ssh  root@dev-l-vrt-146-005'
@@ -223,7 +223,7 @@ ibmod ()
 
     local modules_path="${modules_base_path}/infiniband"
     modules_path+=" ${modules_base_path}/net/ethernet/mellanox"
-    find ${modules_path}  -type f -exec basename {} \; | sed 's/\.ko//g' | 
+    find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | 
         while read m ; do 
             lsmod | awk '{print $1" "$3" " }' | \grep $m ; 
 #             lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe"; 
