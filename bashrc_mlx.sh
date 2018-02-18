@@ -8,7 +8,7 @@ alias 9='ssh     r-ole09'
 alias 10='ssh    r-ole10'
 alias 11='ssh    r-ole11'
 
-alias 145='ssh   dev-l-vrt-145' 
+alias 145='ssh   dev-l-vrt-145'
 alias 145root='ssh   root@dev-l-vrt-145'
 alias 145ping='ping   dev-l-vrt-145'
 
@@ -118,6 +118,8 @@ gitpushtogerrit ()
     local head=HEAD;
     local answer=;
 
+    gitpushtogerritcomplete;
+
     if [ $# -eq 0 ] ; then 
         echo "gitpushtogerrit [-r <remote> | origin] [ -h <git index> | HEAD] -b <branch> -t <topic>" ;
         complete -W "$(git remote)" gitpushtogerrit
@@ -160,8 +162,6 @@ gitpushtogerrit ()
     cat .gitpush.log | sort -u > .gitpush.log.tmp
     mv .gitpush.log.tmp .gitpush.log  1>/dev/null
 
-    complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
-
 #     if [ $# -lt 2 ] ; then 
 #          echo "less than 3 params branch=${branch}, topic=${topic}, remote=${remote}" 
 #     fi              
@@ -175,9 +175,13 @@ gitpushtogerrit ()
 
 }
 
-if [ -e .gitpush.log ] ; then 
-complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
-fi
+gitpushtogerritcomplete () 
+{
+    if [ -e .gitpush.log ] ; then 
+        complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
+    fi
+}
+gitpushtogerritcomplete;
 
 listgitrepos ()
 {
@@ -212,18 +216,24 @@ listgitrepos ()
 ibmod ()
 {
 # lsmod |grep "^ib_\|^mlx\|^rdma" | awk '{print $1" "$3}' | column -t |grep "ib\|mlx\|rdma";
-    local modules_base_path=
-    if [ -d /usr/lib/modules/ ] ; then         
-        modules_base_path="/usr/lib/modules/$(uname -r)/kernel/drivers/";
-    elif  [ -d /lib/modules/ ]  ; then 
-        modules_base_path="/lib/modules/$(uname -r)/kernel/drivers/";
+    local modules_path=;
+    local modules_base_path=;
+
+    if [ -d /usr/lib/modules/$(uname -r) ] ; then         
+        modules_base_path="/usr/lib/modules/$(uname -r)";
+    elif  [ -d /lib/modules/$(uname -r) ]  ; then 
+        modules_base_path="/lib/modules/$(uname -r)";
     else
         echo "no /lib/modules or /usr/lib/modules/ found";
     fi
 
-    local modules_path="${modules_base_path}/infiniband"
-    modules_path+=" ${modules_base_path}/net/ethernet/mellanox"
-    find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | 
+    modules_path="${modules_base_path}/kernel/drivers/infiniband"
+    modules_path+=" ${modules_base_path}/kernel/drivers/net/ethernet/mellanox"
+
+    # ofed libs are usually under extra
+    modules_path+=" ${modules_base_path}/extra";
+
+    find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |  
         while read m ; do 
             lsmod | awk '{print $1" "$3" " }' | \grep $m ; 
 #             lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe"; 
@@ -296,7 +306,24 @@ backupgitkernel ()
 }
 
 
+ofeddeletebackport () 
+{
+    local ans=;
+    read -p "are you running this from ofed kernel root directory [Y/n] " ans;
+    [ "${ans}" == "n" ] && return -1;
 
+    if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then 
+        echo "you need to run mkofedlinks";
+        return;
+    fi
+
+    read -p "are you sure about deleting backport branch ? [y/N] " ans;
+    if  [ ! "${ans}" == "y" ] ; then 
+        return ; 
+    fi ;
+    echo "./ofed_scripts/cleanup"
+    ./ofed_scripts/cleanup
+}
 
 mkofedlinks () 
 {
@@ -306,6 +333,7 @@ mkofedlinks ()
 }
 
 alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
+# alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-srp-mod --with-rxe-mod"
 
 vlinstall ()
 {
@@ -781,6 +809,7 @@ ofedfindindexforpackage ()
     ofed_info |grep -m2  -A1 ${pkg}
 }
 
+if [ -d ~yonatanc/devel ] ; then 
 cddevel () { 
     cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;  
 }
@@ -793,6 +822,7 @@ cdofed  () {
     cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1;  
 }
 complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
+fi
 
 alias mkcoverletterrdmacore='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core'
 alias mkcoverletterkernel='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next'
@@ -811,3 +841,5 @@ mkkernelbuildmlx5core ()
 alias touchmlx5ib='find drivers/infiniband/hw/mlx5/ -name "*.c" -exec touch {} \;'
 alias touchmlx5core='find drivers/net/ethernet/mellanox/mlx5/ -name "*.c" -exec touch {} \;'
 alias touchmlx5='touchmlx5ib ; touchmlx5core'
+
+alias clipboard='cat ~/share/clipboard.txt'
