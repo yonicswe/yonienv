@@ -197,13 +197,13 @@ listgitrepos ()
     [ "$show_branches" = "yes" ] && echo -e "                                |-rdma-next-mlx";
     [ "$show_branches" = "yes" ] && echo -e "    regression next kernel      |-for-upstream";
     [ "$show_branches" = "yes" ] && echo -e "    regression current kernel   \`-for-linust";
-    echo "mellanox ofed.4 kernel       : ssh://l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0";
-    echo "mellanox ofed.4 libibverbs   : ssh://l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs";
-    echo "mellanox ofed.4 libmlx4      : ssh://l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4";
-    echo "mellanox ofed.4 libmlx5      : ssh://l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5";
-    echo "mellanox rdmacore            : ssh://l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core"; 
-    [ "$show_branches" = "yes" ] && echo -e "    stable                      |-master"; 
-    [ "$show_branches" = "yes" ] && echo -e "    up to date                  \`-for-upstream";
+    echo "mellanox ofed.4 kernel       : ssh://yonatanc@gerrit:29418/mlnx_ofed/mlnx-ofa_kernel-4.0";
+    echo "mellanox ofed.4 libibverbs   : ssh://yonatanc@gerrit:29418/mlnx_ofed_2_0/libibverbs";
+    echo "mellanox ofed.4 libmlx4      : ssh://yonatanc@gerrit:29418/mlnx_ofed_2_0/libmlx4";
+    echo "mellanox ofed.4 libmlx5      : ssh://yonatanc@gerrit:29418/connect-ib/libmlx5";
+    echo "mellanox rdmacore            : ssh://yonatanc@gerrit:29418/upstream/rdma-core"; 
+    [ "$show_branches" = "yes" ] && echo -e "    stable                |-master"; 
+    [ "$show_branches" = "yes" ] && echo -e "    up to date            \`-for-upstream";
 
     echo "jason    rdmacore            : https://github.com/linux-rdma/rdma-core.git"; 
 
@@ -310,6 +310,9 @@ ofeddeletebackport ()
 {
     local ans=;
     read -p "are you running this from ofed kernel root directory [Y/n] " ans;
+    [ "${ans}" == "n" ] && return -1;
+
+    read -p "are you checked out on the backport branch [Y/n] " ans;
     [ "${ans}" == "n" ] && return -1;
 
     if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then 
