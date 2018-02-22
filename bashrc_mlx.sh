@@ -809,7 +809,7 @@ ofedfindindexforpackage ()
 {
     local pkg=$1;
     if [ -z ${pkg} ] ; then echo "ofedfindindexforpackage <pkg>" ; return ; fi 
-    ofed_info |grep -m2  -A1 ${pkg}
+    ofed_info |grep -m2  -A1 ${pkg} | sort -u
 }
 
 if [ -d ~yonatanc/devel ] ; then 
