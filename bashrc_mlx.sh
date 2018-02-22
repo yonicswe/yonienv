@@ -186,31 +186,49 @@ gitpushtogerritcomplete;
 listgitrepos ()
 {
     local show_branches=no;
-    [ "$1" = "b" ] &&  show_branches=yes;
+    local prefix="ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418"
+
+
+    OPTIND=0;
+    while getopts "bh" opt; do
+        case $opt in 
+        b)
+            show_branches=yes;
+            ;;
+        h)
+            prefix="http://yonatanc@l-gerrit.mtl.labs.mlnx:8080";
+            ;;
+        *)
+            ;;
+        esac;
+    done;
 
     echo "yonienv                      : https://github.com/yonicswe/yonienv"; 
     echo
     echo "linus torvald linux upstream : git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git";
     echo
-    echo "mellanox upstream kernel     : ssh://l-gerrit.mtl.labs.mlnx:29418/upstream/linux"; 
+    echo "mellanox upstream kernel     : ${prefix}/upstream/linux"; 
     [ "$show_branches" = "yes" ] && echo -e "                                |-rdma-rc-mlx"; 
     [ "$show_branches" = "yes" ] && echo -e "                                |-rdma-next-mlx";
-    [ "$show_branches" = "yes" ] && echo -e "    regression next kernel      |-for-upstream";
-    [ "$show_branches" = "yes" ] && echo -e "    regression current kernel   \`-for-linust";
-    echo "mellanox ofed.4 kernel       : ssh://yonatanc@gerrit:29418/mlnx_ofed/mlnx-ofa_kernel-4.0";
-    echo "mellanox ofed.4 libibverbs   : ssh://yonatanc@gerrit:29418/mlnx_ofed_2_0/libibverbs";
-    echo "mellanox ofed.4 libmlx4      : ssh://yonatanc@gerrit:29418/mlnx_ofed_2_0/libmlx4";
-    echo "mellanox ofed.4 libmlx5      : ssh://yonatanc@gerrit:29418/connect-ib/libmlx5";
-    echo "mellanox rdmacore            : ssh://yonatanc@gerrit:29418/upstream/rdma-core"; 
-    [ "$show_branches" = "yes" ] && echo -e "    stable                |-master"; 
-    [ "$show_branches" = "yes" ] && echo -e "    up to date            \`-for-upstream";
+    [ "$show_branches" = "yes" ] && echo -e "                                |-for-upstream   // regression next kerenl";
+    [ "$show_branches" = "yes" ] && echo -e "                                \`-for-linust     // regression currentn kernel";
+    echo
+    echo "mellanox rdmacore            : ${prefix}/upstream/rdma-core"; 
+    [ "$show_branches" = "yes" ] && echo -e "                  |-master        // stable"; 
+    [ "$show_branches" = "yes" ] && echo -e "                  \`-for-upstream //up to date";
 
     echo "jason    rdmacore            : https://github.com/linux-rdma/rdma-core.git"; 
+    echo;
+    echo "mellanox ofed.4 kernel       : ${prefix}/mlnx_ofed/mlnx-ofa_kernel-4.0";
+    echo "mellanox ofed.4 libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
+    echo "mellanox ofed.4 libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
+    echo "mellanox ofed.4 libmlx5      : ${prefix}/connect-ib/libmlx5";
 
-    echo "mellanox regression vrtsdk   : ssh://l-gerrit.mtl.labs.mlnx:29418/vrtsdk"; 
-    echo "mellanox regression network  : ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/networking"; 
-    echo "mellanox regression core     : ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/core"; 
-    echo "mellanox regression core     : ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/directtests"; 
+    echo;
+    echo "mellanox regression vrtsdk      : ${prefix}/vrtsdk"; 
+    echo "mellanox regression network     : ${prefix}/Linux_drivers_verification/networking"; 
+    echo "mellanox regression core        : ${prefix}/Linux_drivers_verification/core"; 
+    echo "mellanox regression directtests : ${prefix}/Linux_drivers_verification/directtests"; 
 }
 
 ibmod ()
