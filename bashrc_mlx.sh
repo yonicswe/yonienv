@@ -812,6 +812,18 @@ ofedfindindexforpackage ()
     ofed_info |grep -m2  -A1 ${pkg} | sort -u
 }
 
+ofedconfigureofakernel () 
+{
+    local configure_options=;
+    configure_options=$(/etc/infiniband/info |grep Configure\ options | sed 's/.*://g');
+    echo "./configure -j $(nproc) ${configure_options}"
+    read -p "continue [Y/n]: " ans; 
+    if [ "$ans" == "n" ] ; then 
+        return;
+    fi
+    ./configure -j $(nproc) ${configure_options}
+}
+
 if [ -d ~yonatanc/devel ] ; then 
 cddevel () { 
     cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;  
