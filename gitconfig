@@ -53,6 +53,7 @@
     amend = commit --amend --no-edit
     unstage = reset HEAD
     discardall = checkout HEAD -- .
+    head = log -n1 --pretty=oneline
 #                                 SHA          date     name             msg
     l =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
     l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
