@@ -170,6 +170,12 @@ set complete-=i
 " au FileType c,cpp   set grepprg=grep\ -nHr\ --include=*.cpp\ --include=*\.\[c,h\]\
 au FileType c,cpp   set grepprg=ag\ --cc\ 
 
+" shortcut for cscope search where method under cursor is being called.
+map <leader>ac :cs f c <cword><CR>
+
+" shortcut for cscope search of where symbol under cursor appears
+map <leader>as :cs f s <cword><CR>
+
 
 
 map <F11> :cp<cr>
@@ -400,6 +406,7 @@ set foldcolumn=1
 " to ignore white space :set diffopt+=iwhite
 if &diff 
     colorscheme molokai
+"     colorscheme candycode
     map [p ]c
     map ]p [c
     map [B ]c
@@ -413,8 +420,8 @@ if &diff
 else
     map <C-Down>   ]]zz
     map <C-Up>     [[zz
-    map <C-S-Down> ]}
-    map <C-S-Up>   [{
+    "     map <C-S-Down> ]}
+    "     map <C-S-Up>   [{
     map [C :tabnext<CR> 
     map [D :tabprevious<CR> 
     map <C-Right> :tabnext<CR> 
@@ -502,13 +509,13 @@ set statusline=%<%F\ %h%m%r%=%-14.(\[%l:%L\]\[%v\]%)\ %P
 " au FileType perl set guifont=VL\ Gothic\ 13
 " au FileType txt set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 12
 " au FileType git,diff    set guifont=VL\ Gothic\ 13
-set guifont=VL\ Gothic\ 14
+set guifont=VL\ Gothic\ 16
 " au FileType c,cpp,sh    set guifont=VL\ Gothic\ 14
 " au FileType vim set guifont=VL\ Gothic\ 14
 " au FileType gitconfig set guifont=VL\ Gothic\ 14
 " au FileType gitcommit set guifont=VL\ Gothic\ 14
 " au FileType conf set guifont=VL\ Gothic\ 14
-au FileType txt set guifont=Monospace\ 14
+au FileType txt set guifont=Monospace\ 16
 
 set guioptions+=b
 

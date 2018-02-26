@@ -112,7 +112,7 @@ alias f='fg'
 alias b='bg'
 # alias grepc='grep -nH --include=*.c --include=*.h --include=*.cpp --include=*.hpp'
 alias grepc='ag --cc --noheading'
-alias greptxt='grep -nH --color --include=*.txt'
+alias greptxt='grep -nrH --color --include=*.txt'
 alias ag='ag --noheading'
 alias ssh='ssh -X'
 alias pstree='pstree -Uphacl'
@@ -170,6 +170,11 @@ du1 ()
 {
 	path=$1
 	du -h --max-depth=1 $path | sort -h 
+}
+
+du11 ()
+{
+    du -sch $(find . -maxdepth 1 | grep -vP ".snapshot|^.$")|grep -P "M\s|G\s"
 }
 
 t () 
