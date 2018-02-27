@@ -823,6 +823,13 @@ ofedbuildversion ()
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
 }
 
+ofedinstallversion () 
+{
+    local version=${1};
+    if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
+    echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install"
+}
+
 ofedfindindexforpackage () 
 {
     local pkg=$1;
