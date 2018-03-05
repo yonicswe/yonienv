@@ -33,6 +33,11 @@ setup_cgdb_env ()
     ln -snf ${yonienv}/gdbinit ~/.gdbinit;
 }
 
+usage () 
+{
+    echo "TBD"
+}
+
 main  ()
 {
     local yonienv=$1;
@@ -46,6 +51,30 @@ main  ()
     if [ -z ${yonienv} ] ; then 
         echo "you must give the path to yonienv";
         echo "bailing out...";
+        return;
+    fi
+
+    OPTIND=0;
+    while getopts "v" opt; do
+        case $opt in 
+        v)
+            setup_vim=1;
+            ;;
+        g)
+            setup_git=1;
+            ;;
+        h)  
+            usage=1;                
+            ;;
+        esac;
+    done;
+
+    if [ $setup_vim -eq 1 ] ; then 
+        setup_vim_env ${yonienv};
+        return;
+    fi
+    if [ $setup_git -eq 1 ] ; then 
+        setup_git_env ${yonienv};
         return;
     fi
 
