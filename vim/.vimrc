@@ -713,7 +713,7 @@ let g:netrw_list_hide= '\.[ch]$'
 " ------------------------
 "  cscope
 "  -------------------------
-source /.autodirect/mtrswgwork/yonatanc/ipteam_env/vim/cscope.vim
+source ~/.vim/cscope.vim
 
 " ----------------------
 "  enable bash aliases from vim shell
