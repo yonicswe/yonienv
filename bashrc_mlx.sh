@@ -236,6 +236,7 @@ ibmod ()
 # lsmod |grep "^ib_\|^mlx\|^rdma" | awk '{print $1" "$3}' | column -t |grep "ib\|mlx\|rdma";
     local modules_path=;
     local modules_base_path=;
+    local module_grep=${1};
 
     if [ -d /usr/lib/modules/$(uname -r) ] ; then         
         modules_base_path="/usr/lib/modules/$(uname -r)";
@@ -255,7 +256,11 @@ ibmod ()
         while read m ; do 
             lsmod | awk '{print $1" "$3" " }' | \grep $m ; 
 #             lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe"; 
-    done | column -t | sort -h -k2 
+    done | column -t | if [ -n "${module_grep}" ] ; then   
+                          tee | sort -h -k2 | grep ${module_grep} ; 
+                       else 
+                           tee | sort -h -k2 ; 
+                       fi
 }
 alias nox='lspci | grep nox'
 alias cdregression='cd ~/devel/regression' 
@@ -355,6 +360,11 @@ mkofedlinks ()
 
 alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
 # alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-srp-mod --with-rxe-mod"
+
+ofedorigindir () 
+{
+    cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
+}
 
 vlinstall ()
 {
@@ -827,17 +837,23 @@ ofedinstallversion ()
 {
     local version=${1};
     if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
+    echo "will install ofed ${version} for your os and kernel"
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install"
+    read -p "continue [Y/n]: " ans; 
+    if [ "$ans" == "n" ] ; then 
+        return;
+    fi
+    sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install;
 }
 
 ofedfindindexforpackage () 
 {
     local pkg=$1;
     if [ -z ${pkg} ] ; then echo "ofedfindindexforpackage <pkg>" ; return ; fi 
-    ofed_info |grep -m2  -A1 ${pkg} | sort -u
+    ofed_info |grep -m2  -A1 ${pkg} | sort -u | grep "${pkg}\|commit"
 }
 
-ofedconfigureofakernel () 
+ofedmkbackport () 
 {
     local configure_options=;
     configure_options=$(/etc/infiniband/info |grep Configure\ options | sed 's/.*://g');
