@@ -232,7 +232,11 @@ listinstalledkernels ()
     local libmodules=;
 
     echo " grub1  modules    /boot/..";
-    sudo find /boot -type f -name "vmlinuz*" -printf "%f\n" |
+
+    sudo find /boot -type f -name "*vmlinu*" -printf "%T+\t%p\n" | sort | cut -f2 | 
+        while read f ; do basename $f ; done | 
+
+#     sudo find /boot -type f -name "vmlinuz*" -printf "%f\n" |
         while read f ; do 
             grub=" ";
             libmodules=" ";
@@ -242,7 +246,9 @@ listinstalledkernels ()
                 fi
             fi
 
-            if [ -d /lib/modules/$(echo $f | sed 's/vmlinuz-//g') ] ; then
+            libmodulesdir=$(sudo strings /boot/$f |grep "EDT\|IST" -m1  | cut -d" " -f1)
+            if [ -d /lib/modules/${libmodulesdir} ] ; then
+#             if [ -d /lib/modules/$(echo $f | sed 's/vmlinuz-//g') ] ; then
                 libmodules="x";
             fi
 
@@ -284,9 +290,10 @@ editgrubvim ()
 }
 
 if [ -e /usr/bin/nproc ] ; then 
-    ncoresformake=$((   $(nproc)-2 )) ;  
+    ncoresformake=$((   $(nproc) )) ;  
 else
-    ncoresformake=4 ; 
+    
+    ncoresformake=$(cat /proc/cpuinfo |grep core\ id | wc -l); 
 fi
 
 getkernelversionfromMakefile ()
@@ -336,7 +343,7 @@ mkkernelbuildall ()
 }
 
 # install only kernel
-mkkernelinstall ()
+mkkernelinstallall ()
 {
     echo -e "============================================";
     echo -e "installing kernel+modules $(getkernelversionfromMakefile)";
@@ -364,25 +371,25 @@ mkkernelinstallmodules ()
 }
 
 # install kernel and modules.
-mkkernelinstallall () 
-{ 
-    if [ -z "$(redpill)" ] ; then 
-        read -p "This is not VM are you sure ? [y/N]" ans;
-        if [ "$ans" != "y" ] ; then 
-            return;
-        fi
-    fi            
-
-    echo -e "============================================";
-    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
-    echo -e "sudo make -j ${ncoresformake} modules_install" 
-    echo -e "sudo make -j ${ncoresformake} install"
-    echo -e "============================================";
-    sudo make -j ${ncoresformake} modules_install && sudo make install
-    echo -e "============================================";
-    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
-    echo -e "============================================";
-}
+# mkkernelinstallall () 
+# { 
+#     if [ -z "$(redpill)" ] ; then 
+#         read -p "This is not VM are you sure ? [y/N]" ans;
+#         if [ "$ans" != "y" ] ; then 
+#             return;
+#         fi
+#     fi            
+# 
+#     echo -e "============================================";
+#     echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
+#     echo -e "sudo make -j ${ncoresformake} modules_install" 
+#     echo -e "sudo make -j ${ncoresformake} install"
+#     echo -e "============================================";
+#     sudo make -j ${ncoresformake} modules_install && sudo make install
+#     echo -e "============================================";
+#     echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
+#     echo -e "============================================";
+# }
 
 
 # build and install kernel and moduels.
@@ -451,6 +458,9 @@ infiniband_kernel_module_path=" /lib/modules/$(uname -r)/kernel/drivers/infiniba
 fi 
 if [ -d /lib/modules/$(uname -r)/kernel/drivers/net/ethernet/mellanox/ ] ; then
 infiniband_kernel_module_path+=" /lib/modules/$(uname -r)/kernel/drivers/net/ethernet/mellanox/"
+fi
+if [ -d /lib/modules/$(uname -r)/extra/ ] ; then
+infiniband_kernel_module_path+=" /lib/modules/$(uname -r)/extra/"
 fi
 if [ -n "${infiniband_kernel_module_path}" ] ; then
 complete -W "$(find  ${infiniband_kernel_module_path} -name "*ko" -type f -printf "%f " | sed 's/.ko//g')" rmmod insmod modprobe modinfo

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 unalias -a;
+unset SSH_ASKPASS
 alias editbashcommon='g ${yonienv}/bashrc_common.sh';
 
 export LANG=en_US.UTF-8

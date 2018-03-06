@@ -679,6 +679,13 @@ ffdi ()
     fi
 }
 
+findmin ()
+{
+    local min=${1:--5};
+
+    find -mmin ${min} -ls;
+}
+
 vncwatcherslist () 
 {
     lsof -Pni |awk '{if (NR == 1) print $0 }'  
