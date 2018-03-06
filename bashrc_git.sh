@@ -40,3 +40,19 @@ gitconfig ()
         echo "you must install vim to see git config file";
     fi
 }
+
+gitviewpatchsidebyside () 
+{
+    local patchfile=$1;
+    local origfile=$2;
+
+#     gvim -y "+vert diffpatch ${patchfile} " ${origfile};
+    gvim "+vert diffpatch ${patchfile} " ${origfile};
+}
+
+gitcatpatchfile ()
+{
+    local patchfile=$1;
+
+    cat $patchfile | colordiff
+}
