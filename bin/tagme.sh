@@ -12,8 +12,8 @@ includeTagdir+=(./drivers/net/ethernet/mellanox/)
 includeTagdir+=(./net/ipv4/)
 
 excludeTagdir=(./build);
-# excludeTagdir+=(and ./buildlib);
-# excludeTagdir+=(and ./someotherdir);
+# excludeTagdir+=(+++ ./buildlib);
+# excludeTagdir+=(+++ ./someotherdir);
 
 printf "tag     : %s\n" ${includeTagdir[@]}
 if [ ${#excludeTagdir[@]} -eq  0 ] ; then
@@ -24,7 +24,7 @@ if [ ${#excludeTagdir[@]} -eq  0 ] ; then
     cscope -vkqb
 else 
     printf "exclude : %s\n" ${excludeTagdir[@]/and/}
-    prune="-path ${excludeTagdir[@]/and/-o -path}";
+    prune="-path ${excludeTagdir[@]/+++/-o -path}";
     source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
     ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
     echo > cscope.files
