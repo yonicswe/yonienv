@@ -22,8 +22,19 @@ setup_bashrc ()
 setup_vim_env () 
 {
     local yonienv=$1;
-    echo $FUNCNAME
+    echo $FUNCNAME;
+
+    if [ -e ~/.vim ] ; then 
+        echo "found existing .vim bailing out.."
+        exit;
+    fi
+
     ln -snf ${yonienv}/vim ~/.vim;
+
+    if [ -e ~/.vimrc ] ; then 
+        echo "found existing .vimrc. bailing out.."
+        exit;
+    fi
     echo "source ~/.vim/.vimrc" >> ~/.vimrc;
 }
 
