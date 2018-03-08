@@ -765,3 +765,31 @@ if [ -e /usr/bin/nproc ] ; then
 else
     ncoresformake=4 ; 
 fi
+
+
+forcereboot () 
+{
+    local ans=;
+    read -p "about to reboot. Are you sure ? [y/N]" ans;
+    if [ "$ans" == "y" ] ; then 
+        su -c "echo b > /proc/sysrq-trigger";
+    fi
+}
+
+shutdown () 
+{
+    local ans=;
+    read -p "about to shutdown. Are you sure ? [y/N]" ans;
+    if [ "$ans" == "y" ] ; then 
+        sudo shutdown -h now;
+    fi 
+}
+
+reboot ()
+{
+    local ans=;
+    read -p "about to reboot. Are you sure ? [y/N]" ans;
+    if [ "$ans" == "y" ] ; then 
+        sudo reboot;
+    fi 
+}

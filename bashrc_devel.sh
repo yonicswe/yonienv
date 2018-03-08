@@ -417,7 +417,6 @@ mkkernelbuildinstallmodules ()
 alias mkkernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=/usr'
 
 alias makedebug='make CPPFLAGS="-O0 -g"'
-alias forcereboot='su -c "echo b > /proc/sysrq-trigger"'
 
 #  ___  _____  ___    _    ___  ___ 
 # | __||_   _|| _ \  /_\  / __|| __|
