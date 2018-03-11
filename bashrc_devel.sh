@@ -233,7 +233,7 @@ listinstalledkernels ()
 
     echo " grub1  modules    /boot/..";
 
-    sudo find /boot -type f -name "*vmlinu*" -printf "%T+\t%p\n" | sort | cut -f2 | 
+    sudo find /boot -type f -and \( -not -name ".*" \) -name "*vmlinu*" -printf "%T+\t%p\n" | sort | cut -f2 | 
         while read f ; do basename $f ; done | 
 
 #     sudo find /boot -type f -name "vmlinuz*" -printf "%f\n" |
@@ -343,7 +343,7 @@ mkkernelbuildall ()
 }
 
 # install only kernel
-mkkernelinstallall ()
+mkkernelinstall ()
 {
     echo -e "============================================";
     echo -e "installing kernel+modules $(getkernelversionfromMakefile)";
@@ -371,26 +371,25 @@ mkkernelinstallmodules ()
 }
 
 # install kernel and modules.
-# mkkernelinstallall () 
-# { 
-#     if [ -z "$(redpill)" ] ; then 
-#         read -p "This is not VM are you sure ? [y/N]" ans;
-#         if [ "$ans" != "y" ] ; then 
-#             return;
-#         fi
-#     fi            
-# 
-#     echo -e "============================================";
-#     echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
-#     echo -e "sudo make -j ${ncoresformake} modules_install" 
-#     echo -e "sudo make -j ${ncoresformake} install"
-#     echo -e "============================================";
-#     sudo make -j ${ncoresformake} modules_install && sudo make install
-#     echo -e "============================================";
-#     echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
-#     echo -e "============================================";
-# }
+mkkernelinstallall () 
+{ 
+    if [ -z "$(redpill)" ] ; then 
+        read -p "This is not VM are you sure ? [y/N]" ans;
+        if [ "$ans" != "y" ] ; then 
+            return;
+        fi
+    fi            
 
+    echo -e "============================================";
+    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
+    echo -e "sudo make -j ${ncoresformake} modules_install" 
+    echo -e "sudo make -j ${ncoresformake} install"
+    echo -e "============================================";
+    sudo make -j ${ncoresformake} modules_install && sudo make install
+    echo -e "============================================";
+    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
+    echo -e "============================================";
+}
 
 # build and install kernel and moduels.
 mkkernelbuildinstallall ()
