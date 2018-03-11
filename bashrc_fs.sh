@@ -631,8 +631,10 @@ redpill ()
 
     if [ $( cat /proc/cpuinfo | grep --color -i hypervisor | wc -l ) -gt 0 ] ; then 
         echo "i am a virtual machine";
+        return 0;
     else
         echo "i am a hypervisor";
+        return 1;
     fi 
 #     if [ $(which virt-what | grep "no virt-what" | wc -l ) -eq  0 ] ; then
 #         su -c "virt-what"
@@ -770,26 +772,62 @@ fi
 forcereboot () 
 {
     local ans=;
+    local hypervisor=1;
+
+    redpill;
+    hypervisor=$?;
+
     read -p "about to reboot. Are you sure ? [y/N]" ans;
     if [ "$ans" == "y" ] ; then 
-        su -c "echo b > /proc/sysrq-trigger";
+        if [ ${hypervisor} -eq 1 ] ; then 
+            read -p "This is an hypervisor. Are you absolutely sure ? [y/N]" ans;
+            if [ "$ans" == "y" ] ; then 
+                su -c "echo b > /proc/sysrq-trigger";
+            fi
+        else
+            su -c "echo b > /proc/sysrq-trigger";
+        fi
     fi
 }
 
 shutdown () 
 {
     local ans=;
+    local hypervisor=1;
+
+    redpill;
+    hypervisor=$?;
+
     read -p "about to shutdown. Are you sure ? [y/N]" ans;
     if [ "$ans" == "y" ] ; then 
-        sudo shutdown -h now;
+        if [ ${hypervisor} -eq 1 ] ; then 
+            read -p "This is an hypervisor. Are you absolutely sure ? [y/N]" ans;
+            if [ "$ans" == "y" ] ; then 
+                sudo shutdown -h now;
+            fi
+        else
+            sudo shutdown -h now;
+        fi
     fi 
 }
 
 reboot ()
 {
     local ans=;
+    local hypervisor=1;
+
+    redpill;
+    hypervisor=$?;
+
     read -p "about to reboot. Are you sure ? [y/N]" ans;
     if [ "$ans" == "y" ] ; then 
-        sudo reboot;
+        if [ ${hypervisor} -eq 1 ] ; then 
+            read -p "This is an hypervisor. Are you absolutely sure ? [y/N]" ans;
+            if [ "$ans" == "y" ] ; then 
+                sudo reboot;
+            fi
+        else
+            sudo reboot;
+        fi
     fi 
 }
