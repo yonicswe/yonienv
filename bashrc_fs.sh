@@ -250,14 +250,20 @@ h ()
 # to it.
 mv2dir ()
 {
-   local all=0
-   local source_items
+   local all=0;
+   local ans=;
+   local source_items=; 
+   local target_exist=0;
 
    local pars=$*
 
-   if [ "$1" == "-a" ] ; then 
-         source_items="$(ls -A| xargs)" 
-         target_folder=$2            
+#    if [ "$1" == "-a" ] ; then 
+# move hidden files as well..
+#          source_items="$(ls -A| xargs)" 
+#          target_folder=$2            
+   if [ $# -eq 2 ] ; then 
+         source_items=( $(find . -maxdepth 1 -type f -name "*${1}*" -printf "%f ") )
+         target_folder=$2
    else
          source_items="$(find . -maxdepth 1 -type f -printf "%f\n" | xargs)"
          target_folder=$1            
@@ -265,16 +271,22 @@ mv2dir ()
 
    # abort if the target dir already exist         
    if [ -d ${target_folder} ] ; then 
-      echo "folder \"\" exists. aborting !"         
-      return;
+       read -p "${target_folder} exists!! continue [y/N]" ans
+       if [ "$ans" != "y" ] ; then 
+           return;
+       else 
+           target_exist=1;
+       fi
    fi
 
    # create the target directory 
-   echo "mkdir ${target_folder}"   
-   mkdir ${target_folder}
+   if (( ${target_exist} == 0 )) ; then 
+       echo "mkdir ${target_folder}";
+       mkdir ${target_folder};
+   fi
 
    # do the move
-   mv -v ${source_items} ${target_folder}
+   mv -v ${source_items[@]} ${target_folder}
 }
 
 # rename a file name comprised with space 
@@ -830,4 +842,19 @@ reboot ()
             sudo reboot;
         fi
     fi 
+}
+
+showosrelease ()
+{
+    if [ -e /etc/os-release ] ; then 
+        cat /etc/os-release;
+        return;
+    fi
+
+    find /etc -maxdepth 1 -name "*release*" | while read r ; do 
+            echo "----------------------------------------"
+            echo "|  $r"
+            echo "----------------------------------------"
+            cat $r;
+        done
 }
