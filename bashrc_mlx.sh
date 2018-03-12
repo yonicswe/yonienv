@@ -418,7 +418,18 @@ mftchoosedev ()
 
 mftsetlinktypeeth ()
 {
-    local mst_dev=$1;
+    local mst_dev=$1; 
+    local hypervisor=1;
+
+    redpill;
+    hypervisor=$?;
+    if [ ${hypervisor} -eq 0 ] ; then 
+        "This is A VM. you need to do this on hypervisor";
+        echo -e "\033[1;33;7m This is A VM. you need to do this on hypervisor\033[0m"
+        return;
+    fi
+        
+    echo -e "\033[1;33;7mmake sure that you sudo mst start \033[0m"
 
     if [ -z "${mst_dev}" ] ; then 
         mftstatus;
@@ -433,6 +444,15 @@ mftsetlinktypeeth ()
 mftsetlinktypeinfiniband ()
 {
     local mst_dev=$1;
+    local hypervisor=1;
+
+    redpill;
+    hypervisor=$?;
+    if [ ${hypervisor} -eq 0 ] ; then 
+        "This is A VM. you need to do this on hypervisor";
+        echo -e "\033[1;33;7m This is A VM. you need to do this on hypervisor\033[0m"
+        return;
+    fi
 
     if [ -z "${mst_dev}" ] ; then 
         mftstatus;
