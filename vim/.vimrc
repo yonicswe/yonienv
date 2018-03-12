@@ -766,3 +766,9 @@ let g:ctrlp_max_depth=40
 " -----------------------------------
 " opens a left pane (window) to help navigate function,classes in current
 " file.
+"
+" ----------------------------------
+"  gitgrep addOn
+"  ---------------------------------
+"  ,gw does gitgrep on word under curser
+"
