@@ -42,3 +42,4 @@ tagcscopemlx5 ()
     cscope -vkqb;
 }
 
+alias tagyonienv='ctags --language-force=sh *'
