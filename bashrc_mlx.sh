@@ -3,6 +3,10 @@
 ########################################################################
 # mellanox stuff
 ########################################################################
+
+
+alias editbashmlx='g ${yonienv}/bashrc_mlx.sh'
+
 alias 8='ssh     r-ole08'
 alias 9='ssh     r-ole09'
 alias 10='ssh    r-ole10'
@@ -88,23 +92,24 @@ sm ()
         fi
     fi            
 
-    while test $# -gt 0 ; do 
+    while test $# -gt 0 ; do
         singlemoduleinstall.sh $1;
         shift;
-    done    
+    done
 }
 
-geometryrestartoffice ()
-{
+# geometryrestartoffice ()
+# {
 #     port=${1};
 #     [ -z ${port} ] && return;
 #     vncserver -kill :${port} ; sleep 10 ; vncserver -geometry 1920x1080 :${port}
-     xrandr -s "1920x1080"
-}
+#      xrandr -s "1920x1080"
+# }
 
-alias geometryrestartLaptop='xrandr -s "1280x720"'
-alias geometryrestarthome='xrandr -s "1280x1024"'
-alias geometryrestartLG='xrandr -s "1280x720"'
+alias randrlaptop12='xrandr -s "1360x768"'
+alias randroffice24='xrandr -s "1920x1080"'
+alias randroffice27='xrandr -s "1920x1080"'
+alias randrhome36='xrandr   -s "1280x720"'
 
 alias mkgerrithook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
 gitpushtogerrit ()
