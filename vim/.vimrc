@@ -515,17 +515,17 @@ set guifont=VL\ Gothic\ 16
 " au FileType gitconfig set guifont=VL\ Gothic\ 14
 " au FileType gitcommit set guifont=VL\ Gothic\ 14
 " au FileType conf set guifont=VL\ Gothic\ 14
-au FileType txt set guifont=Monospace\ 16
+au FileType txt set guifont=Monospace\ 14
 
 set guioptions+=b
 
 "
 " TABS
-"  _____  _    ___  ___ 
+"  _____  _    ___  ___
 " |_   _|/_\  | _ )/ __|
 "   | | / _ \ | _ \\__ \
 "   |_|/_/ \_\|___/|___/
-"                       
+"
 "
 " setting this will cause :sb <buf number> to open buffers in new tabs
 " set switchbuf=split,usetab,newtab
@@ -565,20 +565,20 @@ map <C-S-Left>  :execute "tabmove" tabpagenr() - 2 <CR>
 map <C-S-Right> :execute "tabmove" tabpagenr() <CR>
 " map <S-F9>  :execute "tabmove" tabpagenr() - 2 <CR>
 " map <S-F10> :execute "tabmove" tabpagenr() <CR>
-map <S-w> :tabedit 
+map <S-w> :tabedit
 map <S-w><S-w> :tabclose!<cr>
-" map <C-S-w> :bd<CR> 
+" map <C-S-w> :bd<CR>
 "
-" map <S-right> :tabnext<CR> 
-" map <S-left> :tabprevious<CR> 
+" map <S-right> :tabnext<CR>
+" map <S-left> :tabprevious<CR>
 
-function! DeleteAllBuffers () 
+function! DeleteAllBuffers ()
     execute "1,100bd"
 endfunction
 com! BD call DeleteAllBuffers()
 
-function! RestartSess () 
-   call DeleteAllBuffers () 
+function! RestartSess ()
+   call DeleteAllBuffers ()
    execute "source Session.vim"
 endfunction
 com! RestartSession call RestartSess()
@@ -587,14 +587,14 @@ nnoremap ml : call RestartSess () <cr>
 
 " file buffers
 nnoremap <A-down> :bnext<CR>
-nnoremap <A-up> :bprevious<CR> 
+nnoremap <A-up> :bprevious<CR>
 nnoremap <S-F8> :ls<cr>
 
-" tag browsing 
-nnoremap <C-S-Up> :pop<CR> 
-nnoremap <C-S-Down> :tag<CR> 
-nnoremap <A-up> :bprevious<CR> 
-" nnoremap <F6> :bprevious<CR> 
+" tag browsing
+nnoremap <C-S-Up> :pop<CR>
+nnoremap <C-S-Down> :tag<CR>
+nnoremap <A-up> :bprevious<CR>
+" nnoremap <F6> :bprevious<CR>
 nnoremap <S-F6> :ts<cr>
 
 
@@ -609,7 +609,7 @@ function! ToggleQuickFix()
 "     try
 "       lopen 10
 "       let g:qwindow = 1
-"     catch 
+"     catch
 "       echo "No Errors found!"
 "     endtry
   endif
@@ -618,11 +618,11 @@ endfunction
 nmap <script> <silent> <F6> :call ToggleQuickFix()<CR>
 
 " tags
-"  _____  _    ___  ___ 
+"  _____  _    ___  ___
 " |_   _|/_\  / __|/ __|
 "   | | / _ \| (_ |\__ \
 "   |_|/_/ \_\\___||___/
-"                       
+"
 "
 " open a tag under the cursor in a new tab
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
@@ -634,7 +634,7 @@ let Tlist_WinWidth = 50
 let Tlist_Show_One_File = 1
 let Tlist_Sort_Type = "name"
 
-"for tags to show up only once 
+"for tags to show up only once
 " let tttt=system("pwd").'/tags'
 " exec 'set tags='.tttt
 set tags=tags
@@ -642,7 +642,7 @@ set tags=tags
 " complete words from tag file with <ctrl>x<ctrl>k<ctrl>n
 set complete+=t
 
-function! SetBreakPoint () 
+function! SetBreakPoint ()
     "let taskpath=$TASK_PATH
     "     execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . taskpath . "/.gdb_breakpoints"
     execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . ".gdb_breakpoints"
@@ -653,8 +653,8 @@ map <S-B> :call SetBreakPoint()<cr>
 " help vim commands
 " -------------
 " vab - will visual select inner block including block limiters
-" vib - will select the same but without the limiters 
-"   the limiters for example of ( text ) are the brackets or in 
+" vib - will select the same but without the limiters
+"   the limiters for example of ( text ) are the brackets or in
 "   [ text ] are the square brackets
 "
 " :tab ba will open all buffers with tabs
@@ -663,7 +663,7 @@ map <S-B> :call SetBreakPoint()<cr>
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 " change directory to current file location
-" lcd %:h will change only for current file 
+" lcd %:h will change only for current file
 map cdf :cd %:h<cr>
 map <leader>a <esc>ggVG<CR>
 map <leader>x :!chmod a+x %<cr>
@@ -675,8 +675,8 @@ set statusline+=%o
 " hex view with :%!xxd and back with :%!xxd -r
 
 " visual block select can select blank lines
-" you can also just start a visual block and press END 
-" then all lines will be chosen till their end 
+" you can also just start a visual block and press END
+" then all lines will be chosen till their end
 " set virtualedit=all
 
 
@@ -718,10 +718,13 @@ source ~/.vim/cscope.vim
 " ----------------------
 "  enable bash aliases from vim shell
 " ----------------------
-" one way to do this
-" set shellcmdflag=-ic
+" option (1) from vim
+" :set shellcmdflag=-ic
 "
-" another way is to add to your bashrc
+" option (2) from vim
+" :set shell=/bin/bash\ -i
+"
+" option (3) : add this to your bashrc
 " the line  : shopt -s expand_aliases
 " and in .vimrc do this :
 "  let $BASH_ENV = "~/.bashrc"
@@ -737,24 +740,24 @@ let realvim = '/.autodirect/mtrswgwork/yonatanc/ipteam_env/vim/.vimrc.' . hostna
 " execute 'echo realvim'
 " exec 'source ' .  realvim
 
-" if filereadable(realvim) 
+" if filereadable(realvim)
 " exec 'source ' .  realvim
 " else
-" exec 'echo "no" realvim' 
+" exec 'echo "no" realvim'
 " endif
 
 " Help
-"  _  _       _       
-" | || | ___ | | _ __ 
+"  _  _       _
+" | || | ___ | | _ __
 " | __ |/ -_)| || '_ \
 " |_||_|\___||_|| .__/
-"               |_|   
+"               |_|
 "
 " -----------------------------------
 " ctrl-p addOn for finding files.
 " -----------------------------------
 " ctrl-r : change between search fixed pattern to regex
-" ctrl-d : change between search directory to file. 
+" ctrl-d : change between search directory to file.
 " ctrl-b : change between search of files or open buffers
 " to start ctrlp with a different path than current-working-directory
 " :Ctrl <you chosen path>
