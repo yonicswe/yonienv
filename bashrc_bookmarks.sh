@@ -229,17 +229,23 @@ rebash ()
     unalias -a
 
     [ -e ~/.inview ] && rm -f ~/.inview 1>/dev/null;
-   \mv ${BM} ${BM}.tmp ; 
+    if [ -e ${BM} ] ; then 
+       \mv ${BM} ${BM}.tmp ; 
+    fi
 
 #  delete all bookmarks they will be re-created by sourcing the bookmarks file
    pdc 1>/dev/null ; 
 
 #    source ~/.bashrc ;
-   source ${yonienv}/bashrc_main.sh;
-   \mv ${BM}.tmp ${BM} ; 
+    source ${yonienv}/bashrc_main.sh;
+    if [ -e ${BM}.tmp ] ; then 
+       \mv ${BM}.tmp ${BM} ; 
+    fi
 
 #  create the bookmarks by sourcing the bookmarks file
-   source ${BM} 1>/dev/null
+    if [ -e ${BM} ] ; then 
+        source ${BM} 1>/dev/null
+    fi            
 
    pdf_complete 1>/dev/null
    pd_complete 1>/dev/null
