@@ -344,7 +344,7 @@ ofeddeletebackport ()
     [ "${ans}" == "n" ] && return -1;
 
     if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then 
-        echo "you need to run mkofedlinks";
+        echo "you need to run ofedmklinks";
         return;
     fi
 
@@ -356,14 +356,14 @@ ofeddeletebackport ()
     ./ofed_scripts/cleanup
 }
 
-mkofedlinks () 
+ofedmklinks () 
 {
     ln -snf ofed_scripts/Makefile Makefile
     ln -snf ofed_scripts/makefile makefile
     ln -snf ofed_scripts/configure configure
 }
 
-alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
+# alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
 # alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-srp-mod --with-rxe-mod"
 
 ofedorigindir () 
@@ -375,11 +375,15 @@ vlinstall ()
 {
     local answer;
     echo ""; 
-    echo -e "\033[1;33;7mmake sure that mft installed before you install vl\033[0m"
-    read -p "continue ? [y/N] : " answer;
-    if [ "$answer" == "y" ] ; then 
-        sudo /.autodirect/net_linux_verification/tools/install_vls.sh; 
+
+    if (( 0 == $(rpm -q mft | grep mft- | wc -l ) )) ; then 
+        echo -e "\033[1;33;7m you need to install mft before you install vl\033[0m";
+        return;
     fi
+#     read -p "continue ? [y/N] : " answer;
+#     if [ "$answer" == "y" ] ; then 
+    sudo /.autodirect/net_linux_verification/tools/install_vls.sh; 
+#     fi
 #  another script that could be used.
 #  sudo /mswg/projects/ver_tools/reg2_latest/install.sh;
 
@@ -924,3 +928,5 @@ alias touchmlx5core='find drivers/net/ethernet/mellanox/mlx5/ -name "*.c" -exec 
 alias touchmlx5='touchmlx5ib ; touchmlx5core'
 
 alias clipboard='cat ~/share/clipboard.txt'
+
+alias tagmeofakernel='cp ${yonienv}/bin/tagmeofakernel.sh .'
