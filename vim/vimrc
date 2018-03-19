@@ -739,8 +739,8 @@ let @p = 'printk("--->%s()%d:\n", __func__, __LINE__);' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
 let @l =  "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n"
 let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n" 
-
-
+let @h = "◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌" 
+let @b = "┌⎯⎯⎯⎯⎯┐\n│     │\n│     │\n│     │\n└⎯⎯⎯⎯⎯┘"
 
 
 " ------------------------------

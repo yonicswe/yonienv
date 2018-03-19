@@ -226,4 +226,4 @@ then search for /\%x7
 
 if you cannot see the characters in the file 
 ══════════════════════════════════════════════
-use set encoding=utf-8   
+use set encoding=utf-8
