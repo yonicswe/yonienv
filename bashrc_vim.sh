@@ -49,6 +49,9 @@ gn ()
     g $vi_param
 }
 
+alias gd="gvimdiff"
+alias vd="vimdiff"
+
 vscript () 
 {
     local file_name=${1};
