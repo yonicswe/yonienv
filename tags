@@ -1,0 +1,929 @@
+	Session.vim	/^map  jzz$/;"	m	line:3
+	Session.vim	/^map  :set nu!$/;"	m	line:7
+	Session.vim	/^nnoremap <silent>  :CtrlP$/;"	m	line:8
+	Session.vim	/^map  :qa!$/;"	m	line:9
+	Session.vim	/^map  kzz$/;"	m	line:10
+	Session.vim	/^map  :tab split$/;"	m	line:11
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+*	Session.vim	/^nnoremap * *N$/;"	m	line:12
+,a	Session.vim	/^map ,a ggVG$/;"	m	line:18
+,cc	Session.vim	/^noremap <silent> ,cc :silent s\/^\/=escape(b:comment_leader,'\\\/')$/;"	m	line:33
+,cu	Session.vim	/^noremap <silent> ,cu :silent s\/^.*\\V=escape(b:comment_leader,'\\\/')$/;"	m	line:32
+,dg	Session.vim	/^map ,dg <Plug>DirDiffGet$/;"	m	line:16
+,dj	Session.vim	/^map ,dj <Plug>DirDiffNext$/;"	m	line:14
+,dk	Session.vim	/^map ,dk <Plug>DirDiffPrev$/;"	m	line:13
+,dp	Session.vim	/^map ,dp <Plug>DirDiffPut$/;"	m	line:15
+,e	Session.vim	/^map ,e :tabedit ~\/.vim\/.vimrc$/;"	m	line:26
+,g	Session.vim	/^map ,g yiw:grep -w " .$/;"	m	line:29
+,gf	Session.vim	/^map ,gf :e <cfile>$/;"	m	line:31
+,l1	Session.vim	/^map ,l1 :call Insert_indent_symbol(1)$/;"	m	line:23
+,l2	Session.vim	/^map ,l2 :call Insert_indent_symbol(2)$/;"	m	line:22
+,l3	Session.vim	/^map ,l3 :call Insert_indent_symbol(3)$/;"	m	line:21
+,l4	Session.vim	/^map ,l4 :call Insert_indent_symbol(4)$/;"	m	line:20
+,l5	Session.vim	/^map ,l5 :call Insert_indent_symbol(5)$/;"	m	line:19
+,ll	Session.vim	/^map ,ll :call Insert_vim_symbol(1)$/;"	m	line:24
+,m	Session.vim	/^map ,m :source ~\/.vimrc$/;"	m	line:27
+,r	Session.vim	/^map ,r yiw:grep -w " drivers\/infiniband\/sw\/rxe\/$/;"	m	line:30
+,rr	Session.vim	/^map ,rr yiw:grep -w " drivers\/infiniband\/ drivers\/net\/ethernel\/mellanox$/;"	m	line:28
+,s	Session.vim	/^map ,s :tabedit ~\/.vim\/vim_symbols.txt$/;"	m	line:25
+,x	Session.vim	/^map ,x :!chmod a+x %$/;"	m	line:17
+/	Session.vim	/^vmap \/ y\/"$/;"	m	line:34
+0	Session.vim	/^normal! 0$/;"	m	line:1323
+0	Session.vim	/^normal! 0$/;"	m	line:261
+02|	Session.vim	/^normal! 02|$/;"	m	line:1205
+02|	Session.vim	/^normal! 02|$/;"	m	line:379
+02|	Session.vim	/^normal! 02|$/;"	m	line:497
+02|	Session.vim	/^normal! 02|$/;"	m	line:615
+03|	Session.vim	/^normal! 03|$/;"	m	line:1087
+03|	Session.vim	/^normal! 03|$/;"	m	line:733
+03|	Session.vim	/^normal! 03|$/;"	m	line:969
+04|	Session.vim	/^normal! 04|$/;"	m	line:851
+<C-Down>	Session.vim	/^map <C-Down> ]]zz$/;"	m	line:67
+<C-Left>	Session.vim	/^map <C-Left> :tabprevious$/;"	m	line:60
+<C-Right>	Session.vim	/^map <C-Right> :tabnext$/;"	m	line:61
+<C-S-Down>	Session.vim	/^nnoremap <C-S-Down> :tag$/;"	m	line:53
+<C-S-Down>	Session.vim	/^omap <C-S-Down> ]}$/;"	m	line:65
+<C-S-Down>	Session.vim	/^vmap <C-S-Down> ]}$/;"	m	line:64
+<C-S-Left>	Session.vim	/^map <C-S-Left> :execute "tabmove" tabpagenr() - 2 $/;"	m	line:59
+<C-S-Right>	Session.vim	/^map <C-S-Right> :execute "tabmove" tabpagenr() $/;"	m	line:58
+<C-S-Up>	Session.vim	/^nnoremap <C-S-Up> :pop$/;"	m	line:54
+<C-S-Up>	Session.vim	/^omap <C-S-Up> [{$/;"	m	line:63
+<C-S-Up>	Session.vim	/^vmap <C-S-Up> [{$/;"	m	line:62
+<C-Up>	Session.vim	/^map <C-Up> [[zz$/;"	m	line:66
+<F11>	Session.vim	/^map <F11> :cp$/;"	m	line:82
+<F12>	Session.vim	/^nmap <F12> :cn$/;"	m	line:80
+<F12>	Session.vim	/^omap <F12> :cn$/;"	m	line:81
+<F12>	Session.vim	/^vmap <F12> :s\/\\s\\+$\/\/$/;"	m	line:73
+<F1>	Session.vim	/^vmap <F1> y:!figlet -m0 -f small "  > x $/;"	m	line:72
+<F1><F1>	Session.vim	/^vmap <F1><F1> y:!figlet -m0 "  > x $/;"	m	line:71
+<F2>	Session.vim	/^nmap <F2> ciw"pa"$/;"	m	line:76
+<F2>	Session.vim	/^omap <F2> ciw"pa"$/;"	m	line:77
+<F2>	Session.vim	/^vmap <F2> c"pa"$/;"	m	line:75
+<F3>	Session.vim	/^map <F3> :set spell!$/;"	m	line:83
+<F4>	Session.vim	/^map <F4> : call FoldAllFunctions ()$/;"	m	line:70
+<F5>	Session.vim	/^map <F5> a=strftime("%A %d\/%m\/%Y")$/;"	m	line:74
+<F7>	Session.vim	/^nnoremap <F7> : call SelectCodeBlock ()$/;"	m	line:68
+<F8>	Session.vim	/^nnoremap <silent> <F8> :TlistToggle$/;"	m	line:49
+<Leader>dg	vim/plugin/DirDiff.vim	/^  map <unique> <Leader>dg <Plug>DirDiffGet$/;"	m	line:207
+<Leader>dj	vim/plugin/DirDiff.vim	/^  map <unique> <Leader>dj <Plug>DirDiffNext$/;"	m	line:213
+<Leader>dk	vim/plugin/DirDiff.vim	/^  map <unique> <Leader>dk <Plug>DirDiffPrev$/;"	m	line:216
+<Leader>dp	vim/plugin/DirDiff.vim	/^  map <unique> <Leader>dp <Plug>DirDiffPut$/;"	m	line:210
+<Leader>gw	vim/plugin/gitgrep.vim	/^  nnoremap <silent> <Leader>gw :GitGrepWord<CR>$/;"	m	line:14
+<M-Down>	Session.vim	/^nnoremap <M-Down> :bnext$/;"	m	line:57
+<M-Up>	Session.vim	/^nnoremap <M-Up> :bprevious$/;"	m	line:56
+<NL>	Session.vim	/^map <NL> :set list!$/;"	m	line:6
+<Plug>DirDiffGet	vim/plugin/DirDiff.vim	/^map <unique> <script> <Plug>DirDiffGet    :diffget<CR>$/;"	m	line:220
+<Plug>DirDiffNext	vim/plugin/DirDiff.vim	/^map <unique> <script> <Plug>DirDiffNext    :call <SID>DirDiffNext()<CR>$/;"	m	line:222
+<Plug>DirDiffPrev	vim/plugin/DirDiff.vim	/^map <unique> <script> <Plug>DirDiffPrev    :call <SID>DirDiffPrev()<CR>$/;"	m	line:223
+<Plug>DirDiffPut	vim/plugin/DirDiff.vim	/^map <unique> <script> <Plug>DirDiffPut    :diffput<CR>$/;"	m	line:221
+<Plug>DirDiffQuit	vim/plugin/DirDiff.vim	/^map <unique> <script> <Plug>DirDiffQuit    :call <SID>DirDiffQuit()<CR>$/;"	m	line:224
+<Plug>NetrwBrowseX	Session.vim	/^nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)$/;"	m	line:48
+<Plug>SetBreakpoint	vim/plugin/gdbvim.vim	/^noremap <unique> <script> <Plug>SetBreakpoint :call <SID>SetBreakpoint()<CR>$/;"	m	line:87
+<S-F10>	Session.vim	/^map <S-F10> :cnewer$/;"	m	line:78
+<S-F11>	Session.vim	/^map <S-F11> :tp$/;"	m	line:51
+<S-F12>	Session.vim	/^map <S-F12> :tn$/;"	m	line:50
+<S-F4>	Session.vim	/^map <S-F4> : call UnFoldAllFunctions ()$/;"	m	line:69
+<S-F6>	Session.vim	/^nnoremap <S-F6> :ts$/;"	m	line:52
+<S-F8>	Session.vim	/^nnoremap <S-F8> :ls$/;"	m	line:55
+<S-F9>	Session.vim	/^map <S-F9> :colder$/;"	m	line:79
+<SID>xx	vim/plugin/taglist.vim	/^    map <SID>xx <SID>xx$/;"	m	line:302
+AppConfig_xml_setup	bin/config_setup.old.sh	/^AppConfig_xml_setup () $/;"	f	line:161
+AppConfig_xml_setup	bin/config_setup.sh	/^AppConfig_xml_setup () $/;"	f	line:161
+AreDiffWinsOpened	vim/plugin/DirDiff.vim	/^function! <SID>AreDiffWinsOpened()$/;"	f	line:921
+AskIfModified	vim/plugin/DirDiff.vim	/^function! <SID>AskIfModified()$/;"	f	line:599
+B	Session.vim	/^map B :call SetBreakPoint()$/;"	m	line:35
+ChangeArguments	vim/plugin/DirDiff.vim	/^function! <SID>ChangeArguments()$/;"	f	line:965
+ChangeExcludes	vim/plugin/DirDiff.vim	/^function! <SID>ChangeExcludes()$/;"	f	line:959
+ChangeIgnore	vim/plugin/DirDiff.vim	/^function! <SID>ChangeIgnore()$/;"	f	line:971
+CheckDisplayNumber	bin/TigerVNC/bin/vncserver	/^sub CheckDisplayNumber$/;"	s	line:419
+CheckGeometryAndDepth	bin/TigerVNC/bin/vncserver	/^sub CheckGeometryAndDepth$/;"	s	line:367
+CloseDiffWindows	vim/plugin/DirDiff.vim	/^function! <SID>CloseDiffWindows()$/;"	f	line:502
+Copy	vim/plugin/DirDiff.vim	/^function! <SID>Copy(fileFromOrig, fileToOrig)$/;"	f	line:825
+DeHighlightLine	vim/plugin/DirDiff.vim	/^function! <SID>DeHighlightLine()$/;"	f	line:622
+Delete	vim/plugin/DirDiff.vim	/^function! <SID>Delete(fileFromOrig)$/;"	f	line:881
+DirDiff	vim/plugin/DirDiff.vim	/^command! -nargs=* -complete=dir DirDiff call <SID>DirDiff (<f-args>)$/;"	c	line:199
+DirDiff	vim/plugin/DirDiff.vim	/^function! <SID>DirDiff(srcA, srcB)$/;"	f	line:350
+DirDiff.vim	vim/plugin/DirDiff.vim	1;"	F	line:1
+DirDiffExec	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffExec(cmd, interactive)$/;"	f	line:866
+DirDiffNext	vim/plugin/DirDiff.vim	/^command! -nargs=0 DirDiffNext call <SID>DirDiffNext ()$/;"	c	line:201
+DirDiffNext	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffNext()$/;"	f	line:651
+DirDiffOpen	vim/plugin/DirDiff.vim	/^command! -nargs=0 DirDiffOpen call <SID>DirDiffOpen ()$/;"	c	line:200
+DirDiffOpen	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffOpen()$/;"	f	line:529
+DirDiffPrev	vim/plugin/DirDiff.vim	/^command! -nargs=0 DirDiffPrev call <SID>DirDiffPrev ()$/;"	c	line:202
+DirDiffPrev	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffPrev()$/;"	f	line:666
+DirDiffQuit	vim/plugin/DirDiff.vim	/^command! -nargs=0 DirDiffQuit call <SID>DirDiffQuit ()$/;"	c	line:204
+DirDiffQuit	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffQuit()$/;"	f	line:487
+DirDiffSync	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffSync() range$/;"	f	line:733
+DirDiffSyncHelper	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffSyncHelper(AB, line)$/;"	f	line:679
+DirDiffUpdate	vim/plugin/DirDiff.vim	/^command! -nargs=0 DirDiffUpdate call <SID>DirDiffUpdate ()$/;"	c	line:203
+DirDiffUpdate	vim/plugin/DirDiff.vim	/^function! <SID>DirDiffUpdate()$/;"	f	line:480
+EscapeDirForRegex	vim/plugin/DirDiff.vim	/^function! <SID>EscapeDirForRegex(path)$/;"	f	line:496
+EscapeFileName	vim/plugin/DirDiff.vim	/^function! <SID>EscapeFileName(path)$/;"	f	line:517
+Gdb_Bpt	vim/plugin/gdbvim.vim	/^function Gdb_Bpt(id, file, linenum)$/;"	f	line:63
+Gdb_CurrFileLine	vim/plugin/gdbvim.vim	/^function Gdb_CurrFileLine(file, line)$/;"	f	line:71
+Gdb_command	vim/plugin/gdbvim.vim	/^function Gdb_command(cmd, ...)$/;"	f	line:89
+Gdb_interf_close	vim/plugin/gdbvim.vim	/^function Gdb_interf_close()$/;"	f	line:58
+Gdb_interf_init	vim/plugin/gdbvim.vim	/^function Gdb_interf_init(fifo_name, pwd)$/;"	f	line:18
+Gdb_interf_init	vim/plugin/gdbvim.vim	/^function! Gdb_interf_init(fifo_name, pwd)$/;"	f	line:36
+Gdb_shortcuts	vim/plugin/gdbvim.vim	/^function s:Gdb_shortcuts()$/;"	f	line:101
+GetBaseDir	vim/plugin/DirDiff.vim	/^function! <SID>GetBaseDir(diffName)$/;"	f	line:638
+GetDiffStrings	vim/plugin/DirDiff.vim	/^function! <SID>GetDiffStrings()$/;"	f	line:1038
+GetDisplayNumber	bin/TigerVNC/bin/vncserver	/^sub GetDisplayNumber$/;"	s	line:401
+GetFileNameFromLine	vim/plugin/DirDiff.vim	/^function! <SID>GetFileNameFromLine(AB, line)$/;"	f	line:788
+GetXDisplayDefaults	bin/TigerVNC/bin/vncserver	/^sub GetXDisplayDefaults$/;"	s	line:472
+GitGrep	vim/plugin/gitgrep.vim	/^command! -nargs=+ GitGrep     :call s:GitGrep(<q-args>)$/;"	c	line:29
+GitGrep	vim/plugin/gitgrep.vim	/^function! s:GitGrep(terms)$/;"	f	line:17
+GitGrepWord	vim/plugin/gitgrep.vim	/^command! -nargs=0 GitGrepWord :call s:GitGrepWord()$/;"	c	line:28
+GitGrepWord	vim/plugin/gitgrep.vim	/^function! s:GitGrepWord()$/;"	f	line:24
+HighlightLine	vim/plugin/DirDiff.vim	/^function! <SID>HighlightLine()$/;"	f	line:608
+IPS_Analyzer_xml_setup	bin/config_setup.old.sh	/^IPS_Analyzer_xml_setup ()$/;"	f	line:185
+IPS_Analyzer_xml_setup	bin/config_setup.sh	/^IPS_Analyzer_xml_setup ()$/;"	f	line:185
+Icm_config_xml_setup	bin/icm_config_setup.sh	/^Icm_config_xml_setup () $/;"	f	line:68
+IsDiffer	vim/plugin/DirDiff.vim	/^function! <SID>IsDiffer(line)$/;"	f	line:954
+IsOnly	vim/plugin/DirDiff.vim	/^function! <SID>IsOnly(line)	$/;"	f	line:949
+Kill	bin/TigerVNC/bin/vncserver	/^sub Kill$/;"	s	line:609
+L	Session.vim	/^noremap L :set nohlsearch!$/;"	m	line:36
+List	bin/TigerVNC/bin/vncserver	/^sub List$/;"	s	line:589
+Main	bin/config_setup.old.sh	/^Main () $/;"	f	line:277
+Main	bin/config_setup.sh	/^Main () $/;"	f	line:277
+Main	bin/icm_config_setup.sh	/^Main () $/;"	f	line:180
+PAGESIZE	bin/ps_mem.py	/^PAGESIZE=os.sysconf("SC_PAGE_SIZE")\/1024 #KiB$/;"	v	line:69
+ParseOnlyFile	vim/plugin/DirDiff.vim	/^function! <SID>ParseOnlyFile(line)$/;"	f	line:818
+ParseOnlySrc	vim/plugin/DirDiff.vim	/^function! <SID>ParseOnlySrc(line)$/;"	f	line:814
+ParseOptions	bin/TigerVNC/bin/vncserver	/^sub ParseOptions$/;"	s	line:670
+S	Session.vim	/^map S :w$/;"	m	line:37
+SanityCheck	bin/TigerVNC/bin/vncserver	/^sub SanityCheck$/;"	s	line:711
+Session.vim	Session.vim	1;"	F	line:1
+SessionLoad	Session.vim	/^let SessionLoad = 1$/;"	v	line:1
+SetupSyntax	vim/plugin/DirDiff.vim	/^function! <SID>SetupSyntax()$/;"	f	line:458
+Sort	vim/plugin/DirDiff.vim	/^func! <SID>Sort(cmp) range$/;"	f	line:1031
+SortR	vim/plugin/DirDiff.vim	/^func! <SID>SortR(start, end, cmp)$/;"	f	line:990
+Strcmp	vim/plugin/DirDiff.vim	/^func! <SID>Strcmp(str1, str2)$/;"	f	line:979
+TagList_IsValid	vim/plugin/taglist.vim	/^function! TagList_IsValid()$/;"	f	line:4535
+TagList_Start	vim/plugin/taglist.vim	/^function! TagList_Start()$/;"	f	line:4505
+TagList_WrapUp	vim/plugin/taglist.vim	/^function! TagList_WrapUp()$/;"	f	line:4539
+TagList_title	vim/plugin/taglist.vim	/^    let TagList_title = "__Tag_List__"$/;"	v	line:242
+Tlist	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar Tlist TlistToggle$/;"	c	line:271
+TlistAddFiles	vim/plugin/taglist.vim	/^    command! -nargs=+ -complete=file TlistAddFiles$/;"	c	line:272
+TlistAddFilesRecursive	vim/plugin/taglist.vim	/^    command! -nargs=+ -complete=dir TlistAddFilesRecursive$/;"	c	line:274
+TlistClose	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistClose call s:Tlist_Window_Close()$/;"	c	line:276
+TlistDebug	vim/plugin/taglist.vim	/^    command! -nargs=? -complete=file -bar TlistDebug$/;"	c	line:294
+TlistHighlightTag	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistHighlightTag call s:Tlist_Window_Highlight_Tag($/;"	c	line:278
+TlistLock	vim/plugin/taglist.vim	/^    command! -bar TlistLock let Tlist_Auto_Update=0$/;"	c	line:290
+TlistMessages	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistMessages call s:Tlist_Debug_Show()$/;"	c	line:297
+TlistOpen	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistOpen call s:Tlist_Window_Open()$/;"	c	line:269
+TlistSessionLoad	vim/plugin/taglist.vim	/^    command! -nargs=* -complete=file TlistSessionLoad$/;"	c	line:286
+TlistSessionSave	vim/plugin/taglist.vim	/^    command! -nargs=* -complete=file TlistSessionSave$/;"	c	line:288
+TlistShowPrototype	vim/plugin/taglist.vim	/^    command! -nargs=* -complete=buffer TlistShowPrototype$/;"	c	line:282
+TlistShowTag	vim/plugin/taglist.vim	/^    command! -nargs=* -complete=buffer TlistShowTag$/;"	c	line:284
+TlistSync	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistSync TlistHighlightTag$/;"	c	line:281
+TlistToggle	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistToggle call s:Tlist_Window_Toggle()$/;"	c	line:268
+TlistUndebug	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistUndebug  call s:Tlist_Debug_Disable()$/;"	c	line:296
+TlistUnlock	vim/plugin/taglist.vim	/^    command! -bar TlistUnlock let Tlist_Auto_Update=1$/;"	c	line:291
+TlistUpdate	vim/plugin/taglist.vim	/^    command! -nargs=0 -bar TlistUpdate call s:Tlist_Update_Current_File()$/;"	c	line:277
+Tlist_Add_Files	vim/plugin/taglist.vim	/^function! s:Tlist_Add_Files(...)$/;"	f	line:2744
+Tlist_Add_Files_Recursive	vim/plugin/taglist.vim	/^function! s:Tlist_Add_Files_Recursive(dir, ...)$/;"	f	line:2720
+Tlist_Auto_Highlight_Tag	vim/plugin/taglist.vim	/^        let Tlist_Auto_Highlight_Tag = 1$/;"	v	line:213
+Tlist_Auto_Open	vim/plugin/taglist.vim	/^        let Tlist_Auto_Open = 0$/;"	v	line:109
+Tlist_Auto_Update	vim/plugin/taglist.vim	/^        let Tlist_Auto_Update = 1$/;"	v	line:208
+Tlist_Ballon_Expr	vim/plugin/taglist.vim	/^function! Tlist_Ballon_Expr()$/;"	f	line:1367
+Tlist_Buffer_Removed	vim/plugin/taglist.vim	/^function! s:Tlist_Buffer_Removed(filename)$/;"	f	line:3997
+Tlist_Change_Sort	vim/plugin/taglist.vim	/^function! s:Tlist_Change_Sort(caller, action, sort_type)$/;"	f	line:2935
+Tlist_Close_On_Select	vim/plugin/taglist.vim	/^        let Tlist_Close_On_Select = 0$/;"	v	line:202
+Tlist_Compact_Format	vim/plugin/taglist.vim	/^        let Tlist_Compact_Format = 0$/;"	v	line:185
+Tlist_Ctags_Cmd	vim/plugin/taglist.vim	/^            let Tlist_Ctags_Cmd = 'ctags'$/;"	v	line:91
+Tlist_Ctags_Cmd	vim/plugin/taglist.vim	/^            let Tlist_Ctags_Cmd = 'ctags.exe'$/;"	v	line:93
+Tlist_Ctags_Cmd	vim/plugin/taglist.vim	/^            let Tlist_Ctags_Cmd = 'exctags'$/;"	v	line:89
+Tlist_Ctags_Cmd	vim/plugin/taglist.vim	/^            let Tlist_Ctags_Cmd = 'exuberant-ctags'$/;"	v	line:86
+Tlist_Ctags_Cmd	vim/plugin/taglist.vim	/^            let Tlist_Ctags_Cmd = 'tags'$/;"	v	line:95
+Tlist_Debug_Disable	vim/plugin/taglist.vim	/^function! s:Tlist_Debug_Disable(...)$/;"	f	line:635
+Tlist_Debug_Enable	vim/plugin/taglist.vim	/^function! s:Tlist_Debug_Enable(...)$/;"	f	line:613
+Tlist_Debug_Show	vim/plugin/taglist.vim	/^function! s:Tlist_Debug_Show()$/;"	f	line:642
+Tlist_Detect_Filetype	vim/plugin/taglist.vim	/^function! s:Tlist_Detect_Filetype(fname)$/;"	f	line:959
+Tlist_Discard_FileInfo	vim/plugin/taglist.vim	/^function! s:Tlist_Discard_FileInfo(fidx)$/;"	f	line:1077
+Tlist_Discard_TagInfo	vim/plugin/taglist.vim	/^function! s:Tlist_Discard_TagInfo(fidx)$/;"	f	line:1010
+Tlist_Display_Prototype	vim/plugin/taglist.vim	/^        let Tlist_Display_Prototype = 0$/;"	v	line:167
+Tlist_Display_Tag_Scope	vim/plugin/taglist.vim	/^        let Tlist_Display_Tag_Scope = 1$/;"	v	line:172
+Tlist_Enable_Fold_Column	vim/plugin/taglist.vim	/^        let Tlist_Enable_Fold_Column = 1$/;"	v	line:223
+Tlist_Exe_Cmd_No_Acmds	vim/plugin/taglist.vim	/^function! s:Tlist_Exe_Cmd_No_Acmds(cmd)$/;"	f	line:788
+Tlist_Exit_OnlyWindow	vim/plugin/taglist.vim	/^        let Tlist_Exit_OnlyWindow = 0$/;"	v	line:191
+Tlist_Extract_Tag_Scope	vim/plugin/taglist.vim	/^function! s:Tlist_Extract_Tag_Scope(tag_line)$/;"	f	line:2778
+Tlist_Extract_Tagtype	vim/plugin/taglist.vim	/^function! s:Tlist_Extract_Tagtype(tag_line)$/;"	f	line:2765
+Tlist_FileType_Init	vim/plugin/taglist.vim	/^function! s:Tlist_FileType_Init(ftype)$/;"	f	line:852
+Tlist_File_Fold_Auto_Close	vim/plugin/taglist.vim	/^        let Tlist_File_Fold_Auto_Close = 0$/;"	v	line:197
+Tlist_Find_Nearest_Tag_Idx	vim/plugin/taglist.vim	/^function! s:Tlist_Find_Nearest_Tag_Idx(fidx, linenum)$/;"	f	line:3422
+Tlist_GainFocus_On_ToggleOpen	vim/plugin/taglist.vim	/^        let Tlist_GainFocus_On_ToggleOpen = 0$/;"	v	line:115
+Tlist_Get_Buffer_Filetype	vim/plugin/taglist.vim	/^function! s:Tlist_Get_Buffer_Filetype(bnum)$/;"	f	line:983
+Tlist_Get_File_Index	vim/plugin/taglist.vim	/^function! s:Tlist_Get_File_Index(fname)$/;"	f	line:693
+Tlist_Get_Tag_Linenum	vim/plugin/taglist.vim	/^function! s:Tlist_Get_Tag_Linenum(fidx, tidx)$/;"	f	line:2114
+Tlist_Get_Tag_Prototype	vim/plugin/taglist.vim	/^function! s:Tlist_Get_Tag_Prototype(fidx, tidx)$/;"	f	line:2069
+Tlist_Get_Tag_Prototype_By_Line	vim/plugin/taglist.vim	/^function! Tlist_Get_Tag_Prototype_By_Line(...)$/;"	f	line:3619
+Tlist_Get_Tag_SearchPat	vim/plugin/taglist.vim	/^function! s:Tlist_Get_Tag_SearchPat(fidx, tidx)$/;"	f	line:2091
+Tlist_Get_Tag_Type_By_Tag	vim/plugin/taglist.vim	/^function! s:Tlist_Get_Tag_Type_By_Tag(fidx, tidx)$/;"	f	line:2054
+Tlist_Get_Tagname_By_Line	vim/plugin/taglist.vim	/^function! Tlist_Get_Tagname_By_Line(...)$/;"	f	line:3669
+Tlist_Highlight_Tag_On_BufEnter	vim/plugin/taglist.vim	/^        let Tlist_Highlight_Tag_On_BufEnter = 1$/;"	v	line:218
+Tlist_Inc_Winwidth	vim/plugin/taglist.vim	/^            let Tlist_Inc_Winwidth = 0$/;"	v	line:149
+Tlist_Inc_Winwidth	vim/plugin/taglist.vim	/^            let Tlist_Inc_Winwidth = 1$/;"	v	line:151
+Tlist_Init_File	vim/plugin/taglist.vim	/^function! s:Tlist_Init_File(filename, ftype)$/;"	f	line:2019
+Tlist_Log_Msg	vim/plugin/taglist.vim	/^function! s:Tlist_Log_Msg(msg)$/;"	f	line:660
+Tlist_Max_Submenu_Items	vim/plugin/taglist.vim	/^        let Tlist_Max_Submenu_Items = 20$/;"	v	line:232
+Tlist_Max_Tag_Length	vim/plugin/taglist.vim	/^        let Tlist_Max_Tag_Length = 10$/;"	v	line:236
+Tlist_Menu_Add_Base_Menu	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_Add_Base_Menu()$/;"	f	line:4137
+Tlist_Menu_File_Refresh	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_File_Refresh(fidx)$/;"	f	line:4266
+Tlist_Menu_Get_Tag_Type_Cmd	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_Get_Tag_Type_Cmd(fidx, ftype, add_ttype_name, ttype_idx)$/;"	f	line:4168
+Tlist_Menu_Init	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_Init()$/;"	f	line:4461
+Tlist_Menu_Jump_To_Tag	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_Jump_To_Tag(tidx)$/;"	f	line:4433
+Tlist_Menu_Refresh	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_Refresh()$/;"	f	line:4419
+Tlist_Menu_Remove_File	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_Remove_File()$/;"	f	line:4388
+Tlist_Menu_Update_File	vim/plugin/taglist.vim	/^function! s:Tlist_Menu_Update_File(clear_menu)$/;"	f	line:4290
+Tlist_Parse_Tagline	vim/plugin/taglist.vim	/^function! s:Tlist_Parse_Tagline(tag_line)$/;"	f	line:2142
+Tlist_Post_Close_Cleanup	vim/plugin/taglist.vim	/^function! s:Tlist_Post_Close_Cleanup()$/;"	f	line:1776
+Tlist_Process_Dir	vim/plugin/taglist.vim	/^function! s:Tlist_Process_Dir(dir_name, pat)$/;"	f	line:2683
+Tlist_Process_File	vim/plugin/taglist.vim	/^function! s:Tlist_Process_File(filename, ftype)$/;"	f	line:2206
+Tlist_Process_File_Always	vim/plugin/taglist.vim	/^        let Tlist_Process_File_Always = 0$/;"	v	line:120
+Tlist_Process_Filelist	vim/plugin/taglist.vim	/^function! s:Tlist_Process_Filelist(file_names)$/;"	f	line:2635
+Tlist_Refresh	vim/plugin/taglist.vim	/^function! s:Tlist_Refresh()$/;"	f	line:2793
+Tlist_Refresh_Folds	vim/plugin/taglist.vim	/^function! s:Tlist_Refresh_Folds()$/;"	f	line:4099
+Tlist_Remove_File	vim/plugin/taglist.vim	/^function! s:Tlist_Remove_File(file_idx, user_request)$/;"	f	line:1136
+Tlist_Session_Load	vim/plugin/taglist.vim	/^function! s:Tlist_Session_Load(...)$/;"	f	line:3777
+Tlist_Session_Save	vim/plugin/taglist.vim	/^function! s:Tlist_Session_Save(...)$/;"	f	line:3906
+Tlist_Set_App	vim/plugin/taglist.vim	/^function! Tlist_Set_App(name)$/;"	f	line:4494
+Tlist_Show_Menu	vim/plugin/taglist.vim	/^        let Tlist_Show_Menu = 0$/;"	v	line:124
+Tlist_Show_One_File	vim/plugin/taglist.vim	/^        let Tlist_Show_One_File = 0$/;"	v	line:228
+Tlist_Skip_File	vim/plugin/taglist.vim	/^function! s:Tlist_Skip_File(filename, ftype)$/;"	f	line:797
+Tlist_Sort_Type	vim/plugin/taglist.vim	/^        let Tlist_Sort_Type = 'order'$/;"	v	line:129
+Tlist_Update_Current_File	vim/plugin/taglist.vim	/^function! s:Tlist_Update_Current_File()$/;"	f	line:2992
+Tlist_Update_File	vim/plugin/taglist.vim	/^function! Tlist_Update_File(filename, ftype)$/;"	f	line:2430
+Tlist_Update_Remove_List	vim/plugin/taglist.vim	/^function! s:Tlist_Update_Remove_List(filename, add)$/;"	f	line:835
+Tlist_Use_Horiz_Window	vim/plugin/taglist.vim	/^        let Tlist_Use_Horiz_Window = 0$/;"	v	line:134
+Tlist_Use_Right_Window	vim/plugin/taglist.vim	/^        let Tlist_Use_Right_Window = 0$/;"	v	line:141
+Tlist_Use_SingleClick	vim/plugin/taglist.vim	/^        let Tlist_Use_SingleClick = 0$/;"	v	line:178
+Tlist_User_Removed_File	vim/plugin/taglist.vim	/^function! s:Tlist_User_Removed_File(filename)$/;"	f	line:827
+Tlist_Vim_Session_Load	vim/plugin/taglist.vim	/^function! s:Tlist_Vim_Session_Load()$/;"	f	line:4480
+Tlist_Warning_Msg	vim/plugin/taglist.vim	/^function! s:Tlist_Warning_Msg(msg)$/;"	f	line:681
+Tlist_WinHeight	vim/plugin/taglist.vim	/^        let Tlist_WinHeight = 10$/;"	v	line:162
+Tlist_WinWidth	vim/plugin/taglist.vim	/^        let Tlist_WinWidth = 30$/;"	v	line:157
+Tlist_Window_Check_Auto_Open	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Check_Auto_Open()$/;"	f	line:4074
+Tlist_Window_Check_Width	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Check_Width()$/;"	f	line:1389
+Tlist_Window_Close	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Close()$/;"	f	line:2510
+Tlist_Window_Create	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Create()$/;"	f	line:1264
+Tlist_Window_Display_Help	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Display_Help()$/;"	f	line:523
+Tlist_Window_Exit_Only_Window	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Exit_Only_Window()$/;"	f	line:1413
+Tlist_Window_Get_File_Index_By_Linenum	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Get_File_Index_By_Linenum(lnum)$/;"	f	line:729
+Tlist_Window_Get_Tag_Index	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Get_Tag_Index(fidx, lnum)$/;"	f	line:3065
+Tlist_Window_Get_Tag_Type_By_Linenum	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Get_Tag_Type_By_Linenum(fidx, lnum)$/;"	f	line:3038
+Tlist_Window_Goto_Window	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Goto_Window()$/;"	f	line:1253
+Tlist_Window_Highlight_Line	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Highlight_Line()$/;"	f	line:3086
+Tlist_Window_Highlight_Tag	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Highlight_Tag(filename, cur_lnum, cntx, center)$/;"	f	line:3495
+Tlist_Window_Init	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Init()$/;"	f	line:1438
+Tlist_Window_Jump_To_Tag	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Jump_To_Tag(win_ctrl)$/;"	f	line:3312
+Tlist_Window_Mark_File_Window	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Mark_File_Window()$/;"	f	line:2545
+Tlist_Window_Move_To_File	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Move_To_File(dir)$/;"	f	line:3720
+Tlist_Window_Open	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Open()$/;"	f	line:2553
+Tlist_Window_Open_File	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Open_File(win_ctrl, filename, tagpat)$/;"	f	line:3103
+Tlist_Window_Open_File_Fold	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Open_File_Fold(acmd_bufnr)$/;"	f	line:4022
+Tlist_Window_Refresh	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Refresh()$/;"	f	line:1697
+Tlist_Window_Refresh_File	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Refresh_File(filename, ftype)$/;"	f	line:1834
+Tlist_Window_Remove_File_From_Display	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Remove_File_From_Display(fidx)$/;"	f	line:1107
+Tlist_Window_Show_Info	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Show_Info()$/;"	f	line:3353
+Tlist_Window_Toggle	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Toggle()$/;"	f	line:2609
+Tlist_Window_Toggle_Help_Text	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Toggle_Help_Text()$/;"	f	line:557
+Tlist_Window_Update_File	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Update_File()$/;"	f	line:3011
+Tlist_Window_Update_Line_Offsets	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Update_Line_Offsets(start_idx, increment, offset)$/;"	f	line:1057
+Tlist_Window_Zoom	vim/plugin/taglist.vim	/^function! s:Tlist_Window_Zoom()$/;"	f	line:1343
+Usage	bin/TigerVNC/bin/vncserver	/^sub Usage$/;"	s	line:571
+W	Session.vim	/^map W :tabedit $/;"	m	line:39
+WW	Session.vim	/^map WW :tabclose!$/;"	m	line:38
+WebEngineCfg_xml_setup	bin/config_setup.old.sh	/^WebEngineCfg_xml_setup ()$/;"	f	line:246
+WebEngineCfg_xml_setup	bin/config_setup.sh	/^WebEngineCfg_xml_setup ()$/;"	f	line:246
+X	vim/colors/candyman.vim	/^fun! s:X(group, fg, bg, attr, lcfg, lcbg)$/;"	f	line:253
+X	vim/colors/desertink.vim	/^  fun! <SID>X(group, fg, bg, attr, ...)$/;"	f	line:234
+Y	Session.vim	/^map Y yiw$/;"	m	line:40
+[C	Session.vim	/^map [C :tabnext$/;"	m	line:42
+[D	Session.vim	/^map [D :tabprevious$/;"	m	line:41
+\j	Session.vim	/^map \\j :call ShowTrailingWhiteSpace()$/;"	m	line:43
+_checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f	line:488
+_svn	bin/svll	/^_svn()$/;"	f	line:158
+_svn	bin/svll.bak2	/^_svn () $/;"	f	line:2
+_svn_grcut	bin/svll	/^function _svn_grcut()$/;"	f	line:64
+_svn_info	bin/svll	/^function _svn_info()$/;"	f	line:79
+_svn_lls	bin/svll	/^function _svn_lls()$/;"	f	line:91
+_svn_read_hashfile	bin/svll	/^function _svn_read_hashfile()$/;"	f	line:37
+acs_build_vars	bashrc_nice.sh	/^acs_build_vars () $/;"	f	line:555
+acs_sockets	bashrc_nice.sh	/^acs_sockets () $/;"	f	line:71
+acs_task_setup.sh	bin/acs_task_setup.sh	1;"	F	line:1
+acs_telnet	bashrc_nice.sh	/^acs_telnet ()$/;"	f	line:187
+acs_threads	bashrc_nice.sh	/^acs_threads () $/;"	f	line:100
+acx_threads	bashrc_nice.sh	/^acx_threads ()$/;"	f	line:165
+acx_threads	bashrc_nice.sh	/^acx_threads ()$/;"	f	line:746
+analyzer_log_ini_setup	bin/config_setup.old.sh	/^analyzer_log_ini_setup () $/;"	f	line:76
+analyzer_log_ini_setup	bin/config_setup.sh	/^analyzer_log_ini_setup () $/;"	f	line:76
+analyzer_log_ini_setup	bin/icm_config_setup.sh	/^analyzer_log_ini_setup () $/;"	f	line:82
+applyPatchList	bashrc_git.sh	/^applyPatchList () $/;"	f	line:25
+arg	bin/TigerVNC/bin/vncserver	/^    arg: while (defined($arg = shift(@ARGV))) {$/;"	l	line:684
+backslash_fix	bin/config_setup.old.sh	/^backslash_fix () $/;"	f	line:21
+backslash_fix	bin/config_setup.sh	/^backslash_fix () $/;"	f	line:21
+backslash_fix	bin/icm_config_setup.sh	/^backslash_fix () $/;"	f	line:13
+backup_script.sh	bin/backup_script.sh	1;"	F	line:1
+backupgitkernel	bashrc_mlx.sh	/^backupgitkernel ()$/;"	f	line:329
+base	bin/svn-merge-meld.py	/^	base   = sys.argv[1]$/;"	v	line:11
+bashrc_bookmarks.sh	bashrc_bookmarks.sh	1;"	F	line:1
+bashrc_common.sh	bashrc_common.sh	1;"	F	line:1
+bashrc_devel.sh	bashrc_devel.sh	1;"	F	line:1
+bashrc_fs.sh	bashrc_fs.sh	1;"	F	line:1
+bashrc_git.sh	bashrc_git.sh	1;"	F	line:1
+bashrc_main.sh	bashrc_main.sh	1;"	F	line:1
+bashrc_misc.sh	bashrc_misc.sh	1;"	F	line:1
+bashrc_mlx.sh	bashrc_mlx.sh	1;"	F	line:1
+bashrc_nice.sh	bashrc_nice.sh	1;"	F	line:1
+bashrc_screen.sh	bashrc_screen.sh	1;"	F	line:1
+bashrc_svn.sh	bashrc_svn.sh	1;"	F	line:1
+bashrc_tags.sh	bashrc_tags.sh	1;"	F	line:1
+bashrc_vim.sh	bashrc_vim.sh	1;"	F	line:1
+becho	bin/showprettygids.sh	/^becho ()$/;"	f	line:28
+black_angus.vim	vim/colors/black_angus.vim	1;"	F	line:1
+blackbeauty.vim	vim/colors/blackbeauty.vim	1;"	F	line:1
+blackboard.vim	vim/colors/blackboard.vim	1;"	F	line:1
+blackdust.vim	vim/colors/blackdust.vim	1;"	F	line:1
+blacklight.vim	vim/colors/blacklight.vim	1;"	F	line:1
+branches	bashrc_svn.sh	/^branches () {$/;"	f	line:498
+build_task_env	bin/acs_task_setup.sh	/^build_task_env () $/;"	f	line:21
+build_task_env	bin/task_setup.sh	/^build_task_env () $/;"	f	line:22
+candy.vim	vim/colors/candy.vim	1;"	F	line:1
+candycode.vim	vim/colors/candycode.vim	1;"	F	line:1
+candyman.vim	vim/colors/candyman.vim	1;"	F	line:1
+catgrubsetdefault	bashrc_devel.sh	/^catgrubsetdefault ()$/;"	f	line:275
+catgrubvsinstalled	bashrc_devel.sh	/^catgrubvsinstalled ()$/;"	f	line:263
+cdbundle	bashrc_nice.sh	/^cdbundle () $/;"	f	line:359
+cdcode	bashrc_bookmarks.sh	/^cdcode () { cd ${yonicode}    ; [ -n "$1" ] && cd "$1"; } $/;"	f	line:270
+cddevel	bashrc_mlx.sh	/^cddevel () { $/;"	f	line:902
+cddocs	bashrc_bookmarks.sh	/^cddocs () { cd ${yonidocs}    ; [ -n "$1" ] && cd $1;  }$/;"	f	line:264
+cdf	Session.vim	/^map cdf :cd %:h$/;"	m	line:44
+cdofed	bashrc_mlx.sh	/^cdofed  () { $/;"	f	line:910
+cdsrc	bashrc_nice.sh	/^cdsrc () $/;"	f	line:387
+cdtask	bashrc_bookmarks.sh	/^cdtask () { cd ${yonitasks}    ; [ -n "$1" ] && cd "$1";  }$/;"	f	line:275
+cdtask	bashrc_nice.sh	/^cdtask () $/;"	f	line:373
+cdupstream	bashrc_mlx.sh	/^cdupstream () { $/;"	f	line:906
+cecho	bin/showprettygids.sh	/^function cecho ()$/;"	f	line:19
+changeState	bashrc_nice.sh	/^changeState () $/;"	f	line:656
+change_param_value	bin/config_setup.old.sh	/^change_param_value () $/;"	f	line:56
+change_param_value	bin/config_setup.sh	/^change_param_value () $/;"	f	line:56
+change_param_value	bin/icm_config_setup.sh	/^change_param_value () $/;"	f	line:48
+change_xml_value	bin/config_setup.old.sh	/^change_xml_value () $/;"	f	line:30
+change_xml_value	bin/config_setup.sh	/^change_xml_value () $/;"	f	line:30
+change_xml_value	bin/icm_config_setup.sh	/^change_xml_value () $/;"	f	line:22
+changecdlinux	bashrc_mlx.sh	/^changecdlinux () {$/;"	f	line:298
+checkout_config	bin/acs_task_setup.sh	/^checkout_config () $/;"	f	line:6
+checkout_config	bin/task_setup.sh	/^checkout_config () $/;"	f	line:7
+checkout_regression	bin/task_setup.sh	/^checkout_regression () $/;"	f	line:111
+checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel () $/;"	f	line:495
+checkpatchuserpace	bashrc_mlx.sh	/^checkpatchuserpace () $/;"	f	line:501
+clean	mkyonienv.sh	/^clean ()$/;"	f	line:66
+clean_exprssion	bin/clean_results.sh	/^clean_exprssion () $/;"	f	line:13
+clean_results.sh	bin/clean_results.sh	1;"	F	line:1
+clean_value	bin/clean_results.sh	/^clean_value () $/;"	f	line:3
+cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration () $/;"	f	line:624
+cleanibheaders	bashrc_mlx.sh	/^cleanibheaders () $/;"	f	line:604
+cmd	bin/TigerVNC/bin/vncserver	/^ cmd:$/;"	l	line:725
+cmd	bin/svn-merge-meld.py	/^	cmd = [meld, mine, base, theirs, merged]$/;"	v	line:17
+cmd1	bin/TigerVNC/bin/vncserver	/^      cmd1:$/;"	l	line:738
+cmd2	bin/TigerVNC/bin/vncserver	/^      cmd2:$/;"	l	line:750
+cmd3	bin/TigerVNC/bin/vncserver	/^      cmd3:$/;"	l	line:762
+cmd_with_count	bin/ps_mem.py	/^def cmd_with_count(cmd, count):$/;"	f	line:132	access:public
+cmds	bin/ps_mem.py	/^cmds={}$/;"	v	line:92
+color	vim/colors/candyman.vim	/^fun! s:color(r, g, b)$/;"	f	line:210
+color	vim/colors/desertink.vim	/^  fun! <SID>color(r, g, b)$/;"	f	line:185
+colors_name	vim/colors/blacklight.vim	/^let colors_name="blacklight"$/;"	v	line:9
+colors_name	vim/colors/candy.vim	/^let colors_name = "candy"$/;"	v	line:13
+colors_name	vim/colors/candyman.vim	/^let colors_name = "candyman"$/;"	v	line:48
+colors_name	vim/colors/yonic.vim	/^let colors_name = "yonic"$/;"	v	line:13
+colors_name	vim/colors/yonic_4.vim	/^let colors_name = "fog"$/;"	v	line:18
+complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f	line:201
+config_setup.old.sh	bin/config_setup.old.sh	1;"	F	line:1
+config_setup.sh	bin/config_setup.sh	1;"	F	line:1
+config_update.sh	bin/config_update.sh	1;"	F	line:1
+connectToRemoteDesk.sh	bin/connectToRemoteDesk.sh	1;"	F	line:1
+count	bin/ps_mem.py	/^count={}$/;"	v	line:94
+cp_modules_to_lib_modules	bin/singlemoduleinstall.sh	/^cp_modules_to_lib_modules ()$/;"	f	line:14
+create_env	bin/task_setup.sh	/^create_env () $/;"	f	line:72
+create_trunk	bin/acs_task_setup.sh	/^create_trunk () $/;"	f	line:50
+create_trunk	bin/task_setup.sh	/^create_trunk () $/;"	f	line:127
+cscope.vim	vim/cscope.vim	1;"	F	line:1
+csfiles	bashrc_mlx.sh	/^csfiles () $/;"	f	line:657
+cw	bashrc_fs.sh	/^cw () $/;"	f	line:204
+define	bashrc_fs.sh	/^define() { $/;"	f	line:605
+delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f	line:589
+delete_param	bin/config_setup.old.sh	/^delete_param () $/;"	f	line:68
+delete_param	bin/config_setup.sh	/^delete_param () $/;"	f	line:68
+delete_param	bin/icm_config_setup.sh	/^delete_param () $/;"	f	line:60
+desertink.vim	vim/colors/desertink.vim	1;"	F	line:1
+dfa	bashrc_fs.sh	/^dfa () $/;"	f	line:158
+dirdiffbrief	bashrc_fs.sh	/^dirdiffbrief () $/;"	f	line:372
+dirgvimdiff	bashrc_fs.sh	/^dirgvimdiff () $/;"	f	line:360
+dirvimdiff	bashrc_fs.sh	/^dirvimdiff () $/;"	f	line:349
+du1	bashrc_fs.sh	/^du1 ()$/;"	f	line:169
+du11	bashrc_fs.sh	/^du11 ()$/;"	f	line:175
+editBashrcScript	bashrc_vim.sh	/^editBashrcScript () $/;"	f	line:101
+editPythonScript	bashrc_vim.sh	/^editPythonScript () $/;"	f	line:115
+editbashrc	bashrc_common.sh	/^editbashrc () $/;"	f	line:43
+editgrub	bashrc_devel.sh	/^editgrub () $/;"	f	line:282
+editgrubvim	bashrc_devel.sh	/^editgrubvim () $/;"	f	line:287
+ethlist	bashrc_fs.sh	/^ethlist () $/;"	f	line:545
+extract	bashrc_fs.sh	/^extract () {$/;"	f	line:609
+ff	bashrc_fs.sh	/^ff () $/;"	f	line:660
+ffd	bashrc_fs.sh	/^ffd () $/;"	f	line:678
+ffdi	bashrc_fs.sh	/^ffdi () $/;"	f	line:687
+ffi	bashrc_fs.sh	/^ffi () $/;"	f	line:669
+findexecutable	bashrc_fs.sh	/^findexecutable ()$/;"	f	line:600
+findibapps	bashrc_mlx.sh	/^findibapps ()$/;"	f	line:573
+findiblibs	bashrc_mlx.sh	/^findiblibs ()$/;"	f	line:515
+findmin	bashrc_fs.sh	/^findmin ()$/;"	f	line:696
+findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f	line:58
+forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f	line:784
+ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f	line:445
+ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f	line:428
+g	bashrc_vim.sh	/^g () $/;"	f	line:25
+g:DirDiffAddArgs	vim/plugin/DirDiff.vim	/^    let g:DirDiffAddArgs = ""$/;"	v	line:260
+g:DirDiffDynamicDiffText	vim/plugin/DirDiff.vim	/^    let g:DirDiffDynamicDiffText = 0$/;"	v	line:265
+g:DirDiffExcludes	vim/plugin/DirDiff.vim	/^    let g:DirDiffExcludes = "*svn*"$/;"	v	line:239
+g:DirDiffIgnore	vim/plugin/DirDiff.vim	/^    let g:DirDiffIgnore = ""$/;"	v	line:244
+g:DirDiffIgnoreCase	vim/plugin/DirDiff.vim	/^    let g:DirDiffIgnoreCase = 0$/;"	v	line:256
+g:DirDiffInteractive	vim/plugin/DirDiff.vim	/^    let g:DirDiffInteractive = 0$/;"	v	line:253
+g:DirDiffSort	vim/plugin/DirDiff.vim	/^    let g:DirDiffSort = 1$/;"	v	line:247
+g:DirDiffTextAnd	vim/plugin/DirDiff.vim	/^    let g:DirDiffTextAnd = " and "$/;"	v	line:275
+g:DirDiffTextDiffer	vim/plugin/DirDiff.vim	/^    let g:DirDiffTextDiffer = " differ"$/;"	v	line:280
+g:DirDiffTextFiles	vim/plugin/DirDiff.vim	/^    let g:DirDiffTextFiles = "Files "$/;"	v	line:270
+g:DirDiffTextOnlyIn	vim/plugin/DirDiff.vim	/^    let g:DirDiffTextOnlyIn = "Only in "$/;"	v	line:285
+g:DirDiffTextOnlyInCenter	vim/plugin/DirDiff.vim	/^    let g:DirDiffTextOnlyInCenter = ": "$/;"	v	line:290
+g:DirDiffWindowSize	vim/plugin/DirDiff.vim	/^    let g:DirDiffWindowSize = 14$/;"	v	line:250
+g:colors_name	vim/colors/black_angus.vim	/^let g:colors_name = "black_angus"$/;"	v	line:13
+g:colors_name	vim/colors/blackbeauty.vim	/^let g:colors_name = "koehler"$/;"	v	line:12
+g:colors_name	vim/colors/blackboard.vim	/^let g:colors_name = 'blackboard'$/;"	v	line:14
+g:colors_name	vim/colors/candycode.vim	/^let g:colors_name="candycode"$/;"	v	line:7
+g:colors_name	vim/colors/desertink.vim	/^let g:colors_name="desertink"$/;"	v	line:30
+g:colors_name	vim/colors/gilboa.vim	/^let g:colors_name = "gilboa"$/;"	v	line:12
+g:colors_name	vim/colors/molokai.vim	/^let g:colors_name="molokai"$/;"	v	line:21
+g:colors_name	vim/colors/molokai_dark.vim	/^let g:colors_name="molokai"$/;"	v	line:22
+g:colors_name	vim/colors/molokayo.vim	/^let g:colors_name="molokayo"$/;"	v	line:5
+g:colors_name	vim/colors/peaksea.vim	/^let g:colors_name = expand("<sfile>:t:r")$/;"	v	line:39
+g:colors_name	vim/colors/yonic_2.vim	/^let g:colors_name="ashen"$/;"	v	line:11
+g:colors_name	vim/colors/yonic_3.vim	/^let g:colors_name = "biogoo"$/;"	v	line:39
+g:colors_name	vim/colors/yonic_desert.vim	/^let g:colors_name="desert"$/;"	v	line:22
+g:git_grep_command	vim/plugin/gitgrep.vim	/^  let g:git_grep_command = 'git grep -n '$/;"	v	line:10
+g:loaded_gitgrep	vim/plugin/gitgrep.vim	/^let g:loaded_gitgrep = 1$/;"	v	line:7
+g:molokai_original	vim/colors/molokayo.vim	/^let g:molokai_original = 1$/;"	v	line:1
+g:molokayo#focus_variant	vim/colors/molokayo.vim	/^    let g:molokayo#focus_variant = 0$/;"	v	line:11
+g:molokayo#high_contrast#comments	vim/colors/molokayo.vim	/^    let g:molokayo#high_contrast#comments = 0$/;"	v	line:8
+gdb	bin/gdbvim	/^sub gdb$/;"	s	line:192
+gdbbt	bashrc_devel.sh	/^gdbbt () $/;"	f	line:151
+gdbvim	bin/gdbvim	1;"	F	line:1
+gdbvim.vim	vim/plugin/gdbvim.vim	1;"	F	line:1
+gen_svl_comp_strings	bin/svll.bak	/^gen_svl_comp_strings () $/;"	f	line:7
+generate_wbe	bashrc_nice.sh	/^generate_wbe () $/;"	f	line:292
+getShared	bin/ps_mem.py	/^def getShared(pid):$/;"	f	line:81	access:public
+get_branches	bashrc_svn.sh	/^get_branches () $/;"	f	line:55
+get_eth_params.sh	bin/get_eth_params.sh	1;"	F	line:1
+get_interrupts.sh	bin/get_interrupts.sh	1;"	F	line:1
+get_loops	bin/traffic_gen.sh	/^get_loops ()$/;"	f	line:75
+get_smp_affinity.sh	bin/get_smp_affinity.sh	1;"	F	line:1
+get_speed	bin/traffic_gen.sh	/^get_speed () $/;"	f	line:59
+getconfigdir	bashrc_nice.sh	/^getconfigdir () $/;"	f	line:328
+getkernelversionfromMakefile	bashrc_devel.sh	/^getkernelversionfromMakefile ()$/;"	f	line:299
+getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f	line:342
+gilboa.vim	vim/colors/gilboa.vim	1;"	F	line:1
+gitb	bashrc_git.sh	/^gitb () $/;"	f	line:14
+gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f	line:53
+gitconfig	bashrc_git.sh	/^gitconfig ()$/;"	f	line:33
+gitedit.sh	bin/gitedit.sh	1;"	F	line:1
+gitgrep.vim	vim/plugin/gitgrep.vim	1;"	F	line:1
+gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f	line:115
+gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete () $/;"	f	line:183
+gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f	line:44
+gn	bashrc_vim.sh	/^gn () $/;"	f	line:45
+grepbash	bashrc_common.sh	/^grepbash () $/;"	f	line:6
+grey_color	vim/colors/candyman.vim	/^fun! s:grey_color(n)$/;"	f	line:132
+grey_color	vim/colors/desertink.vim	/^  fun! <SID>grey_color(n)$/;"	f	line:107
+grey_level	vim/colors/candyman.vim	/^fun! s:grey_level(n)$/;"	f	line:99
+grey_level	vim/colors/desertink.vim	/^  fun! <SID>grey_level(n)$/;"	f	line:74
+grey_number	vim/colors/candyman.vim	/^fun! s:grey_number(x)$/;"	f	line:60
+grey_number	vim/colors/desertink.vim	/^  fun! <SID>grey_number(x)$/;"	f	line:35
+gsess	bashrc_vim.sh	/^gsess () $/;"	f	line:70
+gsessls	bashrc_vim.sh	/^gsessls () $/;"	f	line:63
+gsources	bashrc_vim.sh	/^function gsources ()$/;"	f	line:129
+gvimdiff-svn-wrapper	bin/gvimdiff-svn-wrapper	1;"	F	line:1
+gw	bashrc_fs.sh	/^gw () $/;"	f	line:212
+gx	Session.vim	/^nmap gx <Plug>NetrwBrowseX$/;"	m	line:45
+h	bashrc_fs.sh	/^h () $/;"	f	line:237
+hello	bin/backup_script.sh	/^hello () $/;"	f	line:59
+help	bin/gdbvim	/^sub help # {{{$/;"	s	line:218
+howCleanIsMyHome	bashrc_mlx.sh	/^howCleanIsMyHome ()$/;"	f	line:648
+human	bin/ps_mem.py	/^def human(num, power="Ki"):$/;"	f	line:125	access:public
+ib4start	bashrc_mlx.sh	/^ib4start () $/;"	f	line:697
+ib4stop	bashrc_mlx.sh	/^ib4stop ()$/;"	f	line:705
+ib5start	bashrc_mlx.sh	/^ib5start () $/;"	f	line:714
+ib5stop	bashrc_mlx.sh	/^ib5stop ()$/;"	f	line:723
+ibmod	bashrc_mlx.sh	/^ibmod ()$/;"	f	line:239
+ibstart	bashrc_mlx.sh	/^ibstart ()$/;"	f	line:730
+ibstop	bashrc_mlx.sh	/^ibstop ()$/;"	f	line:747
+icm_config_setup.sh	bin/icm_config_setup.sh	1;"	F	line:1
+icm_kill	bashrc_nice.sh	/^icm_kill () $/;"	f	line:530
+icm_sbuild_vars	bashrc_nice.sh	/^icm_sbuild_vars ()$/;"	f	line:452
+icm_sockets	bashrc_nice.sh	/^icm_sockets () $/;"	f	line:420
+icm_threads	bashrc_nice.sh	/^icm_threads () $/;"	f	line:438
+init_connections	bin/connectToRemoteDesk.sh	/^init_connections () $/;"	f	line:14
+input_pipe	bin/gdbvim	/^sub input_pipe # {{{$/;"	s	line:148
+input_tty	bin/gdbvim	/^sub input_tty # {{{$/;"	s	line:135
+ips_affinity_threads	bashrc_nice.sh	/^ips_affinity_threads () $/;"	f	line:38
+ips_kill	bashrc_nice.sh	/^ips_kill () $/;"	f	line:145
+ips_run.sh	bin/ips_run.sh	1;"	F	line:1
+ips_sockets	bashrc_nice.sh	/^ips_sockets () $/;"	f	line:53
+ips_telnet	bashrc_nice.sh	/^ips_telnet () $/;"	f	line:178
+ips_threads	bashrc_nice.sh	/^ips_threads () $/;"	f	line:90
+iserstart	bashrc_mlx.sh	/^iserstart ()$/;"	f	line:792
+ismoduleup	bashrc_mlx.sh	/^ismoduleup () $/;"	f	line:664
+k	bashrc_fs.sh	/^k () {$/;"	f	line:94
+kdiff3caller.sh	bin/kdiff3caller.sh	1;"	F	line:1
+kdiff3caller.sh.orig	bin/kdiff3caller.sh.orig	1;"	F	line:1
+kernel_ver	bin/ps_mem.py	/^def kernel_ver():$/;"	f	line:73	access:public
+kv	bin/ps_mem.py	/^kv=kernel_ver()$/;"	v	line:79
+la	bashrc_fs.sh	/^la ()$/;"	f	line:127
+listgitrepos	bashrc_mlx.sh	/^listgitrepos ()$/;"	f	line:191
+listinstalledkernels	bashrc_devel.sh	/^listinstalledkernels ()$/;"	f	line:229
+lld	bashrc_fs.sh	/^lld ()$/;"	f	line:121
+loaded_gdbvim	vim/plugin/gdbvim.vim	/^let loaded_gdbvim = 1$/;"	v	line:26
+loaded_taglist	vim/plugin/taglist.vim	/^            let loaded_taglist = 'no'$/;"	v	line:100
+loaded_taglist	vim/plugin/taglist.vim	/^        let loaded_taglist = 'no'$/;"	v	line:76
+loaded_taglist	vim/plugin/taglist.vim	/^    let loaded_taglist = 'fast_load_done'$/;"	v	line:318
+loaded_taglist	vim/plugin/taglist.vim	/^let loaded_taglist = 'available'$/;"	v	line:344
+loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded () $/;"	f	line:674
+logq	bashrc_svn.sh	/^logq () $/;"	f	line:442
+logu	bashrc_svn.sh	/^logu () $/;"	f	line:436
+lstopo.sh	bin/lstopo.sh	1;"	F	line:1
+main	bin/acs_task_setup.sh	/^main () $/;"	f	line:74
+main	bin/backup_script.sh	/^main ()$/;"	f	line:66
+main	bin/clean_results.sh	/^main () $/;"	f	line:25
+main	bin/config_update.sh	/^main () $/;"	f	line:3
+main	bin/mount_m	/^main () $/;"	f	line:39
+main	bin/setipaddrinsetup.sh	/^main ()$/;"	f	line:40
+main	bin/singlemoduleinstall.sh	/^main ()$/;"	f	line:28
+main	bin/task_setup.sh	/^main () $/;"	f	line:152
+main	bin/traffic_gen.sh	/^main () $/;"	f	line:121
+main	bin/valgrind_execute.sh	/^main () $/;"	f	line:69
+main	mkyonienv.sh	/^main  ()$/;"	f	line:83
+measure_traffic.sh	bin/measure_traffic.sh	1;"	F	line:1
+meld	bin/svn-merge-meld.py	/^	meld = "\/usr\/bin\/meld"$/;"	v	line:8
+merged	bin/svn-merge-meld.py	/^	merged = sys.argv[4]$/;"	v	line:14
+mftchoosedev	bashrc_mlx.sh	/^mftchoosedev ()$/;"	f	line:418
+mftgetlinktype	bashrc_mlx.sh	/^mftgetlinktype ()$/;"	f	line:480
+mftinstall	bashrc_mlx.sh	/^mftinstall () $/;"	f	line:397
+mftsetlinktypeeth	bashrc_mlx.sh	/^mftsetlinktypeeth ()$/;"	f	line:432
+mftsetlinktypeinfiniband	bashrc_mlx.sh	/^mftsetlinktypeinfiniband ()$/;"	f	line:457
+mftstatus	bashrc_mlx.sh	/^mftstatus () $/;"	f	line:407
+mine	bin/svn-merge-meld.py	/^	mine   = sys.argv[3]$/;"	v	line:13
+mine.vim	vim/ftdetect/mine.vim	1;"	F	line:1
+mkinfinibandmlx4	bashrc_mlx.sh	/^mkinfinibandmlx4 () $/;"	f	line:283
+mkinfinibandmlx5	bashrc_mlx.sh	/^mkinfinibandmlx5 ()$/;"	f	line:288
+mkkernelbuild	bashrc_devel.sh	/^mkkernelbuild ()$/;"	f	line:310
+mkkernelbuildall	bashrc_devel.sh	/^mkkernelbuildall ()$/;"	f	line:334
+mkkernelbuildinstallall	bashrc_devel.sh	/^mkkernelbuildinstallall ()$/;"	f	line:395
+mkkernelbuildinstallmodules	bashrc_devel.sh	/^mkkernelbuildinstallmodules ()$/;"	f	line:407
+mkkernelbuildmlx5core	bashrc_mlx.sh	/^mkkernelbuildmlx5core ()$/;"	f	line:924
+mkkernelbuildmlx5ib	bashrc_mlx.sh	/^mkkernelbuildmlx5ib () $/;"	f	line:919
+mkkernelbuildmodules	bashrc_devel.sh	/^mkkernelbuildmodules () $/;"	f	line:322
+mkkernelinstall	bashrc_devel.sh	/^mkkernelinstall ()$/;"	f	line:346
+mkkernelinstallall	bashrc_devel.sh	/^mkkernelinstallall () $/;"	f	line:374
+mkkernelinstallmodules	bashrc_devel.sh	/^mkkernelinstallmodules ()$/;"	f	line:361
+mkrdmacoreApps	bashrc_mlx.sh	/^mkrdmacoreApps ()$/;"	f	line:841
+mkrxelib	bashrc_mlx.sh	/^mkrxelib () $/;"	f	line:804
+mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f	line:279
+mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime () $/;"	f	line:822
+mkvmhelp	bashrc_mlx.sh	/^mkvmhelp() $/;"	f	line:509
+mkyonienv.sh	mkyonienv.sh	1;"	F	line:1
+ml	Session.vim	/^nnoremap ml : call RestartSess () $/;"	m	line:46
+molokai.vim	vim/colors/molokai.vim	1;"	F	line:1
+molokai_dark.vim	vim/colors/molokai_dark.vim	1;"	F	line:1
+molokayo.vim	vim/colors/molokayo.vim	1;"	F	line:1
+mount_m	bin/mount_m	/^mount_m()$/;"	f	line:5
+mount_m	bin/mount_m	1;"	F	line:1
+mountkernelsources	bashrc_mlx.sh	/^mountkernelsources () {  $/;"	f	line:307
+mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f	line:251
+myip	bashrc_fs.sh	/^myip ()$/;"	f	line:535
+namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f	line:3
+ofedbuildversion	bashrc_mlx.sh	/^ofedbuildversion () $/;"	f	line:862
+ofeddeletebackport	bashrc_mlx.sh	/^ofeddeletebackport () $/;"	f	line:341
+ofedfindindexforpackage	bashrc_mlx.sh	/^ofedfindindexforpackage () $/;"	f	line:882
+ofedinstallupstreamlib	bashrc_mlx.sh	/^ofedinstallupstreamlib () $/;"	f	line:851
+ofedinstallversion	bashrc_mlx.sh	/^ofedinstallversion () $/;"	f	line:869
+ofedlistversions	bashrc_mlx.sh	/^ofedlistversions () $/;"	f	line:857
+ofedmkbackport	bashrc_mlx.sh	/^ofedmkbackport () $/;"	f	line:889
+ofedmklinks	bashrc_mlx.sh	/^ofedmklinks () $/;"	f	line:363
+ofedorigindir	bashrc_mlx.sh	/^ofedorigindir () $/;"	f	line:373
+os	bin/ps_mem.py	/^import sys, os, string$/;"	i	line:63
+our_pid	bin/ps_mem.py	/^our_pid=os.getpid()$/;"	v	line:70
+parse_git_branch	bashrc_fs.sh	/^parse_git_branch() {$/;"	f	line:33
+parse_svn_branch	bashrc_fs.sh	/^parse_svn_branch() {$/;"	f	line:36
+parse_svn_repository_root	bashrc_fs.sh	/^parse_svn_repository_root() {$/;"	f	line:42
+parse_svn_url	bashrc_fs.sh	/^parse_svn_url() {$/;"	f	line:39
+path2URL	bashrc_svn.sh	/^path2URL () $/;"	f	line:106
+pd	bashrc_bookmarks.sh	/^pd () $/;"	f	line:40
+pd_complete	bashrc_bookmarks.sh	/^pd_complete () $/;"	f	line:80
+pdc	bashrc_bookmarks.sh	/^pdc () $/;"	f	line:11
+pdf	bashrc_bookmarks.sh	/^pdf ()$/;"	f	line:125
+pdf2pd	bashrc_bookmarks.sh	/^pdf2pd ()$/;"	f	line:110
+pdf_complete	bashrc_bookmarks.sh	/^pdf_complete ()$/;"	f	line:88
+pdf_usage	bashrc_bookmarks.sh	/^pdf_usage ()$/;"	f	line:96
+pdp	bashrc_bookmarks.sh	/^pdp ()$/;"	f	line:62
+peaksea.vim	vim/colors/peaksea.vim	1;"	F	line:1
+pgrep	bashrc_fs.sh	/^pgrep () $/;"	f	line:313
+pr_debug	bashrc_devel.sh	/^pr_debug () $/;"	f	line:174
+pr_debug_usage	bashrc_devel.sh	/^pr_debug_usage ()$/;"	f	line:166
+print_gids	bin/showprettygids.sh	/^function print_gids()$/;"	f	line:35
+print_interrupts_for_16_cores	bin/get_interrupts.sh	/^print_interrupts_for_16_cores () $/;"	f	line:36
+print_interrupts_for_24_cores	bin/get_interrupts.sh	/^print_interrupts_for_24_cores ()$/;"	f	line:61
+print_interrupts_for_32_cores	bin/get_interrupts.sh	/^print_interrupts_for_32_cores () $/;"	f	line:94
+print_interrupts_for_4_cores	bin/get_interrupts.sh	/^print_interrupts_for_4_cores () $/;"	f	line:9
+print_interrupts_for_8_cores	bin/get_interrupts.sh	/^print_interrupts_for_8_cores () $/;"	f	line:23
+print_underline	bashrc_common.sh	/^print_underline () $/;"	f	line:29
+probe_topology	bashrc_fs.sh	/^probe_topology () $/;"	f	line:381
+prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f	line:48
+prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f	line:63
+ps_mem.py	bin/ps_mem.py	1;"	F	line:1
+psmine	bashrc_fs.sh	/^psmine ()$/;"	f	line:341
+pu	bashrc_bookmarks.sh	/^pu ()$/;"	f	line:26
+quotedString	bin/TigerVNC/bin/vncserver	/^sub quotedString$/;"	s	line:543
+rdma-core_build.sh	bin/rdma-core_build.sh	1;"	F	line:1
+rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f	line:227
+reboot	bashrc_fs.sh	/^reboot ()$/;"	f	line:826
+redpill	bashrc_fs.sh	/^redpill () $/;"	f	line:636
+refresh_ssh	bashrc_fs.sh	/^refresh_ssh ()$/;"	f	line:81
+remoteDeskDB.sh	bin/remoteDeskDB.sh	1;"	F	line:1
+removeSlashes	bin/TigerVNC/bin/vncserver	/^sub removeSlashes$/;"	s	line:557
+removemoduleifloaded	bashrc_mlx.sh	/^removemoduleifloaded () $/;"	f	line:683
+resolve_intf_from_mac	bin/setipaddrinsetup.sh	/^resolve_intf_from_mac () $/;"	f	line:26
+restartDhcp	bashrc_nice.sh	/^restartDhcp () $/;"	f	line:672
+rgb	vim/colors/candyman.vim	/^fun! s:rgb(rgb)$/;"	f	line:245
+rgb	vim/colors/desertink.vim	/^  fun! <SID>rgb(rgb)$/;"	f	line:220
+rgb_color	vim/colors/candyman.vim	/^fun! s:rgb_color(x, y, z)$/;"	f	line:201
+rgb_color	vim/colors/desertink.vim	/^  fun! <SID>rgb_color(x, y, z)$/;"	f	line:176
+rgb_level	vim/colors/candyman.vim	/^fun! s:rgb_level(n)$/;"	f	line:180
+rgb_level	vim/colors/desertink.vim	/^  fun! <SID>rgb_level(n)$/;"	f	line:155
+rgb_number	vim/colors/candyman.vim	/^fun! s:rgb_number(x)$/;"	f	line:153
+rgb_number	vim/colors/desertink.vim	/^  fun! <SID>rgb_number(x)$/;"	f	line:128
+root_permission	bin/traffic_gen.sh	/^root_permission () $/;"	f	line:30
+rpmsearch	bashrc_fs.sh	/^rpmsearch () $/;"	f	line:302
+rw	bashrc_fs.sh	/^rw () $/;"	f	line:220
+rxe	bashrc_mlx.sh	/^rxe ()        { sudo rxe_cfg ;      } $/;"	f	line:773
+rxecounters	bashrc_mlx.sh	/^rxecounters ()$/;"	f	line:642
+rxerestart	bashrc_mlx.sh	/^rxerestart ()$/;"	f	line:784
+rxestart	bashrc_mlx.sh	/^rxestart ()$/;"	f	line:774
+rxestop	bashrc_mlx.sh	/^rxestop () $/;"	f	line:780
+s:DirDiffALine	vim/plugin/DirDiff.vim	/^let s:DirDiffALine = 1$/;"	v	line:296
+s:DirDiffBLine	vim/plugin/DirDiff.vim	/^let s:DirDiffBLine = 2$/;"	v	line:297
+s:DirDiffCopyCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyCmd = ""$/;"	v	line:342
+s:DirDiffCopyCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyCmd = "copy"$/;"	v	line:319
+s:DirDiffCopyCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyCmd = "cp"$/;"	v	line:301
+s:DirDiffCopyDirCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyDirCmd = "cp"$/;"	v	line:303
+s:DirDiffCopyDirCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyDirCmd = "xcopy"$/;"	v	line:321
+s:DirDiffCopyDirFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyDirFlags = "-rf"$/;"	v	line:304
+s:DirDiffCopyDirFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyDirFlags = "\/e \/i \/q"$/;"	v	line:322
+s:DirDiffCopyFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyFlags = ""$/;"	v	line:302
+s:DirDiffCopyFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyFlags = ""$/;"	v	line:320
+s:DirDiffCopyFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyFlags = ""$/;"	v	line:343
+s:DirDiffCopyInteractiveFlag	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyInteractiveFlag = "-i"$/;"	v	line:305
+s:DirDiffCopyInteractiveFlag	vim/plugin/DirDiff.vim	/^    let s:DirDiffCopyInteractiveFlag = "\/-y"$/;"	v	line:323
+s:DirDiffDeleteCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteCmd = ""$/;"	v	line:344
+s:DirDiffDeleteCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteCmd = "del"$/;"	v	line:325
+s:DirDiffDeleteCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteCmd = "rm"$/;"	v	line:307
+s:DirDiffDeleteDirCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteDirCmd = "rd"$/;"	v	line:332
+s:DirDiffDeleteDirCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteDirCmd = "rm"$/;"	v	line:311
+s:DirDiffDeleteDirFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteDirFlags = "-rf"$/;"	v	line:312
+s:DirDiffDeleteDirFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteDirFlags = "\/s"$/;"	v	line:334
+s:DirDiffDeleteDirQuietFlag	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteDirQuietFlag = "\/q"$/;"	v	line:335
+s:DirDiffDeleteFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteFlags = ""$/;"	v	line:308
+s:DirDiffDeleteFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteFlags = ""$/;"	v	line:345
+s:DirDiffDeleteFlags	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteFlags = "\/s \/q"$/;"	v	line:326
+s:DirDiffDeleteInteractiveFlag	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteInteractiveFlag = "-i"$/;"	v	line:309
+s:DirDiffDeleteInteractiveFlag	vim/plugin/DirDiff.vim	/^    let s:DirDiffDeleteInteractiveFlag = "\/p"$/;"	v	line:327
+s:DirDiffFirstDiffLine	vim/plugin/DirDiff.vim	/^let s:DirDiffFirstDiffLine = 6$/;"	v	line:295
+s:DirDiffMakeDirCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffMakeDirCmd  = "!mkdir "$/;"	v	line:316
+s:DirDiffMakeDirCmd	vim/plugin/DirDiff.vim	/^    let s:DirDiffMakeDirCmd  = "!mkdir "$/;"	v	line:339
+s:Tlist_Skip_Refresh	vim/plugin/taglist.vim	/^let s:Tlist_Skip_Refresh = 0$/;"	v	line:520
+s:cpo_save	Session.vim	/^let s:cpo_save=&cpo$/;"	v	line:4
+s:cpo_save	vim/plugin/taglist.vim	/^let s:cpo_save = &cpo$/;"	v	line:60
+s:having_partner	vim/plugin/gdbvim.vim	/^let s:having_partner=0$/;"	v	line:27
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:1082
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:1200
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:256
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:374
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:492
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:610
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:728
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:846
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 36)$/;"	v	line:964
+s:l	Session.vim	/^let s:l = 1 - ((0 * winheight(0) + 18) \/ 37)$/;"	v	line:1318
+s:low_color	vim/colors/candyman.vim	/^let s:low_color = 0$/;"	v	line:51
+s:low_color	vim/colors/candyman.vim	/^let s:low_color = 1$/;"	v	line:53
+s:menu_char_prefix	vim/plugin/taglist.vim	/^let s:menu_char_prefix =$/;"	v	line:4159
+s:molokai_original	vim/colors/molokai.vim	/^    let s:molokai_original = 0$/;"	v	line:26
+s:molokai_original	vim/colors/molokai.vim	/^    let s:molokai_original = g:molokai_original$/;"	v	line:24
+s:sep	vim/plugin/DirDiff.vim	/^    let s:sep = ""$/;"	v	line:346
+s:sep	vim/plugin/DirDiff.vim	/^    let s:sep = "\/"$/;"	v	line:314
+s:sep	vim/plugin/DirDiff.vim	/^    let s:sep = "\\\\"$/;"	v	line:337
+s:so_save	Session.vim	/^let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0$/;"	v	line:123
+s:sx	Session.vim	/^let s:sx = expand("<sfile>:p:r")."x.vim"$/;"	v	line:1330
+s:tlist_app_name	vim/plugin/taglist.vim	/^let s:tlist_app_name = "none"$/;"	v	line:505
+s:tlist_brief_help	vim/plugin/taglist.vim	/^let s:tlist_brief_help = 1$/;"	v	line:507
+s:tlist_cur_file_idx	vim/plugin/taglist.vim	/^let s:tlist_cur_file_idx = -1$/;"	v	line:511
+s:tlist_debug	vim/plugin/taglist.vim	/^let s:tlist_debug = 0$/;"	v	line:606
+s:tlist_debug_file	vim/plugin/taglist.vim	/^let s:tlist_debug_file = ''$/;"	v	line:609
+s:tlist_def_asm_settings	vim/plugin/taglist.vim	/^let s:tlist_def_asm_settings = 'asm;d:define;l:label;m:macro;t:type'$/;"	v	line:367
+s:tlist_def_aspperl_settings	vim/plugin/taglist.vim	/^let s:tlist_def_aspperl_settings = 'asp;f:function;s:sub;v:variable'$/;"	v	line:370
+s:tlist_def_aspvbs_settings	vim/plugin/taglist.vim	/^let s:tlist_def_aspvbs_settings = 'asp;f:function;s:sub;v:variable'$/;"	v	line:373
+s:tlist_def_awk_settings	vim/plugin/taglist.vim	/^let s:tlist_def_awk_settings = 'awk;f:function'$/;"	v	line:376
+s:tlist_def_beta_settings	vim/plugin/taglist.vim	/^let s:tlist_def_beta_settings = 'beta;f:fragment;s:slot;v:pattern'$/;"	v	line:379
+s:tlist_def_c_settings	vim/plugin/taglist.vim	/^let s:tlist_def_c_settings = 'c;d:macro;g:enum;s:struct;u:union;t:typedef;' .$/;"	v	line:382
+s:tlist_def_cobol_settings	vim/plugin/taglist.vim	/^let s:tlist_def_cobol_settings = 'cobol;d:data;f:file;g:group;p:paragraph;' .$/;"	v	line:395
+s:tlist_def_cpp_settings	vim/plugin/taglist.vim	/^let s:tlist_def_cpp_settings = 'c++;n:namespace;v:variable;d:macro;t:typedef;' .$/;"	v	line:386
+s:tlist_def_cs_settings	vim/plugin/taglist.vim	/^let s:tlist_def_cs_settings = 'c#;d:macro;t:typedef;n:namespace;c:class;' .$/;"	v	line:390
+s:tlist_def_csh_settings	vim/plugin/taglist.vim	/^let s:tlist_def_csh_settings = 'sh;f:function'$/;"	v	line:457
+s:tlist_def_eiffel_settings	vim/plugin/taglist.vim	/^let s:tlist_def_eiffel_settings = 'eiffel;c:class;f:feature'$/;"	v	line:399
+s:tlist_def_erlang_settings	vim/plugin/taglist.vim	/^let s:tlist_def_erlang_settings = 'erlang;d:macro;r:record;m:module;f:function'$/;"	v	line:402
+s:tlist_def_expect_settings	vim/plugin/taglist.vim	/^let s:tlist_def_expect_settings = 'tcl;c:class;f:method;p:procedure'$/;"	v	line:405
+s:tlist_def_fortran_settings	vim/plugin/taglist.vim	/^let s:tlist_def_fortran_settings = 'fortran;p:program;b:block data;' .$/;"	v	line:408
+s:tlist_def_html_settings	vim/plugin/taglist.vim	/^let s:tlist_def_html_settings = 'html;a:anchor;f:javascript function'$/;"	v	line:413
+s:tlist_def_java_settings	vim/plugin/taglist.vim	/^let s:tlist_def_java_settings = 'java;p:package;c:class;i:interface;' .$/;"	v	line:416
+s:tlist_def_javascript_settings	vim/plugin/taglist.vim	/^let s:tlist_def_javascript_settings = 'javascript;f:function'$/;"	v	line:420
+s:tlist_def_lisp_settings	vim/plugin/taglist.vim	/^let s:tlist_def_lisp_settings = 'lisp;f:function'$/;"	v	line:423
+s:tlist_def_lua_settings	vim/plugin/taglist.vim	/^let s:tlist_def_lua_settings = 'lua;f:function'$/;"	v	line:426
+s:tlist_def_make_settings	vim/plugin/taglist.vim	/^let s:tlist_def_make_settings = 'make;m:macro'$/;"	v	line:429
+s:tlist_def_pascal_settings	vim/plugin/taglist.vim	/^let s:tlist_def_pascal_settings = 'pascal;f:function;p:procedure'$/;"	v	line:432
+s:tlist_def_perl_settings	vim/plugin/taglist.vim	/^let s:tlist_def_perl_settings = 'perl;c:constant;l:label;p:package;s:subroutine'$/;"	v	line:435
+s:tlist_def_php_settings	vim/plugin/taglist.vim	/^let s:tlist_def_php_settings = 'php;c:class;d:constant;v:variable;f:function'$/;"	v	line:438
+s:tlist_def_python_settings	vim/plugin/taglist.vim	/^let s:tlist_def_python_settings = 'python;c:class;m:member;f:function'$/;"	v	line:441
+s:tlist_def_rexx_settings	vim/plugin/taglist.vim	/^let s:tlist_def_rexx_settings = 'rexx;s:subroutine'$/;"	v	line:444
+s:tlist_def_ruby_settings	vim/plugin/taglist.vim	/^let s:tlist_def_ruby_settings = 'ruby;c:class;f:method;F:function;' .$/;"	v	line:447
+s:tlist_def_scheme_settings	vim/plugin/taglist.vim	/^let s:tlist_def_scheme_settings = 'scheme;s:set;f:function'$/;"	v	line:451
+s:tlist_def_sh_settings	vim/plugin/taglist.vim	/^let s:tlist_def_sh_settings = 'sh;f:function'$/;"	v	line:454
+s:tlist_def_slang_settings	vim/plugin/taglist.vim	/^let s:tlist_def_slang_settings = 'slang;n:namespace;f:function'$/;"	v	line:463
+s:tlist_def_sml_settings	vim/plugin/taglist.vim	/^let s:tlist_def_sml_settings = 'sml;e:exception;c:functor;s:signature;' .$/;"	v	line:466
+s:tlist_def_sql_settings	vim/plugin/taglist.vim	/^let s:tlist_def_sql_settings = 'sql;c:cursor;F:field;P:package;r:record;' .$/;"	v	line:470
+s:tlist_def_tcl_settings	vim/plugin/taglist.vim	/^let s:tlist_def_tcl_settings = 'tcl;c:class;f:method;m:method;p:procedure'$/;"	v	line:474
+s:tlist_def_vera_settings	vim/plugin/taglist.vim	/^let s:tlist_def_vera_settings = 'vera;c:class;d:macro;e:enumerator;' .$/;"	v	line:477
+s:tlist_def_verilog_settings	vim/plugin/taglist.vim	/^let s:tlist_def_verilog_settings = 'verilog;m:module;c:constant;P:parameter;' .$/;"	v	line:483
+s:tlist_def_vim_settings	vim/plugin/taglist.vim	/^let s:tlist_def_vim_settings = 'vim;a:autocmds;v:variable;f:function'$/;"	v	line:487
+s:tlist_def_yacc_settings	vim/plugin/taglist.vim	/^let s:tlist_def_yacc_settings = 'yacc;l:label'$/;"	v	line:490
+s:tlist_def_zsh_settings	vim/plugin/taglist.vim	/^let s:tlist_def_zsh_settings = 'sh;f:function'$/;"	v	line:460
+s:tlist_file_count	vim/plugin/taglist.vim	/^let s:tlist_file_count = 0$/;"	v	line:501
+s:tlist_file_lnum_idx_cache	vim/plugin/taglist.vim	/^let s:tlist_file_lnum_idx_cache = -1$/;"	v	line:724
+s:tlist_file_name_idx_cache	vim/plugin/taglist.vim	/^let s:tlist_file_name_idx_cache = -1$/;"	v	line:689
+s:tlist_file_names	vim/plugin/taglist.vim	/^let s:tlist_file_names=''$/;"	v	line:499
+s:tlist_ftype_count	vim/plugin/taglist.vim	/^let s:tlist_ftype_count = 0$/;"	v	line:503
+s:tlist_menu_empty	vim/plugin/taglist.vim	/^let s:tlist_menu_empty = 1$/;"	v	line:513
+s:tlist_msg	vim/plugin/taglist.vim	/^    let s:tlist_msg = ''$/;"	v	line:245
+s:tlist_removed_flist	vim/plugin/taglist.vim	/^let s:tlist_removed_flist = ""$/;"	v	line:509
+s:tlist_sid	vim/plugin/taglist.vim	/^    let s:tlist_sid = substitute(maparg('<SID>xx'), '<SNR>\\(\\d\\+_\\)xx$',$/;"	v	line:303
+s:tlist_win_maximized	vim/plugin/taglist.vim	/^let s:tlist_win_maximized = 0$/;"	v	line:497
+s:tlist_winsize_chgd	vim/plugin/taglist.vim	/^let s:tlist_winsize_chgd = -1$/;"	v	line:495
+s:wipebuf	Session.vim	/^  let s:wipebuf = bufnr('%')$/;"	v	line:128
+sanityCheck	bin/valgrind_execute.sh	/^sanityCheck () $/;"	f	line:26
+sanity_validate	bin/traffic_gen.sh	/^sanity_validate ()$/;"	f	line:41
+save_cpo	vim/colors/candycode.vim	/^let save_cpo = &cpo$/;"	v	line:9
+sbuild_vars	bashrc_nice.sh	/^sbuild_vars () $/;"	f	line:212
+set_eth_params.sh	bin/set_eth_params.sh	1;"	F	line:1
+set_net_performance.sh	bin/set_net_performance.sh	1;"	F	line:1
+set_smp_affinity.sh	bin/set_smp_affinity.sh	1;"	F	line:1
+setipaddrinsetup.sh	bin/setipaddrinsetup.sh	1;"	F	line:1
+setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f	line:408
+setup_bash_profile	mkyonienv.sh	/^setup_bash_profile ()$/;"	f	line:3
+setup_bashrc	mkyonienv.sh	/^setup_bashrc () $/;"	f	line:12
+setup_cgdb_env	mkyonienv.sh	/^setup_cgdb_env () $/;"	f	line:48
+setup_gdbinit	bashrc_devel.sh	/^setup_gdbinit () $/;"	f	line:24
+setup_gdbinit_dir_search_path	bashrc_devel.sh	/^setup_gdbinit_dir_search_path () $/;"	f	line:8
+setup_git_env	mkyonienv.sh	/^setup_git_env () $/;"	f	line:41
+setup_icm_gdbinit	bashrc_nice.sh	/^setup_icm_gdbinit () $/;"	f	line:403
+setup_ips_gdbinit	bashrc_nice.sh	/^setup_ips_gdbinit () $/;"	f	line:398
+setup_vim_env	mkyonienv.sh	/^setup_vim_env () $/;"	f	line:22
+shared	bin/ps_mem.py	/^        shared=getShared(pid)$/;"	v	line:100
+shared_val_accurate	bin/ps_mem.py	/^def shared_val_accurate():$/;"	f	line:147	access:public
+shareds	bin/ps_mem.py	/^shareds={}$/;"	v	line:93
+showState	bashrc_nice.sh	/^showState()$/;"	f	line:650
+showosrelease	bashrc_fs.sh	/^showosrelease ()$/;"	f	line:847
+showprettygids.sh	bin/showprettygids.sh	1;"	F	line:1
+shutdown	bashrc_fs.sh	/^shutdown () $/;"	f	line:805
+sig_gdb	bin/gdbvim	/^sub sig_gdb # {{{$/;"	s	line:206
+singlemoduleinstall.sh	bin/singlemoduleinstall.sh	1;"	F	line:1
+sl	bashrc_screen.sh	/^sl () $/;"	f	line:53
+sm	bashrc_mlx.sh	/^sm () $/;"	f	line:76
+sort_list	bin/ps_mem.py	/^sort_list = cmds.items()$/;"	v	line:119
+sort_list	bin/ps_mem.py	/^sort_list=filter(lambda x:x[1],sort_list) #get rid of zero sized processes (kernel threads)$/;"	v	line:121
+space_2_underscore	bashrc_fs.sh	/^space_2_underscore ()$/;"	f	line:294
+startBackup	bin/backup_script.sh	/^startBackup ()$/;"	f	line:26
+startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f	line:680
+startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f	line:692
+startValgrindMemCheck	bin/valgrind_execute.sh	/^startValgrindMemCheck () $/;"	f	line:37
+startValgrindProfile	bin/valgrind_execute.sh	/^startValgrindProfile () $/;"	f	line:56
+string	bin/ps_mem.py	/^import sys, os, string$/;"	i	line:63
+subprocess	bin/svn-merge-meld.py	/^import subprocess$/;"	i	line:4
+svl	bashrc_svn.sh	/^svl () $/;"	f	line:82
+svl_func	bin/svll.bak	/^svl_func ()   #  By convention, the function name$/;"	f	line:14
+svll	bin/svll	1;"	F	line:1
+svll.bak	bin/svll.bak	1;"	F	line:1
+svll.bak2	bin/svll.bak2	1;"	F	line:1
+svn-merge-kdiff3.sh	bin/svn-merge-kdiff3.sh	1;"	F	line:1
+svn-merge-meld.py	bin/svn-merge-meld.py	1;"	F	line:1
+svn-merge-meld.sh	bin/svn-merge-meld.sh	1;"	F	line:1
+svn_complete	bashrc_svn.sh	/^svn_complete () $/;"	f	line:74
+svn_reachable	bashrc_svn.sh	/^svn_reachable () $/;"	f	line:39
+svncat	bashrc_svn.sh	/^svncat () $/;"	f	line:164
+svnchangeuser	bashrc_svn.sh	/^svnchangeuser () $/;"	f	line:509
+svnco	bashrc_svn.sh	/^svnco () $/;"	f	line:94
+svndiff	bashrc_svn.sh	/^svndiff () $/;"	f	line:191
+svndiffbrief	bashrc_svn.sh	/^svndiffbrief () $/;"	f	line:255
+svndiffhead	bashrc_svn.sh	/^svndiffhead () $/;"	f	line:317
+svndiffr	bashrc_svn.sh	/^svndiffr () $/;"	f	line:448
+svnlog	bashrc_svn.sh	/^svnlog () {$/;"	f	line:418
+svnlogforfile	bashrc_svn.sh	/^svnlogforfile () $/;"	f	line:323
+svnmergebranch	bashrc_svn.sh	/^svnmergebranch () $/;"	f	line:398
+svnresolved	bashrc_svn.sh	/^svnresolved () { $/;"	f	line:176
+svnrevert	bashrc_svn.sh	/^svnrevert () {$/;"	f	line:146
+svnstat	bashrc_svn.sh	/^svnstat () {$/;"	f	line:136
+svnstatu	bashrc_svn.sh	/^svnstatu () {$/;"	f	line:126
+svnsw	bashrc_svn.sh	/^svnsw () $/;"	f	line:115
+svnup	bashrc_svn.sh	/^svnup () $/;"	f	line:344
+svnupbranch	bashrc_svn.sh	/^svnupbranch ()$/;"	f	line:373
+sys	bin/ps_mem.py	/^import sys, os, string$/;"	i	line:63
+sys	bin/svn-merge-meld.py	/^import sys$/;"	i	line:3
+t	bashrc_fs.sh	/^t () $/;"	f	line:180
+tag_ls	bashrc_svn.sh	/^tag_ls () {$/;"	f	line:486
+tagcompleteme	bashrc_tags.sh	/^tagcompleteme () $/;"	f	line:3
+tagcscope	bashrc_tags.sh	/^tagcscope () $/;"	f	line:17
+tagcscopeinfiniband	bashrc_tags.sh	/^tagcscopeinfiniband () $/;"	f	line:31
+tagcscopekernel	bashrc_tags.sh	/^tagcscopekernel () $/;"	f	line:24
+tagcscopemlx5	bashrc_tags.sh	/^tagcscopemlx5 () $/;"	f	line:38
+taglist.vim	vim/plugin/taglist.vim	1;"	F	line:1
+tagme.sh	bin/tagme.sh	1;"	F	line:1
+tagmeofakernel.sh	bin/tagmeofakernel.sh	1;"	F	line:1
+tagmerdmacore.sh	bin/tagmerdmacore.sh	1;"	F	line:1
+tagmeupstreamkernel.sh	bin/tagmeupstreamkernel.sh	1;"	F	line:1
+tailstatistics	bashrc_nice.sh	/^tailstatistics () $/;"	f	line:23
+task_list	bashrc_nice.sh	/^task_list () $/;"	f	line:193
+task_setup.sh	bin/task_setup.sh	1;"	F	line:1
+theirs	bin/svn-merge-meld.py	/^	theirs = sys.argv[2]$/;"	v	line:12
+traffic_gen.sh	bin/traffic_gen.sh	1;"	F	line:1
+traffic_runner	bin/traffic_gen.sh	/^traffic_runner () $/;"	f	line:87
+update_dictionary.sh	vim/update_dictionary.sh	1;"	F	line:1
+usage	bin/acs_task_setup.sh	/^usage () $/;"	f	line:38
+usage	bin/connectToRemoteDesk.sh	/^usage () $/;"	f	line:29
+usage	bin/task_setup.sh	/^usage () $/;"	f	line:60
+usage	bin/valgrind_execute.sh	/^usage ()$/;"	f	line:3
+usage	mkyonienv.sh	/^usage () $/;"	f	line:56
+v	bashrc_vim.sh	/^v ()$/;"	f	line:16
+valgrind_execute.sh	bin/valgrind_execute.sh	1;"	F	line:1
+validateState	bashrc_nice.sh	/^validateState ()$/;"	f	line:662
+validate_interface	bin/traffic_gen.sh	/^validate_interface ()$/;"	f	line:6
+vconsole	bashrc_fs.sh	/^vconsole ()$/;"	f	line:766
+verifyBackupDest	bin/backup_script.sh	/^verifyBackupDest ()$/;"	f	line:9
+verify_url	bin/acs_task_setup.sh	/^verify_url () $/;"	f	line:59
+verify_url	bin/task_setup.sh	/^verify_url () $/;"	f	line:137
+vforcestop	bashrc_fs.sh	/^vforcestop ()$/;"	f	line:750
+vim_call	bin/gdbvim	/^sub vim_call$/;"	s	line:198
+vimdiff-svn-wrapper	bin/vimdiff-svn-wrapper	1;"	F	line:1
+virsh_complete	bashrc_fs.sh	/^virsh_complete ()$/;"	f	line:716
+vl	bashrc_fs.sh	/^vl ()$/;"	f	line:723
+vlinstall	bashrc_mlx.sh	/^vlinstall ()$/;"	f	line:378
+vm	bashrc_fs.sh	/^vm ()$/;"	f	line:710
+vm_accuracy	bin/ps_mem.py	/^vm_accuracy = shared_val_accurate()$/;"	v	line:162
+vn	bashrc_vim.sh	/^vn () $/;"	f	line:38
+vncserver	bin/TigerVNC/bin/vncserver	1;"	F	line:1
+vncwatcherslist	bashrc_fs.sh	/^vncwatcherslist () $/;"	f	line:703
+vreset	bashrc_fs.sh	/^vreset ()$/;"	f	line:758
+vscript	bashrc_vim.sh	/^vscript () $/;"	f	line:55
+vstart	bashrc_fs.sh	/^vstart ()$/;"	f	line:734
+vstop	bashrc_fs.sh	/^vstop ()$/;"	f	line:742
+watch_threads	bashrc_nice.sh	/^watch_threads () $/;"	f	line:110
+whichbash	bashrc_common.sh	/^whichbash ()$/;"	f	line:65
+wifiNotLan	bashrc_nice.sh	/^wifiNotLan ()$/;"	f	line:706
+wifiNotLanScript.sh	bin/wifiNotLanScript.sh	1;"	F	line:1
+worker	bin/gdbvim	/^sub worker # {{{$/;"	s	line:164
+yonic.vim	vim/colors/yonic.vim	1;"	F	line:1
+yonic_2.vim	vim/colors/yonic_2.vim	1;"	F	line:1
+yonic_3.vim	vim/colors/yonic_3.vim	1;"	F	line:1
+yonic_4.vim	vim/colors/yonic_4.vim	1;"	F	line:1
+yonic_desert.vim	vim/colors/yonic_desert.vim	1;"	F	line:1
+yonigreet.sh	files/yonigreet.sh	1;"	F	line:1
+z/	Session.vim	/^nnoremap z\/ :if AutoHighlightToggle()|set hls|endif$/;"	m	line:47
+zt	Session.vim	/^normal! zt$/;"	m	line:1085
+zt	Session.vim	/^normal! zt$/;"	m	line:1203
+zt	Session.vim	/^normal! zt$/;"	m	line:1321
+zt	Session.vim	/^normal! zt$/;"	m	line:259
+zt	Session.vim	/^normal! zt$/;"	m	line:377
+zt	Session.vim	/^normal! zt$/;"	m	line:495
+zt	Session.vim	/^normal! zt$/;"	m	line:613
+zt	Session.vim	/^normal! zt$/;"	m	line:731
+zt	Session.vim	/^normal! zt$/;"	m	line:849
+zt	Session.vim	/^normal! zt$/;"	m	line:967
