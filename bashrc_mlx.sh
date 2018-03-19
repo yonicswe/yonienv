@@ -255,7 +255,9 @@ ibmod ()
     modules_path+=" ${modules_base_path}/kernel/drivers/net/ethernet/mellanox"
 
     # ofed libs are usually under extra
-    modules_path+=" ${modules_base_path}/extra";
+    if [ -d ${modules_base_path}/extra ] ; then 
+        modules_path+=" ${modules_base_path}/extra";
+    fi
 
     find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |  
         while read m ; do 
@@ -311,6 +313,8 @@ mountkernelsources () {
         cd > /dev/null
         echo "sudo mount dev-l-vrt-146:/images/ /images/" ; 
         sudo mount dev-l-vrt-146:/images/ /images/
+#       echo "sudo mount r-ole15:/images/ /images/" ; 
+#       sudo mount r-ole15:/images/ /images/
         cd - > /dev/null;
     fi;
     changecdlinux;
@@ -930,3 +934,5 @@ alias touchmlx5='touchmlx5ib ; touchmlx5core'
 alias clipboard='cat ~/share/clipboard.txt'
 
 alias tagmeofakernel='cp ${yonienv}/bin/tagmeofakernel.sh .'
+alias tagmeupstreamkernel='cp ${yonienv}/bin/tagmeupstreamkernel.sh .'
+alias tagmerdmacore='cp ${yonienv}/bin/tagmerdmacore.sh .'
