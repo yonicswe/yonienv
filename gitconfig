@@ -49,7 +49,7 @@
     brename = branch -M
     r = remote -vv
     c = checkout
-    t = ls-tree
+    listtrackedfiles = ls-tree --name-only -r
     amend = commit --amend --no-edit
     unstage = reset HEAD
     discardall = checkout HEAD -- .
