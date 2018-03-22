@@ -230,6 +230,8 @@ listinstalledkernels ()
 {
     local grub=;
     local libmodules=;
+    local f;
+    local ff;
 
     echo " grub1  modules    /boot/..";
 
@@ -246,10 +248,14 @@ listinstalledkernels ()
                 fi
             fi
 
-            libmodulesdir=$(sudo strings /boot/$f |grep "EDT\|IST" -m1  | cut -d" " -f1)
-            if [ -d /lib/modules/${libmodulesdir} ] ; then
+#             libmodulesdir=$(sudo strings /boot/$f |grep "EDT\|IST" -m1  | cut -d" " -f1)
+            ff=$(echo $ff  | grep -v old)
+            if [ -n "$ff" ] ; then 
+                libmodulesdir=$(sudo strings /boot/$ff |grep "EDT\|IST" -m1  | cut -d" " -f1)
+                if [ -d /lib/modules/${libmodulesdir} ] ; then
 #             if [ -d /lib/modules/$(echo $f | sed 's/vmlinuz-//g') ] ; then
-                libmodules="x";
+                    libmodules="x";
+                fi
             fi
 
             t=$(stat --printf "%y" /boot/$f|sed 's/\..*//g')                
@@ -295,6 +301,8 @@ else
     
     ncoresformake=$(cat /proc/cpuinfo |grep core\ id | wc -l); 
 fi
+
+alias make="make -j $(nproc)"
 
 getkernelversionfromMakefile ()
 {
