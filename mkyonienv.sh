@@ -80,6 +80,17 @@ clean ()
     fi 
 }
 
+messags () 
+{
+    echo "you might need to install ...";
+    echo "sudo yum install tree";
+    echo "sudo yum install screen";
+    echo "sudo yum install colordiff";
+    echo "sudo yum install figlet";
+    echo "sudo yum install cgdb"; 
+}
+
+
 main  ()
 {
     local yonienv=;
@@ -134,6 +145,7 @@ main  ()
     setup_vim_env ${yonienv};
     setup_git_env ${yonienv};
     setup_cgdb_env ${yonienv};
+    messages
 }
 
 main $@;
