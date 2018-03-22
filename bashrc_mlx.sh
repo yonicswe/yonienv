@@ -282,16 +282,16 @@ alias mkinfinibandrxe="make M=drivers/infiniband/sw/rxe modules -j ${ncoresforma
 alias mkinfinibandiser="make M=drivers/infiniband/ulp/iser modules -j ${ncoresformake}"
 mkinfinibandmlx4 () 
 {
-    make M=drivers/net/ethernet/mellanox/mlx4 modules -j ${ncoresformake}
-    make M=drivers/infiniband/hw/mlx4 modules -j ${ncoresformake}
+    \make M=drivers/net/ethernet/mellanox/mlx4 modules -j ${ncoresformake}
+    \make M=drivers/infiniband/hw/mlx4 modules -j ${ncoresformake}
 }
 mkinfinibandmlx5 ()
 {
-    make M=drivers/infiniband/hw/mlx5 modules -j ${ncoresformake}
-    make M=drivers/net/ethernet/mellanox/mlx5/core modules -j ${ncoresformake}
+    \make M=drivers/infiniband/hw/mlx5 modules -j ${ncoresformake}
+    \make M=drivers/net/ethernet/mellanox/mlx5/core modules -j ${ncoresformake}
 }
 
-alias mkinfiniband="make M=drivers/infiniband/ modules -j ${ncoresformake}"
+alias mkinfiniband="\make M=drivers/infiniband/ modules -j ${ncoresformake}"
 
 [ -e ${yonienv}/cdlinux.bkp ] && source ${yonienv}/cdlinux.bkp
 alias cdlinux='cd ${linuxkernelsourcecode}'
@@ -306,15 +306,15 @@ changecdlinux () {
 }
 mountkernelsources () {  
 
+    local server=${1:-dev-l-vrt-146};
+
     mountpoint /images  > /dev/null;
     if [ $? -eq 0 ] ; then 
         echo "already mounted";
     else    
         cd > /dev/null
-        echo "sudo mount dev-l-vrt-146:/images/ /images/" ; 
-        sudo mount dev-l-vrt-146:/images/ /images/
-#       echo "sudo mount r-ole15:/images/ /images/" ; 
-#       sudo mount r-ole15:/images/ /images/
+        echo "sudo mount ${server}:/images/ /images/" ; 
+        sudo mount ${server}:/images/ /images/
         cd - > /dev/null;
     fi;
     changecdlinux;
@@ -813,34 +813,34 @@ mkrxelib ()
         return;
     fi
 
-    make clean
+    \make clean
     ./configure --libdir=/usr/lib64/ --prefix=
-    make -j 
+    make
     sudo make install
 }
 
 mkupstreamlib1sttime () 
 {
-    make clean
+    \make clean
     ./autogen.sh 
     ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 CFLAGS="-g -O0"
-    make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1
+    make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1
     # sudo make install
 }
 
-alias mkupstreamlib='make -j  CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
+alias mkupstreamlib='make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
 alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
-alias mkrdmacore='make -C build -j ${ncoresformake} -s 1>/dev/null' 
+alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null' 
 alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacore1sttime='rdma-core_build.sh 1>/dev/null'
 alias mkrdmacoreinstall='sudo make -C build install -s'
-alias mkrdmacoreibverbs='make -C build ibverbs -j ${ncoresformake} -s 1>/dev/null'
-alias mkrdmacoremlx4='make -C build mlx4 -j ${ncoresformake} -s 1>/dev/null'
-alias mkrdmacoremlx5='make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
+alias mkrdmacoreibverbs='\make -C build ibverbs -j ${ncoresformake} -s 1>/dev/null'
+alias mkrdmacoremlx4='\make -C build mlx4 -j ${ncoresformake} -s 1>/dev/null'
+alias mkrdmacoremlx5='\make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
 mkrdmacoreApps ()
 {
-    make -C build ibv_rc_pingpong -j ${ncoresformake} -s; 
+    \make -C build ibv_rc_pingpong -j ${ncoresformake} -s; 
 #   make -C build ibv_ud_pingpong -j ${ncoresformake} -s;
 #   make -C build ibv_uc_pingpong -j ${ncoresformake} -s;
 #   make -C build ibv_srq_pingpong -j ${ncoresformake} -s;
@@ -919,12 +919,12 @@ alias mkcoverletterkernel='~/devel/upstream/tools/scripts/git-upstream format-pa
 mkkernelbuildmlx5ib () 
 {
     echo "make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/";
-    make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/;
+    \make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/;
 }
 mkkernelbuildmlx5core ()
 { 
    echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/"
-   make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
+   \make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
 }
 
 alias touchmlx5ib='find drivers/infiniband/hw/mlx5/ -name "*.c" -exec touch {} \;'
