@@ -260,6 +260,7 @@ if [ -e ${BM} ] ; then
 	pd_complete
 fi
 
+complete -d cd c;
 if [ -d ${yonidocs} ] ; then 
 cddocs () { cd ${yonidocs}    ; [ -n "$1" ] && cd $1;  }
 complete -W "$(find ${yonidocs} -maxdepth 1 -type d -exec basename {} \; )" cddocs
