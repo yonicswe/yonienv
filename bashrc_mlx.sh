@@ -212,15 +212,22 @@ listgitrepos ()
     echo
     echo "linus torvald linux upstream : git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git";
     echo
-    echo "mellanox upstream kernel     : ${prefix}/upstream/linux"; 
-    [ "$show_branches" = "yes" ] && echo -e "                                |-rdma-rc-mlx"; 
-    [ "$show_branches" = "yes" ] && echo -e "                                |-rdma-next-mlx";
-    [ "$show_branches" = "yes" ] && echo -e "                                |-for-upstream   // regression next kerenl";
-    [ "$show_branches" = "yes" ] && echo -e "                                \`-for-linust     // regression currentn kernel";
+    echo    "mellanox upstream kernel     : ${prefix}/upstream/linux"; 
+    if [ "$show_branches" = "yes" ] ; then 
+    echo -e "                                |-rdma-rc-mlx"; 
+    echo -e "                                |-rdma-next-mlx";
+    echo -e "                                |-for-upstream   // regression next kerenl";
+    echo -e "                                \`-for-linust     // regression currentn kernel";
     echo
-    echo "mellanox rdmacore            : ${prefix}/upstream/rdma-core"; 
-    [ "$show_branches" = "yes" ] && echo -e "                  |-master        // stable"; 
-    [ "$show_branches" = "yes" ] && echo -e "                  \`-for-upstream //up to date";
+    fi
+
+
+    echo    "mellanox rdmacore            : ${prefix}/upstream/rdma-core"; 
+    if [ "$show_branches" = "yes" ] ; then 
+    echo -e "                                   |-master        // stable"; 
+    echo -e "                                   \`-for-upstream //up to date";
+    echo
+    fi
 
     echo "jason    rdmacore            : https://github.com/linux-rdma/rdma-core.git"; 
     echo;
@@ -549,6 +556,7 @@ ib_libs+=(librspreload.so)
 #   local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/ /lib /lib64/)
 
     local delete_app=
+    local lib=
 
     if [ -n ${1} ] ; then 
         if [ "${1}" == "-d" ] ; then 
@@ -558,14 +566,20 @@ ib_libs+=(librspreload.so)
                 return;
             fi
             delete_app="-delete";
+        else
+            lib=$1;
         fi 
     fi 
 
     count=0;
     for i in ${ib_libs[@]} ; do 
-        echo -e "\033[1;35m--- ${i} ----\033[0m"
 #         sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app} 2>/dev/null
-        sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%AD %h/%f\n" ${delete_app} 2>/dev/null
+        if [ -z $lib ] ; then 
+            echo -e "\033[1;35m--- ${i} ----\033[0m"
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%AD %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+        else
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%AD %AH:%AM %h/%f\n" | grep ${lib} 2>/dev/null
+        fi
         ((count++));
     done
 }
@@ -596,7 +610,8 @@ findibapps ()
     count=0;
     for i in ${ib_apps[@]} ; do 
         echo -e "\033[1;35m--- ${i} ----\033[0m"
-        sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -ls ${delete_app} 2>/dev/null
+#       sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -ls ${delete_app} 2>/dev/null
+        sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -printf "%AD %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
         ((count++));
     done
 }
