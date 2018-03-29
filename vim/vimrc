@@ -84,7 +84,8 @@ colorscheme  candycode
 " au FileType c,cpp,sh,perl colorscheme desert
 " au FileType vim colorscheme peaksea
 " au FileType sh colorscheme peaksea
-" au FileType txt colorscheme peachpuff
+au FileType txt colorscheme darkbone
+" au FileType txt colorscheme darkzen
 " au FileType make colorscheme peaksea
 " au FileType awk colorscheme peaksea
 " au FileType xml colorscheme peaksea
@@ -170,11 +171,6 @@ set complete-=i
 " au FileType c,cpp   set grepprg=grep\ -nHr\ --include=*.cpp\ --include=*\.\[c,h\]\
 au FileType c,cpp   set grepprg=ag\ --cc\ 
 
-" shortcut for cscope search where method under cursor is being called.
-map <leader>ac :cs f c <cword><CR>
-
-" shortcut for cscope search of where symbol under cursor appears
-map <leader>as :cs f s <cword><CR>
 
 
 
@@ -515,7 +511,7 @@ set guifont=VL\ Gothic\ 16
 " au FileType gitconfig set guifont=VL\ Gothic\ 14
 " au FileType gitcommit set guifont=VL\ Gothic\ 14
 " au FileType conf set guifont=VL\ Gothic\ 14
-au FileType txt set guifont=Monospace\ 14
+au FileType txt set guifont=Monospace\ 13
 
 set guioptions+=b
 
@@ -713,7 +709,14 @@ let g:netrw_list_hide= '\.[ch]$'
 " ------------------------
 "  cscope
 "  -------------------------
-source ~/.vim/cscope.vim
+" source ~/.vim/cscope.vim
+" shortcut for cscope search where method under cursor is being called.
+map <leader>fc :cs f c <cword><CR>
+
+" shortcut for cscope search of where symbol under cursor appears
+map <leader>fs :cs f s <cword><CR>
+map <leader>ft :cs f t <cword><CR>
+vmap <leader>ft y:cs f t <C-R>"<CR>
 
 " ----------------------
 "  enable bash aliases from vim shell
