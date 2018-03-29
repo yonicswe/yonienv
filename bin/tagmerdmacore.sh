@@ -1,7 +1,12 @@
 #!/bin/bash
 
-includeTagdir=(.)
-excludeTagdir=(./build);
+includeTagdir=(./libibverbs)
+includeTagdir+=(./librdmacm)
+includeTagdir+=(./providers/mlx5)
+includeTagdir+=(./providers/mlx4)
+includeTagdir+=(./providers/rxe)
+includeTagdir+=(./ccan)
+# excludeTagdir=(./build);
 # excludeTagdir+=(+++ ./someotherdir);
 
 printf "tag     : %s\n" ${includeTagdir[@]}
