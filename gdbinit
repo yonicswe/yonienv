@@ -3,6 +3,8 @@ set print pretty
 set breakpoint pending on
 set print frame-arguments none
 
+# set output-radix 16 - will print values in hex
+
 define xx
     x/40xb $arg0
 end
@@ -47,6 +49,13 @@ define showmainargs
 end
 document showmainargs
 print the command line arguments
+end
+
+define showretval
+    print/x $eax
+end
+document showretval
+print the return value of a func before you actually return from it
 end
 
 source .gdb_breakpoints
