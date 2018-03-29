@@ -92,6 +92,10 @@
 
     sl = stash list
 
+    branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
+    branch-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git c -b $1@for-upstream FETCH_HEAD ; }; f"
+
+
 [core]
     editor = vim
 
