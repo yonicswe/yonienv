@@ -709,14 +709,14 @@ let g:netrw_list_hide= '\.[ch]$'
 " ------------------------
 "  cscope
 "  -------------------------
-" source ~/.vim/cscope.vim
+source ~/.vim/cscope.vim
 " shortcut for cscope search where method under cursor is being called.
-map <leader>fc :cs f c <cword><CR>
+" map <leader>fc :cs f c <cword><CR>
 
 " shortcut for cscope search of where symbol under cursor appears
-map <leader>fs :cs f s <cword><CR>
-map <leader>ft :cs f t <cword><CR>
-vmap <leader>ft y:cs f t <C-R>"<CR>
+" map <leader>fs :cs f s <cword><CR>
+" map <leader>ft :cs f t <cword><CR>
+" vmap <leader>ft y:cs f t <C-R>"<CR>
 
 " ----------------------
 "  enable bash aliases from vim shell
@@ -744,6 +744,7 @@ let @l =  "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
 let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n" 
 let @h = "◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌" 
 let @b = "┌⎯⎯⎯⎯⎯┐\n│     │\n│     │\n│     │\n└⎯⎯⎯⎯⎯┘"
+let @s = "<<<<<"
 
 
 " ------------------------------

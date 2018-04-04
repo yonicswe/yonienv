@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/.autodirect/mtrswgwork/yonatanc/docs/mellanox'
+let g:netrw_dirhist_2='/.autodirect/mtrswgwork/yonatanc/tasks/redmine/ud_pingpong_1307197'
+let g:netrw_dirhist_3='/.autodirect/mtrswgwork/yonatanc/docs/mellanox/ofed/backports'
+let g:netrw_dirhist_4='/.autodirect/mtrswgwork/yonatanc/tasks/redmine/wellknowngid_1313485'
+let g:netrw_dirhist_5='/.autodirect/mtrswgwork/yonatanc/docs/mellanox/gerrit'
+let g:netrw_dirhist_6='/.autodirect/mtrswgwork/yonatanc/docs/mellanox'
+let g:netrw_dirhist_7='/.autodirect/mtrswgwork/yonatanc/docs'
+let g:netrw_dirhist_8='/.autodirect/mtrswgwork/yonatanc/tasks/redmine/sock_stream_1328935'
+let g:netrw_dirhist_9='/.autodirect/mtrswgwork/yonatanc/docs/mellanox/gerrit'
