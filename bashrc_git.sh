@@ -7,7 +7,7 @@ alias gitdiffstat='git --no-pager diff --stat'
 alias gitlog='git log --name-status'
 alias gitmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
 alias gitd='git d'
-alias gitdiscardunstaged='git checkout -- .'
+# alias gitdiscardunstaged='git checkout -- .'
 alias gitstashunstaged='git stash --keep-index'
 alias gitunstageall='git reset HEAD'
 alias gituncommit='git reset --soft HEAD^'
@@ -19,6 +19,28 @@ gitb ()
         git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}'
     else
         git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}' | grep "${branch}"
+    fi
+}
+
+gitdiscardmodified () 
+{
+    local ans;
+    local -a discardlist;
+    discardlist=( $(git status -uno -s | awk '{print $2}') );
+
+    echo ${#discardlist[@]}
+    echo ${discardlist[@]}
+
+    if [ ${#discardlist[@]} -gt 0 ] ; then 
+        echo "about to discard "
+        for i in ${discardlist[@]} ; do 
+            echo -e "\t$i";
+        done;
+
+        read -p "Are you sure [y/N]" ans;
+        if [ "$ans" == "y" ] ; then
+            git status -uno -s | awk '{system("git checkout " $2)}';
+        fi
     fi
 }
 
