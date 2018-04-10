@@ -576,9 +576,9 @@ ib_libs+=(librspreload.so)
 #         sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app} 2>/dev/null
         if [ -z $lib ] ; then 
             echo -e "\033[1;35m--- ${i} ----\033[0m"
-            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%AD %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
         else
-            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%AD %AH:%AM %h/%f\n" | grep ${lib} 2>/dev/null
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" | grep ${lib} 2>/dev/null
         fi
         ((count++));
     done
