@@ -82,12 +82,13 @@ clean ()
 
 messags () 
 {
-    echo "you might need to install ...";
+    echo "you might wanna to install ...";
     echo "sudo yum install tree";
     echo "sudo yum install screen";
     echo "sudo yum install colordiff";
     echo "sudo yum install figlet";
     echo "sudo yum install cgdb"; 
+    echo "sudo yum install the_silver_searcher"; 
 }
 
 
