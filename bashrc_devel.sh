@@ -473,3 +473,11 @@ complete -W "$(find  ${infiniband_kernel_module_path} -name "*ko" -type f -print
 fi
 
 alias d='dmesg --color'
+
+alias findreject='find -name "*rej"'
+alias findorig='find -name "*orig"'
+findconflictfiles ()
+{
+    findreject;
+    findorig;
+}
