@@ -1,5 +1,7 @@
 #!/bin/bash
 
+alias editbashdevel='g ${yonienv}/bashrc_devel.sh'
+
 #   ___  ___   ___ 
 #  / __||   \ | _ )
 # | (_ || |) || _ \
@@ -20,6 +22,7 @@ setup_gdbinit_dir_search_path ()
 }
 
 alias debug='cgdb --args '
+alias debuglibs='LD_DEBUG=libs '
 
 setup_gdbinit () 
 {
@@ -295,14 +298,7 @@ editgrubvim ()
     su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -10'"
 }
 
-if [ -e /usr/bin/nproc ] ; then 
-    ncoresformake=$((   $(nproc) )) ;  
-else
-    
-    ncoresformake=$(cat /proc/cpuinfo |grep core\ id | wc -l); 
-fi
-
-alias make="make -j $(nproc)"
+alias make="make -j ${ncoresformake}"
 
 getkernelversionfromMakefile ()
 {

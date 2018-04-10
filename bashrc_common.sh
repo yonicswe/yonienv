@@ -69,3 +69,8 @@ whichbash ()
     grep -l ${yonienv_cmd} ${yonienv}/bashrc_* | sort -u | xargs basename
 }
 
+if [ -e /usr/bin/nproc ] ; then 
+    ncoresformake=$((   $(nproc) )) ;  
+else 
+    ncoresformake=$(cat /proc/cpuinfo |grep core\ id | wc -l); 
+fi

@@ -774,13 +774,6 @@ vconsole ()
 
 alias isnfsMountPoint='stat -f -L -c %T' 
 
-if [ -e /usr/bin/nproc ] ; then 
-    ncoresformake=$((   $(nproc)-2 )) ;  
-else
-    ncoresformake=4 ; 
-fi
-
-
 forcereboot () 
 {
     local ans=;
