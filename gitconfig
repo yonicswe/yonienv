@@ -36,10 +36,10 @@
     g = grep --color
     # d = diff --color
     d = diff
-    dg = difftool --tool=gvimdiff --no-prompt
-    dv = difftool --tool=vimdiff --no-prompt
+    dg = difftool --tool=gvimdiff
+    dv = difftool --tool=vimdiff
     dc = diff --cached
-    dcg = difftool --tool=gvimdiff --no-prompt --cached
+    dcg = difftool --tool=gvimdiff --cached
     dt = difftool
     mt = mergetool
     ds = diff --stat
@@ -49,10 +49,31 @@
     brename = branch -M
     r = remote -vv
     c = checkout
-    listtrackedfiles = ls-tree --name-only -r
+
+    a = "!f() {                \
+	   if [ -z $1 ] ; then \
+	      git add -u ;     \
+           else                \
+	      git add $1 ;     \
+           fi;                 \
+	   }; f"	   
+
+# listtrackedfiles = ls-tree --name-only -r 
+    listtrackedfiles = "!git ls-files"
+
+    ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate 
+
     amend = commit --amend --no-edit
     unstage = reset HEAD
-    discardall = checkout HEAD -- .
+    # discardall = checkout HEAD -- .
+    discard = "!f() {              \
+       if [ -z $1 ] ; then         \
+          git checkout HEAD -- . ; \
+       else                        \
+          git checkout $1 ;        \
+       fi;                         \
+    }; f" 
+
     head = log -n1 --pretty=oneline
     untrackfile = rm --cached 
 #                                 SHA          date     name             msg
@@ -61,9 +82,9 @@
     l20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n20
     l30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n30
     lf = log --pretty=short
-#   l = log --pretty=format oneline
-#   l10 = log --pretty=oneline -n10
-#   l30 = log --pretty=oneline -n30
+    #   l = log --pretty=format oneline
+    #   l10 = log --pretty=oneline -n10
+    #   l30 = log --pretty=oneline -n30
     ll = log --pretty=oneline --graph --decorate --abbrev-commit
     #ll= log --graph --decorate --pretty=format:"%h %an, %ar - %s"
     gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
@@ -71,8 +92,25 @@
 
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
-    diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
-    diffcommitfile = "!f() { git difftool $1^..$1 --tool=gvimdiff $2;}; f"
+
+    # diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
+    diffcommit =  "!f() {                             \
+      if [ -z $1 ] ; then                             \
+         git difftool HEAD^..HEAD --tool=gvimdiff;  \
+      else                                            \
+         git difftool $1^..$1 --tool=gvimdiff;  \
+      fi ;                                            \
+    }; f"
+
+    # diffcommitfile = "!f() { git difftool $1^..$1 --tool=gvimdiff $2;}; f"
+    diffcommitfile = "!f() {                            \
+	if [ $# -eq 1 ] ; then                          \
+	   git difftool HEAD^..HEAD --tool=gvimdiff $1 ;\
+	else                                            \
+    	   git difftool $1^..$1 --tool=gvimdiff $2;     \
+	fi;                                             \
+    }; f"
+
     format-patch-commit = "!f() { git format-patch $1^..$1 ; }; f"
     edit = "!f() { GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; }; f"
 
@@ -108,7 +146,7 @@
 
 
 [difftool]
-	prompt = false
+	prompt = true
 
 #[commit]
 #template = /fwgwork/guyle/git_commit_template
