@@ -1,14 +1,17 @@
 #!/bin/bash
 
-includeTagdir=(./libibverbs)
-includeTagdir+=(./librdmacm)
-includeTagdir+=(./providers)
-includeTagdir+=(./kernel-headers)
-# includeTagdir+=(./providers/mlx5)
-# includeTagdir+=(./providers/mlx4)
-# includeTagdir+=(./providers/rxe)
-includeTagdir+=(./ccan)
+includeTagdir=(./include/)
+includeTagdir+=(./drivers/infiniband/)
+# includeTagdir+=(./drivers/infiniband/ulp/iser)
+# includeTagdir+=(./drivers/infiniband/hw/mlx5/)
+# includeTagdir+=(./drivers/infiniband/sw/rxe/)
+# includeTagdir+=(./drivers/infiniband/core/)
+# includeTagdir+=(./drivers/net/ethernet/mellanox/mlx5/core/)
+includeTagdir+=(./drivers/net/ethernet/mellanox/)
+includeTagdir+=(./net/ipv4/)
+
 # excludeTagdir=(./build);
+# excludeTagdir+=(+++ ./buildlib);
 # excludeTagdir+=(+++ ./someotherdir);
 
 printf "tag     : %s\n" ${includeTagdir[@]}
