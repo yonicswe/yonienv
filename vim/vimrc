@@ -140,7 +140,9 @@ function! Update_dict ()
    !~/.vim/update_dictionary.sh
    source ~/.vim/.vimrc.dictionary
 endfunc
-source ~/.vim/.vimrc.dictionary
+if !empty(glob("~/.vim/.vimrc.dictionary"))
+        source ~/.vim/.vimrc.dictionary
+endif
 " set dictionary=/usr/share/dict/words
 "
 filetype plugin on
