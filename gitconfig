@@ -105,9 +105,9 @@
     # diffcommitfile = "!f() { git difftool $1^..$1 --tool=gvimdiff $2;}; f"
     diffcommitfile = "!f() {                            \
 	if [ $# -eq 1 ] ; then                          \
-	   git difftool HEAD^..HEAD --tool=gvimdiff $1 ;\
+	   git difftool HEAD^..HEAD --tool=gvimdiff -y $1 ;\
 	else                                            \
-    	   git difftool $1^..$1 --tool=gvimdiff $2;     \
+    	   git difftool $1^..$1 --tool=gvimdiff -y $2;     \
 	fi;                                             \
     }; f"
 
