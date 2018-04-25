@@ -35,7 +35,7 @@ setup_vim_env ()
         echo "found existing .vimrc. bailing out.."
         exit;
     fi
-    echo "source ~/.vim/.vimrc" >> ~/.vimrc;
+    echo "source ~/.vim/vimrc" >> ~/.vimrc;
 }
 
 setup_git_env () 
@@ -80,7 +80,7 @@ clean ()
     fi 
 }
 
-messags () 
+messages () 
 {
     echo "you might wanna to install ...";
     echo "sudo yum install tree";
