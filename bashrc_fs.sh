@@ -168,13 +168,19 @@ dfa ()
 # sort files and directories by size
 du1 ()
 {
-	path=$1
+	local path=$1
 	du -h --max-depth=1 $path | sort -h 
 }
 
 du11 ()
 {
     du -sch $(find . -maxdepth 1 | grep -vP ".snapshot|^.$")|grep -P "M\s|G\s"
+}
+
+duroot ()
+{
+    local path=${1:-/};
+    sudo du -h -x --max-depth=1 --exclude="/proc" --exclude="/misc" --exclude="/dev" ${path} | sort -h
 }
 
 t () 

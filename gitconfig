@@ -65,6 +65,8 @@
 
     amend = commit --amend --no-edit
     unstage = reset HEAD
+    uncommit = reset HEAD^
+
     # discardall = checkout HEAD -- .
     discard = "!f() {              \
        if [ -z $1 ] ; then         \
@@ -77,7 +79,18 @@
     head = log -n1 --pretty=oneline
     untrackfile = rm --cached 
 #                                 SHA          date     name             msg
-    l =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+# l =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+
+    l =  "!f() {                             \
+      if [ -z $1 ] ; then                             \
+         git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
+      else                                            \
+         git log -n $1 --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
+      fi ;                                            \
+    }; f"
+
+
+
     l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
     l20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n20
     l30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n30

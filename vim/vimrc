@@ -507,13 +507,18 @@ set statusline=%<%F\ %h%m%r%=%-14.(\[%l:%L\]\[%v\]%)\ %P
 " au FileType perl set guifont=VL\ Gothic\ 13
 " au FileType txt set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 12
 " au FileType git,diff    set guifont=VL\ Gothic\ 13
+"
+" use this at mtr
 set guifont=VL\ Gothic\ 16
+
+" set guifont=Monospace\ 13
+"
 " au FileType c,cpp,sh    set guifont=VL\ Gothic\ 14
 " au FileType vim set guifont=VL\ Gothic\ 14
 " au FileType gitconfig set guifont=VL\ Gothic\ 14
 " au FileType gitcommit set guifont=VL\ Gothic\ 14
 " au FileType conf set guifont=VL\ Gothic\ 14
-au FileType txt set guifont=Monospace\ 13
+au FileType txt set guifont=Monospace\ 14
 
 set guioptions+=b
 

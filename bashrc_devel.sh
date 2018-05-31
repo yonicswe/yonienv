@@ -252,9 +252,9 @@ listinstalledkernels ()
             fi
 
 #             libmodulesdir=$(sudo strings /boot/$f |grep "EDT\|IST" -m1  | cut -d" " -f1)
-            ff=$(echo $ff  | grep -v old)
+            ff=$(echo $f  | grep -v old)
             if [ -n "$ff" ] ; then 
-                libmodulesdir=$(sudo strings /boot/$ff |grep "EDT\|IST" -m1  | cut -d" " -f1)
+                libmodulesdir=$(sudo strings /boot/$ff |grep "EDT\|IST\|SMP" -m1  | cut -d" " -f1)
                 if [ -d /lib/modules/${libmodulesdir} ] ; then
 #             if [ -d /lib/modules/$(echo $f | sed 's/vmlinuz-//g') ] ; then
                     libmodules="x";
@@ -263,7 +263,9 @@ listinstalledkernels ()
 
             t=$(stat --printf "%y" /boot/$f|sed 's/\..*//g')                
 
-            echo "  ${grub}   |   ${libmodules}    | $t | $f";
+            if [ -n "$ff" ] ; then 
+               echo "  ${grub}   |   ${libmodules}    | $t | $ff";
+            fi
 
         done
 }
@@ -299,6 +301,7 @@ editgrubvim ()
 }
 
 alias make="make -j ${ncoresformake}"
+alias configure="./configure -j ${ncoresformake}"
 
 getkernelversionfromMakefile ()
 {
@@ -476,4 +479,9 @@ findconflictfiles ()
 {
     findreject;
     findorig;
+}
+
+listerrnovalues ()
+{
+    cpp -dM /usr/include/errno.h | grep define\ E | sort -n -k 3 | awk '{print $2 " "$3}' | column -t
 }

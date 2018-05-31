@@ -417,11 +417,21 @@ mftstatus ()
     sudo mst status -vv
 }
 
-alias mftstart='sudo mst start'
+mftcheckstatus ()
+{
+    return $(sudo mst status | grep "not loaded" | wc -l );
+}
+
+mftstart () 
+{
+   sudo mst start;
+   mst_dev_array=( $(ls /dev/mst/) );
+}
 
 if [ -d /dev/mst ] ; then 
     mst_dev_array=( $(ls /dev/mst/) );
 fi
+
 mftchoosedev ()
 {
     local index=0;
@@ -449,7 +459,11 @@ mftsetlinktypeeth ()
         return;
     fi
         
-    echo -e "\033[1;33;7mmake sure that you sudo mst start \033[0m"
+    mftcheckstatus
+    if (( $? != 0 )) ; then 
+        echo -e "\033[1;33;7myou need to run mftstart \033[0m";
+        return 1;
+    fi
 
     if [ -z "${mst_dev}" ] ; then 
         mftstatus;
@@ -587,10 +601,40 @@ ib_libs+=(librspreload.so)
 findibapps ()
 {
 
-    ib_apps=(cmpost cmtime ib_acme ibacm ibv_asyncwatch ibv_devices );
-    ib_apps+=(ibv_devinfo ibv_rc_pingpong ibv_srq_pingpong ibv_uc_pingpong ibv_ud_pingpong);
-    ib_apps+=(ibv_xsrq_pingpong iwpmd mckey rcopy rdma-ndd rdma_client rdma_server rdma_xclient);
-    ib_apps+=(rdma_xserver riostream rping rstream srp_daemon ucmatose udaddy udpong umad_reg2 umad_register2);
+#     ib_apps=(cmpost cmtime ib_acme ibacm ibv_asyncwatch ibv_devices );
+#     ib_apps+=(ibv_devinfo ibv_rc_pingpong ibv_srq_pingpong ibv_uc_pingpong ibv_ud_pingpong);
+#     ib_apps+=(ibv_xsrq_pingpong iwpmd mckey rcopy rdma-ndd rdma_client rdma_server rdma_xclient);
+#     ib_apps+=(rdma_xserver riostream rping rstream srp_daemon ucmatose udaddy udpong umad_reg2 umad_register2);
+    
+    ib_apps=( cmpost              )
+    ib_apps+=( cmtime              )
+    ib_apps+=( ib_acme             )
+    ib_apps+=( ibacm               )
+    ib_apps+=( ibv_asyncwatch      )
+    ib_apps+=( ibv_devices         )
+    ib_apps+=( ibv_devinfo         )
+    ib_apps+=( ibv_rc_pingpong     )
+    ib_apps+=( ibv_srq_pingpong    )
+    ib_apps+=( ibv_uc_pingpong     )
+    ib_apps+=( ibv_ud_pingpong     )
+    ib_apps+=( ibv_xsrq_pingpong   )
+    ib_apps+=( iwpmd               )
+    ib_apps+=( mckey               )
+    ib_apps+=( rcopy               )
+    ib_apps+=( rdma-ndd            )
+    ib_apps+=( rdma_client         )
+    ib_apps+=( rdma_server         )
+    ib_apps+=( rdma_xclient        )
+    ib_apps+=( rdma_xserver        )
+    ib_apps+=( riostream           )
+    ib_apps+=( rping               )
+    ib_apps+=( rstream             )
+    ib_apps+=( srp_daemon          )
+    ib_apps+=( ucmatose            )
+    ib_apps+=( udaddy              )
+    ib_apps+=( udpong              )
+    ib_apps+=( umad_reg2           )
+    ib_apps+=( umad_register2      ) 
 
     local ib_apps_search_path=(/usr/bin/ /usr/sbin/ /usr/local/bin/ /usr/local/sbin/);
 
@@ -611,7 +655,7 @@ findibapps ()
     for i in ${ib_apps[@]} ; do 
         echo -e "\033[1;35m--- ${i} ----\033[0m"
 #       sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -ls ${delete_app} 2>/dev/null
-        sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -printf "%AD %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+        sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
         ((count++));
     done
 }
@@ -853,6 +897,7 @@ alias mkrdmacoreinstall='sudo make -C build install -s'
 alias mkrdmacoreibverbs='\make -C build ibverbs -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacoremlx4='\make -C build mlx4 -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacoremlx5='\make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
+alias mkrdmacorercping='\make -C build ibv_rc_pingpong -j ${ncoresformake} -s 1>/dev/null'
 mkrdmacoreApps ()
 {
     \make -C build ibv_rc_pingpong -j ${ncoresformake} -s; 
@@ -941,6 +986,8 @@ mkkernelbuildmlx5core ()
    echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/"
    \make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
 }
+
+alias mkkernelbuildmlx5='mkkernelbuildmlx5ib; mkkernelbuildmlx5core'
 
 alias touchmlx5ib='find drivers/infiniband/hw/mlx5/ -name "*.c" -exec touch {} \;'
 alias touchmlx5core='find drivers/net/ethernet/mellanox/mlx5/ -name "*.c" -exec touch {} \;'

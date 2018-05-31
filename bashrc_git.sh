@@ -5,8 +5,23 @@ alias gitdiffvim='git difftool --tool=vimdiff --no-prompt'
 alias gitdiffkdiff='git difftool --tool=kdiff3 --no-prompt'
 alias gitdiffstat='git --no-pager diff --stat'
 alias gitlog='git log --name-status'
-alias gitmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
-alias gitd='git d'
+# alias gitmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
+gitd ()
+{
+    local diff_this_file=${1};
+
+    local -a modified_file_list;
+    modified_file_list=( $(git status -s | awk '/\ M/{print $2}') );
+
+    if [ -n "${diff_this_file}" ] ; then 
+        git dg ${diff_this_file};
+    else
+        git status;       
+    fi;
+
+    complete -W "$(echo ${modified_file_list[@]})" gitd;
+
+}
 # alias gitdiscardunstaged='git checkout -- .'
 alias gitstashunstaged='git stash --keep-index'
 alias gitunstageall='git reset HEAD'
@@ -22,16 +37,64 @@ gitb ()
     fi
 }
 
+gitdiscardcached () 
+{ 
+    local -a discardlist;
+    local file_to_discard=${1};
+
+    if [ -n "${file_to_discard}" ] ; then  
+        echo "git checkout ${file_to_discard}";
+        git checkout ${file_to_discard};
+        return;
+    fi
+
+    discardlist=( $(git diff --name-only --cached) );
+    if [ ${#discardlist[@]} -gt 0 ] ; then 
+        complete -W "$(echo ${discardlist[@]})" gitdiscardcached;
+        _gitdiscard  "${discardlist[@]}"
+    fi
+}
+
 gitdiscardmodified () 
 {
-    local ans;
     local -a discardlist;
-    discardlist=( $(git status -uno -s | awk '{print $2}') );
+    local file_to_discard=${1};
 
-    echo ${#discardlist[@]}
-    echo ${discardlist[@]}
+    if [ -n "${file_to_discard}" ] ; then  
+        echo "git checkout ${file_to_discard}";
+        git checkout ${file_to_discard};
+        return;
+    fi
+
+    discardlist=( $(git ls-files -m) ); 
+    if [ ${#discardlist[@]} -gt 0 ] ; then 
+        complete -W "$(echo ${discardlist[@]})" gitdiscardmodified;
+        _gitdiscard  "${discardlist[@]}"
+    fi
+
+}
+
+_gitdiscard () 
+{
+    local ans;
+    local -a discardlist=( $(echo "${@}") );
+
+
+#   local file_to_discard=${1}; 
+#   discardlist=( $(git status -uno -s | awk '{print $2}') );
+#   discardlist=( $(git ls-files -m) );
+
+
+#   echo "${#discardlist[@]} :${discardlist[@]}"
+
+#   if [ -n "${file_to_discard}" ] ; then  
+#       echo "git checkout ${file_to_discard}";
+#       git checkout ${file_to_discard};
+#       return;
+#   fi
 
     if [ ${#discardlist[@]} -gt 0 ] ; then 
+        complete -W "$(echo ${discardlist[@]})" gitdiscardmodified gitdiscardcached;
         echo "about to discard "
         for i in ${discardlist[@]} ; do 
             echo -e "\t$i";
@@ -39,7 +102,8 @@ gitdiscardmodified ()
 
         read -p "Are you sure [y/N]" ans;
         if [ "$ans" == "y" ] ; then
-            git status -uno -s | awk '{system("git checkout " $2)}';
+#           git status -uno -s | awk '{system("git checkout " $2)}';
+            echo ${discardlist[@]} | awk '{ print "git checkout "$0; system("git checkout " $0)}';
         fi
     fi
 }
