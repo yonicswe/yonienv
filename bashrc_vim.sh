@@ -31,6 +31,8 @@ g ()
     gvim $args $*
 }
 
+alias go="gvim -O" 
+
 alias vt="v -t"
 alias gt="g -t"
 

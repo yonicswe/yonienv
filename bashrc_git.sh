@@ -16,7 +16,7 @@ gitd ()
     if [ -n "${diff_this_file}" ] ; then 
         git dg ${diff_this_file};
     else
-        git status;       
+        git status -uno;
     fi;
 
     complete -W "$(echo ${modified_file_list[@]})" gitd;
@@ -108,12 +108,18 @@ _gitdiscard ()
     fi
 }
 
-applyPatchList () 
+gitapplyPatchList () 
 {
     start_index=$1
     end_index=$2
+    patch_path=${3:-.}
 
-    for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do git am $i*patch ; done
+#     for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do git am $i*patch ; done
+    for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do 
+        echo -e "\033[1;31mgit am --reject $( ls ${patch_path}/$i*patch )\033[0m";
+        git am --reject $( ls ${patch_path}/$i*patch ) ;
+    done
+#     for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do echo "git am $( ls ${patch_path}/$i*patch)" ; done
 }
 
 gitconfig ()

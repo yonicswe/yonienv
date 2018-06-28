@@ -303,6 +303,13 @@ editgrubvim ()
 alias make="make -j ${ncoresformake}"
 alias configure="./configure -j ${ncoresformake}"
 
+grub2listentries () 
+{
+#     sudo grub2-mkconfig 2>/dev/null | grep --color ^menuentry
+    sudo grub2-mkconfig 2>/dev/null | sed 's/).*/)/g' |
+        awk -v count=0 '/^menuentry/{print count" " $0; count++}'
+}
+
 getkernelversionfromMakefile ()
 {
     awk 'BEGIN{FS = "="} 
@@ -477,8 +484,14 @@ alias findreject='find -name "*rej"'
 alias findorig='find -name "*orig"'
 findconflictfiles ()
 {
-    findreject;
-    findorig;
+    local delete=
+
+    if [ "$1" == "-d" ] ; then 
+        delete="-delete -print";
+    fi
+
+    findreject ${delete};
+    findorig ${delete};
 }
 
 listerrnovalues ()

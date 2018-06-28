@@ -57,8 +57,12 @@ alias 1468root='ssh  root@dev-l-vrt-146-008'
 alias 1468ping='ping  dev-l-vrt-146-008'
 
 alias stm88ping='ping mtl-stm-88'
-alias stm88root='ping root@mtl-stm-88 -l'
+alias stm88root='ssh root@mtl-stm-88'
 alias stm88='ssh mtl-stm-88'
+
+alias stmaz88='ssh mtl-stm-az-088'
+alias stmaz88root='ssh root@mtl-stm-az-088'
+alias stmaz88ping='ping mtl-stm-az-088'
 
 # performance setup
 alias 94='ssh  dev-l-vrt-094'
@@ -73,6 +77,10 @@ alias 51816='ssh reg-l-vrt-5181-006'
 # guy levi setup
 alias 212='ssh dev-l-vrt-212'
 alias 213='ssh dev-l-vrt-213'
+
+# parav 
+alias parav='ssh sw-mtx-036'
+
 sm () 
 { 
 #   single module install 
@@ -329,6 +337,7 @@ mountkernelsources () {
 }
 
 alias umountkernelsources='set -x ; cd ; sudo umount /images/ ; set +x'
+alias mkkernelmountdir='sudo install -o yonatanc -g mtl -d /images/'
 
 # alias mountkernelkabisources='pushd ~ ; set -x ; sudo mount dev-l-vrt-146:/images/kernel/kabi /images/kernel/ ; set +x ; popd'
 # alias mountkerneldebug='pushd ~ ; set -x ; sudo mount dev-l-vrt-146:/images/debug /images/debug/ ; set +x; popd'
@@ -349,10 +358,10 @@ ofeddeletebackport ()
 {
     local ans=;
     read -p "are you running this from ofed kernel root directory [Y/n] " ans;
-    [ "${ans}" == "n" ] && return -1;
+    [ "${ans}" == "n" ] && return;
 
     read -p "are you checked out on the backport branch [Y/n] " ans;
-    [ "${ans}" == "n" ] && return -1;
+    [ "${ans}" == "n" ] && return;
 
     if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then 
         echo "you need to run ofedmklinks";
@@ -374,8 +383,18 @@ ofedmklinks ()
     ln -snf ofed_scripts/configure configure
 }
 
-# alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
-# alias mkofedconfigure='./configure --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-srp-mod --with-rxe-mod"
+alias ofedapplybackports='./configure -j ${ncoresformake} --kernel-version 2.6.16 --skip-autoconf'
+alias ofedconfigurewithcore='./configure -j ${ncoresformake} --with-core-mod'
+alias ofedconfigurewithrxe='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
+
+ofedconfigureforkernel ()
+{
+    local kernel_version=$1;
+    local kernel_headers=/mswg2/work/kernel.org/x86_64
+
+    if ! [ -d ${kernel_headers}/linux-${} ] 
+    ./configure -j {ncoresformake}  --with-core-mod --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version}
+}
 
 ofedorigindir () 
 {
@@ -893,7 +912,7 @@ alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib
 alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null' 
 alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacore1sttime='rdma-core_build.sh 1>/dev/null'
-alias mkrdmacoreinstall='sudo make -C build install -s'
+alias mkrdmacoreinstall='sudo make -C build install > /dev/null'
 alias mkrdmacoreibverbs='\make -C build ibverbs -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacoremlx4='\make -C build mlx4 -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacoremlx5='\make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
@@ -922,7 +941,10 @@ ofedlistversions ()
 ofedbuildversion () 
 {
     local version=${1};
-    if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
+    if [ -z ${version} ] ; then
+        echo "missing version, use ofedlistversions to get your version" ;
+        return ;
+    fi;
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
 }
 
@@ -930,13 +952,12 @@ ofedinstallversion ()
 {
     local version=${1};
     if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
-    echo "will install ofed ${version} for your os and kernel"
+    echo "about to install ofed ${version} for your $(cat /etc/redhat-release) and the kernel that comes with it"
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install"
-    read -p "continue [Y/n]: " ans; 
-    if [ "$ans" == "n" ] ; then 
-        return;
+    read -p "continue [y/N]: " ans; 
+    if [ "$ans" == "y" ] ; then 
+        sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install;
     fi
-    sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install;
 }
 
 ofedfindindexforpackage () 
@@ -998,3 +1019,11 @@ alias clipboard='cat ~/share/clipboard.txt'
 alias tagmeofakernel='cp ${yonienv}/bin/tagmeofakernel.sh .'
 alias tagmeupstreamkernel='cp ${yonienv}/bin/tagmeupstreamkernel.sh .'
 alias tagmerdmacore='cp ${yonienv}/bin/tagmerdmacore.sh .'
+md2man ()
+{
+    local mdfile=$1;
+    local manpage=$(basename ${mdfile} );
+    manpage=$(echo $manpage | sed 's/.md//g');
+    mkdir -p tmp; 
+    pandoc -s -t man ${mdfile}  -o tmp/${manpage} ; man tmp/${manpage}
+}
