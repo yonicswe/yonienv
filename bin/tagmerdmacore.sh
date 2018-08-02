@@ -11,6 +11,11 @@ includeTagdir+=(./ccan)
 # excludeTagdir=(./build);
 # excludeTagdir+=(+++ ./someotherdir);
 
+if [ -e cscope.files ] ; then 
+    cscope -vkqb;
+    exit
+fi
+
 printf "tag     : %s\n" ${includeTagdir[@]}
 if [ ${#excludeTagdir[@]} -eq  0 ] ; then
     source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h"))

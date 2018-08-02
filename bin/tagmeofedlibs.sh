@@ -1,19 +1,12 @@
 #!/bin/bash
 
-includeTagdir=(./include/)
-includeTagdir+=(./drivers/infiniband/)
-# includeTagdir+=(./drivers/infiniband/ulp/iser)
-# includeTagdir+=(./drivers/infiniband/hw/mlx5/)
-# includeTagdir+=(./drivers/infiniband/sw/rxe/)
-# includeTagdir+=(./drivers/infiniband/core/)
-# includeTagdir+=(./drivers/net/ethernet/mellanox/mlx5/core/)
-includeTagdir+=(./drivers/net/ethernet/mellanox/)
-includeTagdir+=(./net/ipv4/)
+includeTagdir=(./libibverbs/)
+includeTagdir+=(./libmlx5/)
+includeTagdir+=(./rdma-core/)
 
 # excludeTagdir=(./build);
 # excludeTagdir+=(+++ ./buildlib);
 # excludeTagdir+=(+++ ./someotherdir);
-
 
 if [ -e cscope.files ] ; then 
     cscope -vkqb;
@@ -21,7 +14,7 @@ if [ -e cscope.files ] ; then
 fi
 
 printf "tag     : %s\n" ${includeTagdir[@]}
-if [ ${#excludeTagdir[@]} -eq  0 ] ; then 
+if [ ${#excludeTagdir[@]} -eq  0 ] ; then
     source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h"))
     ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
     echo > cscope.files
