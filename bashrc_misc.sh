@@ -12,3 +12,6 @@ alias xtermblack="xterm -bg black -fg green -fa 'Monospace' -fs 10 &"
 if [ -e /usr/bin/xrandr ]  ; then 
 complete -W "$(xrandr -q 2>/dev/null | awk '{print $1}')" xrandr 
 fi
+
+# pdfgrep to grep in pdf files.
+# pdfgrep -n <pattern> <filename>

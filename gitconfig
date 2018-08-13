@@ -107,24 +107,31 @@
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
 
     # diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
-    diffcommit =  "!f() {                             \
-      if [ -z $1 ] ; then                             \
-         git difftool HEAD^..HEAD --tool=gvimdiff;  \
-      else                                            \
-         git difftool $1^..$1 --tool=gvimdiff;  \
-      fi ;                                            \
+    diffcommit =  "!f() {                                   \
+      if [ -z $1 ] ; then                                   \
+         git difftool HEAD^..HEAD --tool=gvimdiff --prompt; \
+      else                                                  \
+         git difftool $1^..$1 --tool=gvimdiff --prompt;     \
+      fi ;                                                  \
     }; f"
 
     # diffcommitfile = "!f() { git difftool $1^..$1 --tool=gvimdiff $2;}; f"
-    diffcommitfile = "!f() {                            \
-	if [ $# -eq 1 ] ; then                          \
-	   git difftool HEAD^..HEAD --tool=gvimdiff -y $1 ;\
-	else                                            \
-    	   git difftool $1^..$1 --tool=gvimdiff -y $2;     \
-	fi;                                             \
+    diffcommitfile = "!f() {                                \
+	if [ $# -eq 1 ] ; then                              \
+	   git difftool HEAD^..HEAD --tool=gvimdiff -y $1 ; \
+	else                                                \
+    	   git difftool $1^..$1 --tool=gvimdiff -y $2;      \
+	fi;                                                 \
     }; f"
 
-    format-patch-commit = "!f() { git format-patch $1^..$1 ; }; f"
+    format-patch-commit = "!f() {              \
+	if [ $# -eq 0 ] ; then                 \
+	   git format-patch HEAD^..HEAD ;      \
+	else                                   \
+	   git format-patch $1^..$1 ;          \
+        fi;                                  \
+    }; f"
+
     edit = "!f() { GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; }; f"
 
     lg = !git lg1
@@ -159,7 +166,7 @@
 
 
 [difftool]
-	prompt = true
+	prompt = false
 
 #[commit]
 #template = /fwgwork/guyle/git_commit_template

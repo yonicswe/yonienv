@@ -307,7 +307,8 @@ function! HighlightTrails()
     autocmd InsertLeave * match ExtraWhitespace /\s\+$/
     autocmd BufWinLeave * call clearmatches()
 endfunction
-autocmd FileType c,cpp,gitcommit call HighlightTrails()
+" autocmd FileType gitcommit call HighlightTrails()
+autocmd FileType c,cpp call HighlightTrails()
 
 
 " With a map leader it's possible to do extra key combinations
@@ -509,7 +510,8 @@ set statusline=%<%F\ %h%m%r%=%-14.(\[%l:%L\]\[%v\]%)\ %P
 " au FileType git,diff    set guifont=VL\ Gothic\ 13
 "
 " use this at mtr
-set guifont=VL\ Gothic\ 16
+" set guifont=VL\ Gothic\ 16
+set guifont=VL\ Gothic\ 13
 
 " set guifont=Monospace\ 13
 "
@@ -518,7 +520,7 @@ set guifont=VL\ Gothic\ 16
 " au FileType gitconfig set guifont=VL\ Gothic\ 14
 " au FileType gitcommit set guifont=VL\ Gothic\ 14
 " au FileType conf set guifont=VL\ Gothic\ 14
-au FileType txt set guifont=Monospace\ 14
+au FileType txt set guifont=Monospace\ 11
 
 set guioptions+=b
 

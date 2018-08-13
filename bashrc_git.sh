@@ -37,6 +37,8 @@ gitb ()
     fi
 }
 
+alias gitwhichbranch="git  s  | awk '/On branch/{print $4}'"
+
 gitdiscardcached () 
 { 
     local -a discardlist;

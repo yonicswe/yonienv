@@ -36,7 +36,7 @@ alias 1459='ssh  dev-l-vrt-145-009'
 alias 1459root='ssh  root@dev-l-vrt-145-009'
 alias 1459ping='ping  dev-l-vrt-145-009'
 
-alias 146='ssh   dev-l-vrt-146' 
+alias 146='ssh   dev-l-vrt-146'
 alias 146root='ssh   root@dev-l-vrt-146'
 alias 146ping='ping  dev-l-vrt-146'
 
@@ -48,14 +48,15 @@ alias 1466='ssh  dev-l-vrt-146-006'
 alias 1466root='ssh  root@dev-l-vrt-146-006'
 alias 1466ping='ping  dev-l-vrt-146-006'
 
-alias 1467='ssh  dev-l-vrt-146-007' 
+alias 1467='ssh  dev-l-vrt-146-007'
 alias 1467root='ssh  root@dev-l-vrt-146-007'
 alias 1467ping='ping  dev-l-vrt-146-007'
 
-alias 1468='ssh  dev-l-vrt-146-008' 
+alias 1468='ssh  dev-l-vrt-146-008'
 alias 1468root='ssh  root@dev-l-vrt-146-008'
 alias 1468ping='ping  dev-l-vrt-146-008'
 
+# stm server to run regression
 alias stm88ping='ping mtl-stm-88'
 alias stm88root='ssh root@mtl-stm-88'
 alias stm88='ssh mtl-stm-88'
@@ -78,27 +79,31 @@ alias 51816='ssh reg-l-vrt-5181-006'
 alias 212='ssh dev-l-vrt-212'
 alias 213='ssh dev-l-vrt-213'
 
-# parav 
+# parav
 alias parav='ssh sw-mtx-036'
 
-sm () 
-{ 
-#   single module install 
+
+
+
+sm ()
+{
+#   single module install
     local ans;
 
-    complete_words=$(awk '/if.*mod.*==/{print $5}' `which singlemoduleinstall.sh ` | sed 's/"//g')
-    complete -W "$(echo ${complete_words})" sm; 
-    if [ -z $1 ] ; then 
-        echo "sm [$(echo ${complete_words[@]} | sed 's/\ /|/g' )]"; 
-        return ;
-    fi    
+    sm_complete_words=$(awk '/if.*mod.*==/{print $5}' `which singlemoduleinstall.sh ` | sed 's/"//g')
+    complete -W "$(echo ${sm_complete_words})" sm;
 
-    if [ -z "$(redpill)" ] ; then 
+    if [ -z $1 ] ; then
+        echo "sm [$(echo ${sm_complete_words[@]} | sed 's/\ /|/g' )]";
+        return ;
+    fi
+
+    if [ -z "$(redpill)" ] ; then
         read -p "This is not VM are you sure ? [y/N]" ans;
-        if [ "$ans" != "y" ] ; then 
+        if [ "$ans" != "y" ] ; then
             return;
         fi
-    fi            
+    fi
 
     while test $# -gt 0 ; do
         singlemoduleinstall.sh $1;
@@ -133,7 +138,7 @@ gitpushtogerrit ()
 
     gitpushtogerritcomplete;
 
-    if [ $# -eq 0 ] ; then 
+    if [ $# -eq 0 ] ; then
         echo "gitpushtogerrit [-r <remote> | origin] [ -h <git index> | HEAD] -b <branch> -t <topic>" ;
         complete -W "$(git remote)" gitpushtogerrit
         return;
@@ -141,7 +146,7 @@ gitpushtogerrit ()
 
     OPTIND=0;
     while getopts "b:t:r:h:" opt; do
-        case $opt in 
+        case $opt in
         b)
             branch=${OPTARG};
             ;;
@@ -159,38 +164,38 @@ gitpushtogerrit ()
         esac;
     done;
 
-    if [ -z "${branch}" -o -z "${topic}" ] ; then 
+    if [ -z "${branch}" -o -z "${topic}" ] ; then
         echo -e "missing branch and/or topic branch: \"${branch}\", topic: \"${topic}\""
         return;
-    fi    
+    fi
 
     echo "git push ${remote} ${head}:refs/for/${branch}/${topic}"
     read -p "are you sure ? [y/N] : " answer;
-    if [ "$answer" != "y" ] ; then 
-       return; 
+    if [ "$answer" != "y" ] ; then
+       return;
     fi
-    echo "pushing"        
+    echo "pushing"
     git push ${remote} ${head}:refs/for/${branch}/${topic}
     echo "git push ${remote} ${head}:refs/for/${branch}/${topic}" >> .gitpush.log
     cat .gitpush.log | sort -u > .gitpush.log.tmp
     mv .gitpush.log.tmp .gitpush.log  1>/dev/null
 
-#     if [ $# -lt 2 ] ; then 
-#          echo "less than 3 params branch=${branch}, topic=${topic}, remote=${remote}" 
-#     fi              
-# 
-#     if [ -z ${branch} ] || [ -z ${topic} ] ; then 
+#     if [ $# -lt 2 ] ; then
+#          echo "less than 3 params branch=${branch}, topic=${topic}, remote=${remote}"
+#     fi
+#
+#     if [ -z ${branch} ] || [ -z ${topic} ] ; then
 #         echo "missing branch and/or topic"
-#     else 
+#     else
 #         echo "git push ${remote} HEAD:refs/for/${branch}/${topic}"
 #         git push ${remote} HEAD:refs/for/${branch}/${topic}
 #     fi
 
 }
 
-gitpushtogerritcomplete () 
+gitpushtogerritcomplete ()
 {
-    if [ -e .gitpush.log ] ; then 
+    if [ -e .gitpush.log ] ; then
         complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
     fi
 }
@@ -204,7 +209,7 @@ listgitrepos ()
 
     OPTIND=0;
     while getopts "bh" opt; do
-        case $opt in 
+        case $opt in
         b)
             show_branches=yes;
             ;;
@@ -216,13 +221,13 @@ listgitrepos ()
         esac;
     done;
 
-    echo "yonienv                      : https://github.com/yonicswe/yonienv"; 
+    echo "yonienv                      : https://github.com/yonicswe/yonienv";
     echo
     echo "linus torvald linux upstream : git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git";
     echo
-    echo    "mellanox upstream kernel     : ${prefix}/upstream/linux"; 
-    if [ "$show_branches" = "yes" ] ; then 
-    echo -e "                                |-rdma-rc-mlx"; 
+    echo    "mellanox upstream kernel     : ${prefix}/upstream/linux";
+    if [ "$show_branches" = "yes" ] ; then
+    echo -e "                                |-rdma-rc-mlx";
     echo -e "                                |-rdma-next-mlx";
     echo -e "                                |-for-upstream   // regression next kerenl";
     echo -e "                                \`-for-linust     // regression currentn kernel";
@@ -230,14 +235,15 @@ listgitrepos ()
     fi
 
 
-    echo    "mellanox rdmacore            : ${prefix}/upstream/rdma-core"; 
-    if [ "$show_branches" = "yes" ] ; then 
-    echo -e "                                   |-master        // stable"; 
+    echo    "mellanox rdmacore            : ${prefix}/upstream/rdma-core";
+    if [ "$show_branches" = "yes" ] ; then
+    echo -e "                                   |-master        // stable";
     echo -e "                                   \`-for-upstream //up to date";
     echo
     fi
 
-    echo "jason    rdmacore            : https://github.com/linux-rdma/rdma-core.git"; 
+    echo "jason    rdmacore            : https://github.com/linux-rdma/rdma-core.git";
+    echo "jason    kernel              : https://github.com/jgunthorpe/linux.git";
     echo;
     echo "mellanox ofed.4 kernel       : ${prefix}/mlnx_ofed/mlnx-ofa_kernel-4.0";
     echo "mellanox ofed.4 libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
@@ -245,10 +251,10 @@ listgitrepos ()
     echo "mellanox ofed.4 libmlx5      : ${prefix}/connect-ib/libmlx5";
 
     echo;
-    echo "mellanox regression vrtsdk      : ${prefix}/vrtsdk"; 
-    echo "mellanox regression network     : ${prefix}/Linux_drivers_verification/networking"; 
-    echo "mellanox regression core        : ${prefix}/Linux_drivers_verification/core"; 
-    echo "mellanox regression directtests : ${prefix}/Linux_drivers_verification/directtests"; 
+    echo "mellanox regression vrtsdk      : ${prefix}/vrtsdk";
+    echo "mellanox regression network     : ${prefix}/Linux_drivers_verification/networking";
+    echo "mellanox regression core        : ${prefix}/Linux_drivers_verification/core";
+    echo "mellanox regression directtests : ${prefix}/Linux_drivers_verification/directtests";
 }
 
 ibmod ()
@@ -258,9 +264,9 @@ ibmod ()
     local modules_base_path=;
     local module_grep=${1};
 
-    if [ -d /usr/lib/modules/$(uname -r) ] ; then         
+    if [ -d /usr/lib/modules/$(uname -r) ] ; then
         modules_base_path="/usr/lib/modules/$(uname -r)";
-    elif  [ -d /lib/modules/$(uname -r) ]  ; then 
+    elif  [ -d /lib/modules/$(uname -r) ]  ; then
         modules_base_path="/lib/modules/$(uname -r)";
     else
         echo "no /lib/modules or /usr/lib/modules/ found";
@@ -270,24 +276,24 @@ ibmod ()
     modules_path+=" ${modules_base_path}/kernel/drivers/net/ethernet/mellanox"
 
     # ofed libs are usually under extra
-    if [ -d ${modules_base_path}/extra ] ; then 
+    if [ -d ${modules_base_path}/extra ] ; then
         modules_path+=" ${modules_base_path}/extra";
     fi
 
-    find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |  
-        while read m ; do 
-            lsmod | awk '{print $1" "$3" " }' | \grep $m ; 
-#             lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe"; 
-    done | column -t | if [ -n "${module_grep}" ] ; then   
-                          tee | sort -h -k2 | grep ${module_grep} ; 
-                       else 
-                           tee | sort -h -k2 ; 
+    find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |
+        while read m ; do
+            lsmod | awk '{print $1" "$3" " }' | \grep $m ;
+#             lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe";
+    done | column -t | if [ -n "${module_grep}" ] ; then
+                          tee | sort -h -k2 | grep ${module_grep} ;
+                       else
+                           tee | sort -h -k2 ;
                        fi
 }
 alias nox='lspci | grep nox'
-alias cdregression='cd ~/devel/regression' 
-alias cdregressioncore='cd ~/devel/regression/core' 
-alias cdregressionnet='cd ~/devel/regression/networking' 
+alias cdregression='cd ~/devel/regression'
+alias cdregressioncore='cd ~/devel/regression/core'
+alias cdregressionnet='cd ~/devel/regression/networking'
 alias cdregressionrxe='cd ~/devel/rxe_regression'
 alias cdshare="cd ${HOME}/share/"
 
@@ -295,7 +301,7 @@ alias cdshare="cd ${HOME}/share/"
 alias mkinfinibandcore="make M=drivers/infiniband/core modules -j ${ncoresformake}"
 alias mkinfinibandrxe="make M=drivers/infiniband/sw/rxe modules -j ${ncoresformake}"
 alias mkinfinibandiser="make M=drivers/infiniband/ulp/iser modules -j ${ncoresformake}"
-mkinfinibandmlx4 () 
+mkinfinibandmlx4 ()
 {
     \make M=drivers/net/ethernet/mellanox/mlx4 modules -j ${ncoresformake}
     \make M=drivers/infiniband/hw/mlx4 modules -j ${ncoresformake}
@@ -313,27 +319,33 @@ alias cdlinux='cd ${linuxkernelsourcecode}'
 changecdlinux () {
     echo "cdlinux : ${linuxkernelsourcecode}";
     read -p "would you like to change ? [y/N] : " answer;
-    if [ "$answer" == "y" ] ; then 
-        read -p "Enter new path : " newlocation; 
+    if [ "$answer" == "y" ] ; then
+        read -p "Enter new path : " newlocation;
     export linuxkernelsourcecode=${newlocation};
     echo "export linuxkernelsourcecode=${newlocation}" > ${yonienv}/cdlinux.bkp;
-    fi 
+    fi
 }
-mountkernelsources () {  
+mountkernelsources () {
 
     local server=${1:-dev-l-vrt-146};
 
+    # test is /images/ exists
+    if ! [ -d /images ] ; then 
+        echo "there is no /images, use mkkernelmountdir to create";
+        return;
+    fi 
+
     mountpoint /images  > /dev/null;
-    if [ $? -eq 0 ] ; then 
+    if [ $? -eq 0 ] ; then
         echo "already mounted";
-    else    
+    else
         cd > /dev/null
-        echo "sudo mount ${server}:/images/ /images/" ; 
+        echo "sudo mount ${server}:/images/ /images/" ;
         sudo mount ${server}:/images/ /images/
         cd - > /dev/null;
     fi;
     changecdlinux;
-    
+
 }
 
 alias umountkernelsources='set -x ; cd ; sudo umount /images/ ; set +x'
@@ -354,7 +366,7 @@ backupgitkernel ()
 }
 
 
-ofeddeletebackport () 
+ofeddeletebackport ()
 {
     local ans=;
     read -p "are you running this from ofed kernel root directory [Y/n] " ans;
@@ -363,20 +375,20 @@ ofeddeletebackport ()
     read -p "are you checked out on the backport branch [Y/n] " ans;
     [ "${ans}" == "n" ] && return;
 
-    if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then 
+    if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then
         echo "you need to run ofedmklinks";
         return;
     fi
 
     read -p "are you sure about deleting backport branch ? [y/N] " ans;
-    if  [ ! "${ans}" == "y" ] ; then 
-        return ; 
+    if  [ ! "${ans}" == "y" ] ; then
+        return ;
     fi ;
     echo "./ofed_scripts/cleanup"
     ./ofed_scripts/cleanup
 }
 
-ofedmklinks () 
+ofedmklinks ()
 {
     ln -snf ofed_scripts/Makefile Makefile
     ln -snf ofed_scripts/makefile makefile
@@ -392,11 +404,12 @@ ofedconfigureforkernel ()
     local kernel_version=$1;
     local kernel_headers=/mswg2/work/kernel.org/x86_64
 
-    if ! [ -d ${kernel_headers}/linux-${} ] 
-    ./configure -j {ncoresformake}  --with-core-mod --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version}
+    if ! [ -d ${kernel_headers}/linux-${} ]  ; then
+        ./configure -j {ncoresformake}  --with-core-mod --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version}
+    fi
 }
 
-ofedorigindir () 
+ofedorigindir ()
 {
     cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
 }
@@ -404,15 +417,15 @@ ofedorigindir ()
 vlinstall ()
 {
     local answer;
-    echo ""; 
+    echo "";
 
-    if (( 0 == $(rpm -q mft | grep mft- | wc -l ) )) ; then 
+    if (( 0 == $(rpm -q mft | grep mft- | wc -l ) )) ; then
         echo -e "\033[1;33;7m you need to install mft before you install vl\033[0m";
         return;
     fi
 #     read -p "continue ? [y/N] : " answer;
-#     if [ "$answer" == "y" ] ; then 
-    sudo /.autodirect/net_linux_verification/tools/install_vls.sh; 
+#     if [ "$answer" == "y" ] ; then
+    sudo /.autodirect/net_linux_verification/tools/install_vls.sh;
 #     fi
 #  another script that could be used.
 #  sudo /mswg/projects/ver_tools/reg2_latest/install.sh;
@@ -420,17 +433,17 @@ vlinstall ()
 }
 
 # you must install mft to be able to change link type.
-mftinstall () 
+mftinstall ()
 {
     local answer;
     echo -e "\033[1;33;7mmake sure that /lib/modules/$(uname -r)/source -> to a valid kernel source tree\033[0m"
     read -p "continue ? [y/N] : " answer;
-    if [ "$answer" == "y" ] ; then 
+    if [ "$answer" == "y" ] ; then
         sudo /mswg/release/mft/mftinstall;
     fi
 }
 
-mftstatus () 
+mftstatus ()
 {
     echo -e "\033[1;33;7mmake sure that you sudo mst start \033[0m"
     sudo mst status -vv
@@ -441,13 +454,13 @@ mftcheckstatus ()
     return $(sudo mst status | grep "not loaded" | wc -l );
 }
 
-mftstart () 
+mftstart ()
 {
    sudo mst start;
    mst_dev_array=( $(ls /dev/mst/) );
 }
 
-if [ -d /dev/mst ] ; then 
+if [ -d /dev/mst ] ; then
     mst_dev_array=( $(ls /dev/mst/) );
 fi
 
@@ -456,39 +469,39 @@ mftchoosedev ()
     local index=0;
     local dev_num=;
 
-    for i in ${mst_dev_array[@]} ; do 
+    for i in ${mst_dev_array[@]} ; do
         echo "[${index}] ${mst_dev_array[$index]}";
         ((index++));
     done
 
-    read -p "choose device: " dev_num;        
+    read -p "choose device: " dev_num;
     return ${dev_num};
 }
 
 mftsetlinktypeeth ()
 {
-    local mst_dev=$1; 
+    local mst_dev=$1;
     local hypervisor=1;
 
     redpill;
     hypervisor=$?;
-    if [ ${hypervisor} -eq 0 ] ; then 
+    if [ ${hypervisor} -eq 0 ] ; then
         "This is A VM. you need to do this on hypervisor";
         echo -e "\033[1;33;7m This is A VM. you need to do this on hypervisor\033[0m"
         return;
     fi
-        
+
     mftcheckstatus
-    if (( $? != 0 )) ; then 
+    if (( $? != 0 )) ; then
         echo -e "\033[1;33;7myou need to run mftstart \033[0m";
         return 1;
     fi
 
-    if [ -z "${mst_dev}" ] ; then 
+    if [ -z "${mst_dev}" ] ; then
         mftstatus;
         mftchoosedev;
         mst_dev=/dev/mst/${mst_dev_array[$?]}
-    fi; 
+    fi;
 
     echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=2 LINK_TYPE_P2=2";
     sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=2 LINK_TYPE_P2=2;
@@ -501,17 +514,17 @@ mftsetlinktypeinfiniband ()
 
     redpill;
     hypervisor=$?;
-    if [ ${hypervisor} -eq 0 ] ; then 
+    if [ ${hypervisor} -eq 0 ] ; then
         "This is A VM. you need to do this on hypervisor";
         echo -e "\033[1;33;7m This is A VM. you need to do this on hypervisor\033[0m"
         return;
     fi
 
-    if [ -z "${mst_dev}" ] ; then 
+    if [ -z "${mst_dev}" ] ; then
         mftstatus;
         mftchoosedev;
         mst_dev=/dev/mst/${mst_dev_array[$?]}
-    fi; 
+    fi;
 
     echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1";
     sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1;
@@ -519,7 +532,7 @@ mftsetlinktypeinfiniband ()
 
 mftgetlinktype ()
 {
-    for d in /dev/mst/* ; do 
+    for d in /dev/mst/* ; do
         echo ${d};
         sudo mlxconfig -d ${d} q | \grep LINK_TYPE;
     done
@@ -532,13 +545,13 @@ _checkpatchcomplete ()
     return;
 }
 
-checkpatchkernel () 
+checkpatchkernel ()
 {
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
     ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID $@
 }
 
-checkpatchuserpace () 
+checkpatchuserpace ()
 {
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
     ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID,PREFER_KERNEL_TYPES $@
@@ -546,15 +559,15 @@ checkpatchuserpace ()
 
 alias mkvmredhat74='/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l RH_7.4_x86_64_virt_guest -c 16 -r 8192 -d 35'
 alias mkvmls='sudo /.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux'
-mkvmhelp() 
-{ 
+mkvmhelp()
+{
     echo "su - ";
-    echo -e "/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l \033[1;31m<your choice of vm>\033[00m -c 16 -r 8192 -d 35"; 
+    echo -e "/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l \033[1;31m<your choice of vm>\033[00m -c 16 -r 8192 -d 35";
 }
 
 findiblibs ()
 {
-#     ib_libs=(libmlx5-rdmav2.so libibacmp.so libibumad.so libibverbs.so) 
+#     ib_libs=(libmlx5-rdmav2.so libibacmp.so libibumad.so libibverbs.so)
 #     ib_libs+=(libibcm.so libhns-rdmav2.so libcxgb3-rdmav2.so libcxgb4-rdmav2.so libi40iw-rdmav2.so)
 #     ib_libs+=(librdmacm.so libnes-rdmav2.so libmlx4-rdmav2.so libmthca-rdmav2.so libmlx5.so)
 #     ib_libs+=(libocrdma-rdmav2.so libhfi1verbs-rdmav2.so libipathverbs-rdmav2.so libqedr-rdmav2.so)
@@ -591,23 +604,23 @@ ib_libs+=(librspreload.so)
     local delete_app=
     local lib=
 
-    if [ -n ${1} ] ; then 
-        if [ "${1}" == "-d" ] ; then 
+    if [ -n ${1} ] ; then
+        if [ "${1}" == "-d" ] ; then
             read -p "delete ib libs [N/y]: " ans;
 
-            if [ "$ans" != "y" ] ; then 
+            if [ "$ans" != "y" ] ; then
                 return;
             fi
             delete_app="-delete";
         else
             lib=$1;
-        fi 
-    fi 
+        fi
+    fi
 
     count=0;
-    for i in ${ib_libs[@]} ; do 
+    for i in ${ib_libs[@]} ; do
 #         sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app} 2>/dev/null
-        if [ -z $lib ] ; then 
+        if [ -z $lib ] ; then
             echo -e "\033[1;35m--- ${i} ----\033[0m"
             sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
         else
@@ -624,7 +637,7 @@ findibapps ()
 #     ib_apps+=(ibv_devinfo ibv_rc_pingpong ibv_srq_pingpong ibv_uc_pingpong ibv_ud_pingpong);
 #     ib_apps+=(ibv_xsrq_pingpong iwpmd mckey rcopy rdma-ndd rdma_client rdma_server rdma_xclient);
 #     ib_apps+=(rdma_xserver riostream rping rstream srp_daemon ucmatose udaddy udpong umad_reg2 umad_register2);
-    
+
     ib_apps=( cmpost              )
     ib_apps+=( cmtime              )
     ib_apps+=( ib_acme             )
@@ -653,25 +666,25 @@ findibapps ()
     ib_apps+=( udaddy              )
     ib_apps+=( udpong              )
     ib_apps+=( umad_reg2           )
-    ib_apps+=( umad_register2      ) 
+    ib_apps+=( umad_register2      )
 
     local ib_apps_search_path=(/usr/bin/ /usr/sbin/ /usr/local/bin/ /usr/local/sbin/);
 
     local delete_app=
 
-    if [ -n ${1} ] ; then 
-        if [ "${1}" == "-d" ] ; then 
+    if [ -n ${1} ] ; then
+        if [ "${1}" == "-d" ] ; then
             read -p "delete ib apps [N/y]: " ans;
 
-            if [ "$ans" != "y" ] ; then 
+            if [ "$ans" != "y" ] ; then
                 return;
             fi
             delete_app="-delete";
-        fi 
-    fi 
+        fi
+    fi
 
     count=0;
-    for i in ${ib_apps[@]} ; do 
+    for i in ${ib_apps[@]} ; do
         echo -e "\033[1;35m--- ${i} ----\033[0m"
 #       sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -ls ${delete_app} 2>/dev/null
         sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
@@ -679,7 +692,7 @@ findibapps ()
     done
 }
 
-cleanibheaders () 
+cleanibheaders ()
 {
     echo "sudo rm -rf /usr/include/infiniband";
     echo "sudo rm -rf /usr/include/rdma";
@@ -687,26 +700,26 @@ cleanibheaders ()
     echo "sudo rm -rf /usr/local/include/rdma "
 
     read -p "are you sure ? [y/N] : " answer;
-    if [ "$answer" != "y" ] ; then 
-       return; 
+    if [ "$answer" != "y" ] ; then
+       return;
     fi
 
     set -x
     sudo rm -rf /usr/include/infiniband
     sudo rm -rf /usr/include/rdma
     sudo rm -rf /usr/local/include/infiniband
-    sudo rm -rf /usr/local/include/rdma 
+    sudo rm -rf /usr/local/include/rdma
     set +x
 }
 
-cleanibconfiguration () 
+cleanibconfiguration ()
 {
     echo "sudo rm -rf /etc/libibverbs.d/";
     echo "sudo rm -rf /usr/local/etc/libibverbs.d/";
 
     read -p "are you sure ? [y/N] : " answer;
-    if [ "$answer" != "y" ] ; then 
-       return; 
+    if [ "$answer" != "y" ] ; then
+       return;
     fi
 
     set -x
@@ -732,47 +745,47 @@ csfilesPaths=(include/)
 csfilesPaths+=(drivers/infiniband/hw/rxe/)
 csfilesPaths+=(drivers/infiniband/core/)
 
-csfiles () 
-{ 
+csfiles ()
+{
     find  ${csfilesPaths[@]} -name "*.[ch]" -type f -print  > cscope.files
     cscope -bqk
     echo "run cscope -d to use the data base youve just created"
 }
 
-ismoduleup () 
+ismoduleup ()
 {
     local module=$1;
-    if [ $(lsmod |grep ${module} | wc  -l ) -gt 0 ] ; then 
+    if [ $(lsmod |grep ${module} | wc  -l ) -gt 0 ] ; then
         echo yes;
     else
         echo no;
-    fi 
+    fi
 }
 
-loadmoduleifnotloaded () 
+loadmoduleifnotloaded ()
 {
     local module=$1
-    if [ "$(ismoduleup ${module})"  == "no" ] ; then 
-        sudo modprobe ${module} ; 
+    if [ "$(ismoduleup ${module})"  == "no" ] ; then
+        sudo modprobe ${module} ;
         echo "load ${module}"
     fi
 }
 
-removemoduleifloaded () 
+removemoduleifloaded ()
 {
     local module=$1
-    if [ "$(ismoduleup ${module})"  == "yes" ] ; then 
-#       sudo modprobe -r ${module} ; 
-        if [ $(sudo rmmod ${module}  | grep ERROR  |wc -l) -eq 0 ] ; then 
+    if [ "$(ismoduleup ${module})"  == "yes" ] ; then
+#       sudo modprobe -r ${module} ;
+        if [ $(sudo rmmod ${module}  | grep ERROR  |wc -l) -eq 0 ] ; then
             echo "removed ${module}"
         else
-            echo "failed to remove ${module}"            
-        fi                
+            echo "failed to remove ${module}"
+        fi
 
     fi
 }
 
-ib4start () 
+ib4start ()
 {
     loadmoduleifnotloaded ib_core
     loadmoduleifnotloaded mlx4_ib
@@ -782,14 +795,14 @@ ib4start ()
 
 ib4stop ()
 {
-    removemoduleifloaded mlx4_ib 
-    removemoduleifloaded mlx4_en 
+    removemoduleifloaded mlx4_ib
+    removemoduleifloaded mlx4_en
     removemoduleifloaded mlx4_core
 }
 
 alias ib5restart='ib4stop; ib4start'
 
-ib5start () 
+ib5start ()
 {
     loadmoduleifnotloaded ib_core
     loadmoduleifnotloaded mlx5_core
@@ -800,45 +813,45 @@ ib5start ()
 
 ib5stop ()
 {
-    removemoduleifloaded mlx5_ib 
-    removemoduleifloaded mlx5_core 
+    removemoduleifloaded mlx5_ib
+    removemoduleifloaded mlx5_core
 }
 alias ib5restart='ib5stop; ib5start'
 
 ibstart ()
-{ 
+{
     ib4start;
     ib5start;
 
     loadmoduleifnotloaded ib_core
-    loadmoduleifnotloaded rdma_cm 
-    loadmoduleifnotloaded ib_cm 
+    loadmoduleifnotloaded rdma_cm
+    loadmoduleifnotloaded ib_cm
     loadmoduleifnotloaded ib_ucm
     loadmoduleifnotloaded ib_umad
     loadmoduleifnotloaded ib_uverbs
     loadmoduleifnotloaded rdma_cm
     loadmoduleifnotloaded ib_ucm
-    loadmoduleifnotloaded ib_iser 
+    loadmoduleifnotloaded ib_iser
     loadmoduleifnotloaded ib_isert
-} 
+}
 
 ibstop ()
 {
-    ib4stop            
+    ib4stop
     ib5stop
 
-    removemoduleifloaded ib_iser 
+    removemoduleifloaded ib_iser
     removemoduleifloaded ib_isert
     removemoduleifloaded ib_srp
     removemoduleifloaded ib_srpt
 
     removemoduleifloaded rpcrdma
-    removemoduleifloaded rdma_ucm 
+    removemoduleifloaded rdma_ucm
     removemoduleifloaded rdma_cm
-    removemoduleifloaded ib_ucm 
+    removemoduleifloaded ib_ucm
     removemoduleifloaded ib_ipoib
 
-    removemoduleifloaded ib_cm 
+    removemoduleifloaded ib_cm
     removemoduleifloaded iw_cm
     removemoduleifloaded ib_umad
     removemoduleifloaded ib_uverbs
@@ -848,28 +861,28 @@ ibstop ()
 
 alias ibrestart='ibstop ; ibstart'
 
-rxe ()        { sudo rxe_cfg ;      } 
+rxe ()        { sudo rxe_cfg ;      }
 rxestart ()
-{ 
+{
     [ $(lsmod |grep mlx5_ib | wc -l ) -ne 0  ] && ( set -x ; sudo rmmod mlx5_ib);
     [ $(lsmod |grep mlx4_ib | wc -l ) -ne 0 ] &&  ( set -x ; sudo rmmod mlx4_ib);
-    ( set -x ; sudo rxe_cfg start); 
+    ( set -x ; sudo rxe_cfg start);
 }
-rxestop () 
-{ 
-    ( set -x ; sudo rxe_cfg stop);  
+rxestop ()
+{
+    ( set -x ; sudo rxe_cfg stop);
 }
 rxerestart ()
-{ 
-    if [ $(lsmod | grep rdma_rxe | wc -l ) -ne 0 ] ; then 
-        rxestop ; 
-    fi 
-    rxestart; 
+{
+    if [ $(lsmod | grep rdma_rxe | wc -l ) -ne 0 ] ; then
+        rxestop ;
+    fi
+    rxestart;
 }
 
 iserstart ()
 {
-    sudo modprobe ib_iser 
+    sudo modprobe ib_iser
     sudo modprobe ib_isert debug_level=3
 }
 
@@ -879,7 +892,7 @@ alias iserinitiatorstart='sudo modprobe ib_iser'
 # alias iserinitiatorstart='sudo insmod /lib/modules/$(uname -r)/kernel/drivers/infiniband/ulp/iser/ib_iser.ko debug_level=3 ; sleep 1 ; sudo rmmod ib_isert'
 alias iserstop='sudo modprobe -r ib_isert ib_iser'
 
-mkrxelib () 
+mkrxelib ()
 {
     local ans;
     echo "Did you install kernel headers ?";
@@ -887,7 +900,7 @@ mkrxelib ()
 
     read -p "[N/y]: " ans;
 
-    if [ "$ans" != "y" ] ; then 
+    if [ "$ans" != "y" ] ; then
         return;
     fi
 
@@ -897,10 +910,10 @@ mkrxelib ()
     sudo make install
 }
 
-mkupstreamlib1sttime () 
+mkupstreamlib1sttime ()
 {
     \make clean
-    ./autogen.sh 
+    ./autogen.sh
     ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 CFLAGS="-g -O0"
     make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1
     # sudo make install
@@ -909,7 +922,8 @@ mkupstreamlib1sttime ()
 alias mkupstreamlib='make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
 alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
-alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null' 
+alias rdmacoreversion='grep Version redhat/rdma-core.spec'
+alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacore1sttime='rdma-core_build.sh 1>/dev/null'
 alias mkrdmacoreinstall='sudo make -C build install > /dev/null'
@@ -919,7 +933,7 @@ alias mkrdmacoremlx5='\make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacorercping='\make -C build ibv_rc_pingpong -j ${ncoresformake} -s 1>/dev/null'
 mkrdmacoreApps ()
 {
-    \make -C build ibv_rc_pingpong -j ${ncoresformake} -s; 
+    \make -C build ibv_rc_pingpong -j ${ncoresformake} -s;
 #   make -C build ibv_ud_pingpong -j ${ncoresformake} -s;
 #   make -C build ibv_uc_pingpong -j ${ncoresformake} -s;
 #   make -C build ibv_srq_pingpong -j ${ncoresformake} -s;
@@ -927,18 +941,18 @@ mkrdmacoreApps ()
 }
 
 alias ofedinstallupstream='sudo build=latest-upstream /mswg/release/ofed/ofed_install --all --force'
-ofedinstallupstreamlib () 
-{ 
+ofedinstallupstreamlib ()
+{
     echo "sudo build=ofed-upstream_last_stable /mswg/release/ofed/ofed_install --all --force --disable-kmp --without-valgrind";
     sudo build=ofed-upstream_last_stable /mswg/release/ofed/ofed_install --all --force --disable-kmp --without-valgrind
 }
 
-ofedlistversions () 
+ofedlistversions ()
 {
-    find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"; 
+    find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n";
 }
 
-ofedbuildversion () 
+ofedbuildversion ()
 {
     local version=${1};
     if [ -z ${version} ] ; then
@@ -948,48 +962,48 @@ ofedbuildversion ()
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
 }
 
-ofedinstallversion () 
+ofedinstallversion ()
 {
     local version=${1};
     if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
     echo "about to install ofed ${version} for your $(cat /etc/redhat-release) and the kernel that comes with it"
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install"
-    read -p "continue [y/N]: " ans; 
-    if [ "$ans" == "y" ] ; then 
+    read -p "continue [y/N]: " ans;
+    if [ "$ans" == "y" ] ; then
         sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install;
     fi
 }
 
-ofedfindindexforpackage () 
+ofedfindindexforpackage ()
 {
     local pkg=$1;
-    if [ -z ${pkg} ] ; then echo "ofedfindindexforpackage <pkg>" ; return ; fi 
+    if [ -z ${pkg} ] ; then echo "ofedfindindexforpackage <pkg>" ; return ; fi
     ofed_info |grep -m2  -A1 ${pkg} | sort -u | grep "${pkg}\|commit"
 }
 
-ofedmkbackport () 
+ofedmkbackport ()
 {
     local configure_options=;
     configure_options=$(/etc/infiniband/info |grep Configure\ options | sed 's/.*://g');
     echo "./configure -j ${ncoresformake} ${configure_options}"
-    read -p "continue [Y/n]: " ans; 
-    if [ "$ans" == "n" ] ; then 
+    read -p "continue [Y/n]: " ans;
+    if [ "$ans" == "n" ] ; then
         return;
     fi
     ./configure -j ${ncoresformake} ${configure_options}
 }
 
-if [ -d ~yonatanc/devel ] ; then 
-cddevel () { 
-    cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;  
+if [ -d ~yonatanc/devel ] ; then
+cddevel () {
+    cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;
 }
 complete -W "$(find ~yonatanc/devel/ -maxdepth 1 -type d  -exec basename {} \;     )" cddevel
-cdupstream () { 
-    cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1;  
+cdupstream () {
+    cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1;
 }
 complete -W "$(find ~yonatanc/devel/upstream -maxdepth 1 -type d  -exec basename {} \;     )" cdupstream
-cdofed  () { 
-    cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1;  
+cdofed  () {
+    cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1;
 }
 complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
 fi
@@ -997,13 +1011,13 @@ fi
 alias mkcoverletterrdmacore='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core'
 alias mkcoverletterkernel='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next'
 
-mkkernelbuildmlx5ib () 
+mkkernelbuildmlx5ib ()
 {
     echo "make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/";
     \make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/;
 }
 mkkernelbuildmlx5core ()
-{ 
+{
    echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/"
    \make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
 }
@@ -1019,11 +1033,12 @@ alias clipboard='cat ~/share/clipboard.txt'
 alias tagmeofakernel='cp ${yonienv}/bin/tagmeofakernel.sh .'
 alias tagmeupstreamkernel='cp ${yonienv}/bin/tagmeupstreamkernel.sh .'
 alias tagmerdmacore='cp ${yonienv}/bin/tagmerdmacore.sh .'
+alias tagmeofedlibs='cp ${yonienv}/bin/tagmeofedlibs.sh .'
 md2man ()
 {
     local mdfile=$1;
     local manpage=$(basename ${mdfile} );
     manpage=$(echo $manpage | sed 's/.md//g');
-    mkdir -p tmp; 
+    mkdir -p tmp;
     pandoc -s -t man ${mdfile}  -o tmp/${manpage} ; man tmp/${manpage}
 }

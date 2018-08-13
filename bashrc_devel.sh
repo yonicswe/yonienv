@@ -292,12 +292,12 @@ catgrubsetdefault ()
 
 editgrub () 
 {
-    su - -c " gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -10'"
+    su - -c " gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
     # sudo vim /boot/grub/grub.conf +':split' +':e x' +'r!ls -ltr /boot'   
 }
 editgrubvim () 
 {
-    su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -10'"
+    su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
 }
 
 alias make="make -j ${ncoresformake}"
