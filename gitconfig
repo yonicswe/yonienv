@@ -132,6 +132,12 @@
         fi;                                  \
     }; f"
 
+    cherry-pick-commit = "!f() {              \
+	if [ $# -gt 0 ] ; then                 \
+	   git cherry-pick $1^..$1 ;          \
+        fi;                                  \
+    }; f"
+
     edit = "!f() { GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; }; f"
 
     lg = !git lg1

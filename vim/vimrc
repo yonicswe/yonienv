@@ -403,6 +403,7 @@ set foldcolumn=1
 "                                   
 "
 " to ignore white space :set diffopt+=iwhite
+" :diffupdate to rescan diffs
 if &diff 
     colorscheme molokai
 "     colorscheme candycode
@@ -429,6 +430,12 @@ endif
 
 " prevent readonly mode. preffered when using git vimdiff 
 set noro
+
+" set diffopt
+
+" mergetool
+" to choose on each diff which window wins, use diffget
+" :diffget [LOCAl,BASE,REMOTE]
 
 "------- view patch file side by side -------------------------
 " open the patch file and press : ,vd
