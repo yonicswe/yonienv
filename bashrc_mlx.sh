@@ -255,7 +255,11 @@ listgitrepos ()
     echo "mellanox regression network     : ${prefix}/Linux_drivers_verification/networking";
     echo "mellanox regression core        : ${prefix}/Linux_drivers_verification/core";
     echo "mellanox regression directtests : ${prefix}/Linux_drivers_verification/directtests";
+
+    echo;
+    echo "mellanox github/devx            : https://github.com/Mellanox/devx.git";
 }
+
 
 ibmod ()
 {
