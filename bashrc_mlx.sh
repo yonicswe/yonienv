@@ -1012,8 +1012,24 @@ cdofed  () {
 complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
 fi
 
-alias mkcoverletterrdmacore='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core'
-alias mkcoverletterkernel='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next'
+mkcoverletterusage ()
+{
+    echo "give index range. e.g. HEAD~3"
+}
+
+mkcoverletterrdmacore ()
+{ 
+    if [ $# -eq 0 ] ; then mkcoverletterusage ; return ; fi;
+    mkdir coverletter
+    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core -- $1
+}
+
+mkcoverletterkernel ()
+{
+    if [ $# -eq 0 ] ; then mkcoverletterusage ; return ; fi;
+    mkdir coverletter
+    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next -- $1
+}
 
 mkkernelbuildinfiniband ()
 {

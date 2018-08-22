@@ -1,6 +1,7 @@
 [user]
-	email = yonatanc@mellanox.com
+	author = Yonatan Cohen
 	name = Yonatan Cohen
+	email = yonatanc@mellanox.com
 
 # accepted values are two of
 # normal, black, red, green, yellow, blue, magenta, cyan, white
@@ -174,8 +175,8 @@
 [difftool]
 	prompt = true
 
-#[commit]
-#template = /fwgwork/guyle/git_commit_template
+[commit]
+template = ~/share/yonienv/git_commit_template
 
 [credential]
 #	helper = wincred
@@ -188,3 +189,18 @@
 	autoDetach = false
 [grep]	
 	linenumber = true
+
+
+[sendemail]
+#       smtpserver = /usr/local/bin/msmtp-enqueue.sh
+	suppresscc = self
+	signedoffbycc = true
+	cccover = true
+	tocover = true
+	chainReplyTo = false
+	confirm = always
+	from = Yonatan Cohen <yonatanc@mellanox.com>
+	envelopeSender = Yonatan Cohen <yonatanc@mellanox.com>
+	signingkey = yonatanc@mellanox.com
+[gpg]
+	program = gpg2
