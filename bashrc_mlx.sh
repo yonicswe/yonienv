@@ -1015,6 +1015,12 @@ fi
 alias mkcoverletterrdmacore='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core'
 alias mkcoverletterkernel='~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next'
 
+mkkernelbuildinfiniband ()
+{
+    echo "make -j${ncoresformake} M=drivers/infiniband/";
+    \make -j${ncoresformake} M=drivers/infiniband/;
+}
+ 
 mkkernelbuildmlx5ib ()
 {
     echo "make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/";

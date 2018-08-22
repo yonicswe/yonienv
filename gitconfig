@@ -172,7 +172,7 @@
 
 
 [difftool]
-	prompt = false
+	prompt = true
 
 #[commit]
 #template = /fwgwork/guyle/git_commit_template
