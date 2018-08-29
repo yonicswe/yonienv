@@ -7,84 +7,54 @@
 
 alias editbashmlx='g ${yonienv}/bashrc_mlx.sh'
 
-alias 8='ssh     r-ole08'
-alias 9='ssh     r-ole09'
-alias 10='ssh    r-ole10'
-alias 11='ssh    r-ole11'
+create_alias_for_host ()
+{
+    alias_name=${1}
+    host_name=${2};
 
-alias 145='ssh   dev-l-vrt-145'
-alias 145root='ssh   root@dev-l-vrt-145'
-alias 145ping='ping   dev-l-vrt-145'
+    alias ${alias_name}="ssh ${host_name}"
+    alias ${alias_name}root="ssh root@${host_name}"
+    alias ${alias_name}ping="ping ${host_name}"
+}
 
-alias 1455='ssh  dev-l-vrt-145-005'
-alias 1455root='ssh  root@dev-l-vrt-145-005'
-alias 1455ping='ping  dev-l-vrt-145-005'
+# vnc hosts
+create_alias_for_host 8 r-ole08
+create_alias_for_host 9 r-ole08
+create_alias_for_host 10 r-ole08
+create_alias_for_host 11 r-ole08
 
-alias 1456='ssh  dev-l-vrt-145-006'
-alias 1456root='ssh  root@dev-l-vrt-145-006'
-alias 1456ping='ping  dev-l-vrt-145-006'
-
-alias 1457='ssh  dev-l-vrt-145-007'
-alias 1457root='ssh  root@dev-l-vrt-145-007'
-alias 1457ping='ping  dev-l-vrt-145-007'
-
-alias 1458='ssh  dev-l-vrt-145-008'
-alias 1458root='ssh  root@dev-l-vrt-145-008'
-alias 1458ping='ping  dev-l-vrt-145-008'
-
-alias 1459='ssh  dev-l-vrt-145-009'
-alias 1459root='ssh  root@dev-l-vrt-145-009'
-alias 1459ping='ping  dev-l-vrt-145-009'
-
-alias 146='ssh   dev-l-vrt-146'
-alias 146root='ssh   root@dev-l-vrt-146'
-alias 146ping='ping  dev-l-vrt-146'
-
-alias 1465='ssh  dev-l-vrt-146-005'
-alias 1465root='ssh  root@dev-l-vrt-146-005'
-alias 1465ping='ping  dev-l-vrt-146-005'
-
-alias 1466='ssh  dev-l-vrt-146-006'
-alias 1466root='ssh  root@dev-l-vrt-146-006'
-alias 1466ping='ping  dev-l-vrt-146-006'
-
-alias 1467='ssh  dev-l-vrt-146-007'
-alias 1467root='ssh  root@dev-l-vrt-146-007'
-alias 1467ping='ping  dev-l-vrt-146-007'
-
-alias 1468='ssh  dev-l-vrt-146-008'
-alias 1468root='ssh  root@dev-l-vrt-146-008'
-alias 1468ping='ping  dev-l-vrt-146-008'
-
-alias 149='ssh  dev-l-vrt-149'
-alias 149root='ssh  root@dev-l-vrt-149'
-alias 149ping='ping  dev-l-vrt-149'
+# my development hosts
+create_alias_for_host 145 dev-l-vrt-145
+create_alias_for_host 1455 dev-l-vrt-145-005
+create_alias_for_host 1456 dev-l-vrt-145-006
+create_alias_for_host 1457 dev-l-vrt-145-007
+create_alias_for_host 1458 dev-l-vrt-145-008
+create_alias_for_host 146 dev-l-vrt-146
+create_alias_for_host 1465 dev-l-vrt-146-005
+create_alias_for_host 1466 dev-l-vrt-146-006
+create_alias_for_host 1467 dev-l-vrt-146-007
+create_alias_for_host 1468 dev-l-vrt-146-008
 
 # stm server to run regression
-alias stm88ping='ping mtl-stm-88'
-alias stm88root='ssh root@mtl-stm-88'
-alias stm88='ssh mtl-stm-88'
-
-alias stmaz88='ssh mtl-stm-az-088'
-alias stmaz88root='ssh root@mtl-stm-az-088'
-alias stmaz88ping='ping mtl-stm-az-088'
+create_alias_for_host stm88 mtl-stm-88
+create_alias_for_host stmaz88 mtl-stm-az-088
 
 # performance setup
-alias 94='ssh  dev-l-vrt-094'
-alias 97='ssh  dev-l-vrt-097'
+create_alias_for_host 94 dev-l-vrt-094
+create_alias_for_host 97 dev-l-vrt-097
 
 # rxe regression setup
-alias 5180='ssh reg-l-vrt-5180'
-alias 5181='ssh reg-l-vrt-5181'
-alias 51806='ssh reg-l-vrt-5180-006'
-alias 51816='ssh reg-l-vrt-5181-006'
+create_alias_for_host 5180 reg-l-vrt-5180
+create_alias_for_host 5181 reg-l-vrt-5181
+create_alias_for_host 51806 reg-l-vrt-5180-006
+create_alias_for_host 51816 reg-l-vrt-5181-006
 
 # guy levi setup
-alias 212='ssh dev-l-vrt-212'
-alias 213='ssh dev-l-vrt-213'
+create_alias_for_host 212 dev-l-vrt-212
+create_alias_for_host 213 dev-l-vrt-213
 
 # parav
-alias parav='ssh sw-mtx-036'
+create_alias_for_host parav sw-mtx-036
 
 
 
