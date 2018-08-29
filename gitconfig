@@ -51,10 +51,18 @@
     brename = branch -M
     r = remote -vv
     c = checkout
+#   commityoni = "!f() { \
+#		    git config commit.template ~/share/yonienv/git_commit_template_yonic; \
+#		    git commit; \
+#		  }f"
+#   commitmlx = "!f() { \
+# 		    git config commit.template ~/share/yonienv/git_commit_template; \
+# 		    git commit; \
+#		  }f"
     commitempty = commit --allow-empty
-
+ 
     a = "!f() {                \
-	   if [ -z $1 ] ; then \
+ 	   if [ -z $1 ] ; then \
 	      git add -u ;     \
            else                \
 	      git add $1 ;     \
@@ -178,7 +186,7 @@
 	prompt = true
 
 [commit]
-template = ~/share/yonienv/git_commit_template
+# template = ~/share/yonienv/git_commit_template
 
 [credential]
 #	helper = wincred

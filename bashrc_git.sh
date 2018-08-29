@@ -152,3 +152,15 @@ gitcatpatchfile ()
 
     cat $patchfile | colordiff
 }
+
+gitcommityoni ()
+{
+    git config commit.template ${yonienv}/git_commit_template_yonic; 
+    git commit;
+}
+
+gitcommitmlx ()
+{
+    git config commit.template ${yonienv}/git_commit_template;
+    git commit;
+}
