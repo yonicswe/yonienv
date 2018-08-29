@@ -56,6 +56,10 @@ alias 1468='ssh  dev-l-vrt-146-008'
 alias 1468root='ssh  root@dev-l-vrt-146-008'
 alias 1468ping='ping  dev-l-vrt-146-008'
 
+alias 149='ssh  dev-l-vrt-149'
+alias 149root='ssh  root@dev-l-vrt-149'
+alias 149ping='ping  dev-l-vrt-149'
+
 # stm server to run regression
 alias stm88ping='ping mtl-stm-88'
 alias stm88root='ssh root@mtl-stm-88'
