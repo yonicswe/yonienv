@@ -38,6 +38,7 @@
     # d = diff --color
     d = diff
     dg = difftool --tool=gvimdiff
+    dgfile = difftool --tool=gvimdiff --no-prompt
     dv = difftool --tool=vimdiff
     dc = diff --cached
     dcg = difftool --tool=gvimdiff --cached
@@ -50,6 +51,7 @@
     brename = branch -M
     r = remote -vv
     c = checkout
+    commitempty = commit --allow-empty
 
     a = "!f() {                \
 	   if [ -z $1 ] ; then \
