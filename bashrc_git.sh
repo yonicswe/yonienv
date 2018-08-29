@@ -35,6 +35,8 @@ gitb ()
     else
         git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}' | grep "${branch}"
     fi
+
+    complete -W "$(git branch)" gitb
 }
 
 alias gitwhichbranch="git  s  | awk '/On branch/{print $4}'"
