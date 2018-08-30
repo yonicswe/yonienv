@@ -53,6 +53,13 @@ setup_cgdb_env ()
     ln -snf ${yonienv}/gdbinit ~/.gdbinit;
 }
 
+setup_misc ()
+{
+    local yonienv=$1;
+    echo $FUNCNAME;
+    echo "set completion-display-width 2" >> ~/.inputrc
+}
+
 usage () 
 {
     echo "mkyonienv.sh  [-e <env_path>] [-v|-g|-h|-c]"
@@ -146,6 +153,7 @@ main  ()
     setup_vim_env ${yonienv};
     setup_git_env ${yonienv};
     setup_cgdb_env ${yonienv};
+    setup_misc ${yonienv}
     messages
 }
 

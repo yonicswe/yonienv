@@ -420,6 +420,7 @@ if &diff
 "   map <C-i> :set diffopt=iwhite<cr>
 "   map <C-i><C-i> :set diffopt=filler<cr>
 
+    map <C-u> :diffupdate
 
     map <C-i> :call IwhiteToggle()<CR>
     function! IwhiteToggle()

@@ -114,7 +114,7 @@ gitpushtogerrit ()
 
     if [ $# -eq 0 ] ; then
         echo "gitpushtogerrit [-r <remote> | origin] [ -h <git index> | HEAD] -b <branch> -t <topic>" ;
-        complete -W "$(git remote)" gitpushtogerrit
+#       complete -W "$(git remote)" gitpushtogerrit
         return;
     fi
 
@@ -170,10 +170,10 @@ gitpushtogerrit ()
 gitpushtogerritcomplete ()
 {
     if [ -e .gitpush.log ] ; then
-        complete -W "$(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
+        complete -W "$(git remote) $(cat .gitpush.log | cat .gitpush.log |sed -e 's/.*for\///' -e 's/\//\n/' |sort -u |xargs)"  gitpushtogerrit
     fi
 }
-gitpushtogerritcomplete;
+# gitpushtogerritcomplete;
 
 listgitrepos ()
 {
@@ -976,10 +976,12 @@ cddevel () {
     cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;
 }
 complete -W "$(find ~yonatanc/devel/ -maxdepth 1 -type d  -exec basename {} \;     )" cddevel
-cdupstream () {
-    cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1;
-}
-complete -W "$(find ~yonatanc/devel/upstream -maxdepth 1 -type d  -exec basename {} \;     )" cdupstream
+
+# cdupstream () {
+#     cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1;
+# }
+# complete -W "$(find ~yonatanc/devel/upstream -maxdepth 1 -type d  -exec basename {} \;     )" cdupstream
+source ${yonienv}/upstream_complete_dir.sh
 
 source ${yonienv}/ofed_complete_dir.sh
 # cdofed  () {
