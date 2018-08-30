@@ -262,19 +262,21 @@ fi
 
 complete -d cd c;
 
-cddocs () { cd ${yonidocs}    ; [ -n "$1" ] && cd $1; completecddocs; }
-completecddocs () { complete -W "$(find ${yonidocs} -maxdepth 1 -type d -exec basename {} \; )" cddocs; }
 alias gdocs="cddocs ; g +e."
-if [ -d ${yonidocs} ] ; then completecddocs ; fi
+
+source ${yonienv}/docs_complete_dir.sh
+# cddocs () { cd ${yonidocs}    ; [ -n "$1" ] && cd $1; completecddocs; }
+# completecddocs () { complete -W "$(find ${yonidocs} -maxdepth 1 -type d -exec basename {} \; )" cddocs; }
+# if [ -d ${yonidocs} ] ; then completecddocs ; fi
 
 cdcode () { cd ${yonicode}    ; [ -n "$1" ] && cd "$1"; completecdcode; } 
 completecdcode () { complete -W "$(find ${yonicode} -maxdepth 1 -type d -exec basename {} \; )" cdcode; }
 if [ -d ${yonicode} ] ; then completecdcode ; fi
 
-cdtask () { cd ${yonitasks} ; [ -n "$1" ] && cd "$1" ; completecdtask ;}
-
-completecdtask () { complete -W "$(find ${yonitasks} -maxdepth 1 -type d -exec basename {} \; )" cdtask; }
-if [ -d ${yonitasks} ] ; then completecdtask ; fi
+source ${yonienv}/task_complete.sh
+# cdtask () { cd ${yonitasks} ; [ -n "$1" ] && cd "$1" ; completecdtask ;}
+# completecdtask () { complete -W "$(find ${yonitasks} -maxdepth 1 -type d -exec basename {} \; )" cdtask; }
+# if [ -d ${yonitasks} ] ; then completecdtask ; fi
 
 mktask () 
 {

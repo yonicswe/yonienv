@@ -980,10 +980,12 @@ cdupstream () {
     cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1;
 }
 complete -W "$(find ~yonatanc/devel/upstream -maxdepth 1 -type d  -exec basename {} \;     )" cdupstream
-cdofed  () {
-    cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1;
-}
-complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
+
+source ${yonienv}/ofed_complete_dir.sh
+# cdofed  () {
+#     cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1;
+# }
+# complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
 fi
 
 mkcoverletterusage ()
