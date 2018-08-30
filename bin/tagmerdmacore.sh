@@ -13,6 +13,7 @@ includeTagdir+=(./ccan)
 
 if [ -e cscope.files ] ; then 
     cscope -vkqb;
+    ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files)
     exit
 fi
 
