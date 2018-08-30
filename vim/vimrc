@@ -417,6 +417,18 @@ if &diff
     map [D :wincmd w<cr>
     map <C-Right> :wincmd w<cr>
     map <C-Left>  :wincmd w<cr>
+"   map <C-i> :set diffopt=iwhite<cr>
+"   map <C-i><C-i> :set diffopt=filler<cr>
+
+
+    map <C-i> :call IwhiteToggle()<CR>
+    function! IwhiteToggle()
+      if &diffopt =~ 'iwhite'
+        set diffopt-=iwhite
+      else
+        set diffopt+=iwhite
+      endif
+    endfunction
 else
     map <C-Down>   ]]zz
     map <C-Up>     [[zz
