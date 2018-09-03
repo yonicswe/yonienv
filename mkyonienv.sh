@@ -57,7 +57,7 @@ setup_misc ()
 {
     local yonienv=$1;
     echo $FUNCNAME;
-    echo "set completion-display-width 2" >> ~/.inputrc
+#   echo "set completion-display-width 0" >> ~/.inputrc
 }
 
 usage () 
@@ -66,6 +66,7 @@ usage ()
     echo "-c - clear env"         
     echo "-g - create only git conf"         
     echo "-v - create only vim conf"         
+    echo "-m - create only misc conf"         
     echo "-h - help"         
     exit;
 }
@@ -106,7 +107,7 @@ main  ()
     local setup_git=0;
 
     OPTIND=0;
-    while getopts "e:vghc" opt; do
+    while getopts "e:vgmhc" opt; do
         case $opt in 
         e)  yonienv=${OPTARG};
             yonienv=$(readlink -f ${yonienv});
@@ -116,6 +117,9 @@ main  ()
             ;;
         g)
             setup_git=1;
+            ;;
+        m)
+            setup_misc=1;
             ;;
         h)  
             usage;                
@@ -147,13 +151,17 @@ main  ()
         setup_git_env ${yonienv};
         return;
     fi
+    if [ $setup_misc -eq 1 ] ; then 
+        setup_misc ${yonienv};
+        return;
+    fi
     
     setup_bash_profile ${yonienv};
     setup_bashrc ${yonienv};
     setup_vim_env ${yonienv};
     setup_git_env ${yonienv};
     setup_cgdb_env ${yonienv};
-    setup_misc ${yonienv}
+#   setup_misc ${yonienv}
     messages
 }
 
