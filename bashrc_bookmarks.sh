@@ -263,15 +263,17 @@ fi
 complete -d cd c;
 
 alias gdocs="cddocs ; g +e."
+alias gtasks="cdtasks ; g +e."
+alias gcode="cdcode ; g +e."
 
 source ${yonienv}/docs_complete_dir.sh
 # cddocs () { cd ${yonidocs}    ; [ -n "$1" ] && cd $1; completecddocs; }
 # completecddocs () { complete -W "$(find ${yonidocs} -maxdepth 1 -type d -exec basename {} \; )" cddocs; }
 # if [ -d ${yonidocs} ] ; then completecddocs ; fi
 
-cdcode () { cd ${yonicode}    ; [ -n "$1" ] && cd "$1"; completecdcode; } 
-completecdcode () { complete -W "$(find ${yonicode} -maxdepth 1 -type d -exec basename {} \; )" cdcode; }
-if [ -d ${yonicode} ] ; then completecdcode ; fi
+# cdcode () { cd ${yonicode}    ; [ -n "$1" ] && cd "$1"; completecdcode; } 
+# completecdcode () { complete -W "$(find ${yonicode} -maxdepth 1 -type d -exec basename {} \; )" cdcode; }
+# if [ -d ${yonicode} ] ; then completecdcode ; fi
 
 source ${yonienv}/task_complete.sh
 # cdtask () { cd ${yonitasks} ; [ -n "$1" ] && cd "$1" ; completecdtask ;}

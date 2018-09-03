@@ -1,22 +1,38 @@
-g_proj_dir=${HOME}/share/docs
 
 _docs ()
 {
     local cmd=$1 cur=$2 pre=$3;
-    local _cur compreply
+    local _cur compreply;
 
-    _cur=$g_proj_dir/$cur
+
+    _cur=$docs_dir/$cur
     compreply=( $( compgen -d "$_cur" ) )
-    COMPREPLY=( ${compreply[@]#$g_proj_dir/} )
+    COMPREPLY=( ${compreply[@]#$docs_dir/} )
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        COMPREPLY[0]=${COMPREPLY[0]}/
+    fi
+}
+
+docs_dir=${HOME}/share/docs
+cddocs() { cd $docs_dir/$1; }
+complete -F _docs -o nospace cddocs
+
+#==========================================================
+_code ()
+{
+    local cmd=$1 cur=$2 pre=$3;
+    local _cur compreply;
+
+    _cur=$code_dir/$cur
+    compreply=( $( compgen -d "$_cur" ) )
+    COMPREPLY=( ${compreply[@]#$code_dir/} )
     if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
         COMPREPLY[0]=${COMPREPLY[0]}/
     fi
 }
 
 
-cddocs()
-{
-    cd $g_proj_dir/$1
-}
+code_dir=${HOME}/share/code
+cdcode() { cd $code_dir/$1; }
+complete -F _code -o nospace cdcode
 
-complete -F _docs -o nospace cddocs
