@@ -43,3 +43,36 @@ tagcscopemlx5 ()
 }
 
 alias tagyonienv='ctags --language-force=sh *'
+
+tagme_base ()
+{
+    declare -a includeTagdir=("${!1}");
+    declare -a excludeTagdir=("${!2}");
+
+#     echo  includeTagdir: ${includeTagdir[@]}
+#     echo  excludeTagdir: ${excludeTagdir[@]}
+
+    if [ -e cscope.files ] ; then 
+        cscope -vkqb;
+        echo "Building ctags file...";
+        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files)
+        exit
+    fi
+
+    printf "tag     : %s\n" ${includeTagdir[@]}
+    if [ ${#excludeTagdir[@]} -eq  0 ] ; then
+        source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h"))
+        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+        echo > cscope.files
+        for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+        cscope -vkqb
+    else 
+        printf "exclude : %s\n" ${excludeTagdir[@]/and/}
+        prune="-path ${excludeTagdir[@]/+++/-o -path}";
+        source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
+        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+        echo > cscope.files
+        for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+        cscope -vkqb
+    fi    
+}
