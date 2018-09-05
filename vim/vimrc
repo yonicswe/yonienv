@@ -96,9 +96,9 @@ au FileType txt colorscheme darkbone
 " au FileType svn colorscheme peaksea
 
 
-" if !has("gui_running")
-"     colorscheme peaksea
-" endif
+if !has("gui_running")
+    colorscheme candy
+endif
 
 " if has("gui_running")
 "   " GUI is running or is about to start.
