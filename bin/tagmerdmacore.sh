@@ -1,6 +1,4 @@
-#!/bin/bash
-yonienv=$(awk 'BEGIN{FS="="}/yonienv=/{  print $2}' ~/.bashrc | sed 's/;//');
-source ${yonienv}/bashrc_tags.sh
+PRJ_NAME="RDMA-CORE user space library"
 
 includeTagdir=(./libibverbs)
 includeTagdir+=(./librdmacm)
@@ -10,6 +8,6 @@ includeTagdir+=(./kernel-headers)
 # includeTagdir+=(./providers/mlx4)
 # includeTagdir+=(./providers/rxe)
 includeTagdir+=(./ccan)
+
 # excludeTagdir=(./build);
 # excludeTagdir+=(+++ ./someotherdir);
-tagme_base includeTagdir[@] excludeTagdir[@]

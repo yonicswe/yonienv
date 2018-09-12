@@ -1034,12 +1034,44 @@ alias touchmlx5='touchmlx5ib ; touchmlx5core'
 
 alias clipboard='cat ~/share/clipboard.txt'
 
-alias tagmeofakernel='cp ${yonienv}/bin/tagmeofakernel.sh .'
-alias tagmeupstreamkernel='cp ${yonienv}/bin/tagmeupstreamkernel.sh .'
-alias tagmerdmacore='cp ${yonienv}/bin/tagmerdmacore.sh .'
-alias tagmeofedlibs='cp ${yonienv}/bin/tagmeofedlibs.sh .'
+tagmeofakernel ()
+{
+    echo "#!/bin/bash" > tagme.sh;
+    echo 'source ${yonienv}/bashrc_tags.sh' >> tagme.sh;
+    cat ${yonienv}/bin/tagmeofakernel.sh >> tagme.sh
+    cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
+    chmod +x tagme.sh;
+}
+tagmeupstreamkernel ()
+{
+    echo "#!/bin/bash" > tagme.sh;
+    echo 'source ${yonienv}/bashrc_tags.sh' >> tagme.sh;
+    cat ${yonienv}/bin/tagmeupstreamkernel.sh >> tagme.sh
+    cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
+    chmod +x tagme.sh;
+}
+
+tagmerdmacore () 
+{
+    echo "#!/bin/bash" > tagme.sh;
+    echo 'source ${yonienv}/bashrc_tags.sh' >> tagme.sh;
+    cat ${yonienv}/bin/tagmerdmacore.sh >> tagme.sh
+    cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
+    chmod +x tagme.sh;
+}
+
+tagmeofedlibs ()
+{
+    echo "#!/bin/bash" > tagme.sh;
+    echo 'source ${yonienv}/bashrc_tags.sh' >> tagme.sh;
+    cat ${yonienv}/bin/tagmeofedlibs.sh >> tagme.sh
+    cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
+    chmod +x tagme.sh;
+}
+
 md2man ()
 {
+#   convert markdown format to man with pandoc tool
     local mdfile=$1;
     local manpage=$(basename ${mdfile} );
     manpage=$(echo $manpage | sed 's/.md//g');

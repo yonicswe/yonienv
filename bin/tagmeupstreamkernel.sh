@@ -1,6 +1,4 @@
-#!/bin/bash
-yonienv=$(awk 'BEGIN{FS="="}/yonienv=/{  print $2}' ~/.bashrc | sed 's/;//');
-source ${yonienv}/bashrc_tags.sh
+PRJ_NAME="upstream kernel"
 
 includeTagdir=(./include/)
 includeTagdir+=(./drivers/infiniband/)
@@ -15,6 +13,3 @@ includeTagdir+=(./net/ipv4/)
 # excludeTagdir=(./build);
 # excludeTagdir+=(+++ ./buildlib);
 # excludeTagdir+=(+++ ./someotherdir);
-
-
-tagme_base includeTagdir[@] excludeTagdir[@]

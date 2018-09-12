@@ -499,3 +499,6 @@ listerrnovalues ()
 {
     cpp -dM /usr/include/errno.h | grep define\ E | sort -n -k 3 | awk '{print $2 " "$3}' | column -t
 }
+
+alias delete_patches='rm -f *.patch'
+alias delete_tags='rm -f cscope.* tags'

@@ -3,35 +3,43 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.6	//
+!_TAG_PROGRAM_VERSION	5.8	//
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
+_code	docs_complete_dir.sh	/^_code ()$/;"	f
+_docs	docs_complete_dir.sh	/^_docs ()$/;"	f
+_gcdcomplete	cdproject.sh	/^function _gcdcomplete()$/;"	f
+_gcdcomplete	task_complete.sh	/^function _gcdcomplete()$/;"	f
+_gitdiscard	bashrc_git.sh	/^_gitdiscard () $/;"	f
+_ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
+_upstream	upstream_complete_dir.sh	/^_upstream ()$/;"	f
 acs_build_vars	bashrc_nice.sh	/^acs_build_vars () $/;"	f
 acs_sockets	bashrc_nice.sh	/^acs_sockets () $/;"	f
 acs_telnet	bashrc_nice.sh	/^acs_telnet ()$/;"	f
 acs_threads	bashrc_nice.sh	/^acs_threads () $/;"	f
 acx_threads	bashrc_nice.sh	/^acx_threads ()$/;"	f
-applyPatchList	bashrc_git.sh	/^applyPatchList () $/;"	f
 backupgitkernel	bashrc_mlx.sh	/^backupgitkernel ()$/;"	f
 branches	bashrc_svn.sh	/^branches () {$/;"	f
 catgrubsetdefault	bashrc_devel.sh	/^catgrubsetdefault ()$/;"	f
 catgrubvsinstalled	bashrc_devel.sh	/^catgrubvsinstalled ()$/;"	f
 cdbundle	bashrc_nice.sh	/^cdbundle () $/;"	f
-cdcode	bashrc_bookmarks.sh	/^cdcode () { cd ${yonicode}    ; [ -n "$1" ] && cd "$1"; } $/;"	f
-cddevel	bashrc_mlx.sh	/^cddevel () { $/;"	f
-cddocs	bashrc_bookmarks.sh	/^cddocs () { cd ${yonidocs}    ; [ -n "$1" ] && cd $1;  }$/;"	f
-cdofed	bashrc_mlx.sh	/^cdofed  () { $/;"	f
+cdcode	docs_complete_dir.sh	/^cdcode() { cd $code_dir\/$1; }$/;"	f
+cddevel	bashrc_mlx.sh	/^cddevel () {$/;"	f
+cddocs	docs_complete_dir.sh	/^cddocs() { cd $docs_dir\/$1; }$/;"	f
+cdofed	ofed_complete_dir.sh	/^cdofed()$/;"	f
 cdsrc	bashrc_nice.sh	/^cdsrc () $/;"	f
-cdtask	bashrc_bookmarks.sh	/^cdtask () { cd ${yonitasks}    ; [ -n "$1" ] && cd "$1";  }$/;"	f
 cdtask	bashrc_nice.sh	/^cdtask () $/;"	f
-cdupstream	bashrc_mlx.sh	/^cdupstream () { $/;"	f
+cdtasks	task_complete.sh	/^function cdtasks () {$/;"	f
+cdupstream	upstream_complete_dir.sh	/^cdupstream()$/;"	f
 changeState	bashrc_nice.sh	/^changeState () $/;"	f
 changecdlinux	bashrc_mlx.sh	/^changecdlinux () {$/;"	f
-checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel () $/;"	f
-checkpatchuserpace	bashrc_mlx.sh	/^checkpatchuserpace () $/;"	f
-cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration () $/;"	f
-cleanibheaders	bashrc_mlx.sh	/^cleanibheaders () $/;"	f
+checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel ()$/;"	f
+checkpatchuserpace	bashrc_mlx.sh	/^checkpatchuserpace ()$/;"	f
+clean	mkyonienv.sh	/^clean ()$/;"	f
+cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
+cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
 complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f
-csfiles	bashrc_mlx.sh	/^csfiles () $/;"	f
+create_alias_for_host	bashrc_mlx.sh	/^create_alias_for_host ()$/;"	f
+csfiles	bashrc_mlx.sh	/^csfiles ()$/;"	f
 cw	bashrc_fs.sh	/^cw () $/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
@@ -41,6 +49,7 @@ dirgvimdiff	bashrc_fs.sh	/^dirgvimdiff () $/;"	f
 dirvimdiff	bashrc_fs.sh	/^dirvimdiff () $/;"	f
 du1	bashrc_fs.sh	/^du1 ()$/;"	f
 du11	bashrc_fs.sh	/^du11 ()$/;"	f
+duroot	bashrc_fs.sh	/^duroot ()$/;"	f
 editBashrcScript	bashrc_vim.sh	/^editBashrcScript () $/;"	f
 editPythonScript	bashrc_vim.sh	/^editPythonScript () $/;"	f
 editbashrc	bashrc_common.sh	/^editbashrc () $/;"	f
@@ -62,30 +71,37 @@ forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
 ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
 ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f
 g	bashrc_vim.sh	/^g () $/;"	f
+gcd	cdproject.sh	/^function gcd {$/;"	f
 gdbbt	bashrc_devel.sh	/^gdbbt () $/;"	f
 generate_wbe	bashrc_nice.sh	/^generate_wbe () $/;"	f
 get_branches	bashrc_svn.sh	/^get_branches () $/;"	f
 getconfigdir	bashrc_nice.sh	/^getconfigdir () $/;"	f
 getkernelversionfromMakefile	bashrc_devel.sh	/^getkernelversionfromMakefile ()$/;"	f
 getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f
+gitapplyPatchList	bashrc_git.sh	/^gitapplyPatchList () $/;"	f
 gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
+gitcommitmlx	bashrc_git.sh	/^gitcommitmlx ()$/;"	f
+gitcommityoni	bashrc_git.sh	/^gitcommityoni ()$/;"	f
 gitconfig	bashrc_git.sh	/^gitconfig ()$/;"	f
+gitd	bashrc_git.sh	/^gitd ()$/;"	f
+gitdiscardcached	bashrc_git.sh	/^gitdiscardcached () $/;"	f
 gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
-gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete () $/;"	f
+gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
 gn	bashrc_vim.sh	/^gn () $/;"	f
 grepbash	bashrc_common.sh	/^grepbash () $/;"	f
+grub2listentries	bashrc_devel.sh	/^grub2listentries () $/;"	f
 gsess	bashrc_vim.sh	/^gsess () $/;"	f
 gsessls	bashrc_vim.sh	/^gsessls () $/;"	f
 gsources	bashrc_vim.sh	/^function gsources ()$/;"	f
 gw	bashrc_fs.sh	/^gw () $/;"	f
 h	bashrc_fs.sh	/^h () $/;"	f
 howCleanIsMyHome	bashrc_mlx.sh	/^howCleanIsMyHome ()$/;"	f
-ib4start	bashrc_mlx.sh	/^ib4start () $/;"	f
+ib4start	bashrc_mlx.sh	/^ib4start ()$/;"	f
 ib4stop	bashrc_mlx.sh	/^ib4stop ()$/;"	f
-ib5start	bashrc_mlx.sh	/^ib5start () $/;"	f
+ib5start	bashrc_mlx.sh	/^ib5start ()$/;"	f
 ib5stop	bashrc_mlx.sh	/^ib5stop ()$/;"	f
 ibmod	bashrc_mlx.sh	/^ibmod ()$/;"	f
 ibstart	bashrc_mlx.sh	/^ibstart ()$/;"	f
@@ -100,51 +116,62 @@ ips_sockets	bashrc_nice.sh	/^ips_sockets () $/;"	f
 ips_telnet	bashrc_nice.sh	/^ips_telnet () $/;"	f
 ips_threads	bashrc_nice.sh	/^ips_threads () $/;"	f
 iserstart	bashrc_mlx.sh	/^iserstart ()$/;"	f
-ismoduleup	bashrc_mlx.sh	/^ismoduleup () $/;"	f
+ismoduleup	bashrc_mlx.sh	/^ismoduleup ()$/;"	f
 k	bashrc_fs.sh	/^k () {$/;"	f
 la	bashrc_fs.sh	/^la ()$/;"	f
+listerrnovalues	bashrc_devel.sh	/^listerrnovalues ()$/;"	f
 listgitrepos	bashrc_mlx.sh	/^listgitrepos ()$/;"	f
 listinstalledkernels	bashrc_devel.sh	/^listinstalledkernels ()$/;"	f
 lld	bashrc_fs.sh	/^lld ()$/;"	f
-loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded () $/;"	f
+loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
+main	mkyonienv.sh	/^main  ()$/;"	f
+md2man	bashrc_mlx.sh	/^md2man ()$/;"	f
+messages	mkyonienv.sh	/^messages () $/;"	f
+mftcheckstatus	bashrc_mlx.sh	/^mftcheckstatus ()$/;"	f
 mftchoosedev	bashrc_mlx.sh	/^mftchoosedev ()$/;"	f
 mftgetlinktype	bashrc_mlx.sh	/^mftgetlinktype ()$/;"	f
-mftinstall	bashrc_mlx.sh	/^mftinstall () $/;"	f
+mftinstall	bashrc_mlx.sh	/^mftinstall ()$/;"	f
 mftsetlinktypeeth	bashrc_mlx.sh	/^mftsetlinktypeeth ()$/;"	f
 mftsetlinktypeinfiniband	bashrc_mlx.sh	/^mftsetlinktypeinfiniband ()$/;"	f
-mftstatus	bashrc_mlx.sh	/^mftstatus () $/;"	f
-mkinfinibandmlx4	bashrc_mlx.sh	/^mkinfinibandmlx4 () $/;"	f
+mftstart	bashrc_mlx.sh	/^mftstart ()$/;"	f
+mftstatus	bashrc_mlx.sh	/^mftstatus ()$/;"	f
+mkcoverletterkernel	bashrc_mlx.sh	/^mkcoverletterkernel ()$/;"	f
+mkcoverletterrdmacore	bashrc_mlx.sh	/^mkcoverletterrdmacore ()$/;"	f
+mkcoverletterusage	bashrc_mlx.sh	/^mkcoverletterusage ()$/;"	f
+mkinfinibandmlx4	bashrc_mlx.sh	/^mkinfinibandmlx4 ()$/;"	f
 mkinfinibandmlx5	bashrc_mlx.sh	/^mkinfinibandmlx5 ()$/;"	f
 mkkernelbuild	bashrc_devel.sh	/^mkkernelbuild ()$/;"	f
 mkkernelbuildall	bashrc_devel.sh	/^mkkernelbuildall ()$/;"	f
+mkkernelbuildinfiniband	bashrc_mlx.sh	/^mkkernelbuildinfiniband ()$/;"	f
 mkkernelbuildinstallall	bashrc_devel.sh	/^mkkernelbuildinstallall ()$/;"	f
 mkkernelbuildinstallmodules	bashrc_devel.sh	/^mkkernelbuildinstallmodules ()$/;"	f
 mkkernelbuildmlx5core	bashrc_mlx.sh	/^mkkernelbuildmlx5core ()$/;"	f
-mkkernelbuildmlx5ib	bashrc_mlx.sh	/^mkkernelbuildmlx5ib () $/;"	f
+mkkernelbuildmlx5ib	bashrc_mlx.sh	/^mkkernelbuildmlx5ib ()$/;"	f
 mkkernelbuildmodules	bashrc_devel.sh	/^mkkernelbuildmodules () $/;"	f
 mkkernelinstall	bashrc_devel.sh	/^mkkernelinstall ()$/;"	f
 mkkernelinstallall	bashrc_devel.sh	/^mkkernelinstallall () $/;"	f
 mkkernelinstallmodules	bashrc_devel.sh	/^mkkernelinstallmodules ()$/;"	f
 mkrdmacoreApps	bashrc_mlx.sh	/^mkrdmacoreApps ()$/;"	f
-mkrxelib	bashrc_mlx.sh	/^mkrxelib () $/;"	f
+mkrxelib	bashrc_mlx.sh	/^mkrxelib ()$/;"	f
 mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f
-mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime () $/;"	f
-mkvmhelp	bashrc_mlx.sh	/^mkvmhelp() $/;"	f
-mountkernelsources	bashrc_mlx.sh	/^mountkernelsources () {  $/;"	f
+mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime ()$/;"	f
+mkvmhelp	bashrc_mlx.sh	/^mkvmhelp()$/;"	f
+mountkernelsources	bashrc_mlx.sh	/^mountkernelsources () {$/;"	f
 mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
-ofedbuildversion	bashrc_mlx.sh	/^ofedbuildversion () $/;"	f
-ofeddeletebackport	bashrc_mlx.sh	/^ofeddeletebackport () $/;"	f
-ofedfindindexforpackage	bashrc_mlx.sh	/^ofedfindindexforpackage () $/;"	f
-ofedinstallupstreamlib	bashrc_mlx.sh	/^ofedinstallupstreamlib () $/;"	f
-ofedinstallversion	bashrc_mlx.sh	/^ofedinstallversion () $/;"	f
-ofedlistversions	bashrc_mlx.sh	/^ofedlistversions () $/;"	f
-ofedmkbackport	bashrc_mlx.sh	/^ofedmkbackport () $/;"	f
-ofedmklinks	bashrc_mlx.sh	/^ofedmklinks () $/;"	f
-ofedorigindir	bashrc_mlx.sh	/^ofedorigindir () $/;"	f
+ofedbuildversion	bashrc_mlx.sh	/^ofedbuildversion ()$/;"	f
+ofedconfigureforkernel	bashrc_mlx.sh	/^ofedconfigureforkernel ()$/;"	f
+ofeddeletebackport	bashrc_mlx.sh	/^ofeddeletebackport ()$/;"	f
+ofedfindindexforpackage	bashrc_mlx.sh	/^ofedfindindexforpackage ()$/;"	f
+ofedinstallupstreamlib	bashrc_mlx.sh	/^ofedinstallupstreamlib ()$/;"	f
+ofedinstallversion	bashrc_mlx.sh	/^ofedinstallversion ()$/;"	f
+ofedlistversions	bashrc_mlx.sh	/^ofedlistversions ()$/;"	f
+ofedmkbackport	bashrc_mlx.sh	/^ofedmkbackport ()$/;"	f
+ofedmklinks	bashrc_mlx.sh	/^ofedmklinks ()$/;"	f
+ofedorigindir	bashrc_mlx.sh	/^ofedorigindir ()$/;"	f
 parse_git_branch	bashrc_fs.sh	/^parse_git_branch() {$/;"	f
 parse_svn_branch	bashrc_fs.sh	/^parse_svn_branch() {$/;"	f
 parse_svn_repository_root	bashrc_fs.sh	/^parse_svn_repository_root() {$/;"	f
@@ -171,26 +198,32 @@ rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f
 reboot	bashrc_fs.sh	/^reboot ()$/;"	f
 redpill	bashrc_fs.sh	/^redpill () $/;"	f
 refresh_ssh	bashrc_fs.sh	/^refresh_ssh ()$/;"	f
-removemoduleifloaded	bashrc_mlx.sh	/^removemoduleifloaded () $/;"	f
+removemoduleifloaded	bashrc_mlx.sh	/^removemoduleifloaded ()$/;"	f
 restartDhcp	bashrc_nice.sh	/^restartDhcp () $/;"	f
 rpmsearch	bashrc_fs.sh	/^rpmsearch () $/;"	f
 rw	bashrc_fs.sh	/^rw () $/;"	f
-rxe	bashrc_mlx.sh	/^rxe ()        { sudo rxe_cfg ;      } $/;"	f
+rxe	bashrc_mlx.sh	/^rxe ()        { sudo rxe_cfg ;      }$/;"	f
 rxecounters	bashrc_mlx.sh	/^rxecounters ()$/;"	f
 rxerestart	bashrc_mlx.sh	/^rxerestart ()$/;"	f
 rxestart	bashrc_mlx.sh	/^rxestart ()$/;"	f
-rxestop	bashrc_mlx.sh	/^rxestop () $/;"	f
+rxestop	bashrc_mlx.sh	/^rxestop ()$/;"	f
 sbuild_vars	bashrc_nice.sh	/^sbuild_vars () $/;"	f
 setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f
+setup_bash_profile	mkyonienv.sh	/^setup_bash_profile ()$/;"	f
+setup_bashrc	mkyonienv.sh	/^setup_bashrc () $/;"	f
+setup_cgdb_env	mkyonienv.sh	/^setup_cgdb_env () $/;"	f
 setup_gdbinit	bashrc_devel.sh	/^setup_gdbinit () $/;"	f
 setup_gdbinit_dir_search_path	bashrc_devel.sh	/^setup_gdbinit_dir_search_path () $/;"	f
+setup_git_env	mkyonienv.sh	/^setup_git_env () $/;"	f
 setup_icm_gdbinit	bashrc_nice.sh	/^setup_icm_gdbinit () $/;"	f
 setup_ips_gdbinit	bashrc_nice.sh	/^setup_ips_gdbinit () $/;"	f
+setup_misc	mkyonienv.sh	/^setup_misc ()$/;"	f
+setup_vim_env	mkyonienv.sh	/^setup_vim_env () $/;"	f
 showState	bashrc_nice.sh	/^showState()$/;"	f
 showosrelease	bashrc_fs.sh	/^showosrelease ()$/;"	f
 shutdown	bashrc_fs.sh	/^shutdown () $/;"	f
 sl	bashrc_screen.sh	/^sl () $/;"	f
-sm	bashrc_mlx.sh	/^sm () $/;"	f
+sm	bashrc_mlx.sh	/^sm ()$/;"	f
 space_2_underscore	bashrc_fs.sh	/^space_2_underscore ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
@@ -221,8 +254,14 @@ tagcscope	bashrc_tags.sh	/^tagcscope () $/;"	f
 tagcscopeinfiniband	bashrc_tags.sh	/^tagcscopeinfiniband () $/;"	f
 tagcscopekernel	bashrc_tags.sh	/^tagcscopekernel () $/;"	f
 tagcscopemlx5	bashrc_tags.sh	/^tagcscopemlx5 () $/;"	f
+tagme_base	bashrc_tags.sh	/^tagme_base ()$/;"	f
+tagmeofakernel	bashrc_mlx.sh	/^tagmeofakernel ()$/;"	f
+tagmeofedlibs	bashrc_mlx.sh	/^tagmeofedlibs ()$/;"	f
+tagmerdmacore	bashrc_mlx.sh	/^tagmerdmacore () $/;"	f
+tagmeupstreamkernel	bashrc_mlx.sh	/^tagmeupstreamkernel ()$/;"	f
 tailstatistics	bashrc_nice.sh	/^tailstatistics () $/;"	f
 task_list	bashrc_nice.sh	/^task_list () $/;"	f
+usage	mkyonienv.sh	/^usage () $/;"	f
 v	bashrc_vim.sh	/^v ()$/;"	f
 validateState	bashrc_nice.sh	/^validateState ()$/;"	f
 vconsole	bashrc_fs.sh	/^vconsole ()$/;"	f

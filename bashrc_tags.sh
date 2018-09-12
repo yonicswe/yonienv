@@ -11,7 +11,6 @@ tagcompleteme ()
     fi
 }
 
-alias tagme='cp ${yonienv}/bin/tagme.sh .'
 alias cpptags='ctags -R --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")' 
 
 tagcscope () 
@@ -53,7 +52,7 @@ tagme_base ()
 #     echo  excludeTagdir: ${excludeTagdir[@]}
 
     if [ -e cscope.files ] ; then 
-        cscope -vkqb;
+        cscope -vkqb 2>/dev/null;
         echo "Building ctags file...";
         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files)
         exit
@@ -62,17 +61,19 @@ tagme_base ()
     printf "tag     : %s\n" ${includeTagdir[@]}
     if [ ${#excludeTagdir[@]} -eq  0 ] ; then
         source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h"))
+        echo "Building ctags file...";
         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
         echo > cscope.files
         for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
-        cscope -vkqb
+        cscope -vkqb 2>/dev/null
     else 
-        printf "exclude : %s\n" ${excludeTagdir[@]/and/}
+        printf "exclude : %s\n" ${excludeTagdir[@]/+++/}
         prune="-path ${excludeTagdir[@]/+++/-o -path}";
         source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
+        echo "Building ctags file...";
         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
         echo > cscope.files
         for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
-        cscope -vkqb
+        cscope -vkqb 2>/dev/null
     fi    
 }
