@@ -34,6 +34,7 @@ create_alias_for_host 1465 dev-l-vrt-146-005
 create_alias_for_host 1466 dev-l-vrt-146-006
 create_alias_for_host 1467 dev-l-vrt-146-007
 create_alias_for_host 1468 dev-l-vrt-146-008
+create_alias_for_host 191 dev-r-vrt-191
 
 # stm server to run regression
 create_alias_for_host stm88 mtl-stm-88
@@ -144,7 +145,7 @@ gitpushtogerrit ()
     fi
 
     echo "git push ${remote} ${head}:refs/for/${branch}/${topic}"
-    read -p "are you sure ? [y/N] : " answer;
+    read -p "are you sure (checkpatch ok ?) ? [y/N] : " answer;
     if [ "$answer" != "y" ] ; then
        return;
     fi
@@ -531,8 +532,23 @@ checkpatchkernel ()
 
 checkpatchuserpace ()
 {
+    local patch_file=$(readlink -f $@);
+    local gerrit_ignore="CONST_STRUCT";
+    gerrit_ignore+=",EXECUTE_PERMISSIONS";
+    gerrit_ignore+=",FILE_PATH_CHANGES";
+    gerrit_ignore+=",GERRIT_CHANGE_ID";
+    gerrit_ignore+=",PREFER_KERNEL_TYPES";
+    gerrit_ignore+=",USE_NEGATIVE_ERRNO";
+
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
-    ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID,PREFER_KERNEL_TYPES $@
+    if ! [ -e ./scripts/checkpatch.pl ]  ; then 
+        cdlinux;
+        ./scripts/checkpatch.pl --strict --ignore=${gerrit_ignore} ${patch_file};
+        cd -;
+    else
+        ./scripts/checkpatch.pl --strict --ignore=${gerrit_ignore} ${patch_file};
+    fi
+
 }
 
 alias mkvmredhat74='/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l RH_7.4_x86_64_virt_guest -c 16 -r 8192 -d 35'

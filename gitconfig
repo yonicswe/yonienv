@@ -72,7 +72,8 @@
 # listtrackedfiles = ls-tree --name-only -r 
     listtrackedfiles = "!git ls-files"
 
-    ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate 
+#   ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate 
+    ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 
     amend = commit --amend --no-edit
     unstage = reset HEAD
@@ -90,7 +91,7 @@
     head = log -n1 --pretty=oneline
     untrackfile = rm --cached 
 #                                 SHA          date     name             msg
-# l =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+    ll =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 
     l =  "!f() {                             \
       if [ -z $1 ] ; then                             \
@@ -109,8 +110,8 @@
     #   l = log --pretty=format oneline
     #   l10 = log --pretty=oneline -n10
     #   l30 = log --pretty=oneline -n30
-    ll = log --pretty=oneline --graph --decorate --abbrev-commit
-    #ll= log --graph --decorate --pretty=format:"%h %an, %ar - %s"
+    # ll = log --pretty=oneline --graph --decorate --abbrev-commit
+    # ll = log --graph --decorate --pretty=format:"%h %an, %ar - %s"
     gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
     gls = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s --simplify-by-decoration
 

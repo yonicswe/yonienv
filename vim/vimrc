@@ -50,28 +50,28 @@ else
     set ttymouse=xterm2
 end
 
-"              _    _                     _           __   __ 
+"              _    _                     _           __   __
 "  _ __  _  _ | |_ | |_   ___  _ _    ___| |_  _  _  / _| / _|
 " | '_ \| || ||  _|| ' \ / _ \| ' \  (_-<|  _|| || ||  _||  _|
-" | .__/ \_, | \__||_||_|\___/|_||_| /__/ \__| \_,_||_|  |_|  
-" |_|    |__/                                                 
-" 
+" | .__/ \_, | \__||_||_|\___/|_||_| /__/ \__| \_,_||_|  |_|
+" |_|    |__/
+"
 au FileType python set makeprg=python\ %
 au FileType sh set makeprg=./%
 au FileType python command! R let f=expand("%")|vnew|execute '.!python "' . f . '"'
 au FileType sh     command! R let f=expand("%")|vnew|execute '.! /bin/bash "' . f . '"'
 " au FileType cpp    command! R make %
-" au FileType cpp command! -nargs=1 R | vnew | execute ".! ./<f-args>" 
+" au FileType cpp command! -nargs=1 R | vnew | execute ".! ./<f-args>"
 command! RR :bd!
 
 set encoding=utf-8
 
 
-"           _               
+"           _
 "  __  ___ | | ___  _ _  ___
 " / _|/ _ \| |/ _ \| '_|(_-<
 " \__|\___/|_|\___/|_|  /__/
-                          
+
 "
 " colorscheme yonic_2
 " colorscheme desert
@@ -116,11 +116,11 @@ endif
 
 
 "
-"                 _  _  _             
-"  ___ _ __  ___ | || |(_) _ _   __ _ 
+"                 _  _  _
+"  ___ _ __  ___ | || |(_) _ _   __ _
 " (_-<| '_ \/ -_)| || || || ' \ / _` |
 " /__/| .__/\___||_||_||_||_||_|\__, |
-"     |_|                       |___/ 
+"     |_|                       |___/
 "
 " CTRL-X s -  to find suggestions
 " to turn off :set nospell
@@ -133,7 +133,7 @@ set nospell
 map <F3> :set spell!<cr>
 
 " auto complete words using the files set in dictionary
-" with the CTRL-X,CTRL-K 
+" with the CTRL-X,CTRL-K
 " (not be confused with CTRL-p completes words from open buffers )
 " map <C-F6> :call Update_dict()<cr>
 function! Update_dict ()
@@ -157,7 +157,7 @@ set nolist
 
 set completeopt=menuone,menu,longest,preview
 
-" default for complete is to search the /usr/include path 
+" default for complete is to search the /usr/include path
 " when you click ctrl-p. remove it here to speed up search
 set complete-=i
 "   ___  ___  ___  ___
@@ -171,7 +171,7 @@ set complete-=i
 " au FileType c   set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
 " au FileType cpp set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
 " au FileType c,cpp   set grepprg=grep\ -nHr\ --include=*.cpp\ --include=*\.\[c,h\]\
-au FileType c,cpp   set grepprg=ag\ --cc\ 
+au FileType c,cpp   set grepprg=ag\ --cc\
 
 
 
@@ -182,8 +182,8 @@ map <S-F9> :colder<cr>
 map <S-F10> :cnewer<cr>
 
 map <S-s> :w<CR>
-noremap <S-l> :set nohlsearch!<CR> 
-" map <S-h> :/ababababababababab<CR> 
+noremap <S-l> :set nohlsearch!<CR>
+" map <S-h> :/ababababababababab<CR>
 map <C-n> :set nu!<CR>
 
 
@@ -208,7 +208,7 @@ map <C-y> kzz
 map <C-e> jzz
 vmap <f12> :s/\s\+$//<CR>
 
-" CTRL-i will go into insert mode and press ENTER 
+" CTRL-i will go into insert mode and press ENTER
 " same as 'o' but takes the rest of the line with it
 " map <C-i> i<cr>
 
@@ -218,8 +218,8 @@ vmap <f12> :s/\s\+$//<CR>
 map <S-y> yiw
 
 
-" all files should have this tab setting 
-" except text files 
+" all files should have this tab setting
+" except text files
 au FileType c     set tabstop=8
 au FileType c     set shiftwidth=8
 au FileType cpp   set tabstop=8
@@ -242,19 +242,19 @@ au FileType gdb set shiftwidth=4
 
 
 
-"   ___                               _       
+"   ___                               _
 "  / __| ___  _ __   _ __   ___  _ _ | |_  ___
 " | (__ / _ \| '  \ | '  \ / -_)| ' \|  _|(_-<
 "  \___|\___/|_|_|_||_|_|_|\___||_||_|\__|/__/
-"                                             
+"
 
 " comment shortcut for different file types.
-" add unrecognized file types definitions in 
+" add unrecognized file types definitions in
 " .vim/ftdetect/mine.vim
-" 
+"
 " filetype plugin on
-" au FileType cpp vmap <S-c> :s/^/\/\/\ /g<CR>:nohl<CR> 
-" au FileType c vmap <S-c> :s/^/\/\/\ /g<CR>:nohl<CR> 
+" au FileType cpp vmap <S-c> :s/^/\/\/\ /g<CR>:nohl<CR>
+" au FileType c vmap <S-c> :s/^/\/\/\ /g<CR>:nohl<CR>
 " au FileType sh vmap <S-c> :s/^/#\ /g<CR>:nohl<CR>
 " au FileType conf vmap <S-c> :s/^/#\ /g<CR>:nohl<CR>
 " au FileType python vmap <S-c> :s/^/#\ /g<CR>:nohl<CR>
@@ -294,7 +294,7 @@ map <C-j> :set list!<CR>
 " function! ShowTrailingWhiteSpace ()
 "         :highlight ExtraWhitespace ctermbg=red guibg=red
 "         :match ExtraWhitespace /\s\+$/<cr>
-" endfunc        
+" endfunc
 " to switch off do :match<cr>
 " map <leader>j :call ShowTrailingWhiteSpace()<cr>
 "
@@ -320,7 +320,7 @@ map <leader>gf :e <cfile><cr>
 
 autocmd FileType xml vmap <leader>a s/<\(.*\)>$/<!--\1-->/
 
-" search for code references 
+" search for code references
 map <leader>g  yiw:grep <C-R>" .<cr>
 map <leader>r  yiw:grep -w <C-R>" drivers/infiniband/sw/rxe/<cr>
 map <leader>rr  yiw:grep -w <C-R>" include drivers/infiniband/ drivers/net/ethernet/mellanox<cr>
@@ -336,20 +336,20 @@ map <leader>rr  yiw:grep -w <C-R>" include drivers/infiniband/ drivers/net/ether
 map <leader>m :source ~/.vimrc<CR>
 map <leader>e :tabedit ~/.vim/vimrc<CR>
 map <leader>s :tabedit ~/.vim/vim_symbols.txt<CR>
-" map <leader>f :!figlet -m0 -f small 
+" map <leader>f :!figlet -m0 -f small
 " vmap <leader>f y:!figlet -m0 -f small <C-R>"  > x <CR> :r x<CR> :!rm -f x<cr><cr>
 vmap <F1> y:!figlet -m0 -f small <C-R>"  > x <CR> :r x<CR> :!rm -f x<cr><cr>
 vmap <F1><F1> y:!figlet -m0 <C-R>"  > x <CR> :r x<CR> :!rm -f x<cr><cr>
 
 function! Insert_indent_symbol (number)
-   let v=a:number 
+   let v=a:number
    let s='r! sed -n '.v.'p ~/.vim/vim_indent_symbols.txt'
 "    echom s
    exec s
 endfunc
 
 function! Insert_vim_symbol (number)
-   let v=a:number 
+   let v=a:number
    let s='r! sed -n '.v.'p ~/.vim/vim_symbols.txt'
 "    echom s
    exec s
@@ -370,25 +370,25 @@ set cindent
 
 set ic
 
-"   __       _     _  _             
-"  / _| ___ | | __| |(_) _ _   __ _ 
+"   __       _     _  _
+"  / _| ___ | | __| |(_) _ _   __ _
 " |  _|/ _ \| |/ _` || || ' \ / _` |
 " |_|  \___/|_|\__,_||_||_||_|\__, |
-"                             |___/ 
+"                             |___/
 function! FoldAllFunctions ()
     :set foldmethod=syntax
     :set foldnestmax=1
-endfunc    
+endfunc
 
 function! UnFoldAllFunctions ()
     :set foldmethod=manual
     :normal zE
-endfunc    
+endfunc
 
 map <F4> : call FoldAllFunctions ()<cr>
 map <S-F4> : call UnFoldAllFunctions ()<cr>
 
-function! SelectCodeBlock () 
+function! SelectCodeBlock ()
     :normal va{=``
 endfunc
 nnoremap <F7> : call SelectCodeBlock ()<cr>
@@ -396,15 +396,15 @@ set foldcolumn=1
 
 "
 "  vimdiff
-"       _            _  _   __   __ 
+"       _            _  _   __   __
 " __ __(_) _ __   __| |(_) / _| / _|
 " \ V /| || '  \ / _` || ||  _||  _|
-"  \_/ |_||_|_|_|\__,_||_||_|  |_|  
-"                                   
+"  \_/ |_||_|_|_|\__,_||_||_|  |_|
+"
 "
 " to ignore white space :set diffopt+=iwhite
 " :diffupdate to rescan diffs
-if &diff 
+if &diff
     colorscheme molokai
 "     colorscheme candycode
     map [p ]c
@@ -430,18 +430,20 @@ if &diff
         set diffopt+=iwhite
       endif
     endfunction
+
+    set nu
 else
     map <C-Down>   ]]zz
     map <C-Up>     [[zz
     "     map <C-S-Down> ]}
     "     map <C-S-Up>   [{
-    map [C :tabnext<CR> 
-    map [D :tabprevious<CR> 
-    map <C-Right> :tabnext<CR> 
-    map <C-Left>  :tabprevious<CR> 
+    map [C :tabnext<CR>
+    map [D :tabprevious<CR>
+    map <C-Right> :tabnext<CR>
+    map <C-Left>  :tabprevious<CR>
 endif
 
-" prevent readonly mode. preffered when using git vimdiff 
+" prevent readonly mode. preffered when using git vimdiff
 set noro
 
 " set diffopt
@@ -486,7 +488,7 @@ function! Auto_comp_paren ()
    inoremap [ []<esc>i
    inoremap " ""<esc>i
    inoremap ' ''<esc>i
-   inoremap { {<CR>}<esc><up>o 
+   inoremap { {<CR>}<esc><up>o
 endfunc
 
 
@@ -499,8 +501,8 @@ function! Auto_comp_paren_disable ()
    inoremap { {
 endfunc
 
-function! SetIndent (indent) 
-   let v=a:indent 
+function! SetIndent (indent)
+   let v=a:indent
    execute 'set tabstop='.v
    execute 'set shiftwidth='.v
 endfunc
@@ -770,8 +772,8 @@ source ~/.vim/cscope.vim
 let @p = 'printk("--->%s()%d:\n", __func__, __LINE__);' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
 let @l =  "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n"
-let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n" 
-let @h = "◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌" 
+let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n"
+let @h = "◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌"
 let @b = "┌⎯⎯⎯⎯⎯┐\n│     │\n│     │\n│     │\n└⎯⎯⎯⎯⎯┘"
 let @s = "<<<<<"
 
@@ -810,7 +812,7 @@ let g:ctrlp_by_filename = 1
 let g:ctrlp_max_files=0
 let g:ctrlp_max_depth=40
 " -----------------------------------
-" f8 addOn 
+" f8 addOn
 " -----------------------------------
 " opens a left pane (window) to help navigate function,classes in current
 " file.

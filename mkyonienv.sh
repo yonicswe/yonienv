@@ -102,7 +102,7 @@ messages ()
 
 main  ()
 {
-    local yonienv=;
+    local yonienv=$(readlink -f $PWD);
     local setup_vim=0;
     local setup_git=0;
 
