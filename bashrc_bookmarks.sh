@@ -264,6 +264,11 @@ complete -d cd c;
 
 alias gdocs="cddocs ; g +e."
 alias gtasks="cdtasks ; g +e."
+greptasks ()
+{
+    local search_str=${1};
+    greptxt ${search_str} ${yonitasks}
+}
 alias gcode="cdcode ; g +e."
 
 source ${yonienv}/docs_complete_dir.sh

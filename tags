@@ -35,6 +35,7 @@ changecdlinux	bashrc_mlx.sh	/^changecdlinux () {$/;"	f
 checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel ()$/;"	f
 checkpatchuserpace	bashrc_mlx.sh	/^checkpatchuserpace ()$/;"	f
 clean	mkyonienv.sh	/^clean ()$/;"	f
+clean_vim_env	mkyonienv.sh	/^clean_vim_env ()$/;"	f
 cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
 cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
 complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f
@@ -92,6 +93,7 @@ gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
 gn	bashrc_vim.sh	/^gn () $/;"	f
 grepbash	bashrc_common.sh	/^grepbash () $/;"	f
+greptasks	bashrc_bookmarks.sh	/^greptasks ()$/;"	f
 grub2listentries	bashrc_devel.sh	/^grub2listentries () $/;"	f
 gsess	bashrc_vim.sh	/^gsess () $/;"	f
 gsessls	bashrc_vim.sh	/^gsessls () $/;"	f

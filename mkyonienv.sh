@@ -25,15 +25,25 @@ setup_vim_env ()
     echo $FUNCNAME;
 
     if [ -e ~/.vim ] ; then 
-        echo "found existing .vim bailing out.."
-        exit;
+        echo "found existing .vim directory : bail out or backup and continue ?"
+        read -p "backup and continue ? [y/N]" ans;
+        if [ "$ans" == "y" ] ; then 
+            set -x ; mv ~/.vim ~/.vim.yonienv; set +x
+        else
+            exit;
+        fi
     fi
 
     ln -snf ${yonienv}/vim ~/.vim;
 
     if [ -e ~/.vimrc ] ; then 
-        echo "found existing .vimrc. bailing out.."
-        exit;
+        echo "found existing .vimrc : bail out or backup and continue ?"
+        read -p "backup and continue ? [y/N]" ans;
+        if [ "$ans" == "y" ] ; then 
+            set -x ; mv ~/.vimrc ~/.vimrc.yonienv; set +x
+        else
+            exit;
+        fi
     fi
     echo "source ~/.vim/vimrc" >> ~/.vimrc;
 }
@@ -67,8 +77,38 @@ usage ()
     echo "-g - create only git conf"         
     echo "-v - create only vim conf"         
     echo "-m - create only misc conf"         
+    echo "-e - invoke mkyonienv.sh while yonienv is not in current directory"         
     echo "-h - help"         
     exit;
+}
+
+clean_vim_env ()
+{
+    read -p "clear vimrc ? [y/N]" ans;
+    if [ "$ans" == "y" ] ; then 
+        if [ -e ~/.vimrc.yonienv ] ; then
+            echo "Found yonienv backup for .vimrc, restoring..."
+            mv ~/.vimrc.yonienv ~/.vimrc
+        else
+            read -p "Are you sure about deleting .vimrc ? [y/N]" ans;
+            if [ "$ans" == "y" ] ; then 
+                rm -f ~/.vimrc;
+                echo "Deleted .vimrc file !!!"
+            fi
+        fi
+
+        if [ -e ~/.vim.yonienv ] ;then 
+            echo "Found yonienv backup for .vim link/directory, restoring..."
+            rm -f ~/.vim;
+            mv ~/.vim.yonienv ~/.vim
+        else
+            read -p "Are you sure about deleting .vim ? [y/N]" ans;
+            if [ "$ans" == "y" ] ; then 
+                rm -f ~/.vim;
+                echo "Deleted .vim link/directory !!!"
+            fi
+        fi
+    fi
 }
 
 clean ()
@@ -79,13 +119,10 @@ clean ()
     if [ "$ans" == "y" ] ; then 
         sed  -i '/\#startyonienv/,/\#endyonienv/d' ~/.bashrc;
         sed  -i '/\#startyonienv/,/\#endyonienv/d' ~/.bash_profile;
+        echo "removed yonienv from .bashrc"
     fi 
 
-    read -p "clear vimrc ? [y/N]" ans;
-    if [ "$ans" == "y" ] ; then 
-        rm -f ~/.vim;
-        rm -f ~/.vimrc;
-    fi 
+    clean_vim_env;
 }
 
 messages () 
@@ -102,9 +139,10 @@ messages ()
 
 main  ()
 {
-    local yonienv=$(readlink -f $PWD);
+    local yonienv=;
     local setup_vim=0;
     local setup_git=0;
+    local setup_misc=0;
 
     OPTIND=0;
     while getopts "e:vgmhc" opt; do
