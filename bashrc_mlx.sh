@@ -987,11 +987,11 @@ ofedmkbackport ()
     ./configure -j ${ncoresformake} ${configure_options}
 }
 
-if [ -d ~yonatanc/devel ] ; then
-cddevel () {
-    cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;
-}
-complete -W "$(find ~yonatanc/devel/ -maxdepth 1 -type d  -exec basename {} \;     )" cddevel
+# if [ -d ~yonatanc/devel ] ; then
+# cddevel () {
+#     cd ~yonatanc/devel/         ; [ -n "$1" ] && cd $1;
+# }
+# complete -W "$(find ~yonatanc/devel/ -maxdepth 1 -type d  -exec basename {} \;     )" cddevel
 
 # cdupstream () {
 #     cd ~yonatanc/devel/upstream ; [ -n "$1" ] && cd $1;
@@ -1004,7 +1004,7 @@ source ${yonienv}/ofed_complete_dir.sh
 #     cd ~yonatanc/devel/ofed     ; [ -n "$1" ] && cd $1;
 # }
 # complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
-fi
+# fi
 
 mkcoverletterusage ()
 {
