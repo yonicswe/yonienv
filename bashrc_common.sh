@@ -8,7 +8,7 @@ grepbash ()
     local grepme=${1};
     [ -z "${grepme}" ] && return -1;
 
-    grep -nHT --color ${grepme} ${yonienv}/bash*;
+    grep -nHT --color ${grepme} ${yonienv}/*.sh;
 }
 
 export LANG=en_US.UTF-8
@@ -16,11 +16,8 @@ export LC_ALL=C
 
 alias cdyonienv='cd ${yonienv}'
 
-export yonidocs=~yonatanc/share/docs
-export yonicode=~yonatanc/share/code
-export yonitasks=~yonatanc/share/tasks
+source ${yonienv}/env_common_args.sh
 
-# 
 # e.g print_underline "yoni cohen" =
 #  prints a line from "=" in the length 
 #  of the string "yoni cohen"

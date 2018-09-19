@@ -13,7 +13,8 @@ _docs ()
     fi
 }
 
-docs_dir=${HOME}/share/docs
+# docs_dir=${HOME}/share/docs
+docs_dir=${yonidocs};
 cddocs() { cd $docs_dir/$1; }
 complete -F _docs -o nospace cddocs
 
@@ -32,7 +33,8 @@ _code ()
 }
 
 
-code_dir=${HOME}/share/code
+# code_dir=${HOME}/share/code
+code_dir=${yonicode};
 cdcode() { cd $code_dir/$1; }
 complete -F _code -o nospace cdcode
 
