@@ -111,6 +111,18 @@ clean_vim_env ()
     fi
 }
 
+source bash_common_args.sh
+
+setup_directories ()
+{
+    local yonienv=${1};
+    echo $FUNCNAME;
+
+    mkdir -p ${yonienv}/$yonidocs;
+    mkdir -p ${yonienv}/$yonicode;
+    mkdir -p ${yonienv}/$yonitasks;
+}
+
 clean ()
 {
     local ans=;
@@ -200,6 +212,7 @@ main  ()
     setup_git_env ${yonienv};
     setup_cgdb_env ${yonienv};
 #   setup_misc ${yonienv}
+    setup_directories ${yonienv};
     messages
 }
 
