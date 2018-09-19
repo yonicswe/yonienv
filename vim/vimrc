@@ -66,6 +66,14 @@ command! RR :bd!
 
 set encoding=utf-8
 
+set makeprg=gcc\ -O0\ -g\ -o\ %<\ %
+
+
+let g:ConqueTerm_StartMessages = 0
+let g:ConqueTerm_CloseOnEnd = 1
+let g:ConqueTerm_Color = 2
+let g:ConqueTerm_Interrupt = '<C-g><C-c>'
+let g:ConqueTerm_ReadUnfocused = 1
 
 "           _
 "  __  ___ | | ___  _ _  ___
@@ -308,7 +316,7 @@ function! HighlightTrails()
     autocmd BufWinLeave * call clearmatches()
 endfunction
 " autocmd FileType gitcommit call HighlightTrails()
-autocmd FileType c,cpp call HighlightTrails()
+" autocmd FileType c,cpp call HighlightTrails()
 
 
 " With a map leader it's possible to do extra key combinations
