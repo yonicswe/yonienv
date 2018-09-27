@@ -344,7 +344,7 @@ map <leader>rr  yiw:grep -w <C-R>" include drivers/infiniband/ drivers/net/ether
 " Fast editing of the .vimrc
 map <leader>m :source ~/.vimrc<CR>
 map <leader>e :tabedit ~/.vim/vimrc<CR>
-map <leader>s :tabedit ~/.vim/vim_symbols.txt<CR>
+map <leader>ss :tabedit ~/.vim/vim_symbols.txt<CR>
 " map <leader>f :!figlet -m0 -f small
 " vmap <leader>f y:!figlet -m0 -f small <C-R>"  > x <CR> :r x<CR> :!rm -f x<cr><cr>
 vmap <F1> y:!figlet -m0 -f small <C-R>"  > x <CR> :r x<CR> :!rm -f x<cr><cr>

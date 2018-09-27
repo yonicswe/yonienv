@@ -831,6 +831,8 @@ ibstart ()
 
 ibstop ()
 {
+    removemoduleifloaded mlx5_fpga_tools
+
     ib4stop
     ib5stop
 
