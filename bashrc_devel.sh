@@ -502,3 +502,8 @@ listerrnovalues ()
 
 alias delete_patches='rm -f *.patch'
 alias delete_tags='rm -f cscope.* tags'
+
+killzombies ()
+{
+    kill $(ps -A -ostat,ppid | awk '/[zZ]/ && !a[$2]++ {print $2}')
+}
