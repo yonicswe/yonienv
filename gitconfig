@@ -69,6 +69,14 @@
            fi;                 \
 	   }; f"	   
 
+    push-commit = "!f() {                 \
+ 	   if [ -z $1 ] ; then            \
+	      git push origin HEAD:master;\
+           else                           \
+	      git push orign $1:master;   \
+           fi;                            \
+	   }; f"	   
+
 # listtrackedfiles = ls-tree --name-only -r 
     listtrackedfiles = "!git ls-files"
 
