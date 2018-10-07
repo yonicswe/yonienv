@@ -113,14 +113,32 @@ clean_vim_env ()
 
 source bash_common_args.sh
 
+source env_common_args.sh
+
 setup_directories ()
 {
     local yonienv=${1};
-    echo $FUNCNAME;
 
-    mkdir -p ${yonienv}/$yonidocs;
-    mkdir -p ${yonienv}/$yonicode;
-    mkdir -p ${yonienv}/$yonitasks;
+    echo "$FUNCNAME will create";
+    echo "$yonidocs";
+    echo "$yonicode";
+    echo "$yonitasks";
+
+    if [ -d $yonidocs ]  ; then 
+        echo -e "$FUNCNAME(): \"$yonidocs\" already exists";
+    else
+        mkdir -p $yonidocs;
+    fi
+    if [ -d $yonicode ]  ; then 
+        echo -e "$FUNCNAME(): \"$yonicode\" already exists";
+    else
+        mkdir -p $yonicode;
+    fi
+    if [ -d $yonitasks ]  ; then 
+        echo -e "$FUNCNAME(): \"$yonitasks\" already exists";
+    else
+        mkdir -p $yonitasks;
+    fi
 }
 
 clean ()
