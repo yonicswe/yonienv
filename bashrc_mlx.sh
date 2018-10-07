@@ -365,6 +365,9 @@ ofeddeletebackport ()
     fi ;
     echo "./ofed_scripts/cleanup"
     ./ofed_scripts/cleanup
+
+    echo "make distclean"
+    make distclean
 }
 
 ofedmklinks ()
@@ -827,6 +830,7 @@ ibstart ()
     loadmoduleifnotloaded ib_ucm
     loadmoduleifnotloaded ib_iser
     loadmoduleifnotloaded ib_isert
+    loadmoduleifnotloaded mlx5_fpga_tools
 }
 
 ibstop ()
