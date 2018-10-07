@@ -478,8 +478,9 @@ if [ -n "${infiniband_kernel_module_path}" ] ; then
 complete -W "$(find  ${infiniband_kernel_module_path} -name "*ko" -type f -printf "%f " | sed 's/.ko//g')" rmmod insmod modprobe modinfo
 fi
 
-alias d='dmesg --color'
-alias dcc='sudo dmesg -C'
+alias d='dmesg --color -H'
+alias dcc='sudo dmesg -C -H'
+# dmesg -w will continuously print to screen (like tail -f)
 
 alias findreject='find -name "*rej"'
 alias findorig='find -name "*orig"'
