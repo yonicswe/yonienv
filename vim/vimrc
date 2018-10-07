@@ -1,4 +1,3 @@
-
 source ~/.vim/vimrc.guifont
 
 set hlsearch
@@ -653,6 +652,13 @@ set tags=tags
 " complete words from tag file with <ctrl>x<ctrl>k<ctrl>n
 set complete+=t
 
+
+"    GDB
+"   ___  ___   ___ 
+"  / __||   \ | _ )
+" | (_ || |) || _ \
+"  \___||___/ |___/
+                 
 function! SetBreakPoint ()
     "let taskpath=$TASK_PATH
     "     execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . taskpath . "/.gdb_breakpoints"
@@ -660,6 +666,9 @@ function! SetBreakPoint ()
 endfunc
 " com! B call SetBreakPoint()
 map <S-B> :call SetBreakPoint()<cr>
+
+" ConqueGdb plugin will run gdb inside vim
+" help found in ${yonienv}/vim/doc/conque_*
 
 " help vim commands
 " -------------
