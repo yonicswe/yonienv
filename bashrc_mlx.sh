@@ -555,11 +555,13 @@ checkpatchuserpace ()
 }
 
 alias mkvmredhat74='/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l RH_7.4_x86_64_virt_guest -c 16 -r 8192 -d 35'
+alias mkvmredhat75='/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l RH_7.5_x86_64_virt_guest -c 16 -r 8192 -d 35'
 alias mkvmls='sudo /.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux'
 mkvmhelp()
 {
     echo "su - ";
     echo -e "/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l \033[1;31m<your choice of vm>\033[00m -c 16 -r 8192 -d 35";
+    echo "choose a VM to install from the list produced by mkvmls"
 }
 
 findiblibs ()
