@@ -111,8 +111,6 @@ clean_vim_env ()
     fi
 }
 
-source bash_common_args.sh
-
 source env_common_args.sh
 
 setup_directories ()
