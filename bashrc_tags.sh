@@ -60,20 +60,31 @@ tagme_base ()
 
     printf "tag     : %s\n" ${includeTagdir[@]}
     if [ ${#excludeTagdir[@]} -eq  0 ] ; then
-        source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h"))
-        echo "Building ctags file...";
-        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
-        echo > cscope.files
-        for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
-        cscope -vkqb 2>/dev/null
+        source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h" -exec readlink -f {} \; ) )
+
+#         echo "Building ctags file...";
+#         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+#         echo > cscope.files
+#         for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+#         cscope -vkqb 2>/dev/null
+#       -P$(pwd)  creates cscope.out with full path
+#         cscope -P$(pwd) -vkqb 2>/dev/null 
+
     else 
         printf "exclude : %s\n" ${excludeTagdir[@]/+++/}
         prune="-path ${excludeTagdir[@]/+++/-o -path}";
         source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
-        echo "Building ctags file...";
-        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
-        echo > cscope.files
-        for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
-        cscope -vkqb 2>/dev/null
+
+#         echo "Building ctags file...";
+#         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+#         echo > cscope.files
+#         for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+#         cscope -P$(pwd) -vkqb 2>/dev/null
     fi    
+
+    echo "Building ctags file...";
+    ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+    echo > cscope.files
+    for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+    cscope -vkqb 2>/dev/null
 }
