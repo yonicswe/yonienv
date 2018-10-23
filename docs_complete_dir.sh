@@ -56,3 +56,22 @@ _devel ()
 devel_dir=${HOME}/devel
 cddevel() { cd $devel_dir/$1; }
 complete -F _devel -o nospace cddevel
+
+#==========================================================
+_share ()
+{
+    local cmd=$1 cur=$2 pre=$3;
+    local _cur compreply;
+
+    _cur=$share_dir/$cur
+    compreply=( $( compgen -d "$_cur" ) )
+    COMPREPLY=( ${compreply[@]#$share_dir/} )
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        COMPREPLY[0]=${COMPREPLY[0]}/
+    fi
+}
+
+
+share_dir=${HOME}/share
+cdshare() { cd $share_dir/$1; }
+complete -F _share -o nospace cdshare
