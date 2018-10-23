@@ -66,7 +66,10 @@ command! RR :bd!
 
 set encoding=utf-8
 
-set makeprg=gcc\ -O0\ -g\ -o\ %<\ %
+" au FileType cpp set makeprg=gcc\ -O0\ -g\ -o\ %<\ %
+" :make<cr>
+"    will place the file name and output in the line calling make
+au FileType c,cpp set makeprg=gcc\ -O0\ -g\ -o\ %<\ %
 
 
 let g:ConqueTerm_StartMessages = 0
@@ -179,7 +182,7 @@ set complete-=i
 " au FileType c   set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
 " au FileType cpp set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
 " au FileType c,cpp   set grepprg=grep\ -nHr\ --include=*.cpp\ --include=*\.\[c,h\]\
-au FileType c,cpp   set grepprg=ag\ --cc\
+au FileType c,cpp   set grepprg=ag\ --cc
 
 
 
@@ -316,7 +319,7 @@ function! HighlightTrails()
     autocmd BufWinLeave * call clearmatches()
 endfunction
 " autocmd FileType gitcommit call HighlightTrails()
-" autocmd FileType c,cpp call HighlightTrails()
+autocmd FileType c,cpp call HighlightTrails()
 
 
 " With a map leader it's possible to do extra key combinations
@@ -586,6 +589,7 @@ function! DeleteAllBuffers ()
     execute "1,100bd"
 endfunction
 com! BD call DeleteAllBuffers()
+com! Clipboard :r ~/share/clipboard.txt
 
 function! RestartSess ()
    call DeleteAllBuffers ()
@@ -764,10 +768,10 @@ source ~/.vim/cscope.vim
 "-------------------------------------
 let @p = 'printk("--->%s()%d:\n", __func__, __LINE__);' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
-let @l =  "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n"
+let @l =  "─────────────────────────────────────────────────────────────────────────────\n"
 let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n"
-let @h = "◀╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌"
-let @b = "┌⎯⎯⎯⎯⎯┐\n│     │\n│     │\n│     │\n└⎯⎯⎯⎯⎯┘"
+let @h = "◀──────"
+let @b = "┌─────┐\n│     │\n│     │\n│     │\n└─────┘"
 let @s = "<<<<<"
 
 
