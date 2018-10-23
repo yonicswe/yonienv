@@ -20,6 +20,3 @@ source ${yonienv}/bashrc_git.sh
 # office related 
 # source ${yonienv}/bashrc_nice.sh
 source ${yonienv}/bashrc_mlx.sh
-
-git update-index --assume-unchanged env_common_args.sh
-git update-index --assume-unchanged vim/vimrc.guifont

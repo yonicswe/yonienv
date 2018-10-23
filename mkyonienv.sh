@@ -53,6 +53,9 @@ setup_git_env ()
     local yonienv=$1;
     echo $FUNCNAME
     ln -snf ${yonienv}/gitconfig ~/.gitconfig;
+
+    git update-index --assume-unchanged env_common_args.sh
+    git update-index --assume-unchanged vim/vimrc.guifont
 }
 
 setup_cgdb_env () 
