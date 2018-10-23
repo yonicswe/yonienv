@@ -292,12 +292,18 @@ catgrubsetdefault ()
 
 editgrub () 
 {
-    su - -c " gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
+    # su - -c " gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
     # sudo vim /boot/grub/grub.conf +':split' +':e x' +'r!ls -ltr /boot'   
+    # print the last modified file in /boot 
+    # sudo find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3
+    su - -c " gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
+#   sudo - gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'
+
 }
 editgrubvim () 
 {
-    su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
+#   su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
+    sudo vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'
 }
 
 alias make="make -j ${ncoresformake}"
@@ -478,8 +484,11 @@ if [ -n "${infiniband_kernel_module_path}" ] ; then
 complete -W "$(find  ${infiniband_kernel_module_path} -name "*ko" -type f -printf "%f " | sed 's/.ko//g')" rmmod insmod modprobe modinfo
 fi
 
-alias d='dmesg --color -H'
-alias dcc='sudo dmesg -C -H'
+# dmesg -w will print continuously 
+alias d='dmesg --color -x'
+alias dw='dmesg --color -xw'
+alias dh='dmesg --color -Hx'
+alias dcc='sudo dmesg -C'
 # dmesg -w will continuously print to screen (like tail -f)
 
 alias findreject='find -name "*rej"'
