@@ -35,9 +35,10 @@
     listmodified = diff --name-only
     listcached = diff --cached --name-only
     g = grep --color
+    gi = grep --color --ignore-case
     # d = diff --color
     d = diff
-    dg = difftool --tool=gvimdiff
+#   dg = difftool --tool=gvimdiff
     dgfile = difftool --tool=gvimdiff --no-prompt
     dv = difftool --tool=vimdiff
     dc = diff --cached
@@ -60,7 +61,15 @@
 # 		    git commit; \
 #		  }f"
     commitempty = commit --allow-empty
- 
+    
+    dg = "!f() {					     \
+	  if [ -z $1 ] ; then				     \
+		git difftool --tool=gvimdiff;		     \
+	  else						     \
+		git difftool --tool=gvimdiff --no-prompt $1; \
+	  fi;                                                \
+	}; f"
+
     a = "!f() {                \
  	   if [ -z $1 ] ; then \
 	      git add -u ;     \
@@ -100,6 +109,8 @@
     untrackfile = rm --cached 
 #                                 SHA          date     name             msg
     ll =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+
+    lyoni = log --pretty=oneline --author='Yonatan Cohen'
 
     l =  "!f() {                             \
       if [ -z $1 ] ; then                             \
