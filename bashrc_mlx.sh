@@ -29,6 +29,7 @@ create_alias_for_host 1455 dev-l-vrt-145-005
 create_alias_for_host 1456 dev-l-vrt-145-006
 create_alias_for_host 1457 dev-l-vrt-145-007
 create_alias_for_host 1458 dev-l-vrt-145-008
+create_alias_for_host 1459 dev-l-vrt-145-009
 create_alias_for_host 146 dev-l-vrt-146
 create_alias_for_host 1465 dev-l-vrt-146-005
 create_alias_for_host 1466 dev-l-vrt-146-006
@@ -145,10 +146,19 @@ gitpushtogerrit ()
     fi
 
     echo "git push ${remote} ${head}:refs/for/${branch}/${topic}"
+
+    if [ $( git remote -v | grep ofed | wc -l ) -gt 0 ] ; then
+        read -p "Do you need MetaData ? [Y/n] : " answer;
+        if [ "$answer" != "n" ] ; then
+           return;
+        fi
+    fi
+
     read -p "are you sure (checkpatch ok ?) ? [y/N] : " answer;
     if [ "$answer" != "y" ] ; then
        return;
     fi
+
     echo "pushing"
     git push ${remote} ${head}:refs/for/${branch}/${topic}
     echo "git push ${remote} ${head}:refs/for/${branch}/${topic}" >> .gitpush.log
@@ -270,11 +280,12 @@ ibmod ()
                        fi
 }
 alias nox='lspci | grep nox'
-alias cdregression='cd ~/devel/regression'
-alias cdregressioncore='cd ~/devel/regression/core'
-alias cdregressionnet='cd ~/devel/regression/networking'
-alias cdregressionrxe='cd ~/devel/rxe_regression'
+# alias cdregression='cd ~/devel/regression'
+# alias cdregressioncore='cd ~/devel/regression/core'
+# alias cdregressionnet='cd ~/devel/regression/networking'
+# alias cdregressionrxe='cd ~/devel/rxe_regression'
 alias cdshare="cd ${HOME}/share/"
+source ${yonienv}/regression_complete.sh
 
 
 alias mkinfinibandcore="make M=drivers/infiniband/core modules -j ${ncoresformake}"
@@ -572,32 +583,33 @@ findiblibs ()
 #     ib_libs+=(libocrdma-rdmav2.so libhfi1verbs-rdmav2.so libipathverbs-rdmav2.so libqedr-rdmav2.so)
 #     ib_libs+=(libvmw_pvrdma-rdmav2.so librxe-rdmav2.so librspreload.so libibacmp.so);
 
-ib_libs=(libibverbs.so)
-ib_libs+=(libmlx4.so)
-ib_libs+=(libmlx4-rdmav*.so)
-ib_libs+=(libmlx5.so)
-ib_libs+=(librxe-rdmav*.so)
-ib_libs+=(librxe-rdmav*.so)
-ib_libs+=(libibumad.so)
-ib_libs+=(libibcm.so)
-ib_libs+=(libipathverbs-rdmav*.so)
-ib_libs+=(libnes-rdmav*.so)
-ib_libs+=(libhfi1verbs-rdmav*.so)
-ib_libs+=(libhns-rdmav*.so)
-ib_libs+=(libocrdma-rdmav*.so)
-ib_libs+=(libi40iw-rdmav*.so)
-ib_libs+=(libbnxt_re-rdmav*.so)
-ib_libs+=(libqedr-rdmav*.so)
-ib_libs+=(libvmw_pvrdma-rdmav*.so)
-ib_libs+=(libcxgb4-rdmav*.so)
-ib_libs+=(libcxgb3-rdmav*.so)
-ib_libs+=(libmthca-rdmav*.so)
-ib_libs+=(librdmacm.so)
-ib_libs+=(libibacmp.so)
-ib_libs+=(librspreload.so)
+    ib_libs=(libibverbs.so)
+    ib_libs+=(libmlx4.so)
+    ib_libs+=(libmlx4-rdmav*.so)
+    ib_libs+=(libmlx5.so)
+    ib_libs+=(librxe-rdmav*.so)
+    ib_libs+=(librxe-rdmav*.so)
+    ib_libs+=(libibumad.so)
+    ib_libs+=(libibcm.so)
+    ib_libs+=(libipathverbs-rdmav*.so)
+    ib_libs+=(libnes-rdmav*.so)
+    ib_libs+=(libhfi1verbs-rdmav*.so)
+    ib_libs+=(libhns-rdmav*.so)
+    ib_libs+=(libocrdma-rdmav*.so)
+    ib_libs+=(libi40iw-rdmav*.so)
+    ib_libs+=(libbnxt_re-rdmav*.so)
+    ib_libs+=(libqedr-rdmav*.so)
+    ib_libs+=(libvmw_pvrdma-rdmav*.so)
+    ib_libs+=(libcxgb4-rdmav*.so)
+    ib_libs+=(libcxgb3-rdmav*.so)
+    ib_libs+=(libmthca-rdmav*.so)
+    ib_libs+=(librdmacm.so)
+    ib_libs+=(libibacmp.so)
+    ib_libs+=(librspreload.so)
 
 
-    local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/)
+    local ib_libs_search_path=(/usr/lib64/  /usr/local/lib64/)
+#   local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/)
 #   local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/ /lib /lib64/)
 
     local delete_app=
@@ -980,15 +992,29 @@ ofedfindindexforpackage ()
 {
     local pkg=$1;
     if [ -z ${pkg} ] ; then echo "ofedfindindexforpackage <pkg>" ; return ; fi
-    ofed_info |grep -m2  -A1 ${pkg} | sort -u | grep "${pkg}\|commit"
+    ofed_info |grep -m2  -A3 ${pkg} | sort -u | grep "${pkg}\|commit"
+#     ofed_info |grep -m2  -A1 ${pkg}
 }
+
+alias ofedfindindexforofakernel='ofedfindindexforpackage ofa_kernel:'
+alias ofedfindindexforlibmlx5='ofedfindindexforpackage libmlx5:'
 
 ofedmkbackport ()
 {
     local configure_options=;
+    local possible_backport_branch=;
     configure_options=$(/etc/infiniband/info |grep Configure\ options | sed 's/.*://g');
+    
+    
+    # make sure there is no other backport branch
+    possible_backport_branch=$(git b | grep ^[[:space:]]*backport | awk '{print $1}');
+    if [ -n "${possible_backport_branch}"  ] ; then 
+        echo "You 1st need to delete!!! ${possible_backport_branch}!!!";
+        return;
+    fi
+
     echo "./configure -j ${ncoresformake} ${configure_options}"
-    read -p "continue [Y/n]: " ans;
+    read -p "Continue [Y/n]: " ans;
     if [ "$ans" == "n" ] ; then
         return;
     fi
@@ -1013,6 +1039,8 @@ source ${yonienv}/ofed_complete_dir.sh
 # }
 # complete -W "$(find ~yonatanc/devel/ofed -maxdepth 1 -type d  -exec basename {} \;     )" cdofed
 # fi
+
+alias cdmarsdirecttest='cd /tmp/mars_tests/SW_NET_VERIFICATION-directtest_db.xml/directtests/'
 
 mkcoverletterusage ()
 {
@@ -1102,3 +1130,19 @@ md2man ()
     mkdir -p tmp;
     pandoc -s -t man ${mdfile}  -o tmp/${manpage} ; man tmp/${manpage}
 }
+
+opensmmlx ()
+{
+    local device=${1};
+    local guid=$(ibstat -d ${device} | awk '/Port GUID/{print $3}');
+    sudo opensm -g ${guid} &
+    sleep 3
+    ibv_devinfo -d ${device} | grep state;
+    ibv_devinfo -d ${device} | grep "state\|link_layer";
+}
+alias opensmmlx5_0='opensmmlx mlx5_0'
+alias opensmmlx5_1='opensmmlx mlx5_1'
+alias opensmmlx4_0='opensmmlx mlx4_0'
+alias opensmmlx4_1='opensmmlx mlx4_1'
+
+
