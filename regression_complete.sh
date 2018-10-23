@@ -1,4 +1,4 @@
-regression_proj_dir=${HOME}/devel/regression
+regression_proj_dir=/labhome/yonatanc/devel/regression
 
 _regression ()
 {
