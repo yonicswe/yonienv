@@ -6,11 +6,14 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
 _code	docs_complete_dir.sh	/^_code ()$/;"	f
+_devel	docs_complete_dir.sh	/^_devel ()$/;"	f
 _docs	docs_complete_dir.sh	/^_docs ()$/;"	f
 _gcdcomplete	cdproject.sh	/^function _gcdcomplete()$/;"	f
 _gcdcomplete	task_complete.sh	/^function _gcdcomplete()$/;"	f
 _gitdiscard	bashrc_git.sh	/^_gitdiscard () $/;"	f
 _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
+_regression	regression_complete.sh	/^_regression ()$/;"	f
+_share	docs_complete_dir.sh	/^_share ()$/;"	f
 _upstream	upstream_complete_dir.sh	/^_upstream ()$/;"	f
 acs_build_vars	bashrc_nice.sh	/^acs_build_vars () $/;"	f
 acs_sockets	bashrc_nice.sh	/^acs_sockets () $/;"	f
@@ -23,9 +26,11 @@ catgrubsetdefault	bashrc_devel.sh	/^catgrubsetdefault ()$/;"	f
 catgrubvsinstalled	bashrc_devel.sh	/^catgrubvsinstalled ()$/;"	f
 cdbundle	bashrc_nice.sh	/^cdbundle () $/;"	f
 cdcode	docs_complete_dir.sh	/^cdcode() { cd $code_dir\/$1; }$/;"	f
-cddevel	bashrc_mlx.sh	/^cddevel () {$/;"	f
+cddevel	docs_complete_dir.sh	/^cddevel() { cd $devel_dir\/$1; }$/;"	f
 cddocs	docs_complete_dir.sh	/^cddocs() { cd $docs_dir\/$1; }$/;"	f
 cdofed	ofed_complete_dir.sh	/^cdofed()$/;"	f
+cdregression	regression_complete.sh	/^cdregression()$/;"	f
+cdshare	docs_complete_dir.sh	/^cdshare() { cd $share_dir\/$1; }$/;"	f
 cdsrc	bashrc_nice.sh	/^cdsrc () $/;"	f
 cdtask	bashrc_nice.sh	/^cdtask () $/;"	f
 cdtasks	task_complete.sh	/^function cdtasks () {$/;"	f
@@ -58,6 +63,7 @@ editgrub	bashrc_devel.sh	/^editgrub () $/;"	f
 editgrubvim	bashrc_devel.sh	/^editgrubvim () $/;"	f
 ethlist	bashrc_fs.sh	/^ethlist () $/;"	f
 extract	bashrc_fs.sh	/^extract () {$/;"	f
+extractrpm	bashrc_fs.sh	/^extractrpm ()$/;"	f
 ff	bashrc_fs.sh	/^ff () $/;"	f
 ffd	bashrc_fs.sh	/^ffd () $/;"	f
 ffdi	bashrc_fs.sh	/^ffdi () $/;"	f
@@ -120,6 +126,7 @@ ips_threads	bashrc_nice.sh	/^ips_threads () $/;"	f
 iserstart	bashrc_mlx.sh	/^iserstart ()$/;"	f
 ismoduleup	bashrc_mlx.sh	/^ismoduleup ()$/;"	f
 k	bashrc_fs.sh	/^k () {$/;"	f
+killzombies	bashrc_devel.sh	/^killzombies ()$/;"	f
 la	bashrc_fs.sh	/^la ()$/;"	f
 listerrnovalues	bashrc_devel.sh	/^listerrnovalues ()$/;"	f
 listgitrepos	bashrc_mlx.sh	/^listgitrepos ()$/;"	f
@@ -162,6 +169,7 @@ mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime ()$/;"	f
 mkvmhelp	bashrc_mlx.sh	/^mkvmhelp()$/;"	f
 mountkernelsources	bashrc_mlx.sh	/^mountkernelsources () {$/;"	f
 mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f
+mydistro	bashrc_fs.sh	/^mydistro ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
 ofedbuildversion	bashrc_mlx.sh	/^ofedbuildversion ()$/;"	f
@@ -174,6 +182,7 @@ ofedlistversions	bashrc_mlx.sh	/^ofedlistversions ()$/;"	f
 ofedmkbackport	bashrc_mlx.sh	/^ofedmkbackport ()$/;"	f
 ofedmklinks	bashrc_mlx.sh	/^ofedmklinks ()$/;"	f
 ofedorigindir	bashrc_mlx.sh	/^ofedorigindir ()$/;"	f
+opensmmlx	bashrc_mlx.sh	/^opensmmlx ()$/;"	f
 parse_git_branch	bashrc_fs.sh	/^parse_git_branch() {$/;"	f
 parse_svn_branch	bashrc_fs.sh	/^parse_svn_branch() {$/;"	f
 parse_svn_repository_root	bashrc_fs.sh	/^parse_svn_repository_root() {$/;"	f
@@ -214,6 +223,7 @@ setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f
 setup_bash_profile	mkyonienv.sh	/^setup_bash_profile ()$/;"	f
 setup_bashrc	mkyonienv.sh	/^setup_bashrc () $/;"	f
 setup_cgdb_env	mkyonienv.sh	/^setup_cgdb_env () $/;"	f
+setup_directories	mkyonienv.sh	/^setup_directories ()$/;"	f
 setup_gdbinit	bashrc_devel.sh	/^setup_gdbinit () $/;"	f
 setup_gdbinit_dir_search_path	bashrc_devel.sh	/^setup_gdbinit_dir_search_path () $/;"	f
 setup_git_env	mkyonienv.sh	/^setup_git_env () $/;"	f
