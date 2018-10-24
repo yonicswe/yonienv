@@ -937,7 +937,18 @@ alias mkupstreamlib='make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
 alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
 alias rdmacoreversion='grep Version redhat/rdma-core.spec'
-alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null'
+# alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null'
+mkrdmacore ()
+{
+    local target=$1
+    complete -W "$(make -C build help |awk '{print $2}')" mkrdmacore
+    if [ -z ${target} ] ; then 
+        make -C build $target -j ${ncoresformake} -s 1>/dev/null 
+    else
+        make -C build $target -j ${ncoresformake}  -s
+    fi
+
+}
 alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s 1>/dev/null'
 alias mkrdmacore1sttime='rdma-core_build.sh 1>/dev/null'
 alias mkrdmacoreinstall='sudo make -C build install > /dev/null'
