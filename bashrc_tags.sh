@@ -88,3 +88,12 @@ tagme_base ()
     for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
     cscope -vkqb 2>/dev/null
 }
+
+tagme ()
+{
+    echo "#!/bin/bash" > tagme.sh;
+    echo 'source ${yonienv}/bashrc_tags.sh' >> tagme.sh;
+    echo 'includeTagdir+=(.)' >> tagme.sh
+    cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
+    chmod +x tagme.sh;
+}
