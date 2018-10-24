@@ -47,6 +47,10 @@ tagme_base ()
 {
     declare -a includeTagdir=("${!1}");
     declare -a excludeTagdir=("${!2}");
+    local extra_filetypes=$3;
+    local filetypes=".*\.c\|.*\.h";
+
+    filetypes+=${extra_filetypes};
 
 #     echo  includeTagdir: ${includeTagdir[@]}
 #     echo  excludeTagdir: ${excludeTagdir[@]}
@@ -60,13 +64,15 @@ tagme_base ()
 
     printf "tag     : %s\n" ${includeTagdir[@]}
     if [ ${#excludeTagdir[@]} -eq  0 ] ; then
-        source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h" -exec readlink -f {} \; ) )
+#       source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h" -exec readlink -f {} \; ) )
 
-#         echo "Building ctags file...";
-#         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
-#         echo > cscope.files
-#         for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
-#         cscope -vkqb 2>/dev/null
+        source_files=($( find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; ) )
+
+#       echo "Building ctags file...";
+#       ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+#       echo > cscope.files
+#       for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+#       cscope -vkqb 2>/dev/null
 #       -P$(pwd)  creates cscope.out with full path
 #         cscope -P$(pwd) -vkqb 2>/dev/null 
 
