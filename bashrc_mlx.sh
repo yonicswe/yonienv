@@ -231,18 +231,22 @@ listgitrepos ()
     echo "jason    kernel              : https://github.com/jgunthorpe/linux.git";
     echo;
     echo "mellanox ofed.4 kernel       : ${prefix}/mlnx_ofed/mlnx-ofa_kernel-4.0";
-    echo "mellanox ofed.4 libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
-    echo "mellanox ofed.4 libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
-    echo "mellanox ofed.4 libmlx5      : ${prefix}/connect-ib/libmlx5";
+    echo "                libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
+    echo "                libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
+    echo "                libmlx5      : ${prefix}/connect-ib/libmlx5";
 
     echo;
     echo "mellanox regression vrtsdk      : ${prefix}/vrtsdk";
-    echo "mellanox regression network     : ${prefix}/Linux_drivers_verification/networking";
-    echo "mellanox regression core        : ${prefix}/Linux_drivers_verification/core";
-    echo "mellanox regression directtests : ${prefix}/Linux_drivers_verification/directtests";
+    echo "                    network     : ${prefix}/Linux_drivers_verification/networking";
+    echo "                    core        : ${prefix}/Linux_drivers_verification/core";
+    echo "                    directtests : ${prefix}/Linux_drivers_verification/directtests";
 
     echo;
     echo "mellanox github/devx            : https://github.com/Mellanox/devx.git";
+
+    echo;
+    echo "mellanox Firmware tavor      : ${prefix}/ConnectX"
+    echo "                  golan      : ${prefix}/golan_fw"
 }
 
 
