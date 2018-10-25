@@ -538,6 +538,8 @@ probe_topology ()
     echo
 }
 
+alias freeh='free -h'
+
 myip ()
 {
    if [ -z $(echo $(hostname -i | awk '{print $2}') ) ] ; then 
@@ -769,7 +771,7 @@ vm ()
 virsh_complete ()
 {
 #     if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
-    complete -W "$(sudo virsh list --inactive | awk '{if (NR > 1 ) print $2}')" vstart
+    complete -W "$(sudo virsh list --inactive | awk '{if (NR > 1 ) print $2}')" vstart vrename
     complete -W "$(sudo virsh list | awk '{if (NR > 1) print $2}')" vconsole vreset vstop vforcestop
 }
 
@@ -822,6 +824,33 @@ vconsole ()
 
     sudo virsh console $1;
     virsh_complete;
+}
+
+vrename ()
+{
+    local old_name=$1;
+    local new_name=$2;
+    local ans;
+
+    if [ $(id -u) -ne 0 ] ; then echo "must be root" ; return ; fi
+
+    if [ $# -eq 1 ] ; then
+        virsh dumpxml ${old_name} > $old_name.xml;
+
+        # TODO: replace with sed or xmlstarlet
+        # instead of vim
+        vim ${old_name}.xml 
+
+        read -p "continue [y/N]" ans;
+        if [ "$ans" == "y" ] ; then
+            virsh undefine ${old_name};
+            virsh define ${old_name}.xml;
+        fi
+    else
+        echo "vrename <old name> <new name>";
+    fi
+
+    virsh_complete
 }
 
 
