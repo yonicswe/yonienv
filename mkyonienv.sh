@@ -51,11 +51,55 @@ setup_vim_env ()
 setup_git_env () 
 {
     local yonienv=$1;
+    local git_user_name=
+    local git_user_email=
     echo $FUNCNAME
+
+    if [ -e ~/.gitconfig ] ; then 
+        echo "found existing .gitconfig : Bail out OR Backup and continue ?"
+        read -p "backup and continue ? [y/N]" ans;
+        if [ "$ans" == "y" ] ; then 
+            git_user_name=$(git config --global user.name);
+            git_user_email=$(git config --global user.email);
+            set -x ; mv ~/.gitconfig ~/.gitconfig.yonienv; set +x
+        else
+            return;
+        fi
+    fi
+
     ln -snf ${yonienv}/gitconfig ~/.gitconfig;
 
+    read -p "set git user name to be ${git_user_name} ? [y/N]" ans;
+    if [ "$ans" == "y" ] ; then 
+        git config --global user.name ${git_user_name};
+    fi
+    read -p "set git user email to be ${git_user_email} ? [y/N]" ans;
+    if [ "$ans" == "y" ] ; then 
+        git config --global user.email ${git_user_email};
+    fi
+
+    # git ignore files that change from setup to setup
     git update-index --assume-unchanged env_common_args.sh
     git update-index --assume-unchanged vim/vimrc.guifont
+}
+
+clean_git_env ()
+{
+    read -p "clear .gitcnofig ? [y/N]" ans;
+    if [ "$ans" != "y" ] ; then 
+        return;
+    fi
+
+    if [ -e ~/.gitconfig.yonienv ] ; then
+        echo "Found yonienv backup for .gitconfig, restoring..."
+        mv ~/.gitconfig.yonienv ~/.gitconfig
+    else
+        read -p "Are you sure about deleting .gitconfig ? [y/N]" ans;
+        if [ "$ans" == "y" ] ; then 
+            rm -f ~/.gitconfig;
+            echo "Deleted .gitconfig file !!!"
+        fi
+    fi
 }
 
 setup_cgdb_env () 
@@ -154,6 +198,7 @@ clean ()
     fi 
 
     clean_vim_env;
+    clean_git_env;
 }
 
 messages () 
