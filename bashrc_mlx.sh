@@ -6,6 +6,7 @@
 
 
 alias editbashmlx='g ${yonienv}/bashrc_mlx.sh'
+alias chownyoni='chown yonatanc:mtl'
 
 create_alias_for_host ()
 {
@@ -57,6 +58,7 @@ create_alias_for_host 213 dev-l-vrt-213
 
 # parav
 create_alias_for_host parav sw-mtx-036
+create_alias_for_host danit reg-l-vrt-178
 
 
 
@@ -359,6 +361,15 @@ backupgitkernel ()
     echo "scp ${tarfile} ${backupdest}"
 }
 
+ofedmkmetadata () 
+{
+    local num_of_commits=$1;
+    if [ -n "${num_of_commits}" ] ; then 
+        ./devtools/add_metadata.sh -n ${num_of_commits};
+    else
+        echo "You forgot  <number of commits>"
+    fi
+}
 
 ofeddeletebackport ()
 {
@@ -410,6 +421,8 @@ ofedorigindir ()
 {
     cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
 }
+
+alias ofedinfo='ofed_info -s'
 
 vlinstall ()
 {
@@ -544,8 +557,13 @@ _checkpatchcomplete ()
 
 checkpatchkernel ()
 {
+    local patch_file=$(readlink -f $@);
+
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
-    ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID $@
+
+    cdlinux;
+    ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID ${patch_file};
+    cd -;
 }
 
 checkpatchuserpace ()
@@ -993,13 +1011,22 @@ ofedbuildversion ()
 
 ofedinstallversion ()
 {
+    local ans;
+    local rebuild_drivers=
     local version=${1};
+
     if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
-    echo "about to install ofed ${version} for your $(cat /etc/redhat-release) and the kernel that comes with it"
-    echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install"
+    echo "about to install ofed ${version} for your $(cat /etc/redhat-release) and the kernel that comes with it";
+
+    read -p "Do you need mellanox's drivers rebuilt ? [y/N]" ans;
+    if [ "$ans" == "y" ] ; then
+        rebuild_drivers="--add-kernel-support";
+    fi
+
+    echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers}";
     read -p "continue [y/N]: " ans;
     if [ "$ans" == "y" ] ; then
-        sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install;
+        sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers};
     fi
 }
 
@@ -1150,6 +1177,7 @@ opensmmlx ()
 {
     local device=${1};
     local guid=$(ibstat -d ${device} | awk '/Port GUID/{print $3}');
+    echo "sudo opensm -g ${guid}"
     sudo opensm -g ${guid} &
     sleep 3
     ibv_devinfo -d ${device} | grep state;
@@ -1161,3 +1189,14 @@ alias opensmmlx4_0='opensmmlx mlx4_0'
 alias opensmmlx4_1='opensmmlx mlx4_1'
 
 
+syndrome_to_english () 
+{ 
+    if [ $# != 1 ]; then
+        echo "usage: syndrome_to_english <syndrome>";
+        echo "e.g. syndrome_to_english 0x429d76";
+        return;
+    fi;
+    cd /swgwork/noaos/dev/golan_fw/;
+    git grep -i $1 src;
+    cd - &>/dev/null
+}
