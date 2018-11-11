@@ -31,9 +31,9 @@ gitb ()
     local branch="$1"
 #     git b | awk '/^\*/{print "\033[32m-->["$2"]\033[0m"} !/^\*/{print "    "$1}'
     if [ -z ${branch} ] ; then   
-        git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}'
+        git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}' | sort -V
     else
-        git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}' | grep "${branch}"
+        git b | sed 's/^\*\ /-->\ /g' | awk '/-->/{print "\033[31m" $1 " " $2  "\033[0m"} !/-->/{print "    "$1}' | grep "${branch}" | sort -V
     fi
 
     complete -W "$(git branch)" gitb
@@ -155,12 +155,18 @@ gitcatpatchfile ()
 
 gitcommityoni ()
 {
-    git config commit.template ${yonienv}/git_commit_template_yonic; 
+    git config commit.template ${yonienv}/git_templates/git_commit_template_yonic; 
     git commit;
 }
 
 gitcommitmlx ()
 {
-    git config commit.template ${yonienv}/git_commit_template;
+    git config commit.template ${yonienv}/git_templates/git_commit_mlx_template;
+    git commit;
+}
+
+gitcommitmetadata ()
+{
+    git config commit.template ${yonienv}/git_templates/git_commit_metadata_template;
     git commit;
 }

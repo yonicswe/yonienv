@@ -5,6 +5,8 @@ alias yuminstallfromiso='yum install --disablerepo=\* --enablerepo=c7-media'
 alias yumsearchiniso='yum search --disablerepo=\* --enablerepo=c7-media'
 alias yuminfoiniso='yum info --disablerepo=\* --enablerepo=c7-media'
 
+alias now='date +"%d%b%Y_%H%M%S"'
+
 alias sd='echo $TERM'
 alias diff='diff -up'
 
