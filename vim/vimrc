@@ -23,6 +23,9 @@ au FileType python set noexpandtab
 au FileType xml set expandtab
 au FileType gdb set expandtab
 
+au BufNewfile,BufRead messages-* set filetype=messages
+	
+
 " show a column marker to help keep the code
 " shorter than 80 chars.
 " to disable set cc=
@@ -344,9 +347,9 @@ map <leader>rr  yiw:grep -w <C-R>" include drivers/infiniband/ drivers/net/ether
 " nmap <leader>w :w!<cr>
 
 " Fast editing of the .vimrc
-map <leader>m :source ~/.vimrc<CR>
-map <leader>e :tabedit ~/.vim/vimrc<CR>
-map <leader>ss :tabedit ~/.vim/vim_symbols.txt<CR>
+map <leader>m :source ~/.vimrc<cr>:edit<cr>
+map <leader>e :tabedit ~/.vim/vimrc<cr>
+map <leader>ss :tabedit ~/.vim/vim_symbols.txt<cr>
 " map <leader>f :!figlet -m0 -f small
 " vmap <leader>f y:!figlet -m0 -f small <C-R>"  > x <CR> :r x<CR> :!rm -f x<cr><cr>
 vmap <F1> y:!figlet -m0 -f small <C-R>"  > x <CR> :r x<CR> :!rm -f x<cr><cr>
@@ -591,6 +594,12 @@ endfunction
 com! BD call DeleteAllBuffers()
 com! Clipboard :r ~/share/clipboard.txt
 
+function! Tagme_func ()
+   execute "!./tagme.sh"
+   execute "silent cs reset"
+endfunc
+com! Tagme call Tagme_func()
+
 function! RestartSess ()
    call DeleteAllBuffers ()
    execute "source Session.vim"
@@ -766,14 +775,45 @@ source ~/.vim/cscope.vim
 "---------------------------------------
 "     preset registers
 "-------------------------------------
-let @p = 'printk("--->%s()%d:\n", __func__, __LINE__);' . "\n"
+let @p = '      printk("--->%s()%d:\n", __func__, __LINE__);' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
 let @l =  "─────────────────────────────────────────────────────────────────────────────\n"
 let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n"
 let @h = "◀──────"
 let @b = "┌─────┐\n│     │\n│     │\n│     │\n└─────┘"
+" let @b = " ┌─────┐^J│     │^J│     │^J│     │^J└─────┘"
 let @s = "<<<<<"
 
+" increase/decrease font size
+
+let s:pattern = '^\(.* \)\([1-9][0-9]*\)$'
+let s:minfontsize = 6
+let s:maxfontsize = 16
+function! AdjustFontSize(amount)
+  if has("gui_gtk2") && has("gui_running")
+    let fontname = substitute(&guifont, s:pattern, '\1', '')
+    let cursize = substitute(&guifont, s:pattern, '\2', '')
+    let newsize = cursize + a:amount
+    if (newsize >= s:minfontsize) && (newsize <= s:maxfontsize)
+      let newfont = fontname . newsize
+      let &guifont = newfont
+    endif
+  else
+    echoerr "You need to run the GTK2 version of Vim to use this function."
+  endif
+endfunction
+
+function! LargerFont()
+  call AdjustFontSize(1)
+endfunction
+command! LargerFont call LargerFont()
+map <C-l> :call LargerFont()<cr>
+
+function! SmallerFont()
+  call AdjustFontSize(-1)
+endfunction
+command! SmallerFont call SmallerFont()
+map <C-k> :call SmallerFont()<cr>
 
 " ------------------------------
 " machine specific configuratio
