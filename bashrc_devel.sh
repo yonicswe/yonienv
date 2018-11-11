@@ -311,9 +311,15 @@ alias configure="./configure -j ${ncoresformake}"
 
 grub2listentries () 
 {
+
+#     sudo grep "^menuentry" /boot/grub2/grub.cfg | cut -d "'" -f2
+#     one way
+      sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2-efi.cfg
+      echo "sudo grub2-set-default <entry>";
+      echo "sudo grub2-edit-env";
 #     sudo grub2-mkconfig 2>/dev/null | grep --color ^menuentry
-    sudo grub2-mkconfig 2>/dev/null | sed 's/).*/)/g' |
-        awk -v count=0 '/^menuentry/{print count" " $0; count++}'
+#     sudo grub2-mkconfig 2>/dev/null | sed 's/).*/)/g' |
+#         awk -v count=0 '/^menuentry/{print count" " $0; count++}'
 }
 
 getkernelversionfromMakefile ()
@@ -485,8 +491,8 @@ complete -W "$(find  ${infiniband_kernel_module_path} -name "*ko" -type f -print
 fi
 
 # dmesg -w will print continuously 
-alias d='dmesg --color -x'
-alias dw='dmesg --color -xw'
+alias d='dmesg --color -Hx'
+alias dw='dmesg --color -Hxw'
 alias dh='dmesg --color -Hx'
 alias dcc='sudo dmesg -C'
 # dmesg -w will continuously print to screen (like tail -f)
