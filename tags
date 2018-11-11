@@ -40,6 +40,7 @@ changecdlinux	bashrc_mlx.sh	/^changecdlinux () {$/;"	f
 checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel ()$/;"	f
 checkpatchuserpace	bashrc_mlx.sh	/^checkpatchuserpace ()$/;"	f
 clean	mkyonienv.sh	/^clean ()$/;"	f
+clean_git_env	mkyonienv.sh	/^clean_git_env ()$/;"	f
 clean_vim_env	mkyonienv.sh	/^clean_vim_env ()$/;"	f
 cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
 cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
@@ -88,6 +89,7 @@ getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f
 gitapplyPatchList	bashrc_git.sh	/^gitapplyPatchList () $/;"	f
 gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
+gitcommitmetadata	bashrc_git.sh	/^gitcommitmetadata ()$/;"	f
 gitcommitmlx	bashrc_git.sh	/^gitcommitmlx ()$/;"	f
 gitcommityoni	bashrc_git.sh	/^gitcommityoni ()$/;"	f
 gitconfig	bashrc_git.sh	/^gitconfig ()$/;"	f
@@ -162,6 +164,7 @@ mkkernelbuildmodules	bashrc_devel.sh	/^mkkernelbuildmodules () $/;"	f
 mkkernelinstall	bashrc_devel.sh	/^mkkernelinstall ()$/;"	f
 mkkernelinstallall	bashrc_devel.sh	/^mkkernelinstallall () $/;"	f
 mkkernelinstallmodules	bashrc_devel.sh	/^mkkernelinstallmodules ()$/;"	f
+mkrdmacore	bashrc_mlx.sh	/^mkrdmacore ()$/;"	f
 mkrdmacoreApps	bashrc_mlx.sh	/^mkrdmacoreApps ()$/;"	f
 mkrxelib	bashrc_mlx.sh	/^mkrxelib ()$/;"	f
 mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f
@@ -181,6 +184,7 @@ ofedinstallversion	bashrc_mlx.sh	/^ofedinstallversion ()$/;"	f
 ofedlistversions	bashrc_mlx.sh	/^ofedlistversions ()$/;"	f
 ofedmkbackport	bashrc_mlx.sh	/^ofedmkbackport ()$/;"	f
 ofedmklinks	bashrc_mlx.sh	/^ofedmklinks ()$/;"	f
+ofedmkmetadata	bashrc_mlx.sh	/^ofedmkmetadata () $/;"	f
 ofedorigindir	bashrc_mlx.sh	/^ofedorigindir ()$/;"	f
 opensmmlx	bashrc_mlx.sh	/^opensmmlx ()$/;"	f
 parse_git_branch	bashrc_fs.sh	/^parse_git_branch() {$/;"	f
@@ -197,6 +201,7 @@ pdf_complete	bashrc_bookmarks.sh	/^pdf_complete ()$/;"	f
 pdf_usage	bashrc_bookmarks.sh	/^pdf_usage ()$/;"	f
 pdp	bashrc_bookmarks.sh	/^pdp ()$/;"	f
 pgrep	bashrc_fs.sh	/^pgrep () $/;"	f
+pgrepa	bashrc_fs.sh	/^pgrepa () $/;"	f
 pr_debug	bashrc_devel.sh	/^pr_debug () $/;"	f
 pr_debug_usage	bashrc_devel.sh	/^pr_debug_usage ()$/;"	f
 print_underline	bashrc_common.sh	/^print_underline () $/;"	f
@@ -259,6 +264,7 @@ svnstatu	bashrc_svn.sh	/^svnstatu () {$/;"	f
 svnsw	bashrc_svn.sh	/^svnsw () $/;"	f
 svnup	bashrc_svn.sh	/^svnup () $/;"	f
 svnupbranch	bashrc_svn.sh	/^svnupbranch ()$/;"	f
+syndrome_to_english	bashrc_mlx.sh	/^syndrome_to_english () $/;"	f
 t	bashrc_fs.sh	/^t () $/;"	f
 tag_ls	bashrc_svn.sh	/^tag_ls () {$/;"	f
 tagcompleteme	bashrc_tags.sh	/^tagcompleteme () $/;"	f
@@ -266,6 +272,7 @@ tagcscope	bashrc_tags.sh	/^tagcscope () $/;"	f
 tagcscopeinfiniband	bashrc_tags.sh	/^tagcscopeinfiniband () $/;"	f
 tagcscopekernel	bashrc_tags.sh	/^tagcscopekernel () $/;"	f
 tagcscopemlx5	bashrc_tags.sh	/^tagcscopemlx5 () $/;"	f
+tagme	bashrc_tags.sh	/^tagme ()$/;"	f
 tagme_base	bashrc_tags.sh	/^tagme_base ()$/;"	f
 tagmeofakernel	bashrc_mlx.sh	/^tagmeofakernel ()$/;"	f
 tagmeofedlibs	bashrc_mlx.sh	/^tagmeofedlibs ()$/;"	f
@@ -284,6 +291,7 @@ vlinstall	bashrc_mlx.sh	/^vlinstall ()$/;"	f
 vm	bashrc_fs.sh	/^vm ()$/;"	f
 vn	bashrc_vim.sh	/^vn () $/;"	f
 vncwatcherslist	bashrc_fs.sh	/^vncwatcherslist () $/;"	f
+vrename	bashrc_fs.sh	/^vrename ()$/;"	f
 vreset	bashrc_fs.sh	/^vreset ()$/;"	f
 vscript	bashrc_vim.sh	/^vscript () $/;"	f
 vstart	bashrc_fs.sh	/^vstart ()$/;"	f
