@@ -169,7 +169,13 @@
         fi;                                  \
     }; f"
 
-    edit = "!f() { GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; }; f"
+    edit = "!f() {                  \
+  	   if [ $# -eq 0 ] ; then   \
+              git commit --amend ;  \
+	   else                     \
+	      GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; \
+           fi                       \
+    }; f"
 
     lg = !git lg1
     lg1 = !git lg1-specific --all
