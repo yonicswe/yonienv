@@ -600,6 +600,12 @@ function! Tagme_func ()
 endfunc
 com! Tagme call Tagme_func()
 
+function! TagmeAgain_func ()
+   execute "!./tagme.sh 1"
+   execute "silent cs reset"
+endfunc
+com! TagmeAgain call TagmeAgain_func()
+
 function! RestartSess ()
    call DeleteAllBuffers ()
    execute "source Session.vim"
