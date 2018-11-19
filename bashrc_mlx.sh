@@ -368,7 +368,12 @@ ofedmkmetadata ()
         ./devtools/add_metadata.sh -n ${num_of_commits};
     else
         echo "You forgot  <number of commits>"
+        return;
     fi
+
+    echo "Verifying yonatan cohen metadata";        
+    echo "./devtools/verify_metadata.sh -p metadata/Yonatan_Cohen.csv"
+    ./devtools/verify_metadata.sh -p metadata/Yonatan_Cohen.csv;
 }
 
 ofeddeletebackport ()
@@ -422,7 +427,8 @@ ofedorigindir ()
     cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
 }
 
-alias ofedinfo='ofed_info -s'
+alias ofedversion='ofed_info -s'
+alias ofedrestart='sudo service openibd restart'
 
 vlinstall ()
 {
@@ -1060,7 +1066,9 @@ ofedmkbackport ()
     if [ "$ans" == "n" ] ; then
         return;
     fi
-    ./configure -j ${ncoresformake} ${configure_options}
+    echo             "================================================";
+    /usr/bin/time -f "--->elapsed time %E" ./configure -j ${ncoresformake} ${configure_options}
+    echo             "================================================";
 }
 
 # if [ -d ~yonatanc/devel ] ; then
