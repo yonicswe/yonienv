@@ -314,9 +314,19 @@ grub2listentries ()
 
 #     sudo grep "^menuentry" /boot/grub2/grub.cfg | cut -d "'" -f2
 #     one way
-      sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2-efi.cfg
-      echo "sudo grub2-set-default <entry>";
-      echo "sudo grub2-edit-env";
+      if [ -e /etc/grub2-efi.cfg ] ; then 
+          sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2-efi.cfg
+      elif [ -e /etc/grub2.cfg ] ; then               
+          sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2-efi.cfg
+      else          
+          sudo grub2-mkconfig 2>/dev/null | sed 's/).*/)/g' |
+              awk -v count=0 '/^menuentry/{print count" " $0; count++}'
+      fi              
+      echo "________________________________";
+      echo "to change boot option"
+      echo "    sudo grub2-set-default <entry>";
+      echo "    sudo grub2-edit-env";
+      echo "________________________________";
 #     sudo grub2-mkconfig 2>/dev/null | grep --color ^menuentry
 #     sudo grub2-mkconfig 2>/dev/null | sed 's/).*/)/g' |
 #         awk -v count=0 '/^menuentry/{print count" " $0; count++}'
