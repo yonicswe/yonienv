@@ -553,8 +553,9 @@ mydistro ()
 {
 # this code comes from 
 # https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
-
-    if [ -f /etc/os-release ]; then
+    if [ -f /etc/redhat-release ] ; then
+        OS=$(cat /etc/redhat-release)
+    elif [ -f /etc/os-release ] ; then
         # freedesktop.org and systemd
         . /etc/os-release
         OS=$NAME
@@ -585,6 +586,13 @@ mydistro ()
     fi
 
     echo $OS $VER
+    echo kernel : `uname -r`
+}
+
+m ()
+{
+    myip;
+    mydistro;
 }
 
 alias ethlistroot='echo -n "root " ; su - -c "ethlist"'
