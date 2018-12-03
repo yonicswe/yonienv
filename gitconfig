@@ -110,15 +110,18 @@
 #                                 SHA          date     name             msg
     ll =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 
-    lyoni = log --pretty=oneline --author='Yonatan Cohen'
+# lyoni = log --pretty=oneline --date=short --author='Yonatan Cohen'
 
-    l =  "!f() {                             \
-      if [ -z $1 ] ; then                             \
-         git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
-      else                                            \
-         git log -n $1 --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
-      fi ;                                            \
-    }; f"
+    lyoni = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author='Yonatan Cohen'
+    l = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+
+#   l =  "!f() {                             \
+#     if [ -z $1 ] ; then                             \
+#        git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
+#     else                                            \
+#        git log -n $1 --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
+#     fi ;                                            \
+#   }; f"
 
 
 
