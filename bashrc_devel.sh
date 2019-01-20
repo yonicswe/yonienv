@@ -303,7 +303,7 @@ editgrub ()
 editgrubvim () 
 {
 #   su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
-    sudo vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'
+    su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
 }
 
 alias make="make -j ${ncoresformake}"
@@ -317,15 +317,19 @@ grub2listentries ()
       if [ -e /etc/grub2-efi.cfg ] ; then 
           sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2-efi.cfg
       elif [ -e /etc/grub2.cfg ] ; then               
-          sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2-efi.cfg
+          sudo awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
       else          
           sudo grub2-mkconfig 2>/dev/null | sed 's/).*/)/g' |
               awk -v count=0 '/^menuentry/{print count" " $0; count++}'
       fi              
+
       echo "________________________________";
-      echo "to change boot option"
+      sudo grub2-editenv list
+      echo "________________________________";
+      echo "to change default boot option"
       echo "    sudo grub2-set-default <entry>";
-      echo "    sudo grub2-edit-env";
+      echo "to see default boot option"
+      echo "    sudo grub2-editenv list";
       echo "________________________________";
 #     sudo grub2-mkconfig 2>/dev/null | grep --color ^menuentry
 #     sudo grub2-mkconfig 2>/dev/null | sed 's/).*/)/g' |
@@ -349,7 +353,11 @@ mkkernelbuild ()
     echo -e " building only kernel version $(getkernelversionfromMakefile)"; 
     echo -e "        make -j ${ncoresformake} vmlinux"
     echo    "=============================================================";
+    if [ -e /usr/bin/time ] ; then
     /usr/bin/time -f "================================\n--->elapsed time %E" make -j ${ncoresformake} vmlinux
+    else 
+    time make -j ${ncoresformake} vmlinux
+    fi
     echo -e " built kernel version $(getkernelversionfromMakefile)"; 
     echo    "=============================================================";
 }
@@ -501,10 +509,11 @@ complete -W "$(find  ${infiniband_kernel_module_path} -name "*ko" -type f -print
 fi
 
 # dmesg -w will print continuously 
-alias d='dmesg --color -Hx'
+alias d='dmesg --color -HxP'
+alias dp='dmesg --color -Hx'
 alias dw='dmesg --color -Hxw'
-alias dh='dmesg --color -Hx'
 alias dcc='sudo dmesg -C'
+alias dyoni='su -c "echo yoni-debug > /dev/kmsg"'
 # dmesg -w will continuously print to screen (like tail -f)
 
 alias findreject='find -name "*rej"'

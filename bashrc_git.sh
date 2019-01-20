@@ -157,16 +157,19 @@ gitcommityoni ()
 {
     git config commit.template ${yonienv}/git_templates/git_commit_template_yonic; 
     git commit;
+    git config --unset commit.template;
 }
 
 gitcommitmlx ()
 {
     git config commit.template ${yonienv}/git_templates/git_commit_mlx_template;
     git commit;
+    git config --unset commit.template;
 }
 
 gitcommitmetadata ()
 {
     git config commit.template ${yonienv}/git_templates/git_commit_metadata_template;
     git commit;
+    git config --unset commit.template;
 }

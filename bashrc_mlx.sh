@@ -36,6 +36,7 @@ create_alias_for_host 1465 dev-l-vrt-146-005
 create_alias_for_host 1466 dev-l-vrt-146-006
 create_alias_for_host 1467 dev-l-vrt-146-007
 create_alias_for_host 1468 dev-l-vrt-146-008
+create_alias_for_host 1469 dev-l-vrt-146-009
 create_alias_for_host 191 dev-r-vrt-191
 
 # stm server to run regression
@@ -275,6 +276,14 @@ ibmod ()
         modules_path+=" ${modules_base_path}/extra";
     fi
 
+    if [ -n "${module_grep}" ] ; then 
+        if [ ${module_grep} == "print" ] ; then 
+            modules_path+=" ${modules_base_path}/kernel/net/core";
+            find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g';
+            return;
+        fi
+    fi
+
     find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |
         while read m ; do
             lsmod | awk '{print $1" "$3" " }' | \grep $m ;
@@ -282,10 +291,11 @@ ibmod ()
     done | column -t | if [ -n "${module_grep}" ] ; then
                           tee | sort -h -k2 | grep ${module_grep} ;
                        else
-                           tee | sort -h -k2 ;
+                         # tee | sort -h -k2 ;
+                           tee | sort -d;
                        fi
 }
-alias nox='lspci | grep nox'
+alias nox='lspci -tvv | grep --color -C 3 nox'
 # alias cdregression='cd ~/devel/regression'
 # alias cdregressioncore='cd ~/devel/regression/core'
 # alias cdregressionnet='cd ~/devel/regression/networking'
@@ -461,8 +471,13 @@ mftinstall ()
 
 mftstatus ()
 {
-    echo -e "\033[1;33;7mmake sure that you sudo mst start \033[0m"
-    sudo mst status -vv
+    if [ -x /usr/bin/mst ] ; then 
+        echo -e "\033[1;33;7mmake sure that you sudo mst start \033[0m";
+        sudo mst status -vv
+    else
+        echo "you need to install mft 'mftinstall'";
+    fi
+
 }
 
 mftcheckstatus ()
@@ -546,6 +561,67 @@ mftsetlinktypeinfiniband ()
     sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1;
 }
 
+mftresethca ()
+{
+    local mst_dev=$1;
+    local hypervisor=1;
+
+    redpill;
+    hypervisor=$?;
+    if [ ${hypervisor} -eq 0 ] ; then
+        "This is A VM. you need to do this on hypervisor";
+        echo -e "\033[1;33;7m This is A VM. you need to do this on hypervisor\033[0m"
+        return;
+    fi
+
+    if [ -z "${mst_dev}" ] ; then
+        mftstatus;
+        mftchoosedev;
+        mst_dev=/dev/mst/${mst_dev_array[$?]}
+    fi;
+
+#     echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1";
+#     sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1;
+
+    echo "sudo mlxfwreset -d ${mst_dev} reset --skip_driver"
+    sudo mlxfwreset -d ${mst_dev} reset --skip_driver;
+}
+
+mftquerynvconf ()
+{
+    local mst_dev=$1;
+    local attr;
+
+#     local hypervisor=1;
+#     redpill;
+#     hypervisor=$?;
+#     if [ ${hypervisor} -eq 0 ] ; then
+#         "This is A VM. you need to do this on hypervisor";
+#         echo -e "\033[1;33;7m This is A VM. you need to do this on hypervisor\033[0m"
+#         return;
+#     fi
+
+    if [ -z "${mst_dev}" ] ; then
+        if [ $(ismoduleup mst_pci) == "no" ] ; then return ; fi;
+        mftstatus;
+        mftchoosedev;
+        mst_dev=/dev/mst/${mst_dev_array[$?]}
+    fi;
+
+    read -p "specific attribute ? " attr;
+
+    echo "sudo mlxconfig -d ${mst_dev} q";
+    if [ -z $attr ] ; then 
+        sudo mlxconfig -d ${mst_dev} q;
+    else
+        sudo mlxconfig -d ${mst_dev} q | grep $attr;
+
+        if [ $(sudo mlxconfig -d ${mst_dev} q | grep $attr | wc -l ) -gt 0 ] ; then 
+           echo "sudo mlxconfig -d ${mst_dev} s <attr>=<value>";
+        fi
+    fi
+}
+
 mftgetlinktype ()
 {
     for d in /dev/mst/* ; do
@@ -593,14 +669,91 @@ checkpatchuserpace ()
 
 }
 
-alias mkvmredhat74='/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l RH_7.4_x86_64_virt_guest -c 16 -r 8192 -d 35'
-alias mkvmredhat75='/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l RH_7.5_x86_64_virt_guest -c 16 -r 8192 -d 35'
-alias mkvmls='sudo /.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux'
+alias kgb="sudo /.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder"
+alias mkvmredhat74="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.4_x86_64_virt_guest   "
+alias mkvmredhat75="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.5_x86_64_virt_guest   "
+alias mkvmfedora28="kgb -o linux  -c 16 -r 8192 -d 35 -l Fedora_28_x86_64_virt_guest"
+alias mkvmls="kgb -o linux"
 mkvmhelp()
 {
     echo "su - ";
     echo -e "/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l \033[1;31m<your choice of vm>\033[00m -c 16 -r 8192 -d 35";
     echo "choose a VM to install from the list produced by mkvmls"
+}
+
+findiblibsfaster ()
+{
+#     ib_libs=(libmlx5-rdmav2.so libibacmp.so libibumad.so libibverbs.so)
+#     ib_libs+=(libibcm.so libhns-rdmav2.so libcxgb3-rdmav2.so libcxgb4-rdmav2.so libi40iw-rdmav2.so)
+#     ib_libs+=(librdmacm.so libnes-rdmav2.so libmlx4-rdmav2.so libmthca-rdmav2.so libmlx5.so)
+#     ib_libs+=(libocrdma-rdmav2.so libhfi1verbs-rdmav2.so libipathverbs-rdmav2.so libqedr-rdmav2.so)
+#     ib_libs+=(libvmw_pvrdma-rdmav2.so librxe-rdmav2.so librspreload.so libibacmp.so);
+
+    ib_libs=(.*libibverbs.so)
+    ib_libs+=(.*libmlx4.so)
+    ib_libs+=(.*libmlx4-rdmav.*so)
+    ib_libs+=(.*libmlx5.so)
+    ib_libs+=(.*librxe-rdmav.*so)
+    ib_libs+=(.*librxe-rdmav.*so)
+    ib_libs+=(.*libibumad.so)
+    ib_libs+=(.*libibcm.so)
+    ib_libs+=(.*libipathverbs-rdmav.*so)
+    ib_libs+=(.*libnes-rdmav*.so)
+    ib_libs+=(.*libhfi1verbs-rdmav.*so)
+    ib_libs+=(.*libhns-rdmav.*so)
+    ib_libs+=(.*libocrdma-rdmav.*so)
+    ib_libs+=(.*libi40iw-rdmav.*so)
+    ib_libs+=(.*libbnxt_re-rdmav.*so)
+    ib_libs+=(.*libqedr-rdmav.*so)
+    ib_libs+=(.*libvmw_pvrdma-rdmav.*so)
+    ib_libs+=(.*libcxgb4-rdmav.*so)
+    ib_libs+=(.*libcxgb3-rdmav.*so)
+    ib_libs+=(.*libmthca-rdmav.*so)
+    ib_libs+=(.*librdmacm.so)
+    ib_libs+=(.*libibacmp.so)
+    ib_libs+=(.*librspreload.so)
+
+
+    local ib_libs_search_path=(/usr/lib64/  /usr/local/lib64/)
+#   local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/)
+#   local ib_libs_search_path=(/usr/lib/ /usr/lib64/ /usr/local/lib/  /usr/local/lib64/ /lib /lib64/)
+
+    local delete_app=
+    local lib=
+
+    if [ -n ${1} ] ; then
+        if [ "${1}" == "-d" ] ; then
+            read -p "delete ib libs [N/y]: " ans;
+
+            if [ "$ans" != "y" ] ; then
+                return;
+            fi
+            delete_app="-delete";
+        else
+            lib=$1;
+        fi
+    fi
+    
+
+    libs="${ib_libs[0]}"
+    for (( i=1 ; i< ${#ib_libs[@]} ; i++))  ; do
+        libs+=" -o -regex ${ib_libs[$i]}"
+    done
+
+#     echo $libs;
+    for i in $(find ${ib_libs_search_path[@]} -regex $libs) ; do 
+        ls -l $i 
+    done
+
+
+#         if [ -z $lib ] ; then
+#             echo -e "\033[1;35m--- ${i} ----\033[0m"
+#             sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+#         else
+#             sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" | grep ${lib} 2>/dev/null
+#         fi
+#         ((count++));
+#     done
 }
 
 findiblibs ()
@@ -794,7 +947,7 @@ csfiles ()
 ismoduleup ()
 {
     local module=$1;
-    if [ $(lsmod |grep ${module} | wc  -l ) -gt 0 ] ; then
+    if [ $(lsmod |grep -w ${module} | wc  -l ) -gt 0 ] ; then
         echo yes;
     else
         echo no;
@@ -824,7 +977,16 @@ removemoduleifloaded ()
     fi
 }
 
-ib4start ()
+reloadmodule ()
+{
+    local module=$1;
+    removemoduleifloaded ${module};
+    loadmoduleifnotloaded ${module};
+}
+
+complete -W "$(ibmod print)" reloadmodule ismoduleup loadmoduleifnotloaded removemoduleifloaded
+
+mlx4start ()
 {
     loadmoduleifnotloaded ib_core
     loadmoduleifnotloaded mlx4_ib
@@ -832,16 +994,17 @@ ib4start ()
     loadmoduleifnotloaded ib_uverbs
 }
 
-ib4stop ()
+mlx4stop ()
 {
     removemoduleifloaded mlx4_ib
     removemoduleifloaded mlx4_en
     removemoduleifloaded mlx4_core
 }
 
-alias ib5restart='ib4stop; ib4start'
+alias mlx4restart='mlx4stop; mlx4start'
+alias mlx5restart='mlx5stop; mlx5start'
 
-ib5start ()
+mlx5start ()
 {
     loadmoduleifnotloaded ib_core
     loadmoduleifnotloaded mlx5_core
@@ -850,17 +1013,17 @@ ib5start ()
 }
 
 
-ib5stop ()
+mlx5stop ()
 {
     removemoduleifloaded mlx5_ib
     removemoduleifloaded mlx5_core
 }
-alias ib5restart='ib5stop; ib5start'
+alias mlx5restart='mlx5stop; mlx5start'
 
-ibstart ()
+mlxstart ()
 {
-    ib4start;
-    ib5start;
+    mlx4start;
+    mlx5start;
 
     loadmoduleifnotloaded ib_core
     loadmoduleifnotloaded rdma_cm
@@ -875,12 +1038,12 @@ ibstart ()
     loadmoduleifnotloaded mlx5_fpga_tools
 }
 
-ibstop ()
+mlxstop ()
 {
     removemoduleifloaded mlx5_fpga_tools
 
-    ib4stop
-    ib5stop
+    mlx4stop
+    mlx5stop
 
     removemoduleifloaded ib_iser
     removemoduleifloaded ib_isert
@@ -898,10 +1061,12 @@ ibstop ()
     removemoduleifloaded ib_umad
     removemoduleifloaded ib_uverbs
     removemoduleifloaded mlx5_core
+    removemoduleifloaded ib_sa
+    removemoduleifloaded ib_mad
     removemoduleifloaded ib_core
 }
 
-alias ibrestart='ibstop ; ibstart'
+alias mlxrestart='mlxstop ; mlxstart'
 
 rxe ()        { sudo rxe_cfg ;      }
 rxestart ()
@@ -1067,8 +1232,8 @@ ofedmkbackport ()
         return;
     fi
     echo             "================================================";
-    /usr/bin/time -f "--->elapsed time %E" ./configure -j ${ncoresformake} ${configure_options}
-    echo             "================================================";
+    /usr/bin/time -f "=======================\n--->elapsed time %E" ./configure -j ${ncoresformake} ${configure_options}
+    echo             "=======================";
 }
 
 # if [ -d ~yonatanc/devel ] ; then
@@ -1111,24 +1276,34 @@ mkcoverletterkernel ()
     ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next -- $1
 }
 
-mkkernelbuildinfiniband ()
-{
-    echo "make -j${ncoresformake} M=drivers/infiniband/";
-    \make -j${ncoresformake} M=drivers/infiniband/;
-}
- 
 mkkernelbuildmlx5ib ()
 {
-    echo "make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/";
-    \make -j${ncoresformake} M=drivers/infiniband/hw/mlx5/;
+    local again="${1}";
+    echo "make ${again} -j${ncoresformake} M=drivers/infiniband/hw/mlx5/";
+    \make ${again} -j${ncoresformake} M=drivers/infiniband/hw/mlx5/;
 }
 mkkernelbuildmlx5core ()
 {
-   echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/"
-   \make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
+    local again="${1}";
+    echo  "make ${again} -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/";
+    \make ${again} -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
 }
 
+mkkernelbuildmlx4ib ()
+{
+    echo "make -j${ncoresformake} M=drivers/infiniband/hw/mlx4/";
+    \make -j${ncoresformake} M=drivers/infiniband/hw/mlx4/;
+}
+mkkernelbuildmlx4core ()
+{
+   echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx4/core/"
+   \make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx4/;
+}
+
+alias mkkernelbuildmlx4='mkkernelbuildmlx4ib; mkkernelbuildmlx4core'
 alias mkkernelbuildmlx5='mkkernelbuildmlx5ib; mkkernelbuildmlx5core'
+alias mkkernelbuildmlx5again='mkkernelbuildmlx5ib -B; mkkernelbuildmlx5core -B'
+alias mkkernelbuildmlx='mkkernelbuildmlx5; mkkernelbuildmlx4'
 
 alias touchmlx5ib='find drivers/infiniband/hw/mlx5/ -name "*.c" -exec touch {} \;'
 alias touchmlx5core='find drivers/net/ethernet/mellanox/mlx5/ -name "*.c" -exec touch {} \;'
@@ -1208,3 +1383,32 @@ syndrome_to_english ()
     git grep -i $1 src;
     cd - &>/dev/null
 }
+
+
+mlx ()
+{
+    if [ -x /usr/sbin/ibstat ] ; then
+        echo "===================================="
+        echo "        ibstat                      "
+        echo "       --------                     "
+        ibstat | grep "CA\|Number of ports";
+        echo "===================================="
+    fi
+    if [ -x /usr/bin/ibv_devinfo ] ; then
+        echo "        ibv_devinfo                 "
+        echo "       -------------                "
+        ibv_devinfo | grep "state\|hca_id\|\<port\>\|phys_port_cnt\|link_layer" | column -t ;
+        echo "===================================="
+    fi;
+
+    if [ -x /usr/bin/ibdev2netdev ] ; then
+        echo "   ibdev2netdev                     "
+        echo "  --------------                    "
+        ibdev2netdev;
+        echo "===================================="
+    fi;
+
+
+#     mftstatus;
+}                       
+                        

@@ -383,6 +383,7 @@ dirdiffbrief ()
     diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ
 }
 
+alias tt='probe_topology'
 alias probe_topology_root='echo -n "root " ; su - -c "probe_topology"'
 probe_topology () 
 {

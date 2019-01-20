@@ -1,40 +1,40 @@
 #!/bin/bash
 
-tagcompleteme () 
+tagcompleteme ()
 {
     name_spec=$1;
-    # complete -W "$(awk -v n=$name_spec '/${n}/{print $1}' tags )" gt 
-    if [ -z "${name_spec}" ] ; then 
-        complete -W "$( awk '{print $1}' tags )" gt vt 
+    # complete -W "$(awk -v n=$name_spec '/${n}/{print $1}' tags )" gt
+    if [ -z "${name_spec}" ] ; then
+        complete -W "$( awk '{print $1}' tags )" gt vt
     else
         complete -W "$(awk '{print $1}' tags | /usr/bin/grep -i ${name_spec} )" gt vt
     fi
 }
 
-alias cpptags='ctags -R --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")' 
+alias cpptags='ctags -R --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
 
-tagcscope () 
+tagcscope ()
 {
     source_path=${1:-.};
     find ${source_path} -regex ".*\.c\|.*\.h"  -type f > cscope.files;
     cscope -vqb;
 }
 
-tagcscopekernel () 
+tagcscopekernel ()
 {
     source_path=${1:-.};
     find ${source_path} -regex ".*\.c\|.*\.h"  -type f > cscope.files;
     cscope -vqbk;
 }
 
-tagcscopeinfiniband () 
+tagcscopeinfiniband ()
 {
     source_path=${1:-.};
     find ${source_path}/drivers/infiniband/ ${source_path}/drivers/net/ethernet/mellanox/ ${source_path}/include/ -regex ".*\.c\|.*\.h"  -type f > cscope.files;
     cscope -vkqb;
 }
 
-tagcscopemlx5 () 
+tagcscopemlx5 ()
 {
     source_path=${1:-.};
     find ${source_path}/drivers/infiniband/hw/mlx5/ ${source_path}/drivers/net/ethernet/mellanox/mlx5/ ${source_path}/include/ -regex ".*\.c\|.*\.h"  -type f > cscope.files;
@@ -45,8 +45,8 @@ alias tagyonienv='ctags --language-force=sh *'
 
 tagme_base ()
 {
-    declare -a includeTagdir=("${!1}");
-    declare -a excludeTagdir=("${!2}");
+#     declare -a includeTagdir=("${!1}");
+#     declare -a excludeTagdir=("${!2}");
     local extra_filetypes=$3;
     local filetypes=".*\.c\|.*\.h";
 
@@ -58,7 +58,7 @@ tagme_base ()
     if [ -e cscope.files ] ; then 
         cscope -vkqb 2>/dev/null;
         echo "Building ctags file...";
-        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files)
+        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
         exit
     fi
 

@@ -73,6 +73,7 @@ findconflictfiles	bashrc_devel.sh	/^findconflictfiles ()$/;"	f
 findexecutable	bashrc_fs.sh	/^findexecutable ()$/;"	f
 findibapps	bashrc_mlx.sh	/^findibapps ()$/;"	f
 findiblibs	bashrc_mlx.sh	/^findiblibs ()$/;"	f
+findiblibsfaster	bashrc_mlx.sh	/^findiblibsfaster ()$/;"	f
 findmin	bashrc_fs.sh	/^findmin ()$/;"	f
 findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
@@ -109,13 +110,7 @@ gsources	bashrc_vim.sh	/^function gsources ()$/;"	f
 gw	bashrc_fs.sh	/^gw () $/;"	f
 h	bashrc_fs.sh	/^h () $/;"	f
 howCleanIsMyHome	bashrc_mlx.sh	/^howCleanIsMyHome ()$/;"	f
-ib4start	bashrc_mlx.sh	/^ib4start ()$/;"	f
-ib4stop	bashrc_mlx.sh	/^ib4stop ()$/;"	f
-ib5start	bashrc_mlx.sh	/^ib5start ()$/;"	f
-ib5stop	bashrc_mlx.sh	/^ib5stop ()$/;"	f
 ibmod	bashrc_mlx.sh	/^ibmod ()$/;"	f
-ibstart	bashrc_mlx.sh	/^ibstart ()$/;"	f
-ibstop	bashrc_mlx.sh	/^ibstop ()$/;"	f
 icm_kill	bashrc_nice.sh	/^icm_kill () $/;"	f
 icm_sbuild_vars	bashrc_nice.sh	/^icm_sbuild_vars ()$/;"	f
 icm_sockets	bashrc_nice.sh	/^icm_sockets () $/;"	f
@@ -137,6 +132,7 @@ lld	bashrc_fs.sh	/^lld ()$/;"	f
 loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
+m	bashrc_fs.sh	/^m ()$/;"	f
 main	mkyonienv.sh	/^main  ()$/;"	f
 md2man	bashrc_mlx.sh	/^md2man ()$/;"	f
 messages	mkyonienv.sh	/^messages () $/;"	f
@@ -144,6 +140,8 @@ mftcheckstatus	bashrc_mlx.sh	/^mftcheckstatus ()$/;"	f
 mftchoosedev	bashrc_mlx.sh	/^mftchoosedev ()$/;"	f
 mftgetlinktype	bashrc_mlx.sh	/^mftgetlinktype ()$/;"	f
 mftinstall	bashrc_mlx.sh	/^mftinstall ()$/;"	f
+mftquerynvconf	bashrc_mlx.sh	/^mftquerynvconf ()$/;"	f
+mftresethca	bashrc_mlx.sh	/^mftresethca ()$/;"	f
 mftsetlinktypeeth	bashrc_mlx.sh	/^mftsetlinktypeeth ()$/;"	f
 mftsetlinktypeinfiniband	bashrc_mlx.sh	/^mftsetlinktypeinfiniband ()$/;"	f
 mftstart	bashrc_mlx.sh	/^mftstart ()$/;"	f
@@ -158,6 +156,8 @@ mkkernelbuildall	bashrc_devel.sh	/^mkkernelbuildall ()$/;"	f
 mkkernelbuildinfiniband	bashrc_mlx.sh	/^mkkernelbuildinfiniband ()$/;"	f
 mkkernelbuildinstallall	bashrc_devel.sh	/^mkkernelbuildinstallall ()$/;"	f
 mkkernelbuildinstallmodules	bashrc_devel.sh	/^mkkernelbuildinstallmodules ()$/;"	f
+mkkernelbuildmlx4core	bashrc_mlx.sh	/^mkkernelbuildmlx4core ()$/;"	f
+mkkernelbuildmlx4ib	bashrc_mlx.sh	/^mkkernelbuildmlx4ib ()$/;"	f
 mkkernelbuildmlx5core	bashrc_mlx.sh	/^mkkernelbuildmlx5core ()$/;"	f
 mkkernelbuildmlx5ib	bashrc_mlx.sh	/^mkkernelbuildmlx5ib ()$/;"	f
 mkkernelbuildmodules	bashrc_devel.sh	/^mkkernelbuildmodules () $/;"	f
@@ -170,6 +170,13 @@ mkrxelib	bashrc_mlx.sh	/^mkrxelib ()$/;"	f
 mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f
 mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime ()$/;"	f
 mkvmhelp	bashrc_mlx.sh	/^mkvmhelp()$/;"	f
+mlx	bashrc_mlx.sh	/^mlx ()$/;"	f
+mlx4start	bashrc_mlx.sh	/^mlx4start ()$/;"	f
+mlx4stop	bashrc_mlx.sh	/^mlx4stop ()$/;"	f
+mlx5start	bashrc_mlx.sh	/^mlx5start ()$/;"	f
+mlx5stop	bashrc_mlx.sh	/^mlx5stop ()$/;"	f
+mlxstart	bashrc_mlx.sh	/^mlxstart ()$/;"	f
+mlxstop	bashrc_mlx.sh	/^mlxstop ()$/;"	f
 mountkernelsources	bashrc_mlx.sh	/^mountkernelsources () {$/;"	f
 mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f
 mydistro	bashrc_fs.sh	/^mydistro ()$/;"	f
@@ -214,6 +221,7 @@ rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f
 reboot	bashrc_fs.sh	/^reboot ()$/;"	f
 redpill	bashrc_fs.sh	/^redpill () $/;"	f
 refresh_ssh	bashrc_fs.sh	/^refresh_ssh ()$/;"	f
+reloadmodule	bashrc_mlx.sh	/^reloadmodule ()$/;"	f
 removemoduleifloaded	bashrc_mlx.sh	/^removemoduleifloaded ()$/;"	f
 restartDhcp	bashrc_nice.sh	/^restartDhcp () $/;"	f
 rpmsearch	bashrc_fs.sh	/^rpmsearch () $/;"	f
@@ -267,11 +275,11 @@ svnupbranch	bashrc_svn.sh	/^svnupbranch ()$/;"	f
 syndrome_to_english	bashrc_mlx.sh	/^syndrome_to_english () $/;"	f
 t	bashrc_fs.sh	/^t () $/;"	f
 tag_ls	bashrc_svn.sh	/^tag_ls () {$/;"	f
-tagcompleteme	bashrc_tags.sh	/^tagcompleteme () $/;"	f
-tagcscope	bashrc_tags.sh	/^tagcscope () $/;"	f
-tagcscopeinfiniband	bashrc_tags.sh	/^tagcscopeinfiniband () $/;"	f
-tagcscopekernel	bashrc_tags.sh	/^tagcscopekernel () $/;"	f
-tagcscopemlx5	bashrc_tags.sh	/^tagcscopemlx5 () $/;"	f
+tagcompleteme	bashrc_tags.sh	/^tagcompleteme ()$/;"	f
+tagcscope	bashrc_tags.sh	/^tagcscope ()$/;"	f
+tagcscopeinfiniband	bashrc_tags.sh	/^tagcscopeinfiniband ()$/;"	f
+tagcscopekernel	bashrc_tags.sh	/^tagcscopekernel ()$/;"	f
+tagcscopemlx5	bashrc_tags.sh	/^tagcscopemlx5 ()$/;"	f
 tagme	bashrc_tags.sh	/^tagme ()$/;"	f
 tagme_base	bashrc_tags.sh	/^tagme_base ()$/;"	f
 tagmeofakernel	bashrc_mlx.sh	/^tagmeofakernel ()$/;"	f
@@ -294,6 +302,7 @@ vncwatcherslist	bashrc_fs.sh	/^vncwatcherslist () $/;"	f
 vrename	bashrc_fs.sh	/^vrename ()$/;"	f
 vreset	bashrc_fs.sh	/^vreset ()$/;"	f
 vscript	bashrc_vim.sh	/^vscript () $/;"	f
+vsess	bashrc_vim.sh	/^vsess () { gsess $1 v; }$/;"	f
 vstart	bashrc_fs.sh	/^vstart ()$/;"	f
 vstop	bashrc_fs.sh	/^vstop ()$/;"	f
 watch_threads	bashrc_nice.sh	/^watch_threads () $/;"	f

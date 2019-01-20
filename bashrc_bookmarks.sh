@@ -224,6 +224,7 @@ pdf ()
 BM=~/.bookmarks.${HOSTNAME}
 alias pdedit="v ${BM} ; cat ${BM}"
 
+alias r='rebash'
 rebash ()
 {
     unalias -a

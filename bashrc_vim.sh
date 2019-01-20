@@ -66,20 +66,23 @@ gsessls ()
 {
     session_ls=$(find -maxdepth 1 -name "*.vim" -printf "%f\n");
     find -maxdepth 1 -name "*.vim" -printf "%f\n";
-    complete -W "${session_ls}" gsess;
+    complete -W "${session_ls}" gsess vsess;
 }
+
+vsess () { gsess $1 v; }
 
 gsess () 
 {
     complete -W "$(gsessls)" gsess
-    vimSession=${1}
+    local vimSession=${1}
+    local vim_or_gvim=${2:-g};
 
     if [ -e "${vimSession}"  ]  ; then 
-        g -S ${vimSession}; 
+        ${vim_or_gvim} -S ${vimSession}; 
     elif [ -e Session.vim ] ; then 
-        g -S Session.vim;
+        ${vim_or_gvim} -S Session.vim;
     elif [ -e .session.vim ] ; then 
-        g -S .session.vim;
+        ${vim_or_gvim} -S .session.vim;
     else
         echo "No vim Session found";                
     fi

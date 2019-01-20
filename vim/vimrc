@@ -1,5 +1,6 @@
 source ~/.vim/vimrc.guifont
 
+set nowritebackup
 set hlsearch
 set noincsearch
 
@@ -68,6 +69,7 @@ au FileType sh     command! R let f=expand("%")|vnew|execute '.! /bin/bash "' . 
 command! RR :bd!
 
 set encoding=utf-8
+set fileencoding=utf-8
 
 " au FileType cpp set makeprg=gcc\ -O0\ -g\ -o\ %<\ %
 " :make<cr>
@@ -108,6 +110,9 @@ au FileType txt colorscheme darkbone
 " au FileType spec colorscheme peaksea
 " au FileType diff colorscheme koehler
 " au FileType svn colorscheme peaksea
+
+" find out which colorscheme u are using
+" with :echo g:colors_name
 
 
 if !has("gui_running")
@@ -197,6 +202,8 @@ map <S-F10> :cnewer<cr>
 
 map <S-s> :w<CR>
 noremap <S-l> :set nohlsearch!<CR>
+noremap lll :set nohlsearch!<CR>
+
 " map <S-h> :/ababababababababab<CR>
 map <C-n> :set nu!<CR>
 
@@ -446,6 +453,17 @@ if &diff
     endfunction
 
     set nu
+
+
+
+"     hi DiffAdd      gui=none    guifg=NONE          guibg=#bada9f
+"     hi DiffChange   gui=none    guifg=NONE          guibg=#e5d5ac
+"     hi DiffDelete   gui=bold    guifg=#ff8080       guibg=#ffb0b0
+"     hi DiffText     gui=none    guifg=NONE          guibg=#8cbee2
+    hi DiffText   cterm=none ctermfg=Black ctermbg=LightRed gui=none guifg=Black guibg=Red
+    hi DiffChange cterm=none ctermfg=Black ctermbg=LightMagenta gui=none guifg=Black guibg=LightMagenta
+    hi DiffAdd    cterm=none ctermfg=Black ctermbg=Red gui=none guifg=Black guibg=LightMagenta
+    syntax  off
 else
     map <C-Down>   ]]zz
     map <C-Up>     [[zz
@@ -600,6 +618,12 @@ function! Tagme_func ()
 endfunc
 com! Tagme call Tagme_func()
 
+function! TagmeInBackground_func ()
+   execute "!./tagme.sh &"
+endfunc
+map mmm :call TagmeInBackground_func()<cr>
+map mm :cs reset<cr>
+
 function! TagmeAgain_func ()
    execute "!./tagme.sh 1"
    execute "silent cs reset"
@@ -670,14 +694,14 @@ set tags=tags
 
 " complete words from tag file with <ctrl>x<ctrl>k<ctrl>n
 set complete+=t
-
+let g:ctags_statusline=1
 
 "    GDB
-"   ___  ___   ___ 
+"   ___  ___   ___
 "  / __||   \ | _ )
 " | (_ || |) || _ \
 "  \___||___/ |___/
-                 
+
 function! SetBreakPoint ()
     "let taskpath=$TASK_PATH
     "     execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . taskpath . "/.gdb_breakpoints"
@@ -776,12 +800,15 @@ source ~/.vim/cscope.vim
 "  let $BASH_ENV = "~/.bashrc"
 "
 
-
+com! Printk call PrintkFunc
+function! PrintkFunc ()
+        <C-">p==
+endfunction
 
 "---------------------------------------
 "     preset registers
 "-------------------------------------
-let @p = '      printk("--->%s()%d:\n", __func__, __LINE__);' . "\n"
+let @p = '      printk("%d: %s():\n", __LINE__,  __func__);' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
 let @l =  "─────────────────────────────────────────────────────────────────────────────\n"
 let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n"
@@ -820,6 +847,17 @@ function! SmallerFont()
 endfunction
 command! SmallerFont call SmallerFont()
 map <C-k> :call SmallerFont()<cr>
+
+
+fun! ShowFuncName()
+  let lnum = line(".")
+  let col = col(".")
+  echohl ModeMsg
+  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW'))
+  echohl None
+  call search("\\%" . lnum . "l" . "\\%" . col . "c")
+endfun
+map f :call ShowFuncName() <CR>
 
 " ------------------------------
 " machine specific configuratio
