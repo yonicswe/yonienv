@@ -23,6 +23,7 @@ create_alias_for_host 8 r-ole08
 create_alias_for_host 9 r-ole08
 create_alias_for_host 10 r-ole08
 create_alias_for_host 11 r-ole08
+create_alias_for_host 15 r-ole15
 
 # my development hosts
 create_alias_for_host 145 dev-l-vrt-145
@@ -602,7 +603,10 @@ mftquerynvconf ()
 #     fi
 
     if [ -z "${mst_dev}" ] ; then
-        if [ $(ismoduleup mst_pci) == "no" ] ; then return ; fi;
+        if [ $(ismoduleup mst_pci) == "no" ] ; then 
+            echo mft is down
+            return ; 
+        fi;
         mftstatus;
         mftchoosedev;
         mst_dev=/dev/mst/${mst_dev_array[$?]}
@@ -633,15 +637,17 @@ mftgetlinktype ()
 _checkpatchcomplete ()
 {
     ls *.patch | tr ' ' '\n';
-    complete -W "$(ls *.patch)" checkpatch;
+    complete -W "$(ls *.patch)" checkpatch checkpatchkernel;
     return;
 }
 
 checkpatchkernel ()
 {
-    local patch_file=$(readlink -f $@);
+    local patch_file=;
 
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
+
+    local patch_file=$(readlink -f $@);
 
     cdlinux;
     ./scripts/checkpatch.pl --strict --ignore=GERRIT_CHANGE_ID ${patch_file};
@@ -795,6 +801,8 @@ findiblibs ()
 
     local delete_app=
     local lib=
+    local backup=""
+    local -a backup_libs=();
 
     if [ -n ${1} ] ; then
         if [ "${1}" == "-d" ] ; then
@@ -804,6 +812,8 @@ findiblibs ()
                 return;
             fi
             delete_app="-delete";
+        elif [ "${1}" == "-b" ] ; then
+            backup=yes;
         else
             lib=$1;
         fi
@@ -812,6 +822,13 @@ findiblibs ()
     count=0;
     for i in ${ib_libs[@]} ; do
 #         sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -ls ${delete_app} 2>/dev/null
+
+        if [ -n "${backup}" ] ; then 
+            backup_libs+=( $(sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%h/%f\n" ) );
+            ((count++));
+            continue;
+        fi
+
         if [ -z $lib ] ; then
             echo -e "\033[1;35m--- ${i} ----\033[0m"
             sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
@@ -820,6 +837,11 @@ findiblibs ()
         fi
         ((count++));
     done
+
+    if [ -n "${backup}" ]  ; then 
+        echo "backup IB libs to ib_libs_backup.bz2"
+        tar cjvf ib_libs_backup.bz2 ${backup_libs[@]};
+    fi
 }
 
 findibapps ()
@@ -863,6 +885,8 @@ findibapps ()
     local ib_apps_search_path=(/usr/bin/ /usr/sbin/ /usr/local/bin/ /usr/local/sbin/);
 
     local delete_app=
+    local backup=""
+    local -a backup_apps=();
 
     if [ -n ${1} ] ; then
         if [ "${1}" == "-d" ] ; then
@@ -872,16 +896,31 @@ findibapps ()
                 return;
             fi
             delete_app="-delete";
+        elif [ "${1}" == "-b" ] ; then
+            backup=yes;
         fi
     fi
 
     count=0;
     for i in ${ib_apps[@]} ; do
+
+        if [ -n "${backup}" ] ; then 
+            backup_apps+=( $(sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -printf "%h/%f\n") );
+            ((count++));
+            continue;
+        fi
+
         echo -e "\033[1;35m--- ${i} ----\033[0m"
+
 #       sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -ls ${delete_app} 2>/dev/null
         sudo find ${ib_apps_search_path[@]} -name "${ib_apps[${count}]}" -type f -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
         ((count++));
     done
+
+    if [ -n "${backup}" ]  ; then 
+        echo "backup IB apps to ib_apps_backup.bz2"
+        tar cjvf ib_apps_backup.bz2 ${backup_apps[@]};
+    fi
 }
 
 cleanibheaders ()
@@ -1397,7 +1436,12 @@ mlx ()
     if [ -x /usr/bin/ibv_devinfo ] ; then
         echo "        ibv_devinfo                 "
         echo "       -------------                "
-        ibv_devinfo | grep "state\|hca_id\|\<port\>\|phys_port_cnt\|link_layer" | column -t ;
+        ibv_devinfo | grep "state\|hca_id\|\<port\>\|phys_port_cnt\|link_layer" |
+        column -t | sed -e 's/hca_id:/\n/' \
+            -e 's/^phys_port/\ \ phys_port/' \
+            -e 's/^port/\ \ port/' \
+            -e 's/^state/\ \ state/' \
+            -e 's/^link_layer/\ \ link_layer/';
         echo "===================================="
     fi;
 
