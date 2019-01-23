@@ -102,6 +102,14 @@ clean_git_env ()
     fi
 }
 
+clean_cgdb_env () 
+{
+    local yonienv=$1;
+    echo $FUNCNAME;
+    rm  ~/.cgdb;
+    rm  ~/.gdbinit;
+}
+
 setup_cgdb_env () 
 {
     local yonienv=$1;
@@ -199,6 +207,7 @@ clean ()
 
     clean_vim_env;
     clean_git_env;
+    clean_cgdb_env; 
 }
 
 messages () 
