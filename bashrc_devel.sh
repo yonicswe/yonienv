@@ -513,7 +513,11 @@ alias d='dmesg --color -HxP'
 alias dp='dmesg --color -Hx'
 alias dw='dmesg --color -Hxw'
 alias dcc='sudo dmesg -C'
-alias dyoni='su -c "echo yoni-debug > /dev/kmsg"'
+dyoni ()
+{
+    echo -n "root ";
+    su -c "echo yoni-debug > /dev/kmsg"
+}
 # dmesg -w will continuously print to screen (like tail -f)
 
 alias findreject='find -name "*rej"'
@@ -532,10 +536,11 @@ findconflictfiles ()
 
 listerrnovalues ()
 {
-    cpp -dM /usr/include/errno.h | grep define\ E | sort -n -k 3 | awk '{print $2 " "$3}' | column -t
+#   cpp -dM /usr/include/errno.h | grep define\ E | sort -n -k 3 | awk '{print $2 " "$3}' | column -t;
+    cat ${yonienv}/errno_list.txt;
 }
 
-alias delete_patches='rm -f *.patch'
+alias delete_patches='rm -fv *.patch'
 alias delete_tags='rm -f cscope.* tags'
 
 killzombies ()
