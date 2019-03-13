@@ -25,6 +25,18 @@ cp_modules_to_lib_modules ()
     set +x 
 }
 
+install_modules_to_lib_modules ()
+{
+    for d in ${INSTALL_SOURCE[@]} ; do
+        for m in $(find $d -name *.ko)  ; do
+            echo "sudo make modules_install M=$d INSTALL_MOD_DIR=kernel/$m";
+                  sudo make modules_install M=$d INSTALL_MOD_DIR=kernel/$m;
+#             echo "sudo cp -f $m $INSTALL_TARGET/$m"
+#             sudo cp -f $m $INSTALL_TARGET/$m
+        done
+    done
+}
+
 main ()
 {
     local mod=${1:-rxe};
@@ -49,12 +61,15 @@ main ()
         INSTALL_SOURCE+=(drivers/net/ethernet/mellanox/mlx4)
         INSTALL_SOURCE+=(drivers/infiniband/hw/mlx5)
         INSTALL_SOURCE+=(drivers/net/ethernet/mellanox/mlx5/core)
+    elif [ "${mod}" == "devlink" ]  ; then             
+        INSTALL_SOURCE=(net/core)
     else
         echo "no module specified for install"
         return;
-    fi
+    fi;
 
     cp_modules_to_lib_modules;
+#     install_modules_to_lib_modules;
 }
 
 main $@
