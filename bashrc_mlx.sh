@@ -5,8 +5,8 @@
 ########################################################################
 
 
-alias editbashmlx='g ${yonienv}/bashrc_mlx.sh'
-alias chownyoni='chown yonatanc:mtl'
+alias editbashmlx='${v_or_g} ${yonienv}/bashrc_mlx.sh'
+alias chownyoni='sudo chown yonatanc:mtl'
 
 create_alias_for_host ()
 {
@@ -57,6 +57,7 @@ create_alias_for_host 51816 reg-l-vrt-5181-006
 # guy levi setup
 create_alias_for_host 212 dev-l-vrt-212
 create_alias_for_host 213 dev-l-vrt-213
+create_alias_for_host 202 dev-l-vrt-202
 
 # parav
 create_alias_for_host parav sw-mtx-036
@@ -104,7 +105,7 @@ alias randroffice24='xrandr -s "1920x1080"'
 alias randroffice27='xrandr -s "1920x1080"'
 alias randrhome36='xrandr   -s "1280x720"'
 
-alias mkgerrithook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
+alias gerritmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
 gitpushtogerrit ()
 {
 #     local branch=${1};
@@ -296,7 +297,8 @@ ibmod ()
                            tee | sort -d;
                        fi
 }
-alias nox='lspci -tvv | grep --color -C 3 nox'
+alias noxx='lspci -tvv | grep --color -C 3 nox'
+alias nox='lspci | grep --color nox'
 # alias cdregression='cd ~/devel/regression'
 # alias cdregressioncore='cd ~/devel/regression/core'
 # alias cdregressionnet='cd ~/devel/regression/networking'
@@ -372,6 +374,9 @@ backupgitkernel ()
     echo "scp ${tarfile} ${backupdest}"
 }
 
+alias backupusrlib64='tar -C / -cjvf usr_lib64.bkp.bz2 /usr/lib64'
+alias restoreusrlib64='tar -C / -xjvf usr_lib64.bkp.bz2'
+
 ofedmkmetadata () 
 {
     local num_of_commits=$1;
@@ -422,6 +427,7 @@ ofedmklinks ()
 alias ofedapplybackports='./configure -j ${ncoresformake} --kernel-version 2.6.16 --skip-autoconf'
 alias ofedconfigurewithcore='./configure -j ${ncoresformake} --with-core-mod'
 alias ofedconfigurewithrxe='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
+alias ofedconfigure='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-e_ipoib-mod --with-memtrack'
 
 ofedconfigureforkernel ()
 {
@@ -438,8 +444,18 @@ ofedorigindir ()
     cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
 }
 
-alias ofedversion='ofed_info -s'
-alias ofedrestart='sudo service openibd restart'
+alias ofedversion='[ -e /usr/bin/ofed_info ] && ofed_info -s'
+alias ofedstop='sudo service openibd stop'
+alias ofedstart='sudo service openibd start'
+alias ofedrestart='ofedstop; ofedstart'
+
+
+m ()
+{
+    myip;
+    mydistro;
+    ofedversion;
+}
 
 vlinstall ()
 {
@@ -636,6 +652,7 @@ mftgetlinktype ()
 
 _checkpatchcomplete ()
 {
+    [ -z "$(ls *.patch 2>/dev/null)" ] && return;
     ls *.patch | tr ' ' '\n';
     complete -W "$(ls *.patch)" checkpatch checkpatchkernel;
     return;
@@ -645,8 +662,8 @@ checkpatchkernel ()
 {
     local patch_file=;
 
-    if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
-
+    _checkpatchcomplete;
+    [ $# -eq 0 ] && return ;
     local patch_file=$(readlink -f $@);
 
     cdlinux;
@@ -749,7 +766,7 @@ findiblibsfaster ()
 #     echo $libs;
     for i in $(find ${ib_libs_search_path[@]} -regex $libs) ; do 
         ls -l $i 
-    done
+    done | column -t;
 
 
 #         if [ -z $lib ] ; then
@@ -1170,10 +1187,10 @@ alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib
 
 alias rdmacoreversion='grep Version redhat/rdma-core.spec'
 # alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null'
-mkrdmacore ()
+rdmacorebuild ()
 {
     local target=$1
-    complete -W "$(make -C build help |awk '{print $2}')" mkrdmacore
+    complete -W "$(make -C build help |awk '{print $2}')" rdmacorebuild
     if [ -z ${target} ] ; then 
         make -C build $target -j ${ncoresformake} -s 1>/dev/null 
     else
@@ -1181,14 +1198,14 @@ mkrdmacore ()
     fi
 
 }
-alias mkrdmacoreagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s 1>/dev/null'
-alias mkrdmacore1sttime='rdma-core_build.sh 1>/dev/null'
-alias mkrdmacoreinstall='sudo make -C build install > /dev/null'
-alias mkrdmacoreibverbs='\make -C build ibverbs -j ${ncoresformake} -s 1>/dev/null'
-alias mkrdmacoremlx4='\make -C build mlx4 -j ${ncoresformake} -s 1>/dev/null'
-alias mkrdmacoremlx5='\make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
-alias mkrdmacorercping='\make -C build ibv_rc_pingpong -j ${ncoresformake} -s 1>/dev/null'
-mkrdmacoreApps ()
+alias rdmacorebuildagain='find libibverbs providers -name "*.c" -exec touch {} \; ;  make -C build -j ${ncoresformake} -s 1>/dev/null'
+alias rdmacorebuild1sttime='rdma-core_build.sh 1>/dev/null'
+alias rdmacoreinstall='sudo make -C build install > /dev/null'
+alias rdmacorebuildibverbs='\make -C build ibverbs -j ${ncoresformake} -s 1>/dev/null'
+alias rdmacorebuildmlx4='\make -C build mlx4 -j ${ncoresformake} -s 1>/dev/null'
+alias rdmacorebuildmlx5='\make -C build mlx5 -j ${ncoresformake} -s 1>/dev/null'
+alias rdmacorebuildrcping='\make -C build ibv_rc_pingpong -j ${ncoresformake} -s 1>/dev/null'
+rdmacorebuildapps ()
 {
     \make -C build ibv_rc_pingpong -j ${ncoresformake} -s;
 #   make -C build ibv_ud_pingpong -j ${ncoresformake} -s;
@@ -1218,6 +1235,8 @@ ofedbuildversion ()
     fi;
     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
 }
+
+alias ofedkernelinstall='sudo make install INSTALL_MOD_DIR=updates'
 
 ofedinstallversion ()
 {
@@ -1250,6 +1269,8 @@ ofedfindindexforpackage ()
 
 alias ofedfindindexforofakernel='ofedfindindexforpackage ofa_kernel:'
 alias ofedfindindexforlibmlx5='ofedfindindexforpackage libmlx5:'
+alias ofedfindindexforlibibverbs='ofedfindindexforpackage libibverbs'
+alias ofedkernelinstall='sudo make install INSTALL_MOD_DIR=kernel'
 
 ofedmkbackport ()
 {
@@ -1271,7 +1292,11 @@ ofedmkbackport ()
         return;
     fi
     echo             "================================================";
-    /usr/bin/time -f "=======================\n--->elapsed time %E" ./configure -j ${ncoresformake} ${configure_options}
+    if [ -x /usr/bin/time ] ; then
+        /usr/bin/time -f "=======================\n--->elapsed time %E" ./configure -j ${ncoresformake} ${configure_options}
+    else
+        ./configure -j ${ncoresformake} ${configure_options}
+    fi
     echo             "=======================";
 }
 
@@ -1298,51 +1323,58 @@ alias cdmarsdirecttest='cd /tmp/mars_tests/SW_NET_VERIFICATION-directtest_db.xml
 
 mkcoverletterusage ()
 {
-    echo "give index range. e.g. HEAD~3"
+    echo "give index range and version. e.g. ";
+    echo "mkcoverletterkernel HEAD~3 3"
 }
 
 mkcoverletterrdmacore ()
 { 
+    local index_range=${1};
+    local version=${2};
+
     if [ $# -eq 0 ] ; then mkcoverletterusage ; return ; fi;
-    mkdir coverletter
-    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core -- $1
+    if ! [ -d coverletter ] ; then mkdir coverletter ; fi;
+    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core -v ${version} -- ${index_range};
 }
 
 mkcoverletterkernel ()
 {
-    if [ $# -eq 0 ] ; then mkcoverletterusage ; return ; fi;
-    mkdir coverletter
-    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next -- $1
+    local index_range=${1};
+    local version=${2};
+
+    if [ $# -lt 2 ] ; then mkcoverletterusage ; return ; fi;
+    if ! [ -d coverletter ] ; then mkdir coverletter ; fi;
+    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next -v ${version} -- ${index_range}
 }
 
-mkkernelbuildmlx5ib ()
+kernelbuildmlx5ib ()
 {
     local again="${1}";
     echo "make ${again} -j${ncoresformake} M=drivers/infiniband/hw/mlx5/";
     \make ${again} -j${ncoresformake} M=drivers/infiniband/hw/mlx5/;
 }
-mkkernelbuildmlx5core ()
+kernelbuildmlx5core ()
 {
     local again="${1}";
     echo  "make ${again} -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/";
     \make ${again} -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx5/core/;
 }
 
-mkkernelbuildmlx4ib ()
+kernelbuildmlx4ib ()
 {
     echo "make -j${ncoresformake} M=drivers/infiniband/hw/mlx4/";
     \make -j${ncoresformake} M=drivers/infiniband/hw/mlx4/;
 }
-mkkernelbuildmlx4core ()
+kernelbuildmlx4core ()
 {
    echo  "make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx4/core/"
    \make -j${ncoresformake} M=drivers/net/ethernet/mellanox/mlx4/;
 }
 
-alias mkkernelbuildmlx4='mkkernelbuildmlx4ib; mkkernelbuildmlx4core'
-alias mkkernelbuildmlx5='mkkernelbuildmlx5ib; mkkernelbuildmlx5core'
-alias mkkernelbuildmlx5again='mkkernelbuildmlx5ib -B; mkkernelbuildmlx5core -B'
-alias mkkernelbuildmlx='mkkernelbuildmlx5; mkkernelbuildmlx4'
+alias kernelbuildmlx4='kernelbuildmlx4ib; kernelbuildmlx4core'
+alias kernelbuildmlx5='kernelbuildmlx5ib; kernelbuildmlx5core'
+alias kernelbuildmlx5again='kernelbuildmlx5ib -B; kernelbuildmlx5core -B'
+alias kernelbuildmlx='kernelbuildmlx5; kernelbuildmlx4'
 
 alias touchmlx5ib='find drivers/infiniband/hw/mlx5/ -name "*.c" -exec touch {} \;'
 alias touchmlx5core='find drivers/net/ethernet/mellanox/mlx5/ -name "*.c" -exec touch {} \;'
