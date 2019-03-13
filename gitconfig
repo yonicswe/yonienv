@@ -30,38 +30,48 @@
   untracked = cyan
 
 [alias]
-    s = status -uno
-    su = status -u
-    listmodified = diff --name-only
-    listcached = diff --cached --name-only
-    g = grep --color
-    gi = grep --color --ignore-case
-    # d = diff --color
-    d = diff
+
+    amend = commit --amend --no-edit
+
+    b = branch -vv
+    bdelete = branch -D 
+    brename = branch -M
+
+    commitempty = commit --allow-empty
+    c = checkout
+
 #   dg = difftool --tool=gvimdiff
+#   d = diff --color
     dgfile = difftool --tool=gvimdiff --no-prompt
     dv = difftool --tool=vimdiff
     dc = diff --cached
     dcg = difftool --tool=gvimdiff --cached
+    dcv = difftool --tool=vimdiff --cached
     dt = difftool
-    mt = mergetool
+    d = diff
     ds = diff --stat
-    ss = show --stat
-    b = branch -vv
-    bdelete = branch -D 
-    brename = branch -M
+
+    g = grep --color
+    gi = grep --color --ignore-case
+
+    head = log -n1 --pretty=oneline
+
+    listmodified = diff --name-only
+    listcached = diff --cached --name-only
+
+    mt = mergetool
+    mtv = mergetool --tool=vimdiff
+
     r = remote -vv
-    c = checkout
-#   commityoni = "!f() { \
-#		    git config commit.template ~/share/yonienv/git_commit_template_yonic; \
-#		    git commit; \
-#		  }f"
-#   commitmlx = "!f() { \
-# 		    git config commit.template ~/share/yonienv/git_commit_template; \
-# 		    git commit; \
-#		  }f"
-    commitempty = commit --allow-empty
-    
+
+    s = status -uno
+    su = status -u
+    ss = show --stat
+
+    unstage = reset HEAD
+    uncommit = reset HEAD^
+    untrackfile = rm --cached 
+
     dg = "!f() {					     \
 	  if [ -z $1 ] ; then				     \
 		git difftool --tool=gvimdiff;		     \
@@ -89,12 +99,6 @@
 # listtrackedfiles = ls-tree --name-only -r 
     listtrackedfiles = "!git ls-files"
 
-#   ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate 
-    ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
-
-    amend = commit --amend --no-edit
-    unstage = reset HEAD
-    uncommit = reset HEAD^
 
     # discardall = checkout HEAD -- .
     discard = "!f() {              \
@@ -105,35 +109,16 @@
        fi;                         \
     }; f" 
 
-    head = log -n1 --pretty=oneline
-    untrackfile = rm --cached 
-#                                 SHA          date     name             msg
-    ll =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 
-# lyoni = log --pretty=oneline --date=short --author='Yonatan Cohen'
-
+#                                   SHA          date                   name             msg
+    lll =    log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
+    l =    log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
     lyoni = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author='Yonatan Cohen'
-    l = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
-
-#   l =  "!f() {                             \
-#     if [ -z $1 ] ; then                             \
-#        git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
-#     else                                            \
-#        git log -n $1 --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
-#     fi ;                                            \
-#   }; f"
-
-
-
-    l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
+    l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
     l20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n20
     l30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n30
     lf = log --pretty=short
-    #   l = log --pretty=format oneline
-    #   l10 = log --pretty=oneline -n10
-    #   l30 = log --pretty=oneline -n30
-    # ll = log --pretty=oneline --graph --decorate --abbrev-commit
-    # ll = log --graph --decorate --pretty=format:"%h %an, %ar - %s"
+
     gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
     gls = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s --simplify-by-decoration
 
@@ -143,18 +128,17 @@
     # diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
     diffcommit =  "!f() {                                   \
       if [ -z $1 ] ; then                                   \
-         git difftool HEAD^..HEAD --tool=gvimdiff --prompt; \
+         git difftool HEAD^..HEAD --prompt; \
       else                                                  \
-         git difftool $1^..$1 --tool=gvimdiff --prompt;     \
+         git difftool $1^..$1 --prompt;     \
       fi ;                                                  \
     }; f"
 
-    # diffcommitfile = "!f() { git difftool $1^..$1 --tool=gvimdiff $2;}; f"
     diffcommitfile = "!f() {                                \
 	if [ $# -eq 1 ] ; then                              \
-	   git difftool HEAD^..HEAD --tool=gvimdiff -y $1 ; \
+	   git difftool HEAD^..HEAD  -y $1 ; \
 	else                                                \
-    	   git difftool $1^..$1 --tool=gvimdiff -y $2;      \
+    	   git difftool $1^..$1  -y $2;      \
 	fi;                                                 \
     }; f"
 
@@ -191,6 +175,7 @@
 
 
     rlog = log --show-notes=review
+    rebaseto = "!f() { git rebase -i $1^; }; f"
 
     commitfilelist = show --stat --oneline
 
@@ -214,11 +199,10 @@
     editor = vim
 
 [diff]
-#   tool = kdiff3
-    tool = vimdiff
+	tool = vimdiff
 
 [merge]
-    tool = gvimdiff
+	tool = vimdiff
 
 
 [difftool]
@@ -253,3 +237,44 @@
 	signingkey = yonatanc@mellanox.com
 [gpg]
 	program = gpg2
+
+
+
+
+# 
+#  all sorts of aliases.
+#
+#   commityoni = "!f() { \
+#		    git config commit.template ~/share/yonienv/git_commit_template_yonic; \
+#		    git commit; \
+#		  }f"
+#   commitmlx = "!f() { \
+# 		    git config commit.template ~/share/yonienv/git_commit_template; \
+# 		    git commit; \
+#		  }f"
+#
+#   l = log --pretty=format oneline
+#   l10 = log --pretty=oneline -n10
+#   l30 = log --pretty=oneline -n30
+# ll = log --pretty=oneline --graph --decorate --abbrev-commit
+# ll = log --graph --decorate --pretty=format:"%h %an, %ar - %s"
+#    ll =   log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+#
+# diffcommitfile = "!f() { git difftool $1^..$1 --tool=gvimdiff $2;}; f"
+#
+#
+#
+#
+#   l =  "!f() {                             \
+#     if [ -z $1 ] ; then                             \
+#        git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
+#     else                                            \
+#        git log -n $1 --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short;  \
+#     fi ;                                            \
+#   }; f"
+#   
+#
+# lyoni = log --pretty=oneline --date=short --author='Yonatan Cohen'
+#
+#   ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate 
+#   ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
