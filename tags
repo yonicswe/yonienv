@@ -22,6 +22,13 @@ acs_threads	bashrc_nice.sh	/^acs_threads () $/;"	f
 acx_threads	bashrc_nice.sh	/^acx_threads ()$/;"	f
 backupgitkernel	bashrc_mlx.sh	/^backupgitkernel ()$/;"	f
 branches	bashrc_svn.sh	/^branches () {$/;"	f
+cat_bash_env	commonyonienv.sh	/^cat_bash_env ()$/;"	f
+cat_bash_profile	commonyonienv.sh	/^cat_bash_profile ()$/;"	f
+cat_bashrc	commonyonienv.sh	/^cat_bashrc () $/;"	f
+cat_cgdb_env	commonyonienv.sh	/^cat_cgdb_env ()$/;"	f
+cat_git_env	commonyonienv.sh	/^cat_git_env ()$/;"	f
+cat_vim_env	commonyonienv.sh	/^cat_vim_env () $/;"	f
+cat_yoni_env	commonyonienv.sh	/^cat_yoni_env ()$/;"	f
 catgrubsetdefault	bashrc_devel.sh	/^catgrubsetdefault ()$/;"	f
 catgrubvsinstalled	bashrc_devel.sh	/^catgrubvsinstalled ()$/;"	f
 cdbundle	bashrc_nice.sh	/^cdbundle () $/;"	f
@@ -39,9 +46,13 @@ changeState	bashrc_nice.sh	/^changeState () $/;"	f
 changecdlinux	bashrc_mlx.sh	/^changecdlinux () {$/;"	f
 checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel ()$/;"	f
 checkpatchuserpace	bashrc_mlx.sh	/^checkpatchuserpace ()$/;"	f
-clean	mkyonienv.sh	/^clean ()$/;"	f
-clean_git_env	mkyonienv.sh	/^clean_git_env ()$/;"	f
-clean_vim_env	mkyonienv.sh	/^clean_vim_env ()$/;"	f
+clean	commonyonienv.sh	/^clean ()$/;"	f
+clean_bash_env	commonyonienv.sh	/^clean_bash_env ()$/;"	f
+clean_bash_profile	commonyonienv.sh	/^clean_bash_profile ()$/;"	f
+clean_bashrc	commonyonienv.sh	/^clean_bashrc () $/;"	f
+clean_cgdb_env	commonyonienv.sh	/^clean_cgdb_env () $/;"	f
+clean_git_env	commonyonienv.sh	/^clean_git_env ()$/;"	f
+clean_vim_env	commonyonienv.sh	/^clean_vim_env ()$/;"	f
 cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
 cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
 complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f
@@ -51,17 +62,16 @@ cw	bashrc_fs.sh	/^cw () $/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
 dfa	bashrc_fs.sh	/^dfa () $/;"	f
+dirdiff	bashrc_fs.sh	/^dirdiff () $/;"	f
 dirdiffbrief	bashrc_fs.sh	/^dirdiffbrief () $/;"	f
-dirgvimdiff	bashrc_fs.sh	/^dirgvimdiff () $/;"	f
-dirvimdiff	bashrc_fs.sh	/^dirvimdiff () $/;"	f
 du1	bashrc_fs.sh	/^du1 ()$/;"	f
 du11	bashrc_fs.sh	/^du11 ()$/;"	f
 duroot	bashrc_fs.sh	/^duroot ()$/;"	f
+dyoni	bashrc_devel.sh	/^dyoni ()$/;"	f
 editBashrcScript	bashrc_vim.sh	/^editBashrcScript () $/;"	f
 editPythonScript	bashrc_vim.sh	/^editPythonScript () $/;"	f
 editbashrc	bashrc_common.sh	/^editbashrc () $/;"	f
 editgrub	bashrc_devel.sh	/^editgrub () $/;"	f
-editgrubvim	bashrc_devel.sh	/^editgrubvim () $/;"	f
 ethlist	bashrc_fs.sh	/^ethlist () $/;"	f
 extract	bashrc_fs.sh	/^extract () {$/;"	f
 extractrpm	bashrc_fs.sh	/^extractrpm ()$/;"	f
@@ -79,35 +89,31 @@ findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
 ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
 ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f
-g	bashrc_vim.sh	/^g () $/;"	f
 gcd	cdproject.sh	/^function gcd {$/;"	f
 gdbbt	bashrc_devel.sh	/^gdbbt () $/;"	f
 generate_wbe	bashrc_nice.sh	/^generate_wbe () $/;"	f
 get_branches	bashrc_svn.sh	/^get_branches () $/;"	f
 getconfigdir	bashrc_nice.sh	/^getconfigdir () $/;"	f
-getkernelversionfromMakefile	bashrc_devel.sh	/^getkernelversionfromMakefile ()$/;"	f
 getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f
 gitapplyPatchList	bashrc_git.sh	/^gitapplyPatchList () $/;"	f
 gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
+gitcheckouttag	bashrc_git.sh	/^gitcheckouttag ()$/;"	f
+gitcommitfixup	bashrc_git.sh	/^gitcommitfixup ()$/;"	f
 gitcommitmetadata	bashrc_git.sh	/^gitcommitmetadata ()$/;"	f
 gitcommitmlx	bashrc_git.sh	/^gitcommitmlx ()$/;"	f
 gitcommityoni	bashrc_git.sh	/^gitcommityoni ()$/;"	f
-gitconfig	bashrc_git.sh	/^gitconfig ()$/;"	f
 gitd	bashrc_git.sh	/^gitd ()$/;"	f
 gitdiscardcached	bashrc_git.sh	/^gitdiscardcached () $/;"	f
 gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
-gn	bashrc_vim.sh	/^gn () $/;"	f
 grepbash	bashrc_common.sh	/^grepbash () $/;"	f
 greptasks	bashrc_bookmarks.sh	/^greptasks ()$/;"	f
 grub2listentries	bashrc_devel.sh	/^grub2listentries () $/;"	f
-gsess	bashrc_vim.sh	/^gsess () $/;"	f
-gsessls	bashrc_vim.sh	/^gsessls () $/;"	f
+grub2setdefault	bashrc_devel.sh	/^grub2setdefault ()$/;"	f
 gsources	bashrc_vim.sh	/^function gsources ()$/;"	f
-gw	bashrc_fs.sh	/^gw () $/;"	f
 h	bashrc_fs.sh	/^h () $/;"	f
 howCleanIsMyHome	bashrc_mlx.sh	/^howCleanIsMyHome ()$/;"	f
 ibmod	bashrc_mlx.sh	/^ibmod ()$/;"	f
@@ -123,6 +129,19 @@ ips_threads	bashrc_nice.sh	/^ips_threads () $/;"	f
 iserstart	bashrc_mlx.sh	/^iserstart ()$/;"	f
 ismoduleup	bashrc_mlx.sh	/^ismoduleup ()$/;"	f
 k	bashrc_fs.sh	/^k () {$/;"	f
+kernelbuild	bashrc_devel.sh	/^kernelbuild ()$/;"	f
+kernelbuildall	bashrc_devel.sh	/^kernelbuildall ()$/;"	f
+kernelbuildinstallall	bashrc_devel.sh	/^kernelbuildinstallall ()$/;"	f
+kernelbuildinstallmodules	bashrc_devel.sh	/^kernelbuildinstallmodules ()$/;"	f
+kernelbuildmlx4core	bashrc_mlx.sh	/^kernelbuildmlx4core ()$/;"	f
+kernelbuildmlx4ib	bashrc_mlx.sh	/^kernelbuildmlx4ib ()$/;"	f
+kernelbuildmlx5core	bashrc_mlx.sh	/^kernelbuildmlx5core ()$/;"	f
+kernelbuildmlx5ib	bashrc_mlx.sh	/^kernelbuildmlx5ib ()$/;"	f
+kernelbuildmodules	bashrc_devel.sh	/^kernelbuildmodules () $/;"	f
+kernelinstall	bashrc_devel.sh	/^kernelinstall ()$/;"	f
+kernelinstallall	bashrc_devel.sh	/^kernelinstallall () $/;"	f
+kernelinstallmodules	bashrc_devel.sh	/^kernelinstallmodules ()$/;"	f
+kernelversion	bashrc_devel.sh	/^kernelversion ()$/;"	f
 killzombies	bashrc_devel.sh	/^killzombies ()$/;"	f
 la	bashrc_fs.sh	/^la ()$/;"	f
 listerrnovalues	bashrc_devel.sh	/^listerrnovalues ()$/;"	f
@@ -133,9 +152,10 @@ loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
 m	bashrc_fs.sh	/^m ()$/;"	f
-main	mkyonienv.sh	/^main  ()$/;"	f
+m	bashrc_mlx.sh	/^m ()$/;"	f
+main	commonyonienv.sh	/^main  ()$/;"	f
 md2man	bashrc_mlx.sh	/^md2man ()$/;"	f
-messages	mkyonienv.sh	/^messages () $/;"	f
+messages	commonyonienv.sh	/^messages () $/;"	f
 mftcheckstatus	bashrc_mlx.sh	/^mftcheckstatus ()$/;"	f
 mftchoosedev	bashrc_mlx.sh	/^mftchoosedev ()$/;"	f
 mftgetlinktype	bashrc_mlx.sh	/^mftgetlinktype ()$/;"	f
@@ -151,21 +171,6 @@ mkcoverletterrdmacore	bashrc_mlx.sh	/^mkcoverletterrdmacore ()$/;"	f
 mkcoverletterusage	bashrc_mlx.sh	/^mkcoverletterusage ()$/;"	f
 mkinfinibandmlx4	bashrc_mlx.sh	/^mkinfinibandmlx4 ()$/;"	f
 mkinfinibandmlx5	bashrc_mlx.sh	/^mkinfinibandmlx5 ()$/;"	f
-mkkernelbuild	bashrc_devel.sh	/^mkkernelbuild ()$/;"	f
-mkkernelbuildall	bashrc_devel.sh	/^mkkernelbuildall ()$/;"	f
-mkkernelbuildinfiniband	bashrc_mlx.sh	/^mkkernelbuildinfiniband ()$/;"	f
-mkkernelbuildinstallall	bashrc_devel.sh	/^mkkernelbuildinstallall ()$/;"	f
-mkkernelbuildinstallmodules	bashrc_devel.sh	/^mkkernelbuildinstallmodules ()$/;"	f
-mkkernelbuildmlx4core	bashrc_mlx.sh	/^mkkernelbuildmlx4core ()$/;"	f
-mkkernelbuildmlx4ib	bashrc_mlx.sh	/^mkkernelbuildmlx4ib ()$/;"	f
-mkkernelbuildmlx5core	bashrc_mlx.sh	/^mkkernelbuildmlx5core ()$/;"	f
-mkkernelbuildmlx5ib	bashrc_mlx.sh	/^mkkernelbuildmlx5ib ()$/;"	f
-mkkernelbuildmodules	bashrc_devel.sh	/^mkkernelbuildmodules () $/;"	f
-mkkernelinstall	bashrc_devel.sh	/^mkkernelinstall ()$/;"	f
-mkkernelinstallall	bashrc_devel.sh	/^mkkernelinstallall () $/;"	f
-mkkernelinstallmodules	bashrc_devel.sh	/^mkkernelinstallmodules ()$/;"	f
-mkrdmacore	bashrc_mlx.sh	/^mkrdmacore ()$/;"	f
-mkrdmacoreApps	bashrc_mlx.sh	/^mkrdmacoreApps ()$/;"	f
 mkrxelib	bashrc_mlx.sh	/^mkrxelib ()$/;"	f
 mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f
 mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime ()$/;"	f
@@ -217,6 +222,8 @@ prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
 prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f
 psmine	bashrc_fs.sh	/^psmine ()$/;"	f
 pu	bashrc_bookmarks.sh	/^pu ()$/;"	f
+rdmacorebuild	bashrc_mlx.sh	/^rdmacorebuild ()$/;"	f
+rdmacorebuildapps	bashrc_mlx.sh	/^rdmacorebuildapps ()$/;"	f
 rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f
 reboot	bashrc_fs.sh	/^reboot ()$/;"	f
 redpill	bashrc_fs.sh	/^redpill () $/;"	f
@@ -233,17 +240,18 @@ rxestart	bashrc_mlx.sh	/^rxestart ()$/;"	f
 rxestop	bashrc_mlx.sh	/^rxestop ()$/;"	f
 sbuild_vars	bashrc_nice.sh	/^sbuild_vars () $/;"	f
 setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f
-setup_bash_profile	mkyonienv.sh	/^setup_bash_profile ()$/;"	f
-setup_bashrc	mkyonienv.sh	/^setup_bashrc () $/;"	f
-setup_cgdb_env	mkyonienv.sh	/^setup_cgdb_env () $/;"	f
-setup_directories	mkyonienv.sh	/^setup_directories ()$/;"	f
+setup_bash_env	commonyonienv.sh	/^setup_bash_env ()$/;"	f
+setup_bash_profile	commonyonienv.sh	/^setup_bash_profile ()$/;"	f
+setup_bashrc	commonyonienv.sh	/^setup_bashrc () $/;"	f
+setup_cgdb_env	commonyonienv.sh	/^setup_cgdb_env () $/;"	f
+setup_directories	commonyonienv.sh	/^setup_directories ()$/;"	f
 setup_gdbinit	bashrc_devel.sh	/^setup_gdbinit () $/;"	f
 setup_gdbinit_dir_search_path	bashrc_devel.sh	/^setup_gdbinit_dir_search_path () $/;"	f
-setup_git_env	mkyonienv.sh	/^setup_git_env () $/;"	f
+setup_git_env	commonyonienv.sh	/^setup_git_env () $/;"	f
 setup_icm_gdbinit	bashrc_nice.sh	/^setup_icm_gdbinit () $/;"	f
 setup_ips_gdbinit	bashrc_nice.sh	/^setup_ips_gdbinit () $/;"	f
-setup_misc	mkyonienv.sh	/^setup_misc ()$/;"	f
-setup_vim_env	mkyonienv.sh	/^setup_vim_env () $/;"	f
+setup_misc	commonyonienv.sh	/^setup_misc ()$/;"	f
+setup_vim_env	commonyonienv.sh	/^setup_vim_env () $/;"	f
 showState	bashrc_nice.sh	/^showState()$/;"	f
 showosrelease	bashrc_fs.sh	/^showosrelease ()$/;"	f
 shutdown	bashrc_fs.sh	/^shutdown () $/;"	f
@@ -288,11 +296,13 @@ tagmerdmacore	bashrc_mlx.sh	/^tagmerdmacore () $/;"	f
 tagmeupstreamkernel	bashrc_mlx.sh	/^tagmeupstreamkernel ()$/;"	f
 tailstatistics	bashrc_nice.sh	/^tailstatistics () $/;"	f
 task_list	bashrc_nice.sh	/^task_list () $/;"	f
-usage	mkyonienv.sh	/^usage () $/;"	f
+usage	commonyonienv.sh	/^usage () $/;"	f
 v	bashrc_vim.sh	/^v ()$/;"	f
 validateState	bashrc_nice.sh	/^validateState ()$/;"	f
 vconsole	bashrc_fs.sh	/^vconsole ()$/;"	f
+vd	bashrc_vim.sh	/^vd () { ${_vd} $1 $2 ;}$/;"	f
 vforcestop	bashrc_fs.sh	/^vforcestop ()$/;"	f
+vimorgvim	bashrc_vim.sh	/^vimorgvim ()$/;"	f
 virsh_complete	bashrc_fs.sh	/^virsh_complete ()$/;"	f
 vl	bashrc_fs.sh	/^vl ()$/;"	f
 vlinstall	bashrc_mlx.sh	/^vlinstall ()$/;"	f
@@ -302,9 +312,12 @@ vncwatcherslist	bashrc_fs.sh	/^vncwatcherslist () $/;"	f
 vrename	bashrc_fs.sh	/^vrename ()$/;"	f
 vreset	bashrc_fs.sh	/^vreset ()$/;"	f
 vscript	bashrc_vim.sh	/^vscript () $/;"	f
-vsess	bashrc_vim.sh	/^vsess () { gsess $1 v; }$/;"	f
+vsess	bashrc_vim.sh	/^vsess () $/;"	f
+vsessls	bashrc_vim.sh	/^vsessls () $/;"	f
 vstart	bashrc_fs.sh	/^vstart ()$/;"	f
 vstop	bashrc_fs.sh	/^vstop ()$/;"	f
+vt	bashrc_vim.sh	/^vt () { ${v_or_g} -t $1; }$/;"	f
+vw	bashrc_fs.sh	/^vw () $/;"	f
 watch_threads	bashrc_nice.sh	/^watch_threads () $/;"	f
 whichbash	bashrc_common.sh	/^whichbash ()$/;"	f
 wifiNotLan	bashrc_nice.sh	/^wifiNotLan ()$/;"	f
