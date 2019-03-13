@@ -2,7 +2,7 @@
 
 unalias -a;
 unset SSH_ASKPASS
-alias editbashcommon='g ${yonienv}/bashrc_common.sh';
+alias editbashcommon='${v_or_g} ${yonienv}/bashrc_common.sh';
 grepbash () 
 {
     local grepme=${1};
@@ -41,13 +41,14 @@ editbashrc ()
 {
     local bashfile=${1:-bashrc_main.sh};
 
-    if [ $(rpm -q vim-X11 | wc -l ) -gt 0 ] ; then 
-        gvim ${yonienv}/${bashfile};
-    elif [ $(rpm -q vim-enhanced | wc -l ) -gt 0 ] ; then 
-        vim ${yonienv}/${bashfile};
-    else
-        echo "please install vim-enhanced or vim-X11"
-    fi        
+      ${v_or_g} ${yonienv}/${bashfile};
+#     if [ $(rpm -q vim-X11 | wc -l ) -gt 0 ] ; then 
+#         gvim ${yonienv}/${bashfile};
+#     elif [ $(rpm -q vim-enhanced | wc -l ) -gt 0 ] ; then 
+#         vim ${yonienv}/${bashfile};
+#     else
+#         echo "please install vim-enhanced or vim-X11"
+#     fi        
 }
 
 complete -W "$(find  ${yonienv} -maxdepth 1 -name "*bash*" -printf "%f\n")" editbashrc

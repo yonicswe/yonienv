@@ -4,7 +4,7 @@
 # like su -c  "some command"
 shopt -s expand_aliases 
 
-alias editbashmain='g ${yonienv}/bashrc_main.sh'
+alias editbashmain='${v_or_g} ${yonienv}/bashrc_main.sh'
 
 source ${yonienv}/bashrc_common.sh
 source ${yonienv}/bashrc_misc.sh

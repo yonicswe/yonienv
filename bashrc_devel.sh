@@ -1,6 +1,6 @@
 #!/bin/bash
 
-alias editbashdevel='g ${yonienv}/bashrc_devel.sh'
+alias editbashdevel='${v_or_g} ${yonienv}/bashrc_devel.sh'
 
 #   ___  ___   ___ 
 #  / __||   \ | _ )
@@ -296,15 +296,22 @@ editgrub ()
     # sudo vim /boot/grub/grub.conf +':split' +':e x' +'r!ls -ltr /boot'   
     # print the last modified file in /boot 
     # sudo find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3
-    su - -c " gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
+    if [ "${v_or_g}" == "vim" ] ; then
+    su - -c "vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
+        echo vim
+    else
+        echo gvim
+    su - -c "gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
+    fi
+
 #   sudo - gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'
 
 }
-editgrubvim () 
-{
+# editgrubvim () 
+# {
 #   su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1 -type f -mmin -60'"
-    su -c " vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
-}
+#     su -c " ${vimorgvim} /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
+# }
 
 alias make="make -j ${ncoresformake}"
 alias configure="./configure -j ${ncoresformake}"
@@ -336,7 +343,13 @@ grub2listentries ()
 #         awk -v count=0 '/^menuentry/{print count" " $0; count++}'
 }
 
-getkernelversionfromMakefile ()
+grub2setdefault ()
+{
+    sudo grub2-set-default $1;
+    sudo grub2-mkconfig -o /boot/grub2/grub.cfg;
+}
+
+kernelversion ()
 {
     awk 'BEGIN{FS = "="} 
         /^VERSION/{ printf $2"-"}
@@ -347,75 +360,85 @@ getkernelversionfromMakefile ()
 }
 
 # build only kernel
-mkkernelbuild ()
+kernelbuild ()
 {
     echo -e "=============================================================";
-    echo -e " building only kernel version $(getkernelversionfromMakefile)"; 
+    echo -e " building only kernel version $(kernelversion)"; 
     echo -e "        make -j ${ncoresformake} vmlinux"
     echo    "=============================================================";
     if [ -e /usr/bin/time ] ; then
-    /usr/bin/time -f "================================\n--->elapsed time %E" make -j ${ncoresformake} vmlinux
+        /usr/bin/time -f "================================\n--->elapsed time %E" make -j ${ncoresformake} vmlinux
     else 
-    time make -j ${ncoresformake} vmlinux
+        make -j ${ncoresformake} vmlinux
     fi
-    echo -e " built kernel version $(getkernelversionfromMakefile)"; 
+    echo -e " built kernel version $(kernelversion)"; 
     echo    "=============================================================";
 }
 
 # build only modules
-mkkernelbuildmodules () 
+kernelbuildmodules () 
 {
     echo -e "=========================================================================";
-    echo -e " building only modules for kernel version $(getkernelversionfromMakefile)"; 
+    echo -e " building only modules for kernel version $(kernelversion)"; 
     echo -e "        make -j ${ncoresformake} modules"
     echo    "=========================================================================";
-    /usr/bin/time -f "=======================================\n--->elapsed time %E" make -j ${ncoresformake} modules     
-    echo -e " built modules for kernel version $(getkernelversionfromMakefile)"; 
+    if [ -e /usr/bin/time ] ; then
+        /usr/bin/time -f "=======================================\n--->elapsed time %E" make -j ${ncoresformake} modules     
+    else 
+        make -j ${ncoresformake} modules     
+    fi
+    echo -e " built modules for kernel version $(kernelversion)"; 
     echo    "=============================================================";
 }
 
 # build kernel and modules.
-mkkernelbuildall ()
+kernelbuildall ()
 {
     echo -e "===============================================================================";
-    echo -e " building kernel and modules for kernel version $(getkernelversionfromMakefile)"; 
+    echo -e " building kernel and modules for kernel version $(kernelversion)"; 
     echo -e "        make -j ${ncoresformake}"
     echo    "===============================================================================";
-    /usr/bin/time -f "===================================\n--->elapsed time %E" make -j ${ncoresformake} 
-    echo -e          " built kernel and modules for kernel version $(getkernelversionfromMakefile)"; 
+    make prepare;
+    make scripts;
+    if [ -e /usr/bin/time ] ; then
+        /usr/bin/time -f "===================================\n--->elapsed time %E" make -j ${ncoresformake} 
+    else 
+        make -j ${ncoresformake} 
+    fi
+    echo -e          " built kernel and modules for kernel version $(kernelversion)"; 
     echo             "================================================";
 }
 
 # install only kernel
-mkkernelinstall ()
+kernelinstall ()
 {
     echo -e "============================================";
-    echo -e "installing kernel+modules $(getkernelversionfromMakefile)";
+    echo -e "installing kernel+modules $(kernelversion)";
     echo -e "sudo make -j ${ncoresformake} install"
     echo -e "============================================";
     
     sudo make install;
 
     echo -e "============================================";
-    echo -e "installed kernel+modules $(getkernelversionfromMakefile)";
+    echo -e "installed kernel+modules $(kernelversion)";
     echo -e "============================================";
 }
 
 # install only modules.
-mkkernelinstallmodules ()
+kernelinstallmodules ()
 {
     echo -e "============================================";
-    echo -e "installing modules for $(getkernelversionfromMakefile)";
+    echo -e "installing modules for $(kernelversion)";
     echo -e "sudo make -j ${ncoresformake} modules_install" 
     echo -e "============================================";
     sudo make -j ${ncoresformake} modules_install
     echo -e "============================================";
-    echo -e "installed modules for $(getkernelversionfromMakefile)";
+    echo -e "installed modules for $(kernelversion)";
     echo -e "============================================";
 }
 
 # install kernel and modules.
-mkkernelinstallall () 
+kernelinstallall () 
 { 
     if [ -z "$(redpill)" ] ; then 
         read -p "This is not VM are you sure ? [y/N]" ans;
@@ -425,18 +448,18 @@ mkkernelinstallall ()
     fi            
 
     echo -e "============================================";
-    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
+    echo -e "installing kernel+modules for $(kernelversion)";
     echo -e "sudo make -j ${ncoresformake} modules_install" 
     echo -e "sudo make -j ${ncoresformake} install"
     echo -e "============================================";
     sudo make -j ${ncoresformake} modules_install && sudo make install
     echo -e "============================================";
-    echo -e "installing kernel+modules for $(getkernelversionfromMakefile)";
+    echo -e "installing kernel+modules for $(kernelversion)";
     echo -e "============================================";
 }
 
 # build and install kernel and moduels.
-mkkernelbuildinstallall ()
+kernelbuildinstallall ()
 {
     echo -e "============================================";
     echo -e "sudo make -j ${ncoresformake}"
@@ -448,7 +471,7 @@ mkkernelbuildinstallall ()
 }
 
 # build and install only the modules.
-mkkernelbuildinstallmodules ()
+kernelbuildinstallmodules ()
 {
     echo -e "============================================";
     echo -e "make      -j ${ncoresformake} modules"
@@ -457,7 +480,7 @@ mkkernelbuildinstallmodules ()
     make -j ${ncoresformake} modules && sudo make -j ${ncoresformake} modules_install
 }
 
-alias mkkernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=/usr'
+alias kernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=/usr'
 
 alias makedebug='make CPPFLAGS="-O0 -g"'
 
@@ -536,8 +559,8 @@ findconflictfiles ()
 
 listerrnovalues ()
 {
-#   cpp -dM /usr/include/errno.h | grep define\ E | sort -n -k 3 | awk '{print $2 " "$3}' | column -t;
-    cat ${yonienv}/errno_list.txt;
+    cpp -dM /usr/include/errno.h | grep define\ E | sort -n -k 3 | awk '{print $2 " "$3}' | column -t;
+    cat ${yonienv}/errno_list.txt
 }
 
 alias delete_patches='rm -fv *.patch'

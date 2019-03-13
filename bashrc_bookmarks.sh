@@ -6,7 +6,7 @@
 # |___/\___/\___/|_\_\|_|  |_|\__,_||_|  |_\_\/__/
 #                                                 
 
-alias editbashbookmarks='g ${yonienv}/bashrc_bookmarks.sh'
+alias editbashbookmarks='${v_or_g} ${yonienv}/bashrc_bookmarks.sh'
 
 pdc () 
 {
@@ -222,7 +222,7 @@ pdf ()
 }
 
 BM=~/.bookmarks.${HOSTNAME}
-alias pdedit="v ${BM} ; cat ${BM}"
+alias pdedit="${v_or_g} ${BM} ; cat ${BM}"
 
 alias r='rebash'
 rebash ()

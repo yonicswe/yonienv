@@ -1,8 +1,8 @@
 #!/bin/bash
 
-alias gitdiffvim='git difftool --tool=vimdiff --no-prompt'
+alias gitdiff="git difftool --tool=${v_or_g} --no-prompt"
 # alias gitdiffgvim='git difftool --tool=gvimdiff --no-prompt'
-alias gitdiffkdiff='git difftool --tool=kdiff3 --no-prompt'
+alias gitdiffkdiff3='git difftool --tool=kdiff3 --no-prompt'
 alias gitdiffstat='git --no-pager diff --stat'
 alias gitlog='git log --name-status'
 # alias gitmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
@@ -126,16 +126,17 @@ gitapplyPatchList ()
 #     for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do echo "git am $( ls ${patch_path}/$i*patch)" ; done
 }
 
-gitconfig ()
-{
-    if [ -e /usr/bin/gvim ] ; then
-        g ~/.gitconfig
-    elif [ -e /usr/bin/vim ] ; then
-        v ~/.gitconfig
-    else
-        echo "you must install vim to see git config file";
-    fi
-}
+alias gitconfig="${v_or_g} ~/.gitconfig";
+# {
+#     if [ -e /usr/bin/gvim ] ; then
+#         g ~/.gitconfig
+#     elif [ -e /usr/bin/vim ] ; then
+#         v ~/.gitconfig
+#     else
+#         echo "you must install vim to see git config file";
+#     fi
+# }
+
 
 gitviewpatchsidebyside () 
 {
@@ -143,7 +144,7 @@ gitviewpatchsidebyside ()
     local origfile=$2;
 
 #     gvim -y "+vert diffpatch ${patchfile} " ${origfile};
-    gvim "+vert diffpatch ${patchfile} " ${origfile};
+    ${v_or_g} "+vert diffpatch ${patchfile} " ${origfile};
 }
 
 gitcatpatchfile ()
@@ -162,6 +163,11 @@ gitcommityoni ()
 
 gitcommitmlx ()
 {
+    local issue=${1};
+    if [ -n "${issue}" ] ; then 
+        sed -i "s/Issue:.*/Issue: ${issue}/g" ${yonienv}/git_templates/git_commit_mlx_template;
+    fi
+
     git config commit.template ${yonienv}/git_templates/git_commit_mlx_template;
     git commit;
     git config --unset commit.template;
@@ -172,4 +178,18 @@ gitcommitmetadata ()
     git config commit.template ${yonienv}/git_templates/git_commit_metadata_template;
     git commit;
     git config --unset commit.template;
+}
+
+gitcheckouttag ()
+{
+    local tag=$1;
+    new_branch_name=$2;
+
+    git checkout -b ${new_branch_name} tags/${tag};
+}
+
+gitcommitfixup ()
+{
+    local index=$1;
+    git commit -m "fixup: ${index}"
 }

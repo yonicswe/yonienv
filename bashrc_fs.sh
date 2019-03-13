@@ -1,6 +1,6 @@
 #!/bin/bash
 
-alias editbashfs='g ${yonienv}/bashrc_fs.sh'
+alias editbashfs='${v_or_g} ${yonienv}/bashrc_fs.sh'
 
 #  ___                         _   
 # | _ \ _ _  ___  _ __   _ __ | |_ 
@@ -215,11 +215,11 @@ cw ()
 }
 
 # gvim which
-gw () 
+vw () 
 {
     file=${1};
     [ -z ${file} ] && return
-    gvim $(which ${file});
+    ${v_or_g} $(which ${file});
 }
 
 # rpm which 
@@ -352,28 +352,28 @@ psmine ()
 # export GREP_OPTIONS="--color --binary-files=without-match -D skip"
 alias grepfiles='grep -nH --color --binary-files=without-match -D skip'
 
-dirvimdiff () 
+dirdiff () 
 {
     dir1=$1
     dir2=$2
 #   diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print "vimdiff "$2" "$4}'    
     diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print $2" "$4}'| 
         while read r1 r2 ; do 
-            vimdiff $r1 $r2 < /dev/tty
+            ${v_or_g} $r1 $r2 < /dev/tty;
         done
 }
 
-dirgvimdiff () 
-{
-    dir1=$1
-    dir2=$2
-#   diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print "vimdiff "$2" "$4}'    
-    diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print $2" "$4}'| 
-        while read r1 r2 ; do 
-            gvimdiff $r1 $r2 
-            gvimdiff $r1 $r2 < /dev/tty
-        done
-}
+# dirgvimdiff () 
+# {
+#     dir1=$1
+#     dir2=$2
+# #   diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print "vimdiff "$2" "$4}'    
+#     diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print $2" "$4}'| 
+#         while read r1 r2 ; do 
+#             gvimdiff $r1 $r2 
+#             gvimdiff $r1 $r2 < /dev/tty
+#         done
+# }
 
 dirdiffbrief () 
 {
@@ -594,6 +594,7 @@ m ()
 {
     myip;
     mydistro;
+    ofedversion;
 }
 
 alias ethlistroot='echo -n "root " ; su - -c "ethlist"'
@@ -613,7 +614,7 @@ ethlist ()
 	fi
 
     # print header
-    printf "%-10s  %-5s  %-5s  %-10s  %-10s  %-10s %s\n" "Interface" "stat" "Link" "Promisc" "Speed" "MTU" "IP Addr"; 
+    printf "%-10s  %-5s  %-5s  %-10s  %-10s  %-10s %-20s %s\n" "Interface" "stat" "Link" "Promisc" "Speed" "MTU" "IP Addr" "HW Addr"; 
 
     # for e in $(ifconfig -a | awk '/eth|wlan/{print $1}') ; do 
     for e in $(netstat -i | awk '/eth|wlan|eno/{print $1}') ; do 
@@ -626,17 +627,19 @@ ethlist ()
             mtu=$( ifconfig $e | awk '/mtu/{print $0}'| sed 's/\(.*\)mtu\(.*\)/\2/g')
         fi
 #       ip_addr=$( ifconfig $e | awk '/inet addr/{print $0}' | sed 's/\(.*:\)\(.*\ \).*/\2/g');
+#         if [ -z "${ip_addr}" ] ; then 
+#             ip_addr=$( ifconfig $e | awk '/inet\ /{print $2}');
+#         fi
         ip_addr=$( ifconfig $e | awk '/inet\ /{print $2}');
-        if [ -z "${ip_addr}" ] ; then 
-            ip_addr=$( ifconfig $e | awk '/inet\ /{print $2}');
-        fi
 
         if [ ${show_link} -eq 1 ] ; then 
             link=$(ethtool $e | awk '/Link detected/{print $3}') ; 
             speed=$(ethtool $e | grep Speed | awk '{print $2}') ;
-        fi                        
+        fi;
 
-        printf "%-10s  %-5s  %-5s  %-10s  %-10s  %-10s %s\n" $e "${up_down}" "${link}"  ${promisc} "${speed}" ${mtu} ${ip_addr}; 
+        mac=$(ifconfig $e | awk '/ether\ /{print $2}' );
+
+        printf "%-10s  %-5s  %-5s  %-10s  %-10s  %-10s %-20s %s\n" $e "${up_down}" "${link}"  ${promisc} "${speed}" ${mtu} ${ip_addr} "${mac}"; 
     done
 }
 export -f ethlist
@@ -761,7 +764,7 @@ findmin ()
 {
     local min=${1:--5};
 
-    find -mmin ${min} -ls;
+    find -type f -mmin ${min} -ls;
 }
 
 vncwatcherslist () 
@@ -848,7 +851,7 @@ vrename ()
 
         # TODO: replace with sed or xmlstarlet
         # instead of vim
-        vim ${old_name}.xml 
+        ${v_or_g} ${old_name}.xml 
 
         read -p "continue [y/N]" ans;
         if [ "$ans" == "y" ] ; then
