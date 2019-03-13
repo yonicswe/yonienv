@@ -23,6 +23,18 @@ source ${yonienv}/env_common_args.sh
 #  of the string "yoni cohen"
 #  i.e.           ==========
 # 
+print_underline_size () 
+{
+    local line_char=$1;
+    local str_len=${2:-20};
+
+    for i in $(seq 0 ${str_len} )  ; do 
+        printf "${line_char}" ; 
+    done
+
+    echo; 
+}
+
 print_underline () 
 {
     local str=$1;

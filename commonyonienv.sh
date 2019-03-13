@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./bashrc_common.sh
+
 setup_bash_profile ()
 {
     local yonienv=$1;
@@ -67,8 +69,10 @@ cat_bash_env ()
 {
     echo -e "\n~/.bashrc"
     cat_bashrc;
+    print_underline_size "_";
     echo -e "\n~/.bash_profile";
     cat_bash_profile;
+    print_underline_size "_";
 } 
 
 setup_git_env () 
@@ -127,8 +131,9 @@ clean_git_env ()
 
 cat_git_env ()
 {
-    echo $FUNCNAME;
-    ls ~/.git
+    echo -e "\n$FUNCNAME";
+    ls -ld ~/.gitconfig;
+    print_underline_size "_";
 }
 
 setup_cgdb_env () 
@@ -149,9 +154,10 @@ clean_cgdb_env ()
 
 cat_cgdb_env ()
 {
-    echo $FUNCNAME;
-    ls  ~/.cgdb;
-    ls  ~/.gdbinit;
+    echo -e "\n$FUNCNAME";
+    ls -ld ~/.cgdb;
+    ls -ld ~/.gdbinit;
+    print_underline_size "_";
 }
 
 setup_misc ()
@@ -234,13 +240,15 @@ clean_vim_env ()
 
 cat_vim_env () 
 {
-    echo $FUNCNAME;
+    echo -e "\n$FUNCNAME";
     if [ -e ~/.vim ] ; then
-        ls ~/.vim;
+        ls -ld ~/.vim;
     fi
     if [ -e ~/.vimrc ] ; then
+        ls -ld ~/.vimrc;
         head -1 ~/.vimrc;
     fi
+    print_underline_size "_";
 }
 
 source env_common_args.sh
