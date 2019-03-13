@@ -217,6 +217,7 @@ pgrepa	bashrc_fs.sh	/^pgrepa () $/;"	f
 pr_debug	bashrc_devel.sh	/^pr_debug () $/;"	f
 pr_debug_usage	bashrc_devel.sh	/^pr_debug_usage ()$/;"	f
 print_underline	bashrc_common.sh	/^print_underline () $/;"	f
+print_underline_size	bashrc_common.sh	/^print_underline_size () $/;"	f
 probe_topology	bashrc_fs.sh	/^probe_topology () $/;"	f
 prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
 prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f
