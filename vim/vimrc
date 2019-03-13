@@ -456,14 +456,21 @@ if &diff
 
 
 
+"     ====================================
+"     use these when using vim (no gvim)
+"     ====================================
+"     hi DiffText   cterm=none ctermfg=Black ctermbg=LightRed gui=none guifg=Black guibg=Red
+"     hi DiffChange cterm=none ctermfg=Black ctermbg=LightMagenta gui=none guifg=Black guibg=LightMagenta
+"     hi DiffAdd    cterm=none ctermfg=Black ctermbg=Red gui=none guifg=Black guibg=LightMagenta
+"     syntax  off
+
+"     ====================================
+"     Examples
+"     ====================================
 "     hi DiffAdd      gui=none    guifg=NONE          guibg=#bada9f
 "     hi DiffChange   gui=none    guifg=NONE          guibg=#e5d5ac
 "     hi DiffDelete   gui=bold    guifg=#ff8080       guibg=#ffb0b0
 "     hi DiffText     gui=none    guifg=NONE          guibg=#8cbee2
-    hi DiffText   cterm=none ctermfg=Black ctermbg=LightRed gui=none guifg=Black guibg=Red
-    hi DiffChange cterm=none ctermfg=Black ctermbg=LightMagenta gui=none guifg=Black guibg=LightMagenta
-    hi DiffAdd    cterm=none ctermfg=Black ctermbg=Red gui=none guifg=Black guibg=LightMagenta
-    syntax  off
 else
     map <C-Down>   ]]zz
     map <C-Up>     [[zz
@@ -808,7 +815,7 @@ endfunction
 "---------------------------------------
 "     preset registers
 "-------------------------------------
-let @p = '      printk("%d: %s():\n", __LINE__,  __func__);' . "\n"
+let @p = '      printk("-->%d: %s():\n", __LINE__,  __func__);' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
 let @l =  "─────────────────────────────────────────────────────────────────────────────\n"
 let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n"
