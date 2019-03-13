@@ -5,7 +5,47 @@
 # \ V /| || '  \ 
 #  \_/ |_||_|_|_| 
 
-alias editbashvim='g ${yonienv}/bashrc_vim.sh'
+
+export vimorgvimbackupfile=${HOME}/.vimorgvim;
+if ! [ -e ${vimorgvimbackupfile} ] ; then 
+    echo vim > ${vimorgvimbackupfile};
+fi
+
+export v_or_g="$(cat ${vimorgvimbackupfile})";
+
+if [ "${v_or_g}" == "gvim" ] ; then 
+    export _vd="gvimdiff"
+else
+    export _vd="vimdiff";
+fi
+
+git config --global diff.tool ${_vd};
+git config --global merge.tool ${_vd};
+
+# if [ -e /usr/bin/gvim ] ; then
+# else
+#     export v_or_g="vim";
+#     export _vd="vimdiff"
+# fi
+vimorgvim ()
+{
+    if [ "${v_or_g}" == "vim" ] ; then
+        export v_or_g="gvim";
+        export _vd="gvimdiff";
+    else
+        export v_or_g="vim";
+        export _vd="vimdiff"
+    fi
+
+    git config --global diff.tool ${_vd};
+    git config --global merge.tool ${_vd};
+    echo $v_or_g | tee ${vimorgvimbackupfile};
+}
+
+vd () { ${_vd} $1 $2 ;}
+
+
+alias editbashvim="${v_or_g} ${yonienv}/bashrc_vim.sh"
 
 vim_args="-p"
 
@@ -19,40 +59,38 @@ v ()
    if [ -e ~/.vim/.vimrc.dictionary ] ; then 
       args+=" -S ~/.vim/.vimrc.dictionary"
    fi         
-   vim $args $*
+   ${v_or_g} $args $*
 }
 
-g () 
-{
-    local args=$gvim_args;
-    if [ -e ~/.vim/.vimrc.dictionary ] ; then 
-        args+=" -S ~/.vim/.vimrc.dictionary"
-    fi         
-    gvim $args $*
-}
+# g () 
+# {
+#     local args=$gvim_args;
+#     if [ -e ~/.vim/.vimrc.dictionary ] ; then 
+#         args+=" -S ~/.vim/.vimrc.dictionary"
+#     fi         
+#     gvim $args $*
+# }
 
-alias go="gvim -O" 
+alias vo="${v_or_g} -O" 
 
-alias vt="v -t"
-alias gt="g -t"
+vt () { ${v_or_g} -t $1; }
+# alias gt="g -t"
 
 # open vi with a compound string of file and number
 vn () 
 {
     file_and_line="$*"
     vi_param=$(echo "$file_and_line" | sed 's/\ //g' | sed 's/:/\ +/' | sed 's/://')
-    v $vi_param
+    ${v_or_g} $vi_param
 }
 
-gn () 
-{
-    file_and_line="$*"
-    vi_param=$(echo "$file_and_line" | sed 's/\ //g' | sed 's/:/\ +/' | sed 's/://')
-    g $vi_param
-}
+# gn () 
+# {
+#     file_and_line="$*"
+#     vi_param=$(echo "$file_and_line" | sed 's/\ //g' | sed 's/:/\ +/' | sed 's/://')
+#     g $vi_param
+# }
 
-alias gd="gvimdiff"
-alias vd="vimdiff"
 
 vscript () 
 {
@@ -62,27 +100,34 @@ vscript ()
     v ${file_name}
 }
 
-gsessls () 
+# gsessls () 
+vsessls () 
 {
     session_ls=$(find -maxdepth 1 -name "*.vim" -printf "%f\n");
     find -maxdepth 1 -name "*.vim" -printf "%f\n";
-    complete -W "${session_ls}" gsess vsess;
+    complete -W "${session_ls}" vsess;
+#     complete -W "${session_ls}" gsess vsess;
 }
 
-vsess () { gsess $1 v; }
+# vsess ()
+# { 
+#     local sess=${1:-Session.vim};
+#     gsess ${sess} v;
+# }
 
-gsess () 
+# gsess () 
+vsess () 
 {
-    complete -W "$(gsessls)" gsess
+    complete -W "$(vsessls)" vsess
     local vimSession=${1}
-    local vim_or_gvim=${2:-g};
+#     local vim_or_gvim=${2:-g};
 
     if [ -e "${vimSession}"  ]  ; then 
-        ${vim_or_gvim} -S ${vimSession}; 
+        ${v_or_g} -S ${vimSession}; 
     elif [ -e Session.vim ] ; then 
-        ${vim_or_gvim} -S Session.vim;
+        ${v_or_g} -S Session.vim;
     elif [ -e .session.vim ] ; then 
-        ${vim_or_gvim} -S .session.vim;
+        ${v_or_g} -S .session.vim;
     else
         echo "No vim Session found";                
     fi
