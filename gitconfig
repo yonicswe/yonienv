@@ -42,13 +42,12 @@
 
 #   dg = difftool --tool=gvimdiff
 #   d = diff --color
-    dgfile = difftool --tool=gvimdiff --no-prompt
-    dv = difftool --tool=vimdiff
-    dc = diff --cached
-    dcg = difftool --tool=gvimdiff --cached
-    dcv = difftool --tool=vimdiff --cached
-    dt = difftool
     d = diff
+    dfile = difftool --no-prompt
+    dv = difftool
+    dc = diff --cached
+    dcv = difftool  --cached
+    dt = difftool
     ds = diff --stat
 
     g = grep --color
@@ -199,11 +198,10 @@
     editor = vim
 
 [diff]
-	tool = vimdiff
+	tool = gvimdiff
 
 [merge]
-	tool = vimdiff
-
+	tool = gvimdiff
 
 [difftool]
 	prompt = true
