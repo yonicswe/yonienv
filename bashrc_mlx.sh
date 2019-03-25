@@ -7,14 +7,14 @@
 
 alias editbashmlx='${v_or_g} ${yonienv}/bashrc_mlx.sh'
 alias chownyoni='sudo chown yonatanc:mtl'
-
+export yonipass="yonatanc11"
 create_alias_for_host ()
 {
     alias_name=${1}
     host_name=${2};
 
-    alias ${alias_name}="ssh ${host_name}"
-    alias ${alias_name}root="ssh root@${host_name}"
+    alias ${alias_name}="sshpass -p ${yonipass} ssh -Y yonatanc@${host_name}"
+    alias ${alias_name}root="sshpass -p 3tango ssh -Y root@${host_name}"
     alias ${alias_name}ping="ping ${host_name}"
 }
 
@@ -63,7 +63,9 @@ create_alias_for_host 202 dev-l-vrt-202
 create_alias_for_host parav sw-mtx-036
 create_alias_for_host danit reg-l-vrt-178
 
-
+# sriov
+create_alias_for_host 165 10.134.3.165
+create_alias_for_host 166 10.134.3.166
 
 
 sm ()
@@ -261,6 +263,7 @@ ibmod ()
     local modules_path=;
     local modules_base_path=;
     local module_grep=${1};
+    local indx=0;
 
     if [ -d /usr/lib/modules/$(uname -r) ] ; then
         modules_base_path="/usr/lib/modules/$(uname -r)";
@@ -271,7 +274,9 @@ ibmod ()
     fi
 
     modules_path="${modules_base_path}/kernel/drivers/infiniband"
-    modules_path+=" ${modules_base_path}/kernel/drivers/net/ethernet/mellanox"
+    if [ -d ${modules_base_path}/kernel/drivers/net/ethernet/mellanox ] ; then
+        modules_path+=" ${modules_base_path}/kernel/drivers/net/ethernet/mellanox";
+    fi;
 
     # ofed libs are usually under extra
     if [ -d ${modules_base_path}/extra ] ; then
@@ -285,6 +290,7 @@ ibmod ()
             return;
         fi
     fi
+
 
     find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |
         while read m ; do
@@ -303,7 +309,7 @@ alias nox='lspci | grep --color nox'
 # alias cdregressioncore='cd ~/devel/regression/core'
 # alias cdregressionnet='cd ~/devel/regression/networking'
 # alias cdregressionrxe='cd ~/devel/rxe_regression'
-alias cdshare="cd ${HOME}/share/"
+# alias cdshare="cd ${HOME}/share/"
 source ${yonienv}/regression_complete.sh
 
 
@@ -667,8 +673,7 @@ checkpatchkernel ()
 {
     local patch_file=;
 
-    _checkpatchcomplete;
-    [ $# -eq 0 ] && return ;
+    if [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi;
     local patch_file=$(readlink -f $@);
 
     cdlinux;
@@ -1249,7 +1254,7 @@ ofedinstallversion ()
     local rebuild_drivers=
     local version=${1};
 
-    if [ -z ${version} ] ; then echo "missing version" ; return ; fi;
+    if [ -z ${version} ] ; then echo -e "missing version, use \"ofedlistversions\"" ; return ; fi;
     echo "about to install ofed ${version} for your $(cat /etc/redhat-release) and the kernel that comes with it";
 
     read -p "Do you need mellanox's drivers rebuilt ? [y/N]" ans;
@@ -1262,6 +1267,11 @@ ofedinstallversion ()
     if [ "$ans" == "y" ] ; then
         sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers};
     fi
+}
+
+ofedkernelversion ()
+{
+    awk '/KVERSION/{print $0}' configure.mk.kernel;
 }
 
 ofedfindindexforpackage ()
@@ -1288,6 +1298,12 @@ ofedmkbackport ()
     possible_backport_branch=$(git b | grep ^[[:space:]]*backport | awk '{print $1}');
     if [ -n "${possible_backport_branch}"  ] ; then 
         echo "You 1st need to delete!!! ${possible_backport_branch}!!!";
+        return;
+    fi
+
+    # make sure that ofed kernel links were created
+    if ![ -e configure ]  ; then
+        echo "You 1st need to create ofa links - use ofedmklinks";
         return;
     fi
 
@@ -1328,28 +1344,36 @@ alias cdmarsdirecttest='cd /tmp/mars_tests/SW_NET_VERIFICATION-directtest_db.xml
 
 mkcoverletterusage ()
 {
-    echo "give index range and version. e.g. ";
-    echo "mkcoverletterkernel HEAD~3 3"
+    echo "give num-of-commits and version. e.g. ";
+    echo "create 3 patches and plave V12 in the subject";
+    echo "mkcoverletterkernel 3 12"
+}
+
+mkcoverletter ()
+{
+    local index_range=${1:-~1};
+    local version=${2:-0};
+    local subject=${3:-rdma-next};
+
+    if ! [ -d coverletter ] ; then mkdir coverletter ; fi;
+    echo "~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b ${subject} -v ${version} -- HEAD~${index_range};";
+    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b ${subject} -v ${version} -- HEAD~${index_range};
 }
 
 mkcoverletterrdmacore ()
 { 
-    local index_range=${1};
-    local version=${2};
-
-    if [ $# -eq 0 ] ; then mkcoverletterusage ; return ; fi;
-    if ! [ -d coverletter ] ; then mkdir coverletter ; fi;
-    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-core -v ${version} -- ${index_range};
+    if [ $# -ne 2 ] ; then mkcoverletterusage ; return ; fi;
+    mkcoverletter $1 $2 rdma-core;
 }
-
-mkcoverletterkernel ()
+mkcoverletterrdma-next ()
 {
-    local index_range=${1};
-    local version=${2};
-
-    if [ $# -lt 2 ] ; then mkcoverletterusage ; return ; fi;
-    if ! [ -d coverletter ] ; then mkdir coverletter ; fi;
-    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b rdma-next -v ${version} -- ${index_range}
+    if [ $# -ne 2 ] ; then mkcoverletterusage ; return ; fi;
+    mkcoverletter $1 $2 rdma-next; 
+}
+mkcoverletternet-next ()  
+{
+    if [ $# -ne 2 ] ; then mkcoverletterusage ; return ; fi;
+    mkcoverletter $1 $2 net-next;  
 }
 
 kernelbuildmlx5ib ()
