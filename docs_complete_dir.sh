@@ -75,3 +75,39 @@ _share ()
 share_dir=${HOME}/share
 cdshare() { cd $share_dir/$1; }
 complete -F _share -o nospace cdshare
+
+#==========================================================
+_bugs ()
+{
+    local cmd=$1 cur=$2 pre=$3;
+    local _cur compreply;
+
+    _cur=$bugs_dir/$cur
+    compreply=( $( compgen -d "$_cur" ) )
+    COMPREPLY=( ${compreply[@]#$bugs_dir/} )
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        COMPREPLY[0]=${COMPREPLY[0]}/
+    fi
+}
+
+bugs_dir=${HOME}/share/tasks/bugs
+cdbugs() { cd $bugs_dir/$1; }
+complete -F _bugs -o nospace cdbugs
+
+#==========================================================
+_features ()
+{
+    local cmd=$1 cur=$2 pre=$3;
+    local _cur compreply;
+
+    _cur=$features_dir/$cur
+    compreply=( $( compgen -d "$_cur" ) )
+    COMPREPLY=( ${compreply[@]#$features_dir/} )
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        COMPREPLY[0]=${COMPREPLY[0]}/
+    fi
+}
+
+features_dir=${HOME}/share/tasks/features
+cdfeatures() { cd $features_dir/$1; }
+complete -F _features -o nospace cdfeatures
