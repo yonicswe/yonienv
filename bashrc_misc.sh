@@ -47,3 +47,8 @@ function up() {
 # cat "file" with color 
 # alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
 
+yonienvdepsinstall ()
+{
+    sudo yum install -y vim-X11 ctags cgdb tree screen sshpass
+}
+
