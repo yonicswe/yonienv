@@ -12,6 +12,7 @@ tagcompleteme ()
 }
 
 alias cpptags='ctags -R --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
+alias pythontags='ctags -R --python-kinds=-i'
 
 tagcscope ()
 {
