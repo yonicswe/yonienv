@@ -2,6 +2,17 @@
 
 alias connect2remoteDesktop='source $(yonienv)/bin/connectToRemoteDesk.sh'
 alias yuminstallfromiso='yum install --disablerepo=\* --enablerepo=c7-media'
+
+yuminstallfromrepo ()
+{
+    local repo=${1};
+    if [ -z ${repo} ] ; then 
+        echo "forgot the repo ? ";
+        return;
+    fi
+    sudo yum install -y --disablerepo=\* --enablerepo=${repo} ;
+}
+
 alias yumsearchiniso='yum search --disablerepo=\* --enablerepo=c7-media'
 alias yuminfoiniso='yum info --disablerepo=\* --enablerepo=c7-media'
 
@@ -10,7 +21,12 @@ alias now='date +"%d%b%Y_%H%M%S"'
 alias sd='echo $TERM'
 alias diff='diff -up'
 
-alias xtermblack="xterm -bg black -fg green -fa 'Monospace' -fs 10 &"
+xtermblack () 
+{
+    local font_size=${1:-14};
+    xterm -bg black -fg green -fa 'Monospace' -fs ${font_size} &
+}
+
 if [ -e /usr/bin/xrandr ]  ; then 
 complete -W "$(xrandr -q 2>/dev/null | awk '{print $1}')" xrandr 
 fi
@@ -47,8 +63,35 @@ function up() {
 # cat "file" with color 
 # alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
 
-yonienvdepsinstall ()
+yuminstallifnotexist ()
 {
-    sudo yum install -y vim-X11 ctags cgdb tree screen sshpass
+    local rpm=${1};
+    if [ -z ${rpm} ] ; then return 0 ; fi;
+    if [ $( rpm -q ${rpm} | grep -i "not installed" | wc -l ) -gt 0 ] ; then 
+        sudo yum install -y ${rpm} ;
+        return 1;
+    fi;
+    echo "${rpm} : already installed.";
+    return 0;
 }
 
+yonienvdepsinstall ()
+{
+    yuminstallifnotexist vim
+    yuminstallifnotexist vim-X11
+    yuminstallifnotexist ctags
+    yuminstallifnotexist cgdb
+    yuminstallifnotexist tree
+    yuminstallifnotexist screen
+    yuminstallifnotexist sshpass
+    yuminstallifnotexist the_silver_searcher
+}
+
+alias yuminstall='sudo yum install -y'
+printlinefromfile ()
+{
+    local line=$1;
+    local file=$2;
+
+    sed -n ${line}p $file;
+}
