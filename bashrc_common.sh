@@ -8,7 +8,8 @@ grepbash ()
     local grepme=${1};
     [ -z "${grepme}" ] && return -1;
 
-    grep -nHT --color ${grepme} ${yonienv}/*.sh;
+#   grep -nHT --color ${grepme} ${yonienv}/*.sh;
+    ag --shell --noheading --depth 1 ${grepme} ${yonienv};
 }
 
 export LANG=en_US.UTF-8
@@ -17,6 +18,31 @@ export LC_ALL=C
 alias cdyonienv='cd ${yonienv}'
 
 source ${yonienv}/env_common_args.sh
+
+are_you_sure_default_no ()
+{
+    local choice=;
+    read -p "Are you sure [y|N]?" choice
+    case "$choice" in 
+      y|Y ) return 1;;
+      * ) return 0;;
+#       y|Y ) echo "yes";;
+#       n|N ) echo "no";;
+#       * ) echo "no";;
+    esac
+}
+are_you_sure_default_yes ()
+{
+    local choice=;
+    read -p "Are you sure [Y|n]?" choice
+    case "$choice" in 
+      n|N ) return 0;;
+      * ) return 1;;
+#       n|N ) echo "no";;
+#       y|Y ) echo "yes";;
+#       * ) echo "yes";;
+    esac
+}
 
 # e.g print_underline "yoni cohen" =
 #  prints a line from "=" in the length 
