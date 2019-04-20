@@ -30,9 +30,13 @@ alias editbashfs='${v_or_g} ${yonienv}/bashrc_fs.sh'
 # 
 # export PS1="\[\033[1;31m\](\u) \[\033[1;36m\]\h:\[\033[0m\]/\W=> "
 
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(git::\1)/'
+parse_git_branch() 
+{
+# if [ -d .git ] ; then 
+        git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(git::\1)/';
+#    fi;
 }
+
 parse_svn_branch() {
   parse_svn_url | sed -e 's#^'"$(parse_svn_repository_root)"'##g' | awk -F / '{print "(svn::"$1 "/" $2 ")"}'
 }
@@ -169,7 +173,7 @@ dfa ()
 du1 ()
 {
 	local path=$1
-	du -h --max-depth=1 $path | sort -h 
+	du -sh --max-depth=1 $path | sort -hr 
 }
 
 du11 ()
@@ -354,13 +358,30 @@ alias grepfiles='grep -nH --color --binary-files=without-match -D skip'
 
 dirdiff () 
 {
-    dir1=$1
-    dir2=$2
+    local dir1=$1
+    local dir2=$2
+    declare -a files1;
+    declare -a files2;
+
+    local ans;
+
 #   diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print "vimdiff "$2" "$4}'    
     diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print $2" "$4}'| 
         while read r1 r2 ; do 
-            ${v_or_g} $r1 $r2 < /dev/tty;
+            echo $r1 differ $r2;
+            files1=( $(echo ${files1[@]} $r1) );
+            files2=( $(echo ${files2[@]} $r2) );
+
+#             read -p " [y/N]" ans;
+#               if  [ "$ans" == "y" ] ; then
+#                  echo diff $r1 $r2;
+#                   # ${_vd} $r1 $r2 < /dev/tty;
+#                   # ${_vd} $r1 $r2;
+#               fi
         done
+
+            echo files1 ${files1[@]};
+            echo files2 ${files2[@]};
 }
 
 # dirgvimdiff () 
@@ -380,7 +401,7 @@ dirdiffbrief ()
     dir1=$1
     dir2=$2
 #   diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ | awk '{print "vimdiff "$2" "$4}'    
-    diff -qrup ${dir1} ${dir2} -x \*svn\* |grep differ
+    diff -qrup ${dir1} ${dir2} -x \*svn\*
 }
 
 alias tt='probe_topology'
@@ -702,26 +723,88 @@ extract () {
 # find out if I am VM or a real machine.
 redpill () 
 {
+    local ret=0;
+
+    ################################################# 
+    # try virt-what
+    which virt-what 1>/dev/null;
+    ret=$?;
+    if [ ${ret} -eq 0 ] ; then
+        if [ $( sudo virt-what |  wc -l ) -gt 0 ] ; then 
+            echo "I am a virtual machine";
+            return 0;
+        fi;
+        echo "I am a hypervisor";
+        return 1;
+    fi;
+
+    ################################################# 
+    # try dmidecode
+    which dmidecode 1>/dev/null;
+    ret=$?;
+    if [ ${ret} -eq 0 ] ; then
+        echo "vendor : $(sudo dmidecode -s system-manufacturer)";
+        echo "product: $(sudo dmidecode -s system-product-name)";
+
+        if [ $( sudo dmidecode | grep -i product | grep -i qemu | wc -l ) -gt 0 ] ; then 
+            return 0;
+        fi
+        return 1;
+    fi
+
+    ################################################# 
+    #  try lshw
+    which lshw 1>/dev/null;
+    ret=$?;
+    if [ ${ret} -eq 0 ] ; then
+        sudo lshw -class system -sanitize | grep -i product
+        if [ $( sudo lshw -class system -sanitize | grep -i product | grep -i kvm | wc -l ) -gt 0 ] ; then 
+            return 0;
+        fi;
+        return 1;
+    fi
+
+    ################################################# 
+    # try systemd-detect-virt
+    which systemd-detect-virt 1>/dev/null;
+    ret=$?;
+    if [ ${ret} -eq 0 ] ; then
+        if [ $( systemd-detect-virt | grep -i none | wc -l ) -gt 0 ] ; then
+            echo "I am a hypervisor";
+            return 1;
+        fi
+        echo "I am a virtual-machine";
+        return 0;
+    fi
+
+    ################################################# 
+    # try hostnamectl
+    which hostnamectl 1>/dev/null;
+    ret=$?;
+    if [ ${ret} -eq 0 ] ; then
+        if [ $( hostnamectl | grep -i virt | wc -l ) -gt 0 ] ; then
+            echo "I am a virtual-machine";
+            return 0;
+        fi
+        echo "I am a hypervisor";
+        return 1;
+    fi
+
+    if [ $( cat /proc/cpuinfo | grep --color -i hypervisor | wc -l ) -gt 0 ] ; then 
+        echo -e "i might be am a virtual machine NO \"hypervisor\" in /proc/cpuinfo"; 
+        return 0;
+    fi 
+
+    echo "i am a hypervisor";
+    return 1;
+
+# using dmesg is not safe as it can be deleted
 #     if [ $(dmesg | grep --color -i hypervisor | wc -l ) -gt 0 ] ; then 
 #         echo "i am a virtual machine (dmesg)";
 #     else
 #         echo "i am a hypervisor (dmesg)";
 #     fi 
 
-    if [ $( cat /proc/cpuinfo | grep --color -i hypervisor | wc -l ) -gt 0 ] ; then 
-        echo "i am a virtual machine";
-        return 0;
-    else
-        echo "i am a hypervisor";
-        return 1;
-    fi 
-#     if [ $(which virt-what | grep "no virt-what" | wc -l ) -eq  0 ] ; then
-#         su -c "virt-what"
-#     fi
-       
-#     if [ $(which dmidecode | grep "no dmidecode" | wc -l ) -eq  0 ] ; then
-#         su -c "dmidecode -s system-manufacturer"
-#     fi        
 }
 
 ff () 
