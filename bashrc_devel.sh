@@ -160,6 +160,7 @@ gdbbt ()
 
 
 alias cdlibmodules='cd /lib/modules/`uname -r`'
+alias listlibmodules='ls -ltr --color /lib/modules/`uname -r`'
 
 
 ########################################################################
@@ -539,7 +540,7 @@ alias dcc='sudo dmesg -C'
 dyoni ()
 {
     echo -n "root ";
-    su -c "echo yoni-debug > /dev/kmsg"
+    su -c "echo =============yoni-debug============= > /dev/kmsg"
 }
 # dmesg -w will continuously print to screen (like tail -f)
 
