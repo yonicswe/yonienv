@@ -11,7 +11,7 @@ tagcompleteme ()
     fi
 }
 
-alias cpptags='ctags -R --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
+alias cpptags='ctags -uR --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
 alias pythontags='ctags -R --python-kinds=-i'
 
 tagcscope ()
@@ -58,8 +58,8 @@ tagme_base ()
 
     if [ -e cscope.files ] ; then 
         cscope -vkqb 2>/dev/null;
-        echo "Building ctags file...";
-        ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
+        echo "re-building ctags...";
+        ctags -u --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
         exit
     fi
 
@@ -69,6 +69,7 @@ tagme_base ()
 
         source_files=($( find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; ) )
 
+#=================================================================================================
 #       echo "Building ctags file...";
 #       ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
 #       echo > cscope.files
@@ -76,21 +77,23 @@ tagme_base ()
 #       cscope -vkqb 2>/dev/null
 #       -P$(pwd)  creates cscope.out with full path
 #         cscope -P$(pwd) -vkqb 2>/dev/null 
+#=================================================================================================
 
     else 
         printf "exclude : %s\n" ${excludeTagdir[@]/+++/}
         prune="-path ${excludeTagdir[@]/+++/-o -path}";
         source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
-
+#=================================================================================================
 #         echo "Building ctags file...";
 #         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
 #         echo > cscope.files
 #         for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
 #         cscope -P$(pwd) -vkqb 2>/dev/null
+#=================================================================================================
     fi    
 
     echo "Building ctags file...";
-    ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+    ctags -u --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
     echo > cscope.files
     for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
     cscope -vkqb 2>/dev/null
@@ -104,3 +107,4 @@ tagme ()
     cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
     chmod +x tagme.sh;
 }
+alias ttt='./tagme.sh'
