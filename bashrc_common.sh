@@ -5,7 +5,7 @@ unset SSH_ASKPASS
 alias editbashcommon='${v_or_g} ${yonienv}/bashrc_common.sh';
 grepbash () 
 {
-    local grepme=${1};
+    local grepme="${1}";
     [ -z "${grepme}" ] && return -1;
 
 #   grep -nHT --color ${grepme} ${yonienv}/*.sh;
@@ -14,6 +14,7 @@ grepbash ()
 
 export LANG=en_US.UTF-8
 export LC_ALL=C
+export LESSCHARSET=UTF-8
 
 alias cdyonienv='cd ${yonienv}'
 
