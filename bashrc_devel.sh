@@ -564,8 +564,9 @@ listerrnovalues ()
     cat ${yonienv}/errno_list.txt
 }
 
-alias delete_patches='rm -fv *.patch'
-alias delete_tags='rm -f cscope.* tags'
+alias deletepatches='rm -fv *.patch'
+alias listpatches='ls -ltr *.patch'
+alias deletetags='rm -f cscope.* tags'
 
 killzombies ()
 {

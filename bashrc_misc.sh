@@ -1,7 +1,20 @@
 #!/bin/bash
 
+# afaik this is only good ranger
+export VISUAL=gvim
+
 alias connect2remoteDesktop='source $(yonienv)/bin/connectToRemoteDesk.sh'
 alias yuminstallfromiso='yum install --disablerepo=\* --enablerepo=c7-media'
+alias less='less -r'
+
+# LESS or MAN with color
+export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[1;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;31m'
 
 yuminstallfromrepo ()
 {
@@ -85,9 +98,11 @@ yonienvdepsinstall ()
     yuminstallifnotexist screen
     yuminstallifnotexist sshpass
     yuminstallifnotexist the_silver_searcher
+    yuminstallifnotexist colordiff
 }
 
 alias yuminstall='sudo yum install -y'
+alias yumlocalinstall='sudo yum localinstall -y'
 printlinefromfile ()
 {
     local line=$1;

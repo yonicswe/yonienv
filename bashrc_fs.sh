@@ -116,7 +116,15 @@ alias f='fg'
 alias b='bg'
 # alias grepc='grep -nH --include=*.c --include=*.h --include=*.cpp --include=*.hpp'
 alias grepc='ag --cc --noheading'
-alias greptxt='grep -nrH --color --include=*.txt'
+# alias greptxt='grep -nrH --color --include=*.txt'
+alias greptxt='grep -nH -r -I --color '
+grepascii  ()
+{
+    grepme="$1";
+    [ -z ${grepme} ] && return;
+    find . -type f -exec grep -Iq . {} \; -print
+}
+
 alias ag='ag --noheading'
 alias ssh='ssh -X'
 alias pstree='pstree -Uphacl'
@@ -207,7 +215,7 @@ t ()
         fi
     fi
 
-    tree -ACF $opts $dir 
+    tree --charset UTF-8 -CF $opts $dir 
 }
 
 # cat which 
