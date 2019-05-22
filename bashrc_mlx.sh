@@ -4,6 +4,10 @@
 # mellanox stuff
 ########################################################################
 
+if ! [ -e ~/.bashmlx_once.$(hostname -s) ] ; then
+    export PATH=${PATH}:/.autodirect/mswg/release/MLNX_OFED/
+    touch ~/.bashmlx_once.$(hostname -s); 
+fi
 
 alias editbashmlx='${v_or_g} ${yonienv}/bashrc_mlx.sh'
 alias chownyoni='sudo chown yonatanc:mtl'
@@ -13,8 +17,8 @@ create_alias_for_host ()
     alias_name=${1}
     host_name=${2};
 
-    alias ${alias_name}="sshpass -p ${yonipass} ssh -Y yonatanc@${host_name}"
-    alias ${alias_name}root="sshpass -p 3tango ssh -Y root@${host_name}"
+    alias ${alias_name}="sshpass -p ${yonipass} ssh -YX yonatanc@${host_name}"
+    alias ${alias_name}root="sshpass -p 3tango ssh -YX root@${host_name}"
     alias ${alias_name}ping="ping ${host_name}"
 }
 
@@ -24,19 +28,25 @@ create_alias_for_host 9 r-ole08
 create_alias_for_host 10 r-ole08
 create_alias_for_host 11 r-ole08
 create_alias_for_host 15 r-ole15
+create_alias_for_host 70 dev-r-vrt-070
 
 # my development hosts
 create_alias_for_host 145 dev-l-vrt-145
 create_alias_for_host 1455 dev-l-vrt-145-005
-create_alias_for_host 1456 dev-l-vrt-145-006
+# dev-l-vrt-145-006
+create_alias_for_host 1456 10.134.145.6 
 create_alias_for_host 1457 dev-l-vrt-145-007
 create_alias_for_host 1458 dev-l-vrt-145-008
 create_alias_for_host 1459 dev-l-vrt-145-009
-create_alias_for_host 146 dev-l-vrt-146
+
+# dev-l-vrt-146
+create_alias_for_host 146 10.134.146.1 
 create_alias_for_host 1465 dev-l-vrt-146-005
 create_alias_for_host 1466 dev-l-vrt-146-006
 create_alias_for_host 1467 dev-l-vrt-146-007
-create_alias_for_host 1468 dev-l-vrt-146-008
+
+# dev-l-vrt-146-008
+create_alias_for_host 1468 10.134.146.8
 create_alias_for_host 1469 dev-l-vrt-146-009
 create_alias_for_host 191 dev-r-vrt-191
 
@@ -66,7 +76,16 @@ create_alias_for_host danit reg-l-vrt-178
 # sriov
 create_alias_for_host 165 10.134.3.165
 create_alias_for_host 166 10.134.3.166
+create_alias_for_host 188 10.136.1.188
+create_alias_for_host 189 10.134.3.189
 
+###########################################################
+#              build servers
+###########################################################
+# l-net-build06-006
+create_alias_for_host ppc64buildserver 10.141.114.6 
+create_alias_for_host x86buildserver 10.141.137.239 
+create_alias_for_host cluster12 clx-cratus-12
 
 sm ()
 {
@@ -238,9 +257,10 @@ listgitrepos ()
     echo "jason    kernel              : https://github.com/jgunthorpe/linux.git";
     echo;
     echo "mellanox ofed.4 kernel       : ${prefix}/mlnx_ofed/mlnx-ofa_kernel-4.0";
-    echo "                libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
-    echo "                libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
-    echo "                libmlx5      : ${prefix}/connect-ib/libmlx5";
+    echo "            |-- libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
+    echo "            |-- libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
+    echo "            |-- libmlx5      : ${prefix}/connect-ib/libmlx5";
+    echo "            +-- rdma-core    : ${prefix}/mlnx_ofed/rdma-core"; 
 
     echo;
     echo "mellanox regression vrtsdk      : ${prefix}/vrtsdk";
@@ -435,7 +455,11 @@ ofedmklinks ()
     ln -snf ofed_scripts/configure configure
 }
 
-alias ofedapplybackports='./configure -j ${ncoresformake} --kernel-version 2.6.16 --skip-autoconf'
+ofedapplybackports ()
+{
+    local kernel_version=${1:-2.6.16};
+    ./configure -j ${ncoresformake} --kernel-version ${kernel_version} --skip-autoconf;
+}
 alias ofedconfigurewithcore='./configure -j ${ncoresformake} --with-core-mod'
 alias ofedconfigurewithrxe='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
 alias ofedconfigure='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-e_ipoib-mod --with-memtrack'
@@ -455,8 +479,8 @@ ofedorigindir ()
     cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
 }
 
-alias ofedversion='[ -e /usr/bin/ofed_info ] && ofed_info -s'
-alias ofedstop='sudo service openibd stop'
+alias ofedversion='[ -e /usr/bin/ofed_info ] && ofed_info -s | sed "s/://g"'
+alias ofedstop='sudo service openibd force-stop'
 alias ofedstart='sudo service openibd start'
 alias ofedrestart='ofedstop; ofedstart'
 
@@ -483,7 +507,11 @@ vlinstall ()
 #     fi
 #  another script that could be used.
 #  sudo /mswg/projects/ver_tools/reg2_latest/install.sh;
+}
 
+regression_tools_install ()
+{
+    sudo /mswg/projects/ver_tools/reg2_latest/install.sh;
 }
 
 # you must install mft to be able to change link type.
@@ -536,6 +564,41 @@ mftchoosedev ()
     read -p "choose device: " dev_num;
     return ${dev_num};
 }
+
+mftenablesriov ()
+{
+    local mst_dev=$1;
+    local hypervisor=1;
+
+    redpill;
+    hypervisor=$?;
+    if [ ${hypervisor} -eq 0 ] ; then
+        "This is A VM. you need to do this on hypervisor";
+        echo -e "\033[1;33;7m This is A VM. you need to do this on hypervisor\033[0m"
+        return;
+    fi
+
+    mftcheckstatus
+    if (( $? != 0 )) ; then
+        echo -e "\033[1;33;7myou need to run mftstart \033[0m";
+        return 1;
+    fi
+
+    if [ -z "${mst_dev}" ] ; then
+        mftstatus;
+        mftchoosedev;
+        mst_dev=/dev/mst/${mst_dev_array[$?]}
+    fi;
+
+    echo "sudo mlxconfig -d ${mst_dev} set SRIOV_EN=1 NUM_OF_VFS=8 FPP_EN=1";
+    sudo mlxconfig -d ${mst_dev} set SRIOV_EN=1 NUM_OF_VFS=8 FPP_EN=1;
+}
+
+# mftdisablesriov ()
+# {
+# 
+# 
+# }
 
 mftsetlinktypeeth ()
 {
@@ -659,6 +722,37 @@ mftgetlinktype ()
         echo ${d};
         sudo mlxconfig -d ${d} q | \grep LINK_TYPE;
     done
+}
+
+sriovsetupmlx5_1 ()
+{
+    echo "set sriov for mlx5_0 : TBD"
+
+#   create 1 VF
+    echo 1 > /sys/class/infiniband/mlx5_1/device/sriov_numvfs 
+
+
+#   get the node_guid from the PF
+    node_guid=$(cat  /sys/class/infiniband/mlx5_1/node_guid)
+
+#   generate a new node_guid using the PFs node_guid
+    vf_node_guid=$(create_node_guid $node_guid);
+
+#   generate a new port_guid using the the new node_guid
+    vf_port_guid=$(create_port_guid $vf_node_guid);
+
+#   get pci address of VF to use for bind->unbind
+    ibdev2netdev -v | grep mlx5_2 
+
+#   setup policy of the VF
+    echo Follow > /sys/class/infiniband/mlx5_1/device/sriov/0/policy
+#   configure node_guid
+    echo $vf_node_guid > /sys/class/infiniband/mlx5_1/device/sriov/0/node_guid
+    echo $vf_port_guid > /sys/class/infiniband/mlx5_1/device/sriov/0/port_guid
+
+#   unbind/bind to activate configuration
+    echo 0000:81:01.2 > /sys/bus/pci/drivers/mlx5_core/unbind
+    echo 0000:81:01.2 > /sys/bus/pci/drivers/mlx5_core/bind
 }
 
 _checkpatchcomplete ()
@@ -858,9 +952,11 @@ findiblibs ()
 
         if [ -z $lib ] ; then
             echo -e "\033[1;35m--- ${i} ----\033[0m"
-            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}" -type l -ls ${delete_app} 2>/dev/null | awk '{print $11" --> " $13}'
+#           sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}" -type l  -printf "%Ad/%Am/%AY %AH:%AM %h/%f %Y\n" ${delete_app} 2>/dev/null
         else
-            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" | grep ${lib} 2>/dev/null
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" \(-type f -o -type l\) -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" | grep ${lib} 2>/dev/null
         fi
         ((count++));
     done
@@ -1231,27 +1327,64 @@ ofedinstallupstreamlib ()
     sudo build=ofed-upstream_last_stable /mswg/release/ofed/ofed_install --all --force --disable-kmp --without-valgrind
 }
 
+alias ofeduninstall='sudo ofed_uninstall.sh'
+
 ofedlistversions ()
 {
-    find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n";
+    local ver=$1
+    if [ -z $ver ] ; then 
+        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n";
+    else
+        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver
+    fi
+
 }
 
-ofedbuildversion ()
+ofed_list_os=( "rhel7.0")
+ofed_list_os+=( "rhel7.1" )
+ofed_list_os+=( "rhel7.2" )
+ofed_list_os+=( "rhel7.3" )
+ofed_list_os+=( "rhel7.4" )
+ofed_list_os+=( "rhel7.5" )
+ofed_list_os+=( "rhel7.6" )
+ofed_list_os+=( "fc27" )
+
+complete -W "$( echo ${ofed_list_os[@]} )" ofedlistversionforos
+
+ofedlistversionforos ()
 {
-    local version=${1};
-    if [ -z ${version} ] ; then
-        echo "missing version, use ofedlistversions to get your version" ;
-        return ;
-    fi;
-    echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
+    local os=${1:-rhel7.0};
+    local arch=${2:-x86_64};
+
+    for i in $(ls -t -d /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-* ) ; do 
+#   for i in $(find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1 -type d -name "*MLNX_OFED_LINUX-*" ) ; do 
+        if [ $(ls -l $i | grep ${os} | wc -l ) -gt 0 ] ; then 
+            sudo find ${i} -maxdepth 1 -type d -name "*${os}*${arch}*" -printf "${i}\n\t|--%f\n";
+# ls -l $i | grep ${os} | grep ^d;
+#             echo $i;
+#             ls -l $i | grep ${os} | grep ^d  | while read d ; do 
+#                 echo "|--$(basename $d)";
+#             done 
+            continue; 
+        fi
+    done; 
 }
 
-alias ofedkernelinstall='sudo make install INSTALL_MOD_DIR=updates'
+# ofedbuildversion ()
+# {
+#     local version=${1};
+#     if [ -z ${version} ] ; then
+#         echo "missing version, use ofedlistversions to get your version" ;
+#         return ;
+#     fi;
+#     echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install --add-kernel-support"
+# }
 
 ofedinstallversion ()
 {
     local ans;
     local rebuild_drivers=
+    local user_space_libs=
     local version=${1};
 
     if [ -z ${version} ] ; then echo -e "missing version, use \"ofedlistversions\"" ; return ; fi;
@@ -1262,10 +1395,16 @@ ofedinstallversion ()
         rebuild_drivers="--add-kernel-support";
     fi
 
-    echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers}";
+    user_space_libs="--upstream-libs --dpdk --with-opensm";
+    read -p "Do you need rdma-core user space ? [Y/n]" ans;
+    if [ "$ans" == "n" ] ; then
+        user_space_libs="";
+    fi
+
+    echo "sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers} ${user_space_libs}";
     read -p "continue [y/N]: " ans;
     if [ "$ans" == "y" ] ; then
-        sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers};
+        sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers} ${user_space_libs};
     fi
 }
 
@@ -1282,10 +1421,54 @@ ofedfindindexforpackage ()
 #     ofed_info |grep -m2  -A1 ${pkg}
 }
 
+ofedbuildidforversion ()
+{
+    local ver=${1};
+    [ -z $ver ] && return;
+    less /mswg/release/ofed/OFED-internal-${ver}/BUILD_ID
+}
+
 alias ofedfindindexforofakernel='ofedfindindexforpackage ofa_kernel:'
 alias ofedfindindexforlibmlx5='ofedfindindexforpackage libmlx5:'
 alias ofedfindindexforlibibverbs='ofedfindindexforpackage libibverbs'
-alias ofedkernelinstall='sudo make install INSTALL_MOD_DIR=kernel'
+
+ofedkernelinstall ()
+{
+    local ibcore_install_path=$(modinfo ib_core|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
+    local mlx5ib_install_path=$(modinfo mlx5_ib|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
+    local dst=${1:-updates};
+    local installed_ibcore="/lib/modules/$(uname -r)/${dst}/drivers/infiniband/core/ib_core.ko"
+
+    echo "About to install ofa-kernel to /lib/modules/$(uname -r)/$dst";
+
+    if ! [ "${installed_ibcore}" = "${ibcore_install_path}" ] ; then 
+        echo "Pay attention that ofed installed kernel drivers to a different path";
+        echo -e "\t${ibcore_install_path}";
+        echo -e "\t${mlx5ib_install_path}";
+    fi
+
+    are_you_sure_default_no;
+    [ $? -eq 0 ] && return;
+    echo "sudo make install INSTALL_MOD_DIR=${dst}";
+    sudo make install INSTALL_MOD_DIR=${dst};
+}
+
+complete -W "updates kernel extra extra/mlnx-ofa_kernel" ofedkernelinstall
+
+ofedfindpathofversion () 
+{
+    local version=$1;
+    if [ -z ${version} ] ; then
+        if [ $( ofedversion | grep internal | wc -l ) -gt 0 ] ; then 
+            version=$(ofedversion | awk -F '-' '{ print $3 "-" $4}');
+        else
+            version=$(ofedversion | awk -F '-' '{ print $2 "-" $3}');
+        fi
+    fi
+    echo -e "find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1 -type d -name \"*${version}*\"";
+    echo "---------------------------"
+    find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1 -type d -name "*${version}*" 
+}
 
 ofedmkbackport ()
 {
@@ -1302,7 +1485,7 @@ ofedmkbackport ()
     fi
 
     # make sure that ofed kernel links were created
-    if ![ -e configure ]  ; then
+    if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then
         echo "You 1st need to create ofa links - use ofedmklinks";
         return;
     fi
@@ -1319,6 +1502,8 @@ ofedmkbackport ()
         ./configure -j ${ncoresformake} ${configure_options}
     fi
     echo             "=======================";
+
+    make distclean;
 }
 
 # if [ -d ~yonatanc/devel ] ; then
@@ -1461,7 +1646,7 @@ opensmmlx ()
     local device=${1};
     local guid=$(ibstat -d ${device} | awk '/Port GUID/{print $3}');
     echo "sudo opensm -g ${guid}"
-    sudo opensm -g ${guid} &
+    sudo opensm -B -g ${guid} ;
     sleep 3
     ibv_devinfo -d ${device} | grep state;
     ibv_devinfo -d ${device} | grep "state\|link_layer";
@@ -1515,5 +1700,33 @@ mlx ()
 
 
 #     mftstatus;
-}                       
-                        
+}
+
+listdevelservers ()
+{
+    # server locations are listed in the windows app : disconet
+    # only LAB IT members have access to it
+
+    local servername=${1};
+    if [ -z "${servername}" ] ; then
+        cat /.autodirect/LIT/SCRIPTS/DHCPD/list;
+    else
+        cat /.autodirect/LIT/SCRIPTS/DHCPD/list |grep -i ${servername};
+    fi
+}
+
+listbuildservers () { less /auto/integration/builders.txt ; }
+
+remotereboot ()
+{
+    host="${1}";
+#   /swgwork/yogevg/tools/virtualization/special_rreboot.py -H clx-cratus-[11-15]
+    /swgwork/yogevg/tools/virtualization/special_rreboot.py -H ${host}
+}
+
+ofedhelp ()
+{
+    echo "ofedmkmetadata - create Metadata"
+    echo "ofeddeletebackport - delete backport branch"
+    echo "ofedbuildidforversion - show git indexs used for a specific ofed version"
+}
