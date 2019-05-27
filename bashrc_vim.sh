@@ -6,7 +6,7 @@
 #  \_/ |_||_|_|_| 
 
 
-export vimorgvimbackupfile=${HOME}/.vimorgvim;
+export vimorgvimbackupfile=${HOME}/.vimorgvim.$(hostname -s);
 if ! [ -e ${vimorgvimbackupfile} ] ; then 
     echo vim > ${vimorgvimbackupfile};
 fi
@@ -32,15 +32,20 @@ vimorgvim ()
     if [ "${v_or_g}" == "vim" ] ; then
         export v_or_g="gvim";
         export _vd="gvimdiff";
+        export EDITOR="gvim";
     else
         export v_or_g="vim";
         export _vd="vimdiff"
+        export EDITOR="vim";
     fi
 
     git config --global diff.tool ${_vd};
     git config --global merge.tool ${_vd};
     echo $v_or_g | tee ${vimorgvimbackupfile};
+
+    r;
 }
+export EDITOR="vim";
 
 vd () { ${_vd} $1 $2 ;}
 
@@ -176,7 +181,9 @@ alias gpython='editPythonScript g'
 alias cleartrailingwhitespace="sed -i 's/[ \t]*$//'"
 
 
-function gsources ()
+function vsources ()
 {
-    g  $(find -maxdepth 1 -regex ".*\.cpp\|.*\.c\|.*\.h" -printf "%f ")
+    ${v_or_g}  $(find -maxdepth 1 -regex ".*\.cpp\|.*\.c\|.*\.h" -printf "%f ")
 }
+
+alias viminstall='sudo yum install -y vim-X11 ctags'

@@ -5,7 +5,7 @@ if [ -d "build" ]; then
 fi
 
 CORES=$(( $(nproc) -1)) 
-mkdir build
+install -m 777 -d build
 cd build
 cmake  \
       -DMLX5_DEBUG=True \

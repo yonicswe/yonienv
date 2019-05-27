@@ -493,6 +493,21 @@ alias makedebug='make CPPFLAGS="-O0 -g"'
 # kernel debugging with ftrace        
 
 
+ftrace ()
+{
+    local ans=;
+    local func=;
+    local pid=;
+
+    # echo 'func' > set_ftrace_filter
+    read -p "trace specific func ?  : " func;
+
+    # echo 'pid' > set_ftrace_pid 
+    read -p "trace specific pid ?   : " pid;
+    read -p "specific trace style [function / function_graph] ? : " trace_style;
+    
+}
+
 ftraceon ()
 {
     local func_name=${1};
@@ -572,3 +587,24 @@ killzombies ()
 {
     kill $(ps -A -ostat,ppid | awk '/[zZ]/ && !a[$2]++ {print $2}')
 }
+
+findkernelsources ()
+{
+    rpm -q --queryformat="%{SOURCERPM}\n" kernel-`uname -r`
+}
+
+extractkernelsrcrpm ()
+{
+    local kernelfile=$1;
+    local ans=;
+
+    read -p "are you on the host that will use this kernel [N/y] ?" ans;
+    if [ "${ans}" != "y" ]  ; then 
+        echo "you need to be on the same machine"
+        return;
+    fi
+    sudo rpm -ivh --define "_topdir $PWD" ${kernelfile};
+    sudo rpmbuild -bp --nodeps --define "_topdir $PWD" SPECS/kernel*.spec
+    echo "cd BUILD/${kernelfile}";
+}
+

@@ -33,6 +33,8 @@
 
     amend = commit --amend --no-edit
 
+    gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
     b = branch -vv
     bdelete = branch -D 
     brename = branch -M
@@ -50,10 +52,10 @@
     dt = difftool
     ds = diff --stat
 
-    g = grep --color
-    gi = grep --color --ignore-case
+    g = grep --color -n
+    gi = grep --color -n --ignore-case
 
-    head = log -n1 --pretty=oneline
+    h = log -n1 --pretty=oneline
 
     listmodified = diff --name-only
     listcached = diff --cached --name-only
@@ -69,6 +71,11 @@
 
     unstage = reset HEAD
     uncommit = reset HEAD^
+
+    saveheadindex = "!f() { \
+		   git log -n1 --pretty=oneline | cut -d ' ' -f1 > reuse_commit.txt; \
+    		}; f"
+
     untrackfile = rm --cached 
 
     dg = "!f() {					     \
@@ -191,17 +198,22 @@
 		}; f"
 
     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
-    branch-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git c -b $1@for-upstream FETCH_HEAD ; }; f"
+    rebase-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git rebase FETCH_HEAD ; }; f"
 
+    branch-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git c -b $1@for-upstream FETCH_HEAD ; }; f"
+    rebase-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git rebase FETCH_HEAD ; }; f"
+
+    branch-ofa-kernel-4-6 = "!f() { if [ -z $1 ] ; then return ; fi;  git fetch origin mlnx_ofed_4_6 ; git c -b $1@mlnx_ofed_4_6 FETCH_HEAD ; }; f"
+    rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
 [core]
     editor = vim
 
 [diff]
-	tool = gvimdiff
+	tool = vimdiff
 
 [merge]
-	tool = gvimdiff
+	tool = vimdiff
 
 [difftool]
 	prompt = true

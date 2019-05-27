@@ -4,10 +4,14 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+Counter	core.14469	/^    Counter()$/;"	f
+_bugs	docs_complete_dir.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
+_clear_type_cache	core.14469	/^/;"	f
 _code	docs_complete_dir.sh	/^_code ()$/;"	f
 _devel	docs_complete_dir.sh	/^_devel ()$/;"	f
 _docs	docs_complete_dir.sh	/^_docs ()$/;"	f
+_features	docs_complete_dir.sh	/^_features ()$/;"	f
 _gcdcomplete	cdproject.sh	/^function _gcdcomplete()$/;"	f
 _gcdcomplete	task_complete.sh	/^function _gcdcomplete()$/;"	f
 _gitdiscard	bashrc_git.sh	/^_gitdiscard () $/;"	f
@@ -15,13 +19,23 @@ _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
 _regression	regression_complete.sh	/^_regression ()$/;"	f
 _share	docs_complete_dir.sh	/^_share ()$/;"	f
 _upstream	upstream_complete_dir.sh	/^_upstream ()$/;"	f
+_weather	bashrc_misc.sh	/^_weather(){ curl -s "wttr.in?m1" ;}$/;"	f
+acquire	core.14469	/^acquire() -- lock the lock, possibly blocking until it can be obtained$/;"	f
 acs_build_vars	bashrc_nice.sh	/^acs_build_vars () $/;"	f
 acs_sockets	bashrc_nice.sh	/^acs_sockets () $/;"	f
 acs_telnet	bashrc_nice.sh	/^acs_telnet ()$/;"	f
 acs_threads	bashrc_nice.sh	/^acs_threads () $/;"	f
 acx_threads	bashrc_nice.sh	/^acx_threads ()$/;"	f
+add	core.14469	/^    add(), and discard().$/;"	f
+alarm	core.14469	/^alarm() -- cause SIGALRM after a specified time [Unix only]$/;"	f
+are_you_sure_default_no	bashrc_common.sh	/^are_you_sure_default_no ()$/;"	f
+are_you_sure_default_yes	bashrc_common.sh	/^are_you_sure_default_yes ()$/;"	f
+asctime	core.14469	/^asctime() -- convert time tuple to string$/;"	f
 backupgitkernel	bashrc_mlx.sh	/^backupgitkernel ()$/;"	f
 branches	bashrc_svn.sh	/^branches () {$/;"	f
+but	core.14469	/^function but consumes less memory by returning an iterator instead of$/;"	f
+call	core.14469	/^function call.  See the debugger chapter in the library manual./;"	f
+callstats	core.14469	/^/;"	f
 cat_bash_env	commonyonienv.sh	/^cat_bash_env ()$/;"	f
 cat_bash_profile	commonyonienv.sh	/^cat_bash_profile ()$/;"	f
 cat_bashrc	commonyonienv.sh	/^cat_bashrc () $/;"	f
@@ -31,10 +45,12 @@ cat_vim_env	commonyonienv.sh	/^cat_vim_env () $/;"	f
 cat_yoni_env	commonyonienv.sh	/^cat_yoni_env ()$/;"	f
 catgrubsetdefault	bashrc_devel.sh	/^catgrubsetdefault ()$/;"	f
 catgrubvsinstalled	bashrc_devel.sh	/^catgrubvsinstalled ()$/;"	f
+cdbugs	docs_complete_dir.sh	/^cdbugs() { cd $bugs_dir\/$1; }$/;"	f
 cdbundle	bashrc_nice.sh	/^cdbundle () $/;"	f
 cdcode	docs_complete_dir.sh	/^cdcode() { cd $code_dir\/$1; }$/;"	f
 cddevel	docs_complete_dir.sh	/^cddevel() { cd $devel_dir\/$1; }$/;"	f
 cddocs	docs_complete_dir.sh	/^cddocs() { cd $docs_dir\/$1; }$/;"	f
+cdfeatures	docs_complete_dir.sh	/^cdfeatures() { cd $features_dir\/$1; }$/;"	f
 cdofed	ofed_complete_dir.sh	/^cdofed()$/;"	f
 cdregression	regression_complete.sh	/^cdregression()$/;"	f
 cdshare	docs_complete_dir.sh	/^cdshare() { cd $share_dir\/$1; }$/;"	f
@@ -55,25 +71,46 @@ clean_git_env	commonyonienv.sh	/^clean_git_env ()$/;"	f
 clean_vim_env	commonyonienv.sh	/^clean_vim_env ()$/;"	f
 cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
 cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
+clock	core.14469	/^clock() -- return CPU time since process start as a float$/;"	f
+collect	core.14469	/^collect() -- Do a full collection right now.$/;"	f
 complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f
+count	bashrc_misc.sh	/^function count() {$/;"	f
 create_alias_for_host	bashrc_mlx.sh	/^create_alias_for_host ()$/;"	f
 csfiles	bashrc_mlx.sh	/^csfiles ()$/;"	f
+ctime	core.14469	/^ctime() -- convert time in seconds to string$/;"	f
 cw	bashrc_fs.sh	/^cw () $/;"	f
+default_int_handler	core.14469	/^default_int_handler() -- default SIGINT handler$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
 dfa	bashrc_fs.sh	/^dfa () $/;"	f
 dirdiff	bashrc_fs.sh	/^dirdiff () $/;"	f
 dirdiffbrief	bashrc_fs.sh	/^dirdiffbrief () $/;"	f
+disable	core.14469	/^/;"	f
+disable	core.14469	/^disable() -- Disable automatic garbage collection.$/;"	f
+displayhook	core.14469	/^displayhook() -- print an object to the screen, and save it in __builtin__._$/;"	f
 du1	bashrc_fs.sh	/^du1 ()$/;"	f
 du11	bashrc_fs.sh	/^du11 ()$/;"	f
+dump	core.14469	/^dump() -- write value to a file$/;"	f
+dump	core.14469	/^dump(), load() will substitute None for the unmarshallable type./;"	f
+dumps	core.14469	/^dumps() -- write value to a string$/;"	f
 duroot	bashrc_fs.sh	/^duroot ()$/;"	f
 dyoni	bashrc_devel.sh	/^dyoni ()$/;"	f
 editBashrcScript	bashrc_vim.sh	/^editBashrcScript () $/;"	f
 editPythonScript	bashrc_vim.sh	/^editPythonScript () $/;"	f
 editbashrc	bashrc_common.sh	/^editbashrc () $/;"	f
 editgrub	bashrc_devel.sh	/^editgrub () $/;"	f
+enable	core.14469	/^/;"	f
+enable	core.14469	/^enable() -- Enable automatic garbage collection.$/;"	f
 ethlist	bashrc_fs.sh	/^ethlist () $/;"	f
+exc_clear	core.14469	/^exc_clear() -- clear the exception state for the current thread$/;"	f
+exc_info	core.14469	/^exc_info() -- return thread-safe information about the current exception$/;"	f
+exc_info	core.14469	/^exc_info() will return (None,None,None) until another exception is raised$/;"	f
+excepthook	core.14469	/^excepthook() -- print an exception and its traceback to sys.stderr$/;"	f
+exit	core.14469	/^exit() -- exit the interpreter by raising SystemExit$/;"	f
 extract	bashrc_fs.sh	/^extract () {$/;"	f
+extract_stack	core.14469	/^    extract_stack() as a formatted stack trace to the given file./;"	f
+extract_stack	core.14469	/^    extract_stack(), return a list of strings ready for printing.$/;"	f
+extractkernelsrcrpm	bashrc_devel.sh	/^extractkernelsrcrpm ()$/;"	f
 extractrpm	bashrc_fs.sh	/^extractrpm ()$/;"	f
 ff	bashrc_fs.sh	/^ff () $/;"	f
 ffd	bashrc_fs.sh	/^ffd () $/;"	f
@@ -84,17 +121,38 @@ findexecutable	bashrc_fs.sh	/^findexecutable ()$/;"	f
 findibapps	bashrc_mlx.sh	/^findibapps ()$/;"	f
 findiblibs	bashrc_mlx.sh	/^findiblibs ()$/;"	f
 findiblibsfaster	bashrc_mlx.sh	/^findiblibsfaster ()$/;"	f
+findkernelsources	bashrc_devel.sh	/^findkernelsources ()$/;"	f
 findmin	bashrc_fs.sh	/^findmin ()$/;"	f
 findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
+flush	core.14469	/^/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
+fork	core.14469	/^/;"	f
+ftrace	bashrc_devel.sh	/^ftrace ()$/;"	f
 ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
 ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f
 gcd	cdproject.sh	/^function gcd {$/;"	f
 gdbbt	bashrc_devel.sh	/^gdbbt () $/;"	f
 generate_wbe	bashrc_nice.sh	/^generate_wbe () $/;"	f
 get_branches	bashrc_svn.sh	/^get_branches () $/;"	f
+get_count	core.14469	/^get_count() -- Return the current collection counts.$/;"	f
+get_debug	core.14469	/^/;"	f
+get_debug	core.14469	/^get_debug() -- Get debugging flags.$/;"	f
+get_objects	core.14469	/^/;"	f
+get_objects	core.14469	/^get_objects() -- Return a list of all objects tracked by the collector.$/;"	f
+get_referents	core.14469	/^get_referents() -- Return the list of objects that an object refers to.$/;"	f
+get_referrers	core.14469	/^get_referrers() -- Return the list of objects that refer to an object.$/;"	f
+get_threshold	core.14469	/^/;"	f
+get_threshold	core.14469	/^get_threshold() -- Return the current the collection thresholds.$/;"	f
 getconfigdir	bashrc_nice.sh	/^getconfigdir () $/;"	f
+getdlopenflags	core.14469	/^getdlopenflags() -- returns flags to be used for dlopen() calls$/;"	f
+getitimer	core.14469	/^getitimer() -- get current value of timer [Unix only]$/;"	f
 getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f
+getprofile	core.14469	/^getprofile() -- get the global profiling function$/;"	f
+getrecursionlimit	core.14469	/^getrecursionlimit() -- return the max recursion depth for the interpreter$/;"	f
+getrefcount	core.14469	/^getrefcount() -- return the reference count for an object (plus one :-)$/;"	f
+getsignal	core.14469	/^getsignal() -- get the signal action for a given signal$/;"	f
+getsizeof	core.14469	/^getsizeof() -- return the size of an object in bytes$/;"	f
+gettrace	core.14469	/^gettrace() -- get the global debug tracing function$/;"	f
 gitapplyPatchList	bashrc_git.sh	/^gitapplyPatchList () $/;"	f
 gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
@@ -109,12 +167,14 @@ gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
+gmtime	core.14469	/^gmtime() -- convert seconds since Epoch to UTC tuple$/;"	f
+grepascii	bashrc_fs.sh	/^grepascii  ()$/;"	f
 grepbash	bashrc_common.sh	/^grepbash () $/;"	f
 greptasks	bashrc_bookmarks.sh	/^greptasks ()$/;"	f
 grub2listentries	bashrc_devel.sh	/^grub2listentries () $/;"	f
 grub2setdefault	bashrc_devel.sh	/^grub2setdefault ()$/;"	f
-gsources	bashrc_vim.sh	/^function gsources ()$/;"	f
 h	bashrc_fs.sh	/^h () $/;"	f
+heappush	core.14469	/^heappush() followed by a separate call to heappop()./;"	f
 howCleanIsMyHome	bashrc_mlx.sh	/^howCleanIsMyHome ()$/;"	f
 ibmod	bashrc_mlx.sh	/^ibmod ()$/;"	f
 icm_kill	bashrc_nice.sh	/^icm_kill () $/;"	f
@@ -126,8 +186,14 @@ ips_kill	bashrc_nice.sh	/^ips_kill () $/;"	f
 ips_sockets	bashrc_nice.sh	/^ips_sockets () $/;"	f
 ips_telnet	bashrc_nice.sh	/^ips_telnet () $/;"	f
 ips_threads	bashrc_nice.sh	/^ips_threads () $/;"	f
+is	core.14469	/^function is None, return the items that are true.  If sequence is a tuple$/;"	f
+is	core.14469	/^function is called with an argument list consisting of the corresponding$/;"	f
+is_tracked	core.14469	/^is_tracked() -- Returns true if a given object is tracked.$/;"	f
+isenabled	core.14469	/^/;"	f
+isenabled	core.14469	/^isenabled() -- Returns true if automatic collection is enabled.$/;"	f
 iserstart	bashrc_mlx.sh	/^iserstart ()$/;"	f
 ismoduleup	bashrc_mlx.sh	/^ismoduleup ()$/;"	f
+issubclass	core.14469	/^    issubclass() function, but the registering ABC won't show up in$/;"	f
 k	bashrc_fs.sh	/^k () {$/;"	f
 kernelbuild	bashrc_devel.sh	/^kernelbuild ()$/;"	f
 kernelbuildall	bashrc_devel.sh	/^kernelbuildall ()$/;"	f
@@ -144,11 +210,18 @@ kernelinstallmodules	bashrc_devel.sh	/^kernelinstallmodules ()$/;"	f
 kernelversion	bashrc_devel.sh	/^kernelversion ()$/;"	f
 killzombies	bashrc_devel.sh	/^killzombies ()$/;"	f
 la	bashrc_fs.sh	/^la ()$/;"	f
+listbuildservers	bashrc_mlx.sh	/^listbuildservers () { less \/auto\/integration\/builders.txt ; }$/;"	f
+listdevelservers	bashrc_mlx.sh	/^listdevelservers ()$/;"	f
 listerrnovalues	bashrc_devel.sh	/^listerrnovalues ()$/;"	f
 listgitrepos	bashrc_mlx.sh	/^listgitrepos ()$/;"	f
 listinstalledkernels	bashrc_devel.sh	/^listinstalledkernels ()$/;"	f
 lld	bashrc_fs.sh	/^lld ()$/;"	f
+load	core.14469	/^load() -- read value from a file$/;"	f
 loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
+loads	core.14469	/^loads() -- read value from a string/;"	f
+localtime	core.14469	/^localtime() -- convert seconds since Epoch to local time tuple$/;"	f
+locked	core.14469	/^/;"	f
+locked	core.14469	/^locked() -- test whether the lock is currently locked$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
 m	bashrc_fs.sh	/^m ()$/;"	f
@@ -158,6 +231,7 @@ md2man	bashrc_mlx.sh	/^md2man ()$/;"	f
 messages	commonyonienv.sh	/^messages () $/;"	f
 mftcheckstatus	bashrc_mlx.sh	/^mftcheckstatus ()$/;"	f
 mftchoosedev	bashrc_mlx.sh	/^mftchoosedev ()$/;"	f
+mftenablesriov	bashrc_mlx.sh	/^mftenablesriov ()$/;"	f
 mftgetlinktype	bashrc_mlx.sh	/^mftgetlinktype ()$/;"	f
 mftinstall	bashrc_mlx.sh	/^mftinstall ()$/;"	f
 mftquerynvconf	bashrc_mlx.sh	/^mftquerynvconf ()$/;"	f
@@ -166,13 +240,14 @@ mftsetlinktypeeth	bashrc_mlx.sh	/^mftsetlinktypeeth ()$/;"	f
 mftsetlinktypeinfiniband	bashrc_mlx.sh	/^mftsetlinktypeinfiniband ()$/;"	f
 mftstart	bashrc_mlx.sh	/^mftstart ()$/;"	f
 mftstatus	bashrc_mlx.sh	/^mftstatus ()$/;"	f
-mkcoverletterkernel	bashrc_mlx.sh	/^mkcoverletterkernel ()$/;"	f
+mkcoverletter	bashrc_mlx.sh	/^mkcoverletter ()$/;"	f
 mkcoverletterrdmacore	bashrc_mlx.sh	/^mkcoverletterrdmacore ()$/;"	f
 mkcoverletterusage	bashrc_mlx.sh	/^mkcoverletterusage ()$/;"	f
 mkinfinibandmlx4	bashrc_mlx.sh	/^mkinfinibandmlx4 ()$/;"	f
 mkinfinibandmlx5	bashrc_mlx.sh	/^mkinfinibandmlx5 ()$/;"	f
 mkrxelib	bashrc_mlx.sh	/^mkrxelib ()$/;"	f
 mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f
+mktime	core.14469	/^mktime() -- convert local time tuple to seconds since Epoch$/;"	f
 mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime ()$/;"	f
 mkvmhelp	bashrc_mlx.sh	/^mkvmhelp()$/;"	f
 mlx	bashrc_mlx.sh	/^mlx ()$/;"	f
@@ -187,23 +262,32 @@ mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f
 mydistro	bashrc_fs.sh	/^mydistro ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
-ofedbuildversion	bashrc_mlx.sh	/^ofedbuildversion ()$/;"	f
+ofedapplybackports	bashrc_mlx.sh	/^ofedapplybackports ()$/;"	f
+ofedbuildidforversion	bashrc_mlx.sh	/^ofedbuildidforversion ()$/;"	f
 ofedconfigureforkernel	bashrc_mlx.sh	/^ofedconfigureforkernel ()$/;"	f
 ofeddeletebackport	bashrc_mlx.sh	/^ofeddeletebackport ()$/;"	f
 ofedfindindexforpackage	bashrc_mlx.sh	/^ofedfindindexforpackage ()$/;"	f
+ofedfindpathofversion	bashrc_mlx.sh	/^ofedfindpathofversion () $/;"	f
+ofedhelp	bashrc_mlx.sh	/^ofedhelp ()$/;"	f
 ofedinstallupstreamlib	bashrc_mlx.sh	/^ofedinstallupstreamlib ()$/;"	f
 ofedinstallversion	bashrc_mlx.sh	/^ofedinstallversion ()$/;"	f
+ofedkernelinstall	bashrc_mlx.sh	/^ofedkernelinstall ()$/;"	f
+ofedkernelversion	bashrc_mlx.sh	/^ofedkernelversion ()$/;"	f
+ofedlistversionforos	bashrc_mlx.sh	/^ofedlistversionforos ()$/;"	f
 ofedlistversions	bashrc_mlx.sh	/^ofedlistversions ()$/;"	f
 ofedmkbackport	bashrc_mlx.sh	/^ofedmkbackport ()$/;"	f
 ofedmklinks	bashrc_mlx.sh	/^ofedmklinks ()$/;"	f
 ofedmkmetadata	bashrc_mlx.sh	/^ofedmkmetadata () $/;"	f
 ofedorigindir	bashrc_mlx.sh	/^ofedorigindir ()$/;"	f
+open	core.14469	/^open() or os.popen(). It must be opened in binary mode ('wb' or 'w+b').$/;"	f
+openpty	core.14469	/^/;"	f
 opensmmlx	bashrc_mlx.sh	/^opensmmlx ()$/;"	f
-parse_git_branch	bashrc_fs.sh	/^parse_git_branch() {$/;"	f
+parse_git_branch	bashrc_fs.sh	/^parse_git_branch() $/;"	f
 parse_svn_branch	bashrc_fs.sh	/^parse_svn_branch() {$/;"	f
 parse_svn_repository_root	bashrc_fs.sh	/^parse_svn_repository_root() {$/;"	f
 parse_svn_url	bashrc_fs.sh	/^parse_svn_url() {$/;"	f
 path2URL	bashrc_svn.sh	/^path2URL () $/;"	f
+pause	core.14469	/^pause() -- wait until a signal arrives [Unix only]$/;"	f
 pd	bashrc_bookmarks.sh	/^pd () $/;"	f
 pd_complete	bashrc_bookmarks.sh	/^pd_complete () $/;"	f
 pdc	bashrc_bookmarks.sh	/^pdc () $/;"	f
@@ -216,8 +300,10 @@ pgrep	bashrc_fs.sh	/^pgrep () $/;"	f
 pgrepa	bashrc_fs.sh	/^pgrepa () $/;"	f
 pr_debug	bashrc_devel.sh	/^pr_debug () $/;"	f
 pr_debug_usage	bashrc_devel.sh	/^pr_debug_usage ()$/;"	f
+print_stack	core.14469	/^    print_stack().  Each item in the list is a quadruple (filename,$/;"	f
 print_underline	bashrc_common.sh	/^print_underline () $/;"	f
 print_underline_size	bashrc_common.sh	/^print_underline_size () $/;"	f
+printlinefromfile	bashrc_misc.sh	/^printlinefromfile ()$/;"	f
 probe_topology	bashrc_fs.sh	/^probe_topology () $/;"	f
 prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
 prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f
@@ -225,13 +311,18 @@ psmine	bashrc_fs.sh	/^psmine ()$/;"	f
 pu	bashrc_bookmarks.sh	/^pu ()$/;"	f
 rdmacorebuild	bashrc_mlx.sh	/^rdmacorebuild ()$/;"	f
 rdmacorebuildapps	bashrc_mlx.sh	/^rdmacorebuildapps ()$/;"	f
+read	core.14469	/^            read() method.$/;"	f
 rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f
 reboot	bashrc_fs.sh	/^reboot ()$/;"	f
 redpill	bashrc_fs.sh	/^redpill () $/;"	f
 refresh_ssh	bashrc_fs.sh	/^refresh_ssh ()$/;"	f
+regression_tools_install	bashrc_mlx.sh	/^regression_tools_install ()$/;"	f
+release	core.14469	/^release() -- unlock of the lock$/;"	f
 reloadmodule	bashrc_mlx.sh	/^reloadmodule ()$/;"	f
+remotereboot	bashrc_mlx.sh	/^remotereboot ()$/;"	f
 removemoduleifloaded	bashrc_mlx.sh	/^removemoduleifloaded ()$/;"	f
 restartDhcp	bashrc_nice.sh	/^restartDhcp () $/;"	f
+returns	core.14469	/^function returns; the return value is ignored.  The thread will also exit$/;"	f
 rpmsearch	bashrc_fs.sh	/^rpmsearch () $/;"	f
 rw	bashrc_fs.sh	/^rw () $/;"	f
 rxe	bashrc_mlx.sh	/^rxe ()        { sudo rxe_cfg ;      }$/;"	f
@@ -240,6 +331,15 @@ rxerestart	bashrc_mlx.sh	/^rxerestart ()$/;"	f
 rxestart	bashrc_mlx.sh	/^rxestart ()$/;"	f
 rxestop	bashrc_mlx.sh	/^rxestop ()$/;"	f
 sbuild_vars	bashrc_nice.sh	/^sbuild_vars () $/;"	f
+set_debug	core.14469	/^set_debug() -- Set debugging flags.$/;"	f
+set_threshold	core.14469	/^set_threshold() -- Set the collection thresholds.$/;"	f
+setcheckinterval	core.14469	/^setcheckinterval() -- control how often the interpreter checks for events$/;"	f
+setdlopenflags	core.14469	/^setdlopenflags() -- set the flags to be used for dlopen() calls$/;"	f
+setitimer	core.14469	/^setitimer() -- cause a signal (described below) after a specified$/;"	f
+setprofile	core.14469	/^setprofile() -- set the global profiling function$/;"	f
+setrecursionlimit	core.14469	/^setrecursionlimit() -- set the max recursion depth for the interpreter$/;"	f
+settrace	core.14469	/^settrace() -- set the global debug tracing functP/;"	f
+settrace	core.14469	/^settrace() -- set the global debug tracing function$/;"	f
 setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f
 setup_bash_env	commonyonienv.sh	/^setup_bash_env ()$/;"	f
 setup_bash_profile	commonyonienv.sh	/^setup_bash_profile ()$/;"	f
@@ -256,11 +356,16 @@ setup_vim_env	commonyonienv.sh	/^setup_vim_env () $/;"	f
 showState	bashrc_nice.sh	/^showState()$/;"	f
 showosrelease	bashrc_fs.sh	/^showosrelease ()$/;"	f
 shutdown	bashrc_fs.sh	/^shutdown () $/;"	f
+signal	core.14469	/^signal() -- set the action for a given signal$/;"	f
 sl	bashrc_screen.sh	/^sl () $/;"	f
+sleep	core.14469	/^sleep() -- delay for a number of seconds given as a float$/;"	f
 sm	bashrc_mlx.sh	/^sm ()$/;"	f
 space_2_underscore	bashrc_fs.sh	/^space_2_underscore ()$/;"	f
+sriovsetupmlx5_1	bashrc_mlx.sh	/^sriovsetupmlx5_1 ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
+strftime	core.14469	/^strftime() -- convert time tuple to string according to format specification$/;"	f
+strptime	core.14469	/^strptime() -- parse string to time tuple according to format specification$/;"	f
 svl	bashrc_svn.sh	/^svl () $/;"	f
 svn_complete	bashrc_svn.sh	/^svn_complete () $/;"	f
 svn_reachable	bashrc_svn.sh	/^svn_reachable () $/;"	f
@@ -297,6 +402,10 @@ tagmerdmacore	bashrc_mlx.sh	/^tagmerdmacore () $/;"	f
 tagmeupstreamkernel	bashrc_mlx.sh	/^tagmeupstreamkernel ()$/;"	f
 tailstatistics	bashrc_nice.sh	/^tailstatistics () $/;"	f
 task_list	bashrc_nice.sh	/^task_list () $/;"	f
+time	core.14469	/^time() -- return current time in seconds since the Epoch as a float$/;"	f
+tzset	core.14469	/^tzset() -- change the local timezon@/;"	f
+tzset	core.14469	/^tzset() -- change the local timezone/;"	f
+up	bashrc_misc.sh	/^function up() {$/;"	f
 usage	commonyonienv.sh	/^usage () $/;"	f
 v	bashrc_vim.sh	/^v ()$/;"	f
 validateState	bashrc_nice.sh	/^validateState ()$/;"	f
@@ -315,6 +424,7 @@ vreset	bashrc_fs.sh	/^vreset ()$/;"	f
 vscript	bashrc_vim.sh	/^vscript () $/;"	f
 vsess	bashrc_vim.sh	/^vsess () $/;"	f
 vsessls	bashrc_vim.sh	/^vsessls () $/;"	f
+vsources	bashrc_vim.sh	/^function vsources ()$/;"	f
 vstart	bashrc_fs.sh	/^vstart ()$/;"	f
 vstop	bashrc_fs.sh	/^vstop ()$/;"	f
 vt	bashrc_vim.sh	/^vt () { ${v_or_g} -t $1; }$/;"	f
@@ -322,3 +432,10 @@ vw	bashrc_fs.sh	/^vw () $/;"	f
 watch_threads	bashrc_nice.sh	/^watch_threads () $/;"	f
 whichbash	bashrc_common.sh	/^whichbash ()$/;"	f
 wifiNotLan	bashrc_nice.sh	/^wifiNotLan ()$/;"	f
+will	core.14469	/^    function will also set it.$/;"	f
+with	core.14469	/^function with positional arguments from the tuple args and keyword arguments$/;"	f
+wttr	bashrc_misc.sh	/^wttr()$/;"	f
+xtermblack	bashrc_misc.sh	/^xtermblack () $/;"	f
+yonienvdepsinstall	bashrc_misc.sh	/^yonienvdepsinstall ()$/;"	f
+yuminstallfromrepo	bashrc_misc.sh	/^yuminstallfromrepo ()$/;"	f
+yuminstallifnotexist	bashrc_misc.sh	/^yuminstallifnotexist ()$/;"	f
