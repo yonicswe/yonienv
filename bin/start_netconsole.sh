@@ -23,6 +23,6 @@ echo "Run in $receiverIP: nc -u -l ${receiver_port}"
 echo
 dmesg -n8
 modprobe -r netconsole
-cmd="modprobe netconsole netconsole=1111@${senderIP}/${senderIF},${$2}@${receiverIP}/${receiverMAC}"
+cmd="sudo modprobe netconsole netconsole=1111@${senderIP}/${senderIF},${$2}@${receiverIP}/${receiverMAC}"
 echo "Running: $cmd"
 $cmd
