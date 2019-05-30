@@ -480,8 +480,8 @@ ofedorigindir ()
 }
 
 alias ofedversion='[ -e /usr/bin/ofed_info ] && ofed_info -s | sed "s/://g"'
-alias ofedstop='sudo service openibd force-stop'
-alias ofedstart='sudo service openibd start'
+alias ofedstop='sudo /etc/init.d/openibd force-stop'
+alias ofedstart='sudo /etc/init.d/openibd start'
 alias ofedrestart='ofedstop; ofedstart'
 
 
