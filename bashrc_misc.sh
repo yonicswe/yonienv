@@ -8,13 +8,13 @@ alias yuminstallfromiso='yum install --disablerepo=\* --enablerepo=c7-media'
 alias less='less -r'
 
 # LESS or MAN with color
-export LESS_TERMCAP_mb=$'\e[1;32m'
-export LESS_TERMCAP_md=$'\e[1;32m'
-export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_so=$'\e[1;33m'
-export LESS_TERMCAP_ue=$'\e[0m'
-export LESS_TERMCAP_us=$'\e[1;4;31m'
+export LESS_TERMCAP_mb=$'\e[1;32m'      # begin blinking
+export LESS_TERMCAP_md=$'\e[1;32m'      # being bold
+export LESS_TERMCAP_me=$'\e[0m'         # end mode
+export LESS_TERMCAP_se=$'\e[0m'         # end stand-out mode
+export LESS_TERMCAP_so=$'\e[30;2;43m'      # being stand-out mode (e.g higlight search results on man page)
+export LESS_TERMCAP_ue=$'\e[0m'         # end underline
+export LESS_TERMCAP_us=$'\e[1;4;31m'    # begin underline
 
 yuminstallfromrepo ()
 {
