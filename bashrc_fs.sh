@@ -24,6 +24,44 @@ alias editbashfs='${v_or_g} ${yonienv}/bashrc_fs.sh'
 # Purple      0;35     Light Purple  1;35
 # Brown       0;33     Yellow        1;33
 # Light Gray  0;37     White         1;37
+# 
+#                color struct explained
+# ─────────────────────────────────────────────────────────────────────────────
+#     format         forground     background
+#     0 - normal      30 black       30 black
+#     1 - bold        31 red         31 red
+#     2 - underline   32 green       32 green
+#                     33 yellow      33 yellow
+#                     34 blue        34 blue
+#                     35 purple      35 purple
+#                     36 cyan        36 cyan
+#                     37 white       37 white
+# ─────────────────────────────────────────────────────────────────────────────
+#    
+#  color structue
+#  forground ; format ; background   
+#    
+#    
+#    
+#    
+#  \e[1;4;31m
+#    
+#  
+#  ┌─────────────┬───┬───────────────────┬───┬────────────────┬───┬───┬─────────────┬───┐
+#  │\e           │ [ │ 1                 │ ; │ 4              │ ; │ 31│ m           │   │
+#  ├─────────────┼───┼───────────────────┼───┼────────────────┼───┼───┼─────────────┼───┤
+#  │start color  │   │ 0 - normal        │   │ 4 - underline  │   │   │ end color   │   │
+#  │sequence     │   │ 1 - bold          │   │                │   │   │ sequence    │   │
+#  │             │   │ 2 - underline     │   │                │   │   │             │   │
+#  │             │   │                   │   │                │   │   │             │   │
+#  │             │   │                   │   │                │   │   │             │   │
+#  │             │   │                   │   │                │   │   │             │   │
+#  │             │   │                   │   │                │   │   │             │   │
+#  │             │   │                   │   │                │   │   │             │   │
+#  └─────────────┴───┴───────────────────┴───┴────────────────┴───┴───┴─────────────┴───┘
+#  
+#  
+# 
 
 # 
 # command prompt colors
@@ -1047,4 +1085,9 @@ pgrepa ()
             ps h $i;
         done
     fi
+}
+
+freecachedmem ()
+{
+    sync; echo 1 > /proc/sys/vm/drop_caches
 }
