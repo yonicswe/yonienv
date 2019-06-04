@@ -28,14 +28,14 @@ alias editbashfs='${v_or_g} ${yonienv}/bashrc_fs.sh'
 #                color struct explained
 # ─────────────────────────────────────────────────────────────────────────────
 #     format         forground     background
-#     0 - normal      30 black       30 black
-#     1 - bold        31 red         31 red
-#     2 - underline   32 green       32 green
-#                     33 yellow      33 yellow
-#                     34 blue        34 blue
-#                     35 purple      35 purple
-#                     36 cyan        36 cyan
-#                     37 white       37 white
+#     0 - normal      30 black       40 black
+#     1 - bold        31 red         41 red
+#     2 - underline   32 green       42 green
+#                     33 yellow      43 yellow
+#                     34 blue        44 blue
+#                     35 purple      45 purple
+#                     36 cyan        46 cyan
+#                     37 white       47 white
 # ─────────────────────────────────────────────────────────────────────────────
 #    
 #  color structue
