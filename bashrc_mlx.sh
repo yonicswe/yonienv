@@ -808,7 +808,21 @@ mkvmhelp()
     echo "choose a VM to install from the list produced by mkvmls"
 }
 
-findiblibsfaster ()
+listiblibs ()
+{
+    ib_libs=(.*/libibverbs.so)
+    ib_libs+=(.*/libmlx4.*.so)
+    ib_libs+=(.*/libmlx5.*.so)
+      
+    sudo updatedb -U /lib64
+    for (( i=0 ; i< ${#ib_libs[@]} ; i++))  ; do
+        echo -e "\n\t\t\033[1;35m==== ${ib_libs[$i]#.*/} ====\033[0m"
+        locate -r "${ib_libs[$i]}" | while read f ; do ls  --format='context'  $f ; done | awk '{$1="" ; print $0 }' | column -t
+    done
+}
+
+
+findiblib_old ()
 {
 #     ib_libs=(libmlx5-rdmav2.so libibacmp.so libibumad.so libibverbs.so)
 #     ib_libs+=(libibcm.so libhns-rdmav2.so libcxgb3-rdmav2.so libcxgb4-rdmav2.so libi40iw-rdmav2.so)
@@ -816,29 +830,29 @@ findiblibsfaster ()
 #     ib_libs+=(libocrdma-rdmav2.so libhfi1verbs-rdmav2.so libipathverbs-rdmav2.so libqedr-rdmav2.so)
 #     ib_libs+=(libvmw_pvrdma-rdmav2.so librxe-rdmav2.so librspreload.so libibacmp.so);
 
-    ib_libs=(.*libibverbs.so)
-    ib_libs+=(.*libmlx4.so)
-    ib_libs+=(.*libmlx4-rdmav.*so)
-    ib_libs+=(.*libmlx5.so)
-    ib_libs+=(.*librxe-rdmav.*so)
-    ib_libs+=(.*librxe-rdmav.*so)
-    ib_libs+=(.*libibumad.so)
-    ib_libs+=(.*libibcm.so)
-    ib_libs+=(.*libipathverbs-rdmav.*so)
-    ib_libs+=(.*libnes-rdmav*.so)
-    ib_libs+=(.*libhfi1verbs-rdmav.*so)
-    ib_libs+=(.*libhns-rdmav.*so)
-    ib_libs+=(.*libocrdma-rdmav.*so)
-    ib_libs+=(.*libi40iw-rdmav.*so)
-    ib_libs+=(.*libbnxt_re-rdmav.*so)
-    ib_libs+=(.*libqedr-rdmav.*so)
-    ib_libs+=(.*libvmw_pvrdma-rdmav.*so)
-    ib_libs+=(.*libcxgb4-rdmav.*so)
-    ib_libs+=(.*libcxgb3-rdmav.*so)
-    ib_libs+=(.*libmthca-rdmav.*so)
-    ib_libs+=(.*librdmacm.so)
-    ib_libs+=(.*libibacmp.so)
-    ib_libs+=(.*librspreload.so)
+    ib_libs=(.*/libibverbs.so)
+    ib_libs+=(.*/libmlx4.so)
+    ib_libs+=(.*/libmlx4-rdmav.*so)
+    ib_libs+=(.*/libmlx5.so)
+    ib_libs+=(.*/librxe-rdmav.*so)
+    ib_libs+=(.*/librxe-rdmav.*so)
+    ib_libs+=(.*/libibumad.so)
+    ib_libs+=(.*/libibcm.so)
+    ib_libs+=(.*/libipathverbs-rdmav.*so)
+    ib_libs+=(.*/libnes-rdmav*.so)
+    ib_libs+=(.*/libhfi1verbs-rdmav.*so)
+    ib_libs+=(.*/libhns-rdmav.*so)
+    ib_libs+=(.*/libocrdma-rdmav.*so)
+    ib_libs+=(.*/libi40iw-rdmav.*so)
+    ib_libs+=(.*/libbnxt_re-rdmav.*so)
+    ib_libs+=(.*/libqedr-rdmav.*so)
+    ib_libs+=(.*/libvmw_pvrdma-rdmav.*so)
+    ib_libs+=(.*/libcxgb4-rdmav.*so)
+    ib_libs+=(.*/libcxgb3-rdmav.*so)
+    ib_libs+=(.*/libmthca-rdmav.*so)
+    ib_libs+=(.*/librdmacm.so)
+    ib_libs+=(.*/libibacmp.so)
+    ib_libs+=(.*/librspreload.so)
 
 
     local ib_libs_search_path=(/usr/lib64/  /usr/local/lib64/)
@@ -872,7 +886,6 @@ findiblibsfaster ()
         ls -l $i 
     done | column -t;
 
-
 #         if [ -z $lib ] ; then
 #             echo -e "\033[1;35m--- ${i} ----\033[0m"
 #             sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f  -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
@@ -883,7 +896,7 @@ findiblibsfaster ()
 #     done
 }
 
-findiblibs ()
+manageiblibs ()
 {
 #     ib_libs=(libmlx5-rdmav2.so libibacmp.so libibumad.so libibverbs.so)
 #     ib_libs+=(libibcm.so libhns-rdmav2.so libcxgb3-rdmav2.so libcxgb4-rdmav2.so libi40iw-rdmav2.so)
