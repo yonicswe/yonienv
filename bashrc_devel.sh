@@ -160,7 +160,15 @@ gdbbt ()
 
 
 alias cdlibmodules='cd /lib/modules/`uname -r`'
-alias listlibmodules='ls -ltr --color /lib/modules/`uname -r`'
+listlibmodules ()
+{ 
+    t 1 /lib/modules/`uname -r`
+
+#     pushd /lib/modules/`uname -r` 1>/dev/null;
+#     echo -e "\n====\n"
+#     ls | while read f ; do readlink -f $f ; done
+#     popd 1>/dev/null;
+}
 
 
 ########################################################################
