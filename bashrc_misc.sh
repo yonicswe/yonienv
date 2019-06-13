@@ -99,6 +99,8 @@ yonienvdepsinstall ()
     yuminstallifnotexist sshpass
     yuminstallifnotexist the_silver_searcher
     yuminstallifnotexist colordiff
+    yuminstallifnotexist lddtree
+    yuminstallifnotexist tmux
 }
 
 alias yuminstall='sudo yum install -y'
