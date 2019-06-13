@@ -616,3 +616,5 @@ extractkernelsrcrpm ()
     echo "cd BUILD/${kernelfile}";
 }
 
+alias tmuxnewyoni='tmux new -s yoni'
+alias tmuxattachyoni='tmux attach -t yoni'
