@@ -235,6 +235,7 @@ listgitrepos ()
     echo "yonienv                      : https://github.com/yonicswe/yonienv";
     echo
     echo "linus torvald linux upstream : git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git";
+    echo "                             : https://github.com/torvalds/linux.git";
     echo
     echo    "mellanox upstream kernel     : ${prefix}/upstream/linux";
     if [ "$show_branches" = "yes" ] ; then
