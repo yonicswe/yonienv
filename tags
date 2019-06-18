@@ -119,14 +119,14 @@ ffi	bashrc_fs.sh	/^ffi () $/;"	f
 findconflictfiles	bashrc_devel.sh	/^findconflictfiles ()$/;"	f
 findexecutable	bashrc_fs.sh	/^findexecutable ()$/;"	f
 findibapps	bashrc_mlx.sh	/^findibapps ()$/;"	f
-findiblibs	bashrc_mlx.sh	/^findiblibs ()$/;"	f
-findiblibsfaster	bashrc_mlx.sh	/^findiblibsfaster ()$/;"	f
+findiblib_old	bashrc_mlx.sh	/^findiblib_old ()$/;"	f
 findkernelsources	bashrc_devel.sh	/^findkernelsources ()$/;"	f
 findmin	bashrc_fs.sh	/^findmin ()$/;"	f
 findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
 flush	core.14469	/^/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
 fork	core.14469	/^/;"	f
+freecachedmem	bashrc_fs.sh	/^freecachedmem ()$/;"	f
 ftrace	bashrc_devel.sh	/^ftrace ()$/;"	f
 ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
 ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f
@@ -214,6 +214,8 @@ listbuildservers	bashrc_mlx.sh	/^listbuildservers () { less \/auto\/integration\
 listdevelservers	bashrc_mlx.sh	/^listdevelservers ()$/;"	f
 listerrnovalues	bashrc_devel.sh	/^listerrnovalues ()$/;"	f
 listgitrepos	bashrc_mlx.sh	/^listgitrepos ()$/;"	f
+listibkerenlmodules	bashrc_devel.sh	/^listibkerenlmodules ()$/;"	f
+listibuserlibs	bashrc_mlx.sh	/^listibuserlibs ()$/;"	f
 listinstalledkernels	bashrc_devel.sh	/^listinstalledkernels ()$/;"	f
 lld	bashrc_fs.sh	/^lld ()$/;"	f
 load	core.14469	/^load() -- read value from a file$/;"	f
@@ -227,6 +229,7 @@ logu	bashrc_svn.sh	/^logu () $/;"	f
 m	bashrc_fs.sh	/^m ()$/;"	f
 m	bashrc_mlx.sh	/^m ()$/;"	f
 main	commonyonienv.sh	/^main  ()$/;"	f
+manageiblibs	bashrc_mlx.sh	/^manageiblibs ()$/;"	f
 md2man	bashrc_mlx.sh	/^md2man ()$/;"	f
 messages	commonyonienv.sh	/^messages () $/;"	f
 mftcheckstatus	bashrc_mlx.sh	/^mftcheckstatus ()$/;"	f
