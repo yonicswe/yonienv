@@ -88,19 +88,34 @@ yuminstallifnotexist ()
     return 0;
 }
 
+yonideps_arr=(vim);
+yonideps_arr+=(vim-X11);
+yonideps_arr+=(ctags);
+yonideps_arr+=(cgdb);
+yonideps_arr+=(tree);
+yonideps_arr+=(screen);
+yonideps_arr+=(sshpass);
+yonideps_arr+=(the_silver_searcher);
+yonideps_arr+=(colordiff);
+yonideps_arr+=(lddtree);
+yonideps_arr+=(pax-utils);
+complete -W "$(echo ${yonideps_arr[@]})" yuminstall
 yonienvdepsinstall ()
 {
-    yuminstallifnotexist vim
-    yuminstallifnotexist vim-X11
-    yuminstallifnotexist ctags
-    yuminstallifnotexist cgdb
-    yuminstallifnotexist tree
-    yuminstallifnotexist screen
-    yuminstallifnotexist sshpass
-    yuminstallifnotexist the_silver_searcher
-    yuminstallifnotexist colordiff
-    yuminstallifnotexist lddtree
-    yuminstallifnotexist pax-utils
+    for p in $(echo ${yonideps_arr[@]}) ; do 
+        yuminstallifnotexist $p
+    done
+#     yuminstallifnotexist vim
+#     yuminstallifnotexist vim-X11
+#     yuminstallifnotexist ctags
+#     yuminstallifnotexist cgdb
+#     yuminstallifnotexist tree
+#     yuminstallifnotexist screen
+#     yuminstallifnotexist sshpass
+#     yuminstallifnotexist the_silver_searcher
+#     yuminstallifnotexist colordiff
+#     yuminstallifnotexist lddtree
+#     yuminstallifnotexist pax-utils
 }
 
 alias yuminstall='sudo yum install -y'
