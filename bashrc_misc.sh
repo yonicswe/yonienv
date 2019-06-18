@@ -99,7 +99,7 @@ yonideps_arr+=(the_silver_searcher);
 yonideps_arr+=(colordiff);
 yonideps_arr+=(lddtree);
 yonideps_arr+=(pax-utils);
-complete -W "$(echo ${yonideps_arr[@]})" yuminstall
+complete -W "$(echo ${yonideps_arr[@]})" yuminstall yuminstallifnotexist
 yonienvdepsinstall ()
 {
     for p in $(echo ${yonideps_arr[@]}) ; do 
