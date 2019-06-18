@@ -97,7 +97,7 @@ yonideps_arr+=(screen);
 yonideps_arr+=(sshpass);
 yonideps_arr+=(the_silver_searcher);
 yonideps_arr+=(colordiff);
-yonideps_arr+=(lddtree);
+# pax-utils for lddtree
 yonideps_arr+=(pax-utils);
 complete -W "$(echo ${yonideps_arr[@]})" yuminstall yuminstallifnotexist
 yonienvdepsinstall ()
