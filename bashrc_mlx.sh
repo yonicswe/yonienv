@@ -277,6 +277,8 @@ listgitrepos ()
     echo "                  golan      : ${prefix}/golan_fw"
 }
 
+alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core'
+
 
 ibmod ()
 {
@@ -809,7 +811,7 @@ mkvmhelp()
     echo "choose a VM to install from the list produced by mkvmls"
 }
 
-listiblibs ()
+listibuserlibs ()
 {
     ib_libs=(.*/libibverbs.so)
     ib_libs+=(.*/libmlx4.*.so)
@@ -1445,6 +1447,7 @@ ofedbuildidforversion ()
 alias ofedfindindexforofakernel='ofedfindindexforpackage ofa_kernel:'
 alias ofedfindindexforlibmlx5='ofedfindindexforpackage libmlx5:'
 alias ofedfindindexforlibibverbs='ofedfindindexforpackage libibverbs'
+alias ofedfindindexforrdma-core='ofedfindindexforpackage rdma-core'
 
 ofedkernelinstall ()
 {
