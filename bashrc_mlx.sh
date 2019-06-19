@@ -278,6 +278,13 @@ listgitrepos ()
 }
 
 alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core'
+alias gitclone-libibverbs='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs'
+alias gitclone-libmlx5='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5'
+gitclone-legacy-libs ()
+{
+    gitclone-libibverbs;
+    gitclone-libmlx5;
+}
 
 
 ibmod ()
