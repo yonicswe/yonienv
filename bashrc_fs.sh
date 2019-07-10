@@ -901,6 +901,9 @@ vncwatcherslist ()
 {
     lsof -Pni |awk '{if (NR == 1) print $0 }'  
     lsof -Pni | grep Xvnc | grep -v LISTEN   
+    echo
+    netstat -tupa | grep 5901 2>/dev/null
+    echo "vncconfig -disconnet"
 }
 
 # virtual machine manager : virsh
