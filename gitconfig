@@ -197,23 +197,21 @@
 		fi; \
 		}; f"
 
-    branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
-    rebase-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git rebase FETCH_HEAD ; }; f"
-
-    branch-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git c -b $1@for-upstream FETCH_HEAD ; }; f"
-    rebase-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git rebase FETCH_HEAD ; }; f"
-
-    branch-ofa-kernel-4-6 = "!f() { if [ -z $1 ] ; then return ; fi;  git fetch origin mlnx_ofed_4_6 ; git c -b $1@mlnx_ofed_4_6 FETCH_HEAD ; }; f"
-    rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
+#     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
+#     rebase-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git rebase FETCH_HEAD ; }; f"
+#     branch-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git c -b $1@for-upstream FETCH_HEAD ; }; f"
+#     rebase-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git rebase FETCH_HEAD ; }; f"
+#     branch-ofa-kernel-4-6 = "!f() { if [ -z $1 ] ; then return ; fi;  git fetch origin mlnx_ofed_4_6 ; git c -b $1@mlnx_ofed_4_6 FETCH_HEAD ; }; f"
+#     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
 [core]
     editor = vim
 
 [diff]
-	tool = vimdiff
+	tool = gvimdiff
 
 [merge]
-	tool = vimdiff
+	tool = gvimdiff
 
 [difftool]
 	prompt = true

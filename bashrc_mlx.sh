@@ -277,13 +277,16 @@ listgitrepos ()
     echo "                  golan      : ${prefix}/golan_fw"
 }
 
-alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core'
-alias gitclone-libibverbs='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs'
-alias gitclone-libmlx5='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5'
+alias gitclone-ofed-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core'
+alias gitclone-ofed-libibverbs='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs'
+alias gitclone-ofed-libmlx5='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5'
+alias gitclone-ofed-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0'
+alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
+
 gitclone-legacy-libs ()
 {
-    gitclone-libibverbs;
-    gitclone-libmlx5;
+    gitclone-ofed-libibverbs;
+    gitclone-ofed-libmlx5;
 }
 
 
@@ -990,7 +993,7 @@ manageiblibs ()
     fi
 }
 
-findibapps ()
+manageibapps ()
 {
 
 #     ib_apps=(cmpost cmtime ib_acme ibacm ibv_asyncwatch ibv_devices );
@@ -1354,11 +1357,13 @@ alias ofeduninstall='sudo ofed_uninstall.sh'
 
 ofedlistversions ()
 {
-    local ver=$1
+    local ver=$1;
+    local tmpfile=/tmp/ofedversionlist.txt; 
     if [ -z $ver ] ; then 
         find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n";
     else
-        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver
+        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver  | tee ${tmpfile};
+        complete -W "$(cat ${tmpfile})" ofedinstallversion;
     fi
 
 }
@@ -1444,11 +1449,13 @@ ofedfindindexforpackage ()
 #     ofed_info |grep -m2  -A1 ${pkg}
 }
 
-ofedbuildidforversion ()
+ofedquerybuildidforversion ()
 {
     local ver=${1};
     [ -z $ver ] && return;
-    less /mswg/release/ofed/OFED-internal-${ver}/BUILD_ID
+    less /mswg/release/ofed/OFED-internal-${ver}/BUILD_ID;
+    echo /mswg/release/ofed/OFED-internal-${ver}/;
+
 }
 
 alias ofedfindindexforofakernel='ofedfindindexforpackage ofa_kernel:'
@@ -1460,7 +1467,7 @@ ofedkernelinstall ()
 {
     local ibcore_install_path=$(modinfo ib_core|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
     local mlx5ib_install_path=$(modinfo mlx5_ib|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
-    local dst=${1:-updates};
+    local dst=${1:-"extra/mlnx-ofa_kernel"};
     local installed_ibcore="/lib/modules/$(uname -r)/${dst}/drivers/infiniband/core/ib_core.ko"
 
     echo "About to install ofa-kernel to /lib/modules/$(uname -r)/$dst";

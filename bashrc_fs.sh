@@ -156,6 +156,7 @@ alias b='bg'
 alias grepc='ag --cc --noheading'
 # alias greptxt='grep -nrH --color --include=*.txt'
 alias greptxt='grep -nH -r -I --color '
+alias grepmake='grep -nH -r -I --color --include=*[m,M]ake*'
 grepascii  ()
 {
     grepme="$1";

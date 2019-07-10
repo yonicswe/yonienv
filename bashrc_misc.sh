@@ -127,3 +127,16 @@ printlinefromfile ()
 
     sed -n ${line}p $file;
 }
+
+checkifalive ()
+{
+    server=$1;
+    [[ -z $server ]] && return;
+
+    while : ; do  
+        ping -q $server  -w 3;
+        ret=$? ;
+        [[ $ret == 0 ]] && break; 
+        sleep 10
+    done
+}

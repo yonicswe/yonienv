@@ -194,7 +194,14 @@ au FileType c,cpp   set grepprg=ag\ --cc
 
 
 
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = ","
+" "let g:mapleader = ","
+"
 
+" map <leader>[ :cp<cr>
+" map <leader>] :cn<cr>
 map <F11> :cp<cr>
 map <F12> :cn<cr>
 map <S-F9> :colder<cr>
@@ -296,6 +303,7 @@ autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
 autocmd FileType sh,ruby,python   let b:comment_leader = '# '
 autocmd FileType make             let b:comment_leader = '# '
 autocmd FileType conf,fstab       let b:comment_leader = '# '
+autocmd FileType gitconfig        let b:comment_leader = '# '
 autocmd FileType tex              let b:comment_leader = '% '
 autocmd FileType mail             let b:comment_leader = '> '
 autocmd FileType vim              let b:comment_leader = '" '
@@ -332,11 +340,6 @@ endfunction
 autocmd FileType c,cpp call HighlightTrails()
 
 
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-" "let g:mapleader = ","
-"
 map <leader>gf :e <cfile><cr>
 
 autocmd FileType xml vmap <leader>a s/<\(.*\)>$/<!--\1-->/
@@ -459,10 +462,14 @@ if &diff
 "     ====================================
 "     use these when using vim (no gvim)
 "     ====================================
+" if has("gui_gtk2") && has("gui_running")
+"     syntax  on
+" else
 "     hi DiffText   cterm=none ctermfg=Black ctermbg=LightRed gui=none guifg=Black guibg=Red
 "     hi DiffChange cterm=none ctermfg=Black ctermbg=LightMagenta gui=none guifg=Black guibg=LightMagenta
 "     hi DiffAdd    cterm=none ctermfg=Black ctermbg=Red gui=none guifg=Black guibg=LightMagenta
 "     syntax  off
+" endif
 
 "     ====================================
 "     Examples
@@ -807,7 +814,7 @@ source ~/.vim/cscope.vim
 "  let $BASH_ENV = "~/.bashrc"
 "
 
-com! Printk call PrintkFunc
+" com! Printk :call PrintkFunc()
 function! PrintkFunc ()
         <C-">p==
 endfunction
@@ -866,6 +873,12 @@ fun! ShowFuncName()
 endfun
 map f :call ShowFuncName() <CR>
 
+
+" add the following line and 
+" Now any plugins you wish to install can be extracted to a subdirectory under
+" ~/.vim/bundle, and they will be added to the 'runtimepath'
+" execute pathogen#infect()
+
 " ------------------------------
 " machine specific configuratio
 " ------------------------------
@@ -910,3 +923,26 @@ let g:ctrlp_max_depth=40
 "  ---------------------------------
 "  ,gw does gitgrep on word under curser
 "
+
+" ----------------------------------
+"  plugins
+" ----------------------------------
+" call plug#begin('~/.vim/plugged')
+" Plug 'junegunn/vim-easy-align'
+" Plug 'francoiscabrol/ranger.vim'
+" call plug#end()
+
+" function RangerExplorer()
+"     exec "silent !ranger --choosefile=/tmp/vim_ranger_current_file " . expand("%:p:h")
+"     if filereadable('/tmp/vim_ranger_current_file')
+"         exec 'edit ' . system('cat /tmp/vim_ranger_current_file')
+"         call system('rm /tmp/vim_ranger_current_file')
+"     endif
+"     redraw!
+" endfun
+" map <Leader>x :call RangerExplorer()<CR>
+"
+" vmap <Enter> <Plug>(EasyAlign)
+" set sc
+
+

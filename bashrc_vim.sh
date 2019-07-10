@@ -106,12 +106,12 @@ vscript ()
 }
 
 # gsessls () 
-vsessls () 
+vsl () 
 {
     session_ls=$(find -maxdepth 1 -name "*.vim" -printf "%f\n");
     find -maxdepth 1 -name "*.vim" -printf "%f\n";
-    complete -W "${session_ls}" vsess;
-#     complete -W "${session_ls}" gsess vsess;
+    complete -W "${session_ls}" vs;
+#     complete -W "${session_ls}" gsess vs;
 }
 
 # vsess ()
@@ -121,9 +121,9 @@ vsessls ()
 # }
 
 # gsess () 
-vsess () 
+vs () 
 {
-    complete -W "$(vsessls)" vsess
+    complete -W "$(vsl)" vs
     local vimSession=${1}
 #     local vim_or_gvim=${2:-g};
 

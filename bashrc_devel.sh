@@ -247,7 +247,7 @@ listinstalledkernels ()
 
     echo " grub1  modules    /boot/..";
 
-    sudo find /boot -type f -and \( -not -name ".*" \) -name "*vmlinu*" -printf "%T+\t%p\n" | sort | cut -f2 | 
+    sudo find /boot -type f -and \( -not -name ".*" \) -name "*vmlinuz*" -printf "%T+\t%p\n" | sort | cut -f2 | 
         while read f ; do basename $f ; done | 
 
 #     sudo find /boot -type f -name "vmlinuz*" -printf "%f\n" |

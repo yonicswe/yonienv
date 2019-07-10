@@ -1,7 +1,9 @@
 #!/bin/bash
 
-alias gitdiff="git difftool --tool=${v_or_g} --no-prompt"
-# alias gitdiffgvim='git difftool --tool=gvimdiff --no-prompt'
+alias editbashgit='${v_or_g} ${yonienv}/bashrc_git.sh'
+
+# alias gitdiff="git difftool --tool=${v_or_g} --no-prompt"
+alias gitdiff='git d'
 alias gitdiffkdiff3='git difftool --tool=kdiff3 --no-prompt'
 alias gitdiffstat='git --no-pager diff --stat'
 alias gitlog='git log --name-status'
@@ -14,12 +16,12 @@ gitd ()
     modified_file_list=( $(git status -s | awk '/\ M/{print $2}') );
 
     if [ -n "${diff_this_file}" ] ; then 
-        git dg ${diff_this_file};
+        git dv ${diff_this_file};
     else
         git status -uno;
     fi;
 
-    complete -W "$(echo ${modified_file_list[@]})" gitd;
+    complete -W "$(echo ${modified_file_list[@]})" gitd gitdiff;
 
 }
 # alias gitdiscardunstaged='git checkout -- .'
@@ -72,7 +74,7 @@ gitdiscardmodified ()
 
     discardlist=( $(git ls-files -m) ); 
     if [ ${#discardlist[@]} -gt 0 ] ; then 
-        complete -W "$(echo ${discardlist[@]})" gitdiscardmodified;
+        complete -W "$(echo ${discardlist[@]})" gitdiscardmodified gitd;
         _gitdiscard  "${discardlist[@]}"
     fi
 
