@@ -56,8 +56,14 @@ setup_bash_env ()
 clean_bash_env ()
 {
     local ans=;
+    local ask=${1:-askme};
+ 	
+    if [[ "$ask" = "askme" ]] ; then
+        read -p "clear bash env ? [y/N]" ans;
+    else
+        ans="y";
+    fi
 
-    read -p "clear bash env ? [y/N]" ans;
     if [ "$ans" == "y" ] ; then 
         clean_bashrc;
         clean_bash_profile;
@@ -112,7 +118,14 @@ setup_git_env ()
 
 clean_git_env ()
 {
-    read -p "clear .gitcnofig ? [y/N]" ans;
+    local ask=${1:-"askme"};
+    
+    if [[ "$ask" = "askme" ]] ; then
+        read -p "clear .gitcnofig ? [y/N]" ans;
+    else
+        ans="y";
+    fi
+
     if [ "$ans" != "y" ] ; then 
         return;
     fi
@@ -121,11 +134,8 @@ clean_git_env ()
         echo "Found yonienv backup for .gitconfig, restoring..."
         mv ~/.gitconfig.yonienv ~/.gitconfig
     else
-        read -p "Are you sure about deleting .gitconfig ? [y/N]" ans;
-        if [ "$ans" == "y" ] ; then 
-            rm -f ~/.gitconfig;
-            echo "Deleted .gitconfig file !!!"
-        fi
+        rm -f ~/.gitconfig;
+        echo "Deleted .gitconfig file !!!"
     fi
 }
 
@@ -148,8 +158,8 @@ clean_cgdb_env ()
 {
     local yonienv=$1;
     echo $FUNCNAME;
-    rm  ~/.cgdb;
-    rm  ~/.gdbinit;
+    [[ -e ~/.cgdb ]] && rm -v  ~/.cgdb;
+    [[ -e ~/.gdbinit ]] && rm -v ~/.gdbinit;
 }
 
 cat_cgdb_env ()
@@ -211,30 +221,33 @@ setup_vim_env ()
 
 clean_vim_env ()
 {
-    read -p "clear vimrc ? [y/N]" ans;
-    if [ "$ans" == "y" ] ; then 
-        if [ -e ~/.vimrc.yonienv ] ; then
-            echo "Found yonienv backup for .vimrc, restoring..."
-            mv ~/.vimrc.yonienv ~/.vimrc
-        else
-            read -p "Are you sure about deleting .vimrc ? [y/N]" ans;
-            if [ "$ans" == "y" ] ; then 
-                rm -f ~/.vimrc;
-                echo "Deleted .vimrc file !!!"
-            fi
-        fi
+    local ask=${1:-"askme"};
+    
+    if [[ "$ask" = "askme" ]] ; then
+        read -p "clear vimrc ? [y/N]" ans;
+    else
+        ans="y";
+    fi
 
-        if [ -e ~/.vim.yonienv ] ;then 
-            echo "Found yonienv backup for .vim link/directory, restoring..."
-            rm -f ~/.vim;
-            mv ~/.vim.yonienv ~/.vim
-        else
-            read -p "Are you sure about deleting .vim ? [y/N]" ans;
-            if [ "$ans" == "y" ] ; then 
-                rm -f ~/.vim;
-                echo "Deleted .vim link/directory !!!"
-            fi
-        fi
+    if [ "$ans" != "y" ] ; then 
+        return;
+    fi
+
+    if [ -e ~/.vimrc.yonienv ] ; then
+        echo "Found yonienv backup for .vimrc, restoring..."
+        mv ~/.vimrc.yonienv ~/.vimrc
+    else
+        rm -f ~/.vimrc;
+        echo "Deleted .vimrc file !!!"
+    fi
+
+    if [ -e ~/.vim.yonienv ] ;then 
+        echo "Found yonienv backup for .vim link/directory, restoring..."
+        rm -f ~/.vim;
+        mv ~/.vim.yonienv ~/.vim
+    else
+        rm -f ~/.vim;
+        echo "Deleted .vim link/directory !!!"
     fi
 }
 
@@ -281,10 +294,10 @@ setup_directories ()
 
 clean ()
 {
-    clean_bash_env;
-    clean_vim_env;
-    clean_git_env;
-    clean_cgdb_env; 
+    clean_bash_env ${1};
+    clean_vim_env ${1};
+    clean_git_env ${1};
+    clean_cgdb_env ${1}; 
 }
 
 cat_yoni_env ()
@@ -315,7 +328,7 @@ main  ()
     local setup_misc=0;
 
     OPTIND=0;
-    while getopts "e:vgmhc" opt; do
+    while getopts "e:vgmhcd" opt; do
         case $opt in 
         e)  yonienv=${OPTARG};
             yonienv=$(readlink -f ${yonienv});
@@ -334,6 +347,9 @@ main  ()
             ;;
         c)
             clean;
+            return;
+            ;;
+        d)  clean dontask
             return;
             ;;
         esac;
