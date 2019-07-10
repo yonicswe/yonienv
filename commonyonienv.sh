@@ -369,7 +369,7 @@ main  ()
     setup_git_env ${yonienv};
     setup_cgdb_env ${yonienv};
 #   setup_misc ${yonienv}
-    setup_directories ${yonienv};
+#   setup_directories ${yonienv};
     messages
 }
 
