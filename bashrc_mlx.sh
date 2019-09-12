@@ -23,6 +23,8 @@ create_alias_for_host ()
 }
 
 # vnc hosts
+create_alias_for_host 1 r-ole01
+create_alias_for_host 2 r-ole02
 create_alias_for_host 8 r-ole08
 create_alias_for_host 9 r-ole08
 create_alias_for_host 10 r-ole08
@@ -280,8 +282,12 @@ listgitrepos ()
 alias gitclone-ofed-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core'
 alias gitclone-ofed-libibverbs='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs'
 alias gitclone-ofed-libmlx5='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5'
+alias gitclone-ofed-libibumad='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/libibumad'
+alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
+alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
 alias gitclone-ofed-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0'
 alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
+alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
 
 gitclone-legacy-libs ()
 {
@@ -402,7 +408,11 @@ mountkernelsources () {
 }
 
 alias umountkernelsources='set -x ; cd ; sudo umount /images/ ; set +x'
-alias mkkernelmountdir='sudo install -o yonatanc -g mtl -d /images/'
+mkkernelmountdir ()
+{
+    local path=${1:-images};
+    sudo install -o yonatanc -g mtl -d /${path};
+}
 
 # alias mountkernelkabisources='pushd ~ ; set -x ; sudo mount dev-l-vrt-146:/images/kernel/kabi /images/kernel/ ; set +x ; popd'
 # alias mountkerneldebug='pushd ~ ; set -x ; sudo mount dev-l-vrt-146:/images/debug /images/debug/ ; set +x; popd'
@@ -476,6 +486,7 @@ ofedapplybackports ()
 alias ofedconfigurewithcore='./configure -j ${ncoresformake} --with-core-mod'
 alias ofedconfigurewithrxe='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod  --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-rxe-mod'
 alias ofedconfigure='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-e_ipoib-mod --with-memtrack'
+alias ofedconfigure4.7='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod'
 
 ofedconfigureforkernel ()
 {
@@ -640,6 +651,7 @@ mftsetlinktypeeth ()
 
     echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=2 LINK_TYPE_P2=2";
     sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=2 LINK_TYPE_P2=2;
+    echo "sudo mlxfwreset -d ${mst_dev} --level 3 reset"
 }
 
 mftsetlinktypeinfiniband ()
@@ -663,6 +675,8 @@ mftsetlinktypeinfiniband ()
 
     echo "sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1";
     sudo mlxconfig -d ${mst_dev} set LINK_TYPE_P1=1 LINK_TYPE_P2=1;
+
+    echo "sudo mlxfwreset -d ${mst_dev} --level 3 reset"
 }
 
 mftresethca ()
@@ -1221,9 +1235,9 @@ mlxstart ()
     loadmoduleifnotloaded ib_uverbs
     loadmoduleifnotloaded rdma_cm
     loadmoduleifnotloaded ib_ucm
-    loadmoduleifnotloaded ib_iser
-    loadmoduleifnotloaded ib_isert
-    loadmoduleifnotloaded mlx5_fpga_tools
+#     loadmoduleifnotloaded ib_iser
+#     loadmoduleifnotloaded ib_isert
+#     loadmoduleifnotloaded mlx5_fpga_tools
 }
 
 mlxstop ()
@@ -1252,6 +1266,8 @@ mlxstop ()
     removemoduleifloaded ib_sa
     removemoduleifloaded ib_mad
     removemoduleifloaded ib_core
+    removemoduleifloaded mlx_compat
+    removemoduleifloaded mlxfw
 }
 
 alias mlxrestart='mlxstop ; mlxstart'
@@ -1478,9 +1494,9 @@ ofedkernelinstall ()
         echo -e "\t${mlx5ib_install_path}";
     fi
 
+    echo "sudo make install INSTALL_MOD_DIR=${dst}";
     are_you_sure_default_no;
     [ $? -eq 0 ] && return;
-    echo "sudo make install INSTALL_MOD_DIR=${dst}";
     sudo make install INSTALL_MOD_DIR=${dst};
 }
 
@@ -1634,6 +1650,7 @@ tagmeofakernel ()
     cat ${yonienv}/bin/tagmeofakernel.sh >> tagme.sh
     cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
     chmod +x tagme.sh;
+    ./tagme.sh
 }
 tagmeupstreamkernel ()
 {
@@ -1676,6 +1693,12 @@ opensmmlx ()
 {
     local device=${1};
     local guid=$(ibstat -d ${device} | awk '/Port GUID/{print $3}');
+
+    if [ -z "${device}" ] ; then 
+        pgrep -l opensm;
+        return;         
+    fi   
+
     echo "sudo opensm -g ${guid}"
     sudo opensm -B -g ${guid} ;
     sleep 3
@@ -1698,6 +1721,11 @@ syndrome_to_english ()
     cd /swgwork/noaos/dev/golan_fw/;
     git grep -i $1 src;
     cd - &>/dev/null
+
+
+    # more possible places to look for syndroms
+    # /mswg/release/fw-4119/ 
+    # /mswg/release/fw-4119/fw-4119-rel-16_25_8016/../etc/syndrome_list.log 
 }
 
 
