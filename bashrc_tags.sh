@@ -53,8 +53,13 @@ tagme_base ()
 
     filetypes+=${extra_filetypes};
 
-#     echo  includeTagdir: ${includeTagdir[@]}
-#     echo  excludeTagdir: ${excludeTagdir[@]}
+#   echo  includeTagdir: ${includeTagdir[@]}
+#   echo  excludeTagdir: ${excludeTagdir[@]}
+
+    rpm -q cscope > /dev/null;
+    if [ $? -ne 0 ] ; then echo "yum install cscope" ; return ; fi ; 
+    rpm -q ctags > /dev/null;
+    if [ $? -ne 0 ] ; then echo "yum install ctags" ; return ; fi ; 
 
     if [ -e cscope.files ] ; then 
         cscope -vkqb 2>/dev/null;

@@ -160,7 +160,7 @@ gdbbt ()
 
 
 alias cdlibmodules='cd /lib/modules/`uname -r`'
-listibkerenlmodules ()
+listkerenlmodules ()
 { 
     t 1 /lib/modules/`uname -r`
 
@@ -410,9 +410,9 @@ kernelbuildall ()
     make prepare;
     make scripts;
     if [ -e /usr/bin/time ] ; then
-        /usr/bin/time -f "===================================\n--->elapsed time %E" make -j ${ncoresformake} 
+        /usr/bin/time -f "===================================\n--->elapsed time %E" /usr/bin/make -j ${ncoresformake} 
     else 
-        make -j ${ncoresformake} 
+        /usr/bin/make -j ${ncoresformake} 
     fi
     echo -e          " built kernel and modules for kernel version $(kernelversion)"; 
     echo             "================================================";
@@ -440,7 +440,7 @@ kernelinstallmodules ()
     echo -e "installing modules for $(kernelversion)";
     echo -e "sudo make -j ${ncoresformake} modules_install" 
     echo -e "============================================";
-    sudo make -j ${ncoresformake} modules_install
+    sudo /usr/bin/make -j ${ncoresformake} modules_install
     echo -e "============================================";
     echo -e "installed modules for $(kernelversion)";
     echo -e "============================================";
@@ -461,7 +461,7 @@ kernelinstallall ()
     echo -e "sudo make -j ${ncoresformake} modules_install" 
     echo -e "sudo make -j ${ncoresformake} install"
     echo -e "============================================";
-    sudo make -j ${ncoresformake} modules_install && sudo make install
+    sudo /usr/bin/make -j ${ncoresformake} modules_install && sudo make install
     echo -e "============================================";
     echo -e "installing kernel+modules for $(kernelversion)";
     echo -e "============================================";
@@ -579,6 +579,15 @@ findconflictfiles ()
 
     findreject ${delete};
     findorig ${delete};
+    complete -W "$(findreject)" vorej
+}
+
+vorej ()
+{
+    local rej_file=${1};    
+    local orig_file=$(echo $rej_file | sed 's/.rej$//g');
+    echo "${v_or_g} -O ${orig_file} ${rej_file}"; 
+    ${v_or_g} -O ${orig_file} ${rej_file}; 
 }
 
 listerrnovalues ()

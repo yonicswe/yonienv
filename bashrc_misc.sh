@@ -91,12 +91,14 @@ yuminstallifnotexist ()
 yonideps_arr=(vim);
 yonideps_arr+=(vim-X11);
 yonideps_arr+=(ctags);
+yonideps_arr+=(cscope);
 yonideps_arr+=(cgdb);
 yonideps_arr+=(tree);
 yonideps_arr+=(screen);
 yonideps_arr+=(sshpass);
 yonideps_arr+=(the_silver_searcher);
 yonideps_arr+=(colordiff);
+yonideps_arr+=(words);
 # pax-utils for lddtree
 yonideps_arr+=(pax-utils);
 complete -W "$(echo ${yonideps_arr[@]})" yuminstall yuminstallifnotexist
