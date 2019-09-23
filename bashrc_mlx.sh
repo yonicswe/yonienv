@@ -283,11 +283,13 @@ alias gitclone-ofed-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29
 alias gitclone-ofed-libibverbs='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs'
 alias gitclone-ofed-libmlx5='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5'
 alias gitclone-ofed-libibumad='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/libibumad'
+alias gitclone-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
 alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
 alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
 alias gitclone-ofed-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0'
 alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
 alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
+alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/directtests/'
 
 gitclone-legacy-libs ()
 {
@@ -1392,6 +1394,7 @@ ofed_list_os+=( "rhel7.4" )
 ofed_list_os+=( "rhel7.5" )
 ofed_list_os+=( "rhel7.6" )
 ofed_list_os+=( "fc27" )
+ofed_list_os+=( "fc29" )
 
 complete -W "$( echo ${ofed_list_os[@]} )" ofedlistversionforos
 
@@ -1450,6 +1453,36 @@ ofedinstallversion ()
     if [ "$ans" == "y" ] ; then
         sudo build=${version} /.autodirect/mswg/release/MLNX_OFED/mlnx_ofed_install ${rebuild_drivers} ${user_space_libs};
     fi
+}
+
+#
+# build user space libs and kernel modules
+# of a specified ofed version
+# and then install them
+#
+ofedbuildandinstallinternalversion ()
+{
+    local version=${1};
+    local install_source_path=/mswg/release/ofed/OFED-internal-${version}/;
+    local install_dest_path=/tmp/OFED-internal-${version}/;
+    if [ -z ${version} ] ; then echo -e "missing version, use \"ofedlistversions\"" ; return ; fi;
+
+    if ! [ -d ${install_source_path} ] ; then
+        echo "There is NO !! : ${install_source_path}";
+        return;
+    fi;
+
+    if [ -d ${install_dest_path} ] ; then
+        echo "dest path already exists: ${install_dest_path}";
+        echo "you must remove it to proceed";
+        return;
+    fi;
+
+    /usr/bin/cp -a -v ${install_source_path} /tmp/;
+    cd ${install_dest_path};
+    echo "Enter root password to proceed with installation";
+    su -c "./install.pl --all";
+
 }
 
 ofedkernelversion ()
@@ -1650,7 +1683,7 @@ tagmeofakernel ()
     cat ${yonienv}/bin/tagmeofakernel.sh >> tagme.sh
     cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
     chmod +x tagme.sh;
-    ./tagme.sh
+    ./tagme.sh 1;
 }
 tagmeupstreamkernel ()
 {
