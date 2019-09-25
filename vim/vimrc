@@ -537,6 +537,8 @@ function! Auto_comp_paren ()
    inoremap { {<CR>}<esc><up>o
 endfunc
 
+call Auto_comp_paren ()
+
 
 function! Auto_comp_paren_disable ()
    inoremap ( (
@@ -944,5 +946,3 @@ let g:ctrlp_max_depth=40
 "
 " vmap <Enter> <Plug>(EasyAlign)
 " set sc
-
-

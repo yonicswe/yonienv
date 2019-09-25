@@ -290,6 +290,8 @@ alias gitclone-ofed-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:2941
 alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
 alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
 alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/directtests/'
+alias gitclone-iproute='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
+alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 
 gitclone-legacy-libs ()
 {
@@ -1821,4 +1823,34 @@ ofedhelp ()
     echo "ofedmkmetadata - create Metadata"
     echo "ofeddeletebackport - delete backport branch"
     echo "ofedbuildidforversion - show git indexs used for a specific ofed version"
+}
+
+
+
+###############
+# get_fw_path 
+################
+#usage: get_fw_path X.Y.Z (e.g 16.26.0260) 
+fw_get_path() {
+    local fw_ver=`echo $1 | sed  's/\./ /g'`
+    local major=`echo $fw_ver | awk {'print $1'}`
+    local minor=`echo $fw_ver | awk {'print $2'}`
+    local subminor=`echo $fw_ver | awk {'print $3'}`
+    local version="${major}_${minor}_${subminor}"
+    
+    project_id=0
+    project=""
+    case "$major" in
+        10)	project_id=4113 ; project="golan"   ;;
+        12)	project_id=4115 ; project="shomron" ;;
+        14)	project_id=4117 ; project="dotan"   ;;
+        16)	project_id=4119 ; project="galil"   ;;
+        18)	project_id=41682 ; project="bluefield"   ;;
+        20)	project_id=4123 ; project="negev"   ;;
+        22)	project_id=4125 ; project="arava"   ;;
+    esac
+    
+    echo "/mswg/release/host_fw/fw-${project_id}/fw-${project_id}-rel-${version}/"
+    echo "/mswg/release/host_fw/fw-${project_id}/fw-${project_id}-rel-${version}/../etc/${project}_basic_debug.sh"
+    echo
 }
