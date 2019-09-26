@@ -1373,7 +1373,13 @@ ofedinstallupstreamlib ()
     sudo build=ofed-upstream_last_stable /mswg/release/ofed/ofed_install --all --force --disable-kmp --without-valgrind
 }
 
-alias ofeduninstall='sudo ofed_uninstall.sh'
+ofeduninstall ()
+{
+    are_you_sure_default_no;
+    [ $? -eq 0 ] && return;
+    sudo mft_uninstall.sh --force; 
+    sudo ofed_uninstall.sh --force;
+}
 
 ofedlistversions ()
 {
