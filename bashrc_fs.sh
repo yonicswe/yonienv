@@ -1056,10 +1056,10 @@ reboot ()
         if [ ${hypervisor} -eq 1 ] ; then 
             read -p "This is an hypervisor. Are you absolutely sure ? [y/N]" ans;
             if [ "$ans" == "y" ] ; then 
-                sudo reboot;
+                sudo /sbin/reboot;
             fi
         else
-            sudo reboot;
+            sudo /sbin/reboot;
         fi
     fi 
 }

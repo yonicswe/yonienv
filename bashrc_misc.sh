@@ -101,6 +101,8 @@ yonideps_arr+=(colordiff);
 yonideps_arr+=(words);
 # pax-utils for lddtree
 yonideps_arr+=(pax-utils);
+yonideps_arr+=(pciutils);
+yonideps_arr+=(openssl-devel);
 complete -W "$(echo ${yonideps_arr[@]})" yuminstall yuminstallifnotexist
 yonienvdepsinstall ()
 {
