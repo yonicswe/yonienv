@@ -29,6 +29,15 @@ git config --global merge.tool ${_vd};
 # fi
 vimorgvim ()
 {
+    local user_choice=$1;
+    if [ -n "${user_choice}" ] ; then 
+        if [ "${user_choice}" == "vim" ] ; then
+            export v_or_g="gvim";
+        elif [ "${user_choice}" == "gvim" ] ; then 
+            export v_or_g="vim";
+        fi
+    fi;
+
     if [ "${v_or_g}" == "vim" ] ; then
         export v_or_g="gvim";
         export _vd="gvimdiff";
@@ -46,6 +55,7 @@ vimorgvim ()
     r;
 }
 export EDITOR="vim";
+complete -W "vim gvim" vimorgvim;
 
 vd () { ${_vd} $1 $2 ;}
 
