@@ -293,10 +293,22 @@ alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_d
 alias gitclone-iproute='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 
-gitclone-legacy-libs ()
+make-ofed-legacy-libs ()
+{
+    cd libibverbs/  ; mkupstreamlib1sttime ; sudo make install ; 
+    cd ../libmlx5/ ; mkupstreamlib1sttime ; sudo make install ; 
+    cd ../libibumad ; mkupstreamlib1sttime ; sudo make install;
+    cd .. ;
+}
+
+gitclone-ofed-legacy-libs ()
 {
     gitclone-ofed-libibverbs;
     gitclone-ofed-libmlx5;
+    gitclone-ofed-libibumad;
+    are_you_sure_default_no;
+    [ $? -eq 0 ] && return;
+    make-ofed-legacy-libs;
 }
 
 
@@ -394,7 +406,7 @@ mountkernelsources () {
 
     # test is /images/ exists
     if ! [ -d /images ] ; then 
-        echo "there is no /images, use mkkernelmountdir to create";
+        echo "there is no /images, use mkrootmountdir to create";
         return;
     fi 
 
@@ -412,7 +424,7 @@ mountkernelsources () {
 }
 
 alias umountkernelsources='set -x ; cd ; sudo umount /images/ ; set +x'
-mkkernelmountdir ()
+mkrootmountdir ()
 {
     local path=${1:-images};
     sudo install -o yonatanc -g mtl -d /${path};
@@ -1404,14 +1416,15 @@ ofed_list_os+=( "rhel7.6" )
 ofed_list_os+=( "fc27" )
 ofed_list_os+=( "fc29" )
 
-complete -W "$( echo ${ofed_list_os[@]} )" ofedlistversionforos
+complete -W "$( echo ${ofed_list_os[@]} x86_64 )" ofedlistversionforos
 
 ofedlistversionforos ()
 {
     local os=${1:-rhel7.0};
     local arch=${2:-x86_64};
+    local ver=${3:-4.7};
 
-    for i in $(ls -t -d /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-* ) ; do 
+    for i in $(ls -t -d /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-${ver}* ) ; do 
 #   for i in $(find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1 -type d -name "*MLNX_OFED_LINUX-*" ) ; do 
         if [ $(ls -l $i | grep ${os} | wc -l ) -gt 0 ] ; then 
             sudo find ${i} -maxdepth 1 -type d -name "*${os}*${arch}*" -printf "${i}\n\t|--%f\n";
@@ -1423,6 +1436,14 @@ ofedlistversionforos ()
             continue; 
         fi
     done; 
+}
+
+complete -W "4.6 4.7" ofedlistosversion;
+ofedlistosversion ()
+{
+    local ver=${3:-4.7};
+
+    ls -t -d /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-${ver}*/* | xargs -n 1 basename | sed -e 's/.*MLNX_OFED_LINUX-//g' | grep ".*iso$";
 }
 
 # ofedbuildversion ()
@@ -1522,8 +1543,8 @@ alias ofedfindindexforrdma-core='ofedfindindexforpackage rdma-core'
 
 ofedkernelinstall ()
 {
-    local ibcore_install_path=$(modinfo ib_core|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
-    local mlx5ib_install_path=$(modinfo mlx5_ib|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
+    local ibcore_install_path=$(/sbin/modinfo ib_core|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
+    local mlx5ib_install_path=$(/sbin/modinfo mlx5_ib|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
     local dst=${1:-"extra/mlnx-ofa_kernel"};
     local installed_ibcore="/lib/modules/$(uname -r)/${dst}/drivers/infiniband/core/ib_core.ko"
 
@@ -1733,7 +1754,7 @@ md2man ()
 opensmmlx ()
 {
     local device=${1};
-    local guid=$(ibstat -d ${device} | awk '/Port GUID/{print $3}');
+    local guid=$(/usr/sbin/ibstat -d ${device} | awk '/Port GUID/{print $3}');
 
     if [ -z "${device}" ] ; then 
         pgrep -l opensm;
@@ -1741,7 +1762,7 @@ opensmmlx ()
     fi   
 
     echo "sudo opensm -g ${guid}"
-    sudo opensm -B -g ${guid} ;
+    sudo /usr/sbin/opensm -B -g ${guid} ;
     sleep 3
     ibv_devinfo -d ${device} | grep state;
     ibv_devinfo -d ${device} | grep "state\|link_layer";
@@ -1776,7 +1797,7 @@ mlx ()
         echo "===================================="
         echo "        ibstat                      "
         echo "       --------                     "
-        ibstat | grep "CA\|Number of ports";
+        /usr/sbin/ibstat | grep "CA\|Number of ports";
         echo "===================================="
     fi
     if [ -x /usr/bin/ibv_devinfo ] ; then
