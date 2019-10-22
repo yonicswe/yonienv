@@ -1721,6 +1721,7 @@ tagmeupstreamkernel ()
     cat ${yonienv}/bin/tagmeupstreamkernel.sh >> tagme.sh
     cat  ${yonienv}/bin/tagme.sh >> tagme.sh ;
     chmod +x tagme.sh;
+    ./tagme.sh 1;
 }
 
 tagmerdmacore () 
