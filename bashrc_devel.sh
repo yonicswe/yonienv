@@ -625,5 +625,10 @@ extractkernelsrcrpm ()
     echo "cd BUILD/${kernelfile}";
 }
 
-alias tmuxnewyoni='tmux new -s yoni'
-alias tmuxattachyoni='tmux attach -t yoni'
+alias tmuxnewyoni='tmux -u new -s yoni'
+alias tmuxattachyoni='tmux -u attach -t yoni'
+
+dockerinstall ()
+{
+    yuminstall docker-ce docker-ci
+}
