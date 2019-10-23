@@ -286,12 +286,17 @@ alias gitclone-ofed-libibumad='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:2
 alias gitclone-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
 alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
 alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
-alias gitclone-ofed-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0'
 alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
 alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
 alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/directtests/'
 alias gitclone-iproute='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
+
+gitclone-ofed-kernel() 
+{
+    git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0; 
+    ofedmklinks;
+}    
 
 make-ofed-legacy-libs ()
 {
@@ -1755,7 +1760,14 @@ md2man ()
 opensmmlx ()
 {
     local device=${1};
-    local guid=$(/usr/sbin/ibstat -d ${device} | awk '/Port GUID/{print $3}');
+    local guid;
+
+    if ! [ -e /usr/sbin/ibstat ] ; then
+        echo "missing ibstat. install infiniband-diags and try again";
+        return;
+    fi;
+
+    guid=$(/usr/sbin/ibstat -d ${device} | awk '/Port GUID/{print $3}');
 
     if [ -z "${device}" ] ; then 
         pgrep -l opensm;

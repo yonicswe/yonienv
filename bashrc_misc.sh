@@ -99,10 +99,15 @@ yonideps_arr+=(sshpass);
 yonideps_arr+=(the_silver_searcher);
 yonideps_arr+=(colordiff);
 yonideps_arr+=(words);
+
 # pax-utils for lddtree
 yonideps_arr+=(pax-utils);
+
 yonideps_arr+=(pciutils);
 yonideps_arr+=(openssl-devel);
+
+# infiniband-diags for ibstat
+yonideps_arr+=(infiniband-diags);
 complete -W "$(echo ${yonideps_arr[@]})" yuminstall yuminstallifnotexist
 yonienvdepsinstall ()
 {
