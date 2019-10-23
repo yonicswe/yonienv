@@ -295,6 +295,7 @@ alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 gitclone-ofed-kernel() 
 {
     git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0; 
+    cd mlnx-ofa_kernel-4.0;
     ofedmklinks;
 }    
 

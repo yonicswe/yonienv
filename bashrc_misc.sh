@@ -105,6 +105,8 @@ yonideps_arr+=(pax-utils);
 
 yonideps_arr+=(pciutils);
 yonideps_arr+=(openssl-devel);
+yonideps_arr+=(virt-what);
+yonideps_arr+=(dmidecode);
 
 # infiniband-diags for ibstat
 yonideps_arr+=(infiniband-diags);

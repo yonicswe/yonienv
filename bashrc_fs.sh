@@ -773,67 +773,72 @@ redpill ()
     local ret=0;
 
     ################################################# 
-    # try virt-what
-    which virt-what 1>/dev/null;
-    ret=$?;
-    if [ ${ret} -eq 0 ] ; then
-        if [ $( sudo virt-what |  wc -l ) -gt 0 ] ; then 
-            echo "I am a virtual machine";
-            return 0;
-        fi;
-        echo "I am a hypervisor";
-        return 1;
-    fi;
-
-    ################################################# 
     # try dmidecode
-    which dmidecode 1>/dev/null;
+    which dmidecode 2>/dev/null;
     ret=$?;
     if [ ${ret} -eq 0 ] ; then
         echo "vendor : $(sudo dmidecode -s system-manufacturer)";
         echo "product: $(sudo dmidecode -s system-product-name)";
 
-        if [ $( sudo dmidecode | grep -i product | grep -i qemu | wc -l ) -gt 0 ] ; then 
+        if [ $( sudo dmidecode | grep -i product | grep -i "qemu\|kvm" | wc -l ) -gt 0 ] ; then 
+            echo "I am a virtual machine (dmidecode)";
             return 0;
         fi
+        echo "I am a hypervisor (dmidecode)";
         return 1;
     fi
 
     ################################################# 
+    # try virt-what
+    which virt-what 2>/dev/null;
+    ret=$?;
+    if [ ${ret} -eq 0 ] ; then
+        if [ $( sudo virt-what |  wc -l ) -gt 0 ] ; then 
+            echo "I am a virtual machine (virt-what)";
+            return 0;
+        fi;
+        echo "I am a hypervisor (virt-what)";
+        return 1;
+    fi;
+
+
+    ################################################# 
     #  try lshw
-    which lshw 1>/dev/null;
+    which lshw 2>/dev/null;
     ret=$?;
     if [ ${ret} -eq 0 ] ; then
         sudo lshw -class system -sanitize | grep -i product
         if [ $( sudo lshw -class system -sanitize | grep -i product | grep -i kvm | wc -l ) -gt 0 ] ; then 
+            echo "I am a virtual machine (lshw)";
             return 0;
         fi;
+        echo "I am a hypervisor (lshw)";
         return 1;
     fi
 
     ################################################# 
     # try systemd-detect-virt
-    which systemd-detect-virt 1>/dev/null;
-    ret=$?;
-    if [ ${ret} -eq 0 ] ; then
-        if [ $( systemd-detect-virt | grep -i none | wc -l ) -gt 0 ] ; then
-            echo "I am a hypervisor";
-            return 1;
-        fi
-        echo "I am a virtual-machine";
-        return 0;
-    fi
+#     which systemd-detect-virt 2>/dev/null;
+#     ret=$?;
+#     if [ ${ret} -eq 0 ] ; then
+#         if [ $( systemd-detect-virt | grep -i none | wc -l ) -gt 0 ] ; then
+#             echo "I am a hypervisor (systemd-detect-virt)";
+#             return 1;
+#         fi
+#         echo "I am a virtual-machine (systemd-detect-virt)";
+#         return 0;
+#     fi
 
     ################################################# 
     # try hostnamectl
-    which hostnamectl 1>/dev/null;
+    which hostnamectl 2>/dev/null;
     ret=$?;
     if [ ${ret} -eq 0 ] ; then
         if [ $( hostnamectl | grep -i virt | wc -l ) -gt 0 ] ; then
-            echo "I am a virtual-machine";
+            echo "I am a virtual-machine (hostnamectl)";
             return 0;
         fi
-        echo "I am a hypervisor";
+        echo "I am a hypervisor (hostnamectl)";
         return 1;
     fi
 
@@ -842,7 +847,7 @@ redpill ()
         return 0;
     fi 
 
-    echo "i am a hypervisor";
+    echo "i am a hypervisor (/proc/cpuinfo)";
     return 1;
 
 # using dmesg is not safe as it can be deleted
