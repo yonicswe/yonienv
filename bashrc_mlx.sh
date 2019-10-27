@@ -1444,12 +1444,18 @@ ofedlistversionforos ()
     done; 
 }
 
-complete -W "4.6 4.7" ofedlistosversion;
-ofedlistosversion ()
+complete -W "4.6 4.7 rhel" ofedlistosforversion;
+ofedlistosforversion ()
 {
-    local ver=${3:-4.7};
-
-    ls -t -d /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-${ver}*/* | xargs -n 1 basename | sed -e 's/.*MLNX_OFED_LINUX-//g' | grep ".*iso$";
+    local ver=${1:-4.7};
+    local os=${2:-rhel};
+    echo "OS list for ofed /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-${ver}";
+#   ls -t -d /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-${ver}*/ | xargs -n 1 basename | sed -e 's/.*MLNX_OFED_LINUX-//g' | grep ".*iso$";
+    ls -t -d /.autodirect/mswg/release/MLNX_OFED/MLNX_OFED_LINUX-${ver}*/ | while read v ; do 
+#       basename $v 
+        ls $v | grep ".*${os}.*iso$";
+    done |less
+   
 }
 
 # ofedbuildversion ()
