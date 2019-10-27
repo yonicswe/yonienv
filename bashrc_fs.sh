@@ -611,10 +611,10 @@ alias freeh='free -h'
 
 myip ()
 {
-   if [ -z $(echo $(hostname -i | awk '{print $2}') ) ] ; then 
-       echo $(hostname -i)
+   if [ -z $(echo $(hostname -I | awk '{print $1}') ) ] ; then 
+       echo $(hostname -I)
    else
-       echo $(hostname -i | awk '{print $2}')
+       echo $(hostname -I | awk '{print $1}')
    fi
 }
 

@@ -358,6 +358,8 @@ grub2setdefault ()
     sudo grub2-mkconfig -o /boot/grub2/grub.cfg;
 }
 
+alias grub2upadte='sudo grub2-mkconfig -o /boot/grub2/grub.cfg'
+
 kernelversion ()
 {
     awk 'BEGIN{FS = "="} 
