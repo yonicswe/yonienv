@@ -144,6 +144,7 @@ alias l='ls --group-directories-first -ltr --color -F'
 alias c='cd'
 alias ..='cd ../ ; pwd -P'
 alias p='pwd -P'
+alias pp="echo $(hostname -i):$(pwd -P)/"
 alias mv='mv -v'
 alias rm='rm -iv'
 alias cp='cp -iv'
