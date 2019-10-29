@@ -535,6 +535,7 @@ function! Auto_comp_paren ()
    inoremap " ""<esc>i
    inoremap ' ''<esc>i
    au FileType c,cpp inoremap { {<CR>}<esc><up>o
+   au FileType sh inoremap { {}<esc>i
 endfunc
 
 call Auto_comp_paren ()
