@@ -109,6 +109,9 @@ yonideps_arr+=(virt-what);
 yonideps_arr+=(dmidecode);
 yonideps_arr+=(grub2-tools);
 yonideps_arr+=(grub2-tools-minimal);
+yonideps_arr+=(opensm);
+yonideps_arr+=(libibverbs-utils);
+yonideps_arr+=(libibverbs-devel);
 
 # infiniband-diags for ibstat
 yonideps_arr+=(infiniband-diags);

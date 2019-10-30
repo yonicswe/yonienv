@@ -299,7 +299,7 @@ h ()
     if [ -z $a ] ; then 
         history 
     else 
-        history | grep -i $a 
+        history | /usr/bin/grep --color -i $a 
     fi
 }
 

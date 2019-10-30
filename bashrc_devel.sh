@@ -160,7 +160,7 @@ gdbbt ()
 
 
 alias cdlibmodules='cd /lib/modules/`uname -r`'
-listkerenlmodules ()
+listkernelmodules ()
 { 
     t 1 /lib/modules/`uname -r`
 
