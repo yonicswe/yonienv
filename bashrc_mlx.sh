@@ -1550,6 +1550,7 @@ ofedquerybuildidforversion ()
 
 alias ofedfindindexforofakernel='ofedfindindexforpackage ofa_kernel:'
 alias ofedfindindexforlibmlx5='ofedfindindexforpackage libmlx5:'
+alias ofedfindindexforlibmlx4='ofedfindindexforpackage libmlx4:'
 alias ofedfindindexforlibibverbs='ofedfindindexforpackage libibverbs'
 alias ofedfindindexforrdma-core='ofedfindindexforpackage rdma-core'
 
