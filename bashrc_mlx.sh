@@ -283,14 +283,22 @@ alias gitclone-ofed-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29
 alias gitclone-ofed-libibverbs='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs'
 alias gitclone-ofed-libmlx5='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5'
 alias gitclone-ofed-libibumad='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/libibumad'
-alias gitclone-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
 alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
 alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
+alias gitclone-ofed-librdmacm='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/librdmacm'
+
+alias gitclone-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
 alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
 alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
 alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/directtests/'
 alias gitclone-iproute='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
+alias gitclone-ucx='git clone https://github.com/openucx/ucx'
+
+ucxbuild ()
+{
+    ./autogen.sh && ./contrib/configure-devel --enable-debug --prefix=$PWD/install && make -j 16 && make install 
+}
 
 gitclone-ofed-kernel() 
 {
@@ -312,6 +320,7 @@ gitclone-ofed-legacy-libs ()
     gitclone-ofed-libibverbs;
     gitclone-ofed-libmlx5;
     gitclone-ofed-libibumad;
+    echo -e "\nfinished clone, would you like to install ";
     are_you_sure_default_no;
     [ $? -eq 0 ] && return;
     make-ofed-legacy-libs;
@@ -1345,7 +1354,7 @@ mkrxelib ()
 
 mkupstreamlib1sttime ()
 {
-    \make clean
+    \make clean 2>/dev/null;
     ./autogen.sh
     ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 CFLAGS="-g -O0"
     make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1
