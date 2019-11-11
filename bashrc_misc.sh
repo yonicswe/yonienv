@@ -99,6 +99,7 @@ yonideps_arr+=(sshpass);
 yonideps_arr+=(the_silver_searcher);
 yonideps_arr+=(colordiff);
 yonideps_arr+=(words);
+yonideps_arr+=(tmux);
 
 # pax-utils for lddtree
 yonideps_arr+=(pax-utils);
@@ -112,6 +113,7 @@ yonideps_arr+=(grub2-tools-minimal);
 yonideps_arr+=(opensm);
 yonideps_arr+=(libibverbs-utils);
 yonideps_arr+=(libibverbs-devel);
+yonideps_arr+=(iproute);
 
 # infiniband-diags for ibstat
 yonideps_arr+=(infiniband-diags);
