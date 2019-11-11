@@ -177,6 +177,21 @@ setup_misc ()
 #   echo "set completion-display-width 0" >> ~/.inputrc
 }
 
+setup_tmux_env () 
+{
+    local yonienv=$1;
+    echo $FUNCNAME;
+    ln -snf ${yonienv}/tmux.conf ~/.tmux.conf;
+}
+
+setup_tmux_env () 
+{
+    local yonienv=$1;
+    echo $FUNCNAME;
+    ln -snf ${yonienv}/tmux.conf ~/.tmux.conf;
+    [[ -e ~/.tmux.conf ]] && rm -v  ~/.tmux.conf;
+}
+
 usage () 
 {
     echo "mkyonienv.sh  [-e <env_path>] [-v|-g|-h|-c]"
@@ -384,6 +399,7 @@ main  ()
     setup_vim_env ${yonienv};
     setup_git_env ${yonienv};
     setup_cgdb_env ${yonienv};
+    setup_tmux_env ${yonienv};
 #   setup_misc ${yonienv}
 #   setup_directories ${yonienv};
     messages
