@@ -160,12 +160,12 @@ alias grepc='ag --cc --noheading'
 alias greptxt='ag -G .*\.txt'
 alias grepascii='grep -nH -r -I --color '
 alias grepmake='grep -nH -r -I --color --include=*[m,M]ake*'
-grepascii  ()
-{
-    grepme="$1";
-    [ -z ${grepme} ] && return;
-    find . -type f -exec grep -Iq . {} \; -print
-}
+# grepascii ()
+# {
+#     grepme="$1";
+#     [ -z ${grepme} ] && return;
+#     find . -type f -exec grep -Iq . {} \; -print
+# }
 
 alias ag='ag --noheading'
 alias ssh='ssh -X'

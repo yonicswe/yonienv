@@ -357,11 +357,10 @@ ibmod ()
     if [ -n "${module_grep}" ] ; then 
         if [ ${module_grep} == "print" ] ; then 
             modules_path+=" ${modules_base_path}/kernel/net/core";
-            find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g';
+            find ${modules_path}  -type f -exec basename {} \; 2>/dev/null | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g';
             return;
         fi
     fi
-
 
     find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |
         while read m ; do
