@@ -302,8 +302,9 @@ ucxbuild ()
 
 gitclone-ofed-kernel() 
 {
-    git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0; 
-    cd mlnx-ofa_kernel-4.0;
+    local dest_name=${1-:mlnx-ofa_kernel-4.0};
+    git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0 ${dest_name};
+    cd ${dest_name};
     ofedmklinks;
 }    
 
