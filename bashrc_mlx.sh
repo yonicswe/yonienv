@@ -855,11 +855,12 @@ checkpatchuserpace ()
 }
 
 alias kgb="sudo /.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder"
-alias mkvmredhat74="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.4_x86_64_virt_guest   "
-alias mkvmredhat75="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.5_x86_64_virt_guest   "
-alias mkvmfedora28="kgb -o linux  -c 16 -r 8192 -d 35 -l Fedora_28_x86_64_virt_guest"
-alias mkvmls="kgb -o linux"
-mkvmhelp()
+alias vmmkredhat74="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.4_x86_64_virt_guest   "
+alias vmmkredhat75="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.5_x86_64_virt_guest   "
+alias vmmkfedora28="kgb -o linux  -c 16 -r 8192 -d 35 -l Fedora_28_x86_64_virt_guest"
+alias vmmkubutu18.4="kgb -o linux  -c 16 -r 8192 -d 35 -l Ubuntu_18.04_x86_64_virt_guest"
+alias vmls="kgb -o linux"
+vmmkhelp()
 {
     echo "su - ";
     echo -e "/.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_builder -o linux -l \033[1;31m<your choice of vm>\033[00m -c 16 -r 8192 -d 35";
