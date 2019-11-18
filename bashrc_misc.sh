@@ -104,20 +104,21 @@ yonideps_arr+=(tmux);
 # pax-utils for lddtree
 yonideps_arr+=(pax-utils);
 
-yonideps_arr+=(pciutils);
-yonideps_arr+=(openssl-devel);
-yonideps_arr+=(virt-what);
-yonideps_arr+=(dmidecode);
-yonideps_arr+=(grub2-tools);
-yonideps_arr+=(grub2-tools-minimal);
-yonideps_arr+=(opensm);
-yonideps_arr+=(libibverbs-utils);
-yonideps_arr+=(libibverbs-devel);
-yonideps_arr+=(iproute);
+yonimlxdeps_arr+=(pciutils);
+yonimlxdeps_arr+=(openssl-devel);
+yonimlxdeps_arr+=(virt-what);
+yonimlxdeps_arr+=(dmidecode);
+yonimlxdeps_arr+=(grub2-tools);
+yonimlxdeps_arr+=(grub2-tools-minimal);
+yonimlxdeps_arr+=(opensm);
+yonimlxdeps_arr+=(libibverbs-utils);
+yonimlxdeps_arr+=(libibverbs-devel);
+yonimlxdeps_arr+=(iproute);
+yonimlxdeps_arr+=(perftest);
 
 # infiniband-diags for ibstat
-yonideps_arr+=(infiniband-diags);
-complete -W "$(echo ${yonideps_arr[@]})" yuminstall yuminstallifnotexist
+yonimlxdeps_arr+=(infiniband-diags);
+complete -W "$(echo ${yonideps_arr[@]} ${yonimlxdeps_arr[@]})" yuminstall yuminstallifnotexist
 yonienvdepsinstall ()
 {
     for p in $(echo ${yonideps_arr[@]}) ; do 
