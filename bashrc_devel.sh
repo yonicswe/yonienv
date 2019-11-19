@@ -627,22 +627,20 @@ extractkernelsrcrpm ()
     echo "cd BUILD/${kernelfile}";
 }
 
-# alias tmuxnewyoni='tmux -u new -s yoni'
-# alias tmuxattachyoni='tmux -u attach -t yoni'
+alias tmuxnewyoni='tmux -u new -s yoni'
+alias tmuxattachyoni='tmux -u attach -t yoni'
 
 # 
 # tn - create a new tmux session 
 tn () 
 {
     local sess_list=$(tmux ls | awk 'BEGIN{FS=":"}{print $1}');
-    local sess_name=${1:-yoni}
-    if [ "${sess_name}" == "yoni" ] ; then
-        echo "session yoni exist! choose a new name ?";
-        are_you_sure_default_no;
-        [ $? == 0 ] && return;
+    local sess_name=${1};
+    if [ -z "${sess_name}" ] ; then
+        read -p "Enter session name : " sess_name;
+        [ -z "${sess_name}" ] && sess_name=yoni;
     fi;
 
-    read -p "Enter session name : " sess_name;
     complete -W "$(echo ${sess_list})" tl ta tk
     tmux -u new -s ${sess_name};
 }

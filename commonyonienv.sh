@@ -184,11 +184,10 @@ setup_tmux_env ()
     ln -snf ${yonienv}/tmux.conf ~/.tmux.conf;
 }
 
-setup_tmux_env () 
+clean_tmux_env () 
 {
     local yonienv=$1;
     echo $FUNCNAME;
-    ln -snf ${yonienv}/tmux.conf ~/.tmux.conf;
     [[ -e ~/.tmux.conf ]] && rm -v  ~/.tmux.conf;
 }
 
@@ -313,6 +312,7 @@ clean ()
     clean_vim_env ${1};
     clean_git_env ${1};
     clean_cgdb_env ${1}; 
+    clean_tmux_env ${1}; 
 }
 
 cat_yoni_env ()
