@@ -833,6 +833,7 @@ let @h = "◀──────"
 let @b = "┌─────┐\n│     │\n│     │\n│     │\n└─────┘"
 " let @b = " ┌─────┐^J│     │^J│     │^J│     │^J└─────┘"
 let @s = "<<<<<"
+let @c = "console=tty0 console=ttyS0,115200n8"
 
 " increase/decrease font size
 

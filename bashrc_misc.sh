@@ -115,6 +115,7 @@ yonimlxdeps_arr+=(libibverbs-utils);
 yonimlxdeps_arr+=(libibverbs-devel);
 yonimlxdeps_arr+=(iproute);
 yonimlxdeps_arr+=(perftest);
+yonimlxdeps_arr+=(mlxver-scripts);
 
 # infiniband-diags for ibstat
 yonimlxdeps_arr+=(infiniband-diags);

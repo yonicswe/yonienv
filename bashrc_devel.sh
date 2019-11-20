@@ -634,7 +634,7 @@ alias tmuxattachyoni='tmux -u attach -t yoni'
 # tn - create a new tmux session 
 tn () 
 {
-    local sess_list=$(tmux ls | awk 'BEGIN{FS=":"}{print $1}');
+    local sess_list=$(tmux ls 2>/dev/null | awk 'BEGIN{FS=":"}{print $1}');
     local sess_name=${1};
     if [ -z "${sess_name}" ] ; then
         read -p "Enter session name : " sess_name;
@@ -647,9 +647,9 @@ tn ()
 
 tl ()
 {
-    local sess_list=$(tmux ls | awk 'BEGIN{FS=":"}{print $1}');
-    complete -W "$(echo ${sess_list})" tl ta tk tk;
-    tmux ls;
+    local sess_list=$(tmux ls 2>/dev/null | awk 'BEGIN{FS=":"}{print $1}');
+    complete -W "$(echo ${sess_list})" tl ta tk;
+    tmux ls 2>/dev/null;
 }
 
 ta ()

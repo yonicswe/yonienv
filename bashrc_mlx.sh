@@ -265,6 +265,12 @@ listgitrepos ()
     echo "            |-- libmlx5      : ${prefix}/connect-ib/libmlx5";
     echo "            +-- rdma-core    : ${prefix}/mlnx_ofed/rdma-core"; 
 
+    echo "mellanox github              : https://github.com/Mellanox/";
+    echo "            |-- gpuDirect    : https://github.com/Mellanox/nv_peer_memory.git";
+
+
+https://github.com/Mellanox/nv_peer_memory.git
+
     echo;
     echo "mellanox regression vrtsdk      : ${prefix}/vrtsdk";
     echo "                    network     : ${prefix}/Linux_drivers_verification/networking";
