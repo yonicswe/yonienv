@@ -259,27 +259,33 @@ listgitrepos ()
     echo "jason    rdmacore            : https://github.com/linux-rdma/rdma-core.git";
     echo "jason    kernel              : https://github.com/jgunthorpe/linux.git";
     echo;
-    echo "mellanox ofed.4 kernel       : ${prefix}/mlnx_ofed/mlnx-ofa_kernel-4.0";
-    echo "            |-- libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
-    echo "            |-- libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
-    echo "            |-- libmlx5      : ${prefix}/connect-ib/libmlx5";
-    echo "            +-- rdma-core    : ${prefix}/mlnx_ofed/rdma-core"; 
-
-    echo "mellanox github              : https://github.com/Mellanox/";
-    echo "            |-- gpuDirect    : https://github.com/Mellanox/nv_peer_memory.git";
+    echo -e "mellanox ofed-4";
+    echo -e "            |-- kernel       : ${prefix}/mlnx_ofed/mlnx-ofa_kernel-4.0";
+    echo -e "            |-- legacy-libs";
+    echo -e "            |      |-- libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
+    echo -e "            |      |-- libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
+    echo -e "            |     \`-- libmlx5      : ${prefix}/connect-ib/libmlx5";
+    echo -e "            \`-- rdma-core   : ${prefix}/mlnx_ofed/rdma-core"; 
 
     echo;
-    echo "mellanox regression vrtsdk      : ${prefix}/vrtsdk";
-    echo "                    network     : ${prefix}/Linux_drivers_verification/networking";
-    echo "                    core        : ${prefix}/Linux_drivers_verification/core";
-    echo "                    directtests : ${prefix}/Linux_drivers_verification/directtests";
+    echo -e "mellanox github              : https://github.com/Mellanox/";
+    echo -e "           \`-- gpuDirect    : https://github.com/Mellanox/nv_peer_memory.git";
+
+    echo;
+    echo -e "mellanox regression vrtsdk       : ${prefix}/vrtsdk";
+    echo -e "                |-- network      : ${prefix}/Linux_drivers_verification/networking";
+    echo -e "                |-- core         : ${prefix}/Linux_drivers_verification/core";
+    echo -e "                \`-- directtests : ${prefix}/Linux_drivers_verification/directtests";
 
     echo;
     echo "mellanox github/devx            : https://github.com/Mellanox/devx.git";
+    echo;
+    echo "perftest                        : ${prefix}/Performance/perftest";
+
 
     echo;
     echo "mellanox Firmware tavor      : ${prefix}/ConnectX"
-    echo "                  golan      : ${prefix}/golan_fw"
+    echo -e "          \`-- golan      : ${prefix}/golan_fw"
 }
 
 alias gitclone-ofed-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core'
@@ -297,6 +303,8 @@ alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_d
 alias gitclone-iproute='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 alias gitclone-ucx='git clone https://github.com/openucx/ucx'
+alias gitclone-perftest='git clone https://yonatanc@l-gerrit.mtl.labs.mlnx:29418/Performance/perftest'
+
 
 ucxbuild ()
 {
