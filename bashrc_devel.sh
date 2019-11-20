@@ -598,6 +598,8 @@ listerrnovalues ()
     cat ${yonienv}/errno_list.txt
 }
 
+alias listpci='lspci -tv'
+
 alias deletepatches='rm -fv *.patch'
 alias listpatches='ls -ltr *.patch'
 alias deletetags='rm -f cscope.* tags'
