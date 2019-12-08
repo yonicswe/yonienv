@@ -623,6 +623,13 @@ myip ()
 
 mydistro ()
 {
+    hostnamectl | grep  -i "operating system" | sed 's/.*:\ /OS: /g';
+    hostnamectl | grep  -i "kernel" | sed 's/.*:\ /Kernel:\ /g';
+    hostnamectl | grep  -i "chassis" | sed 's/.*:\ /Chassis:\ /g';
+}
+
+mydistro_v1 ()
+{
 # this code comes from 
 # https://unix.stackexchange.com/questions/6345/how-can-i-get-distribution-name-and-version-number-in-a-simple-shell-script
     if [ -f /etc/redhat-release ] ; then
