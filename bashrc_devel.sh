@@ -657,7 +657,7 @@ tl ()
 ta ()
 {
     local sess_name=${1};
-    if [ -z "${sess_name}"] ; then
+    if [ -z "${sess_name}" ] ; then
         echo "Missing session name";
         return;
     fi;
