@@ -28,19 +28,12 @@ are_you_sure_default_yes	bashrc_common.sh	/^are_you_sure_default_yes ()$/;"	f
 backupgitkernel	bashrc_mlx.sh	/^backupgitkernel ()$/;"	f
 branches	bashrc_svn.sh	/^branches () {$/;"	f
 cat_bash_env	commonyonienv.sh	/^cat_bash_env ()$/;"	f
-cat_bash_env	commonyonienv.sh.orig	/^cat_bash_env ()$/;"	f
 cat_bash_profile	commonyonienv.sh	/^cat_bash_profile ()$/;"	f
-cat_bash_profile	commonyonienv.sh.orig	/^cat_bash_profile ()$/;"	f
 cat_bashrc	commonyonienv.sh	/^cat_bashrc () $/;"	f
-cat_bashrc	commonyonienv.sh.orig	/^cat_bashrc () $/;"	f
 cat_cgdb_env	commonyonienv.sh	/^cat_cgdb_env ()$/;"	f
-cat_cgdb_env	commonyonienv.sh.orig	/^cat_cgdb_env ()$/;"	f
 cat_git_env	commonyonienv.sh	/^cat_git_env ()$/;"	f
-cat_git_env	commonyonienv.sh.orig	/^cat_git_env ()$/;"	f
 cat_vim_env	commonyonienv.sh	/^cat_vim_env () $/;"	f
-cat_vim_env	commonyonienv.sh.orig	/^cat_vim_env () $/;"	f
 cat_yoni_env	commonyonienv.sh	/^cat_yoni_env ()$/;"	f
-cat_yoni_env	commonyonienv.sh.orig	/^cat_yoni_env ()$/;"	f
 catgrubsetdefault	bashrc_devel.sh	/^catgrubsetdefault ()$/;"	f
 catgrubvsinstalled	bashrc_devel.sh	/^catgrubvsinstalled ()$/;"	f
 cdbugs	docs_complete_dir.sh	/^cdbugs() { cd $bugs_dir\/$1; }$/;"	f
@@ -62,22 +55,13 @@ checkifalive	bashrc_misc.sh	/^checkifalive ()$/;"	f
 checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel ()$/;"	f
 checkpatchuserpace	bashrc_mlx.sh	/^checkpatchuserpace ()$/;"	f
 clean	commonyonienv.sh	/^clean ()$/;"	f
-clean	commonyonienv.sh.orig	/^clean ()$/;"	f
 clean_bash_env	commonyonienv.sh	/^clean_bash_env ()$/;"	f
-clean_bash_env	commonyonienv.sh.orig	/^clean_bash_env ()$/;"	f
-clean_bash_env	commonyonienv.sh.rej	/^ clean_bash_env ()$/;"	f
 clean_bash_profile	commonyonienv.sh	/^clean_bash_profile ()$/;"	f
-clean_bash_profile	commonyonienv.sh.orig	/^clean_bash_profile ()$/;"	f
 clean_bashrc	commonyonienv.sh	/^clean_bashrc () $/;"	f
-clean_bashrc	commonyonienv.sh.orig	/^clean_bashrc () $/;"	f
 clean_cgdb_env	commonyonienv.sh	/^clean_cgdb_env () $/;"	f
-clean_cgdb_env	commonyonienv.sh.orig	/^clean_cgdb_env () $/;"	f
 clean_git_env	commonyonienv.sh	/^clean_git_env ()$/;"	f
-clean_git_env	commonyonienv.sh.orig	/^clean_git_env ()$/;"	f
-clean_git_env	commonyonienv.sh.rej	/^ clean_git_env ()$/;"	f
+clean_tmux_env	commonyonienv.sh	/^clean_tmux_env () $/;"	f
 clean_vim_env	commonyonienv.sh	/^clean_vim_env ()$/;"	f
-clean_vim_env	commonyonienv.sh.orig	/^clean_vim_env ()$/;"	f
-clean_vim_env	commonyonienv.sh.rej	/^ clean_vim_env ()$/;"	f
 cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
 cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
 complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f
@@ -139,7 +123,6 @@ gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
-grepascii	bashrc_fs.sh	/^grepascii  ()$/;"	f
 grepbash	bashrc_common.sh	/^grepbash () $/;"	f
 greptasks	bashrc_bookmarks.sh	/^greptasks ()$/;"	f
 grub2listentries	bashrc_devel.sh	/^grub2listentries () $/;"	f
@@ -183,17 +166,16 @@ listinstalledkernels	bashrc_devel.sh	/^listinstalledkernels ()$/;"	f
 listkernelmodules	bashrc_devel.sh	/^listkernelmodules ()$/;"	f
 lld	bashrc_fs.sh	/^lld ()$/;"	f
 loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
+locatelibibverbs	bashrc_mlx.sh	/^locatelibibverbs ()$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
 m	bashrc_fs.sh	/^m ()$/;"	f
 m	bashrc_mlx.sh	/^m ()$/;"	f
 main	commonyonienv.sh	/^main  ()$/;"	f
-main	commonyonienv.sh.orig	/^main  ()$/;"	f
 manageibapps	bashrc_mlx.sh	/^manageibapps ()$/;"	f
 manageiblibs	bashrc_mlx.sh	/^manageiblibs ()$/;"	f
 md2man	bashrc_mlx.sh	/^md2man ()$/;"	f
 messages	commonyonienv.sh	/^messages () $/;"	f
-messages	commonyonienv.sh.orig	/^messages () $/;"	f
 mftcheckstatus	bashrc_mlx.sh	/^mftcheckstatus ()$/;"	f
 mftchoosedev	bashrc_mlx.sh	/^mftchoosedev ()$/;"	f
 mftenablesriov	bashrc_mlx.sh	/^mftenablesriov ()$/;"	f
@@ -214,7 +196,6 @@ mkrootmountdir	bashrc_mlx.sh	/^mkrootmountdir ()$/;"	f
 mkrxelib	bashrc_mlx.sh	/^mkrxelib ()$/;"	f
 mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f
 mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime ()$/;"	f
-mkvmhelp	bashrc_mlx.sh	/^mkvmhelp()$/;"	f
 mlx	bashrc_mlx.sh	/^mlx ()$/;"	f
 mlx4start	bashrc_mlx.sh	/^mlx4start ()$/;"	f
 mlx4stop	bashrc_mlx.sh	/^mlx4stop ()$/;"	f
@@ -225,6 +206,7 @@ mlxstop	bashrc_mlx.sh	/^mlxstop ()$/;"	f
 mountkernelsources	bashrc_mlx.sh	/^mountkernelsources () {$/;"	f
 mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f
 mydistro	bashrc_fs.sh	/^mydistro ()$/;"	f
+mydistro_v1	bashrc_fs.sh	/^mydistro_v1 ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
 ofedapplybackports	bashrc_mlx.sh	/^ofedapplybackports ()$/;"	f
@@ -238,6 +220,7 @@ ofedinstallupstreamlib	bashrc_mlx.sh	/^ofedinstallupstreamlib ()$/;"	f
 ofedinstallversion	bashrc_mlx.sh	/^ofedinstallversion ()$/;"	f
 ofedkernelinstall	bashrc_mlx.sh	/^ofedkernelinstall ()$/;"	f
 ofedkernelversion	bashrc_mlx.sh	/^ofedkernelversion ()$/;"	f
+ofedlistinternalversions	bashrc_mlx.sh	/^ofedlistinternalversions ()$/;"	f
 ofedlistosforversion	bashrc_mlx.sh	/^ofedlistosforversion ()$/;"	f
 ofedlistversionforos	bashrc_mlx.sh	/^ofedlistversionforos ()$/;"	f
 ofedlistversions	bashrc_mlx.sh	/^ofedlistversions ()$/;"	f
@@ -294,25 +277,18 @@ rxestop	bashrc_mlx.sh	/^rxestop ()$/;"	f
 sbuild_vars	bashrc_nice.sh	/^sbuild_vars () $/;"	f
 setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f
 setup_bash_env	commonyonienv.sh	/^setup_bash_env ()$/;"	f
-setup_bash_env	commonyonienv.sh.orig	/^setup_bash_env ()$/;"	f
 setup_bash_profile	commonyonienv.sh	/^setup_bash_profile ()$/;"	f
-setup_bash_profile	commonyonienv.sh.orig	/^setup_bash_profile ()$/;"	f
 setup_bashrc	commonyonienv.sh	/^setup_bashrc () $/;"	f
-setup_bashrc	commonyonienv.sh.orig	/^setup_bashrc () $/;"	f
 setup_cgdb_env	commonyonienv.sh	/^setup_cgdb_env () $/;"	f
-setup_cgdb_env	commonyonienv.sh.orig	/^setup_cgdb_env () $/;"	f
 setup_directories	commonyonienv.sh	/^setup_directories ()$/;"	f
-setup_directories	commonyonienv.sh.orig	/^setup_directories ()$/;"	f
 setup_gdbinit	bashrc_devel.sh	/^setup_gdbinit () $/;"	f
 setup_gdbinit_dir_search_path	bashrc_devel.sh	/^setup_gdbinit_dir_search_path () $/;"	f
 setup_git_env	commonyonienv.sh	/^setup_git_env () $/;"	f
-setup_git_env	commonyonienv.sh.orig	/^setup_git_env () $/;"	f
 setup_icm_gdbinit	bashrc_nice.sh	/^setup_icm_gdbinit () $/;"	f
 setup_ips_gdbinit	bashrc_nice.sh	/^setup_ips_gdbinit () $/;"	f
 setup_misc	commonyonienv.sh	/^setup_misc ()$/;"	f
-setup_misc	commonyonienv.sh.orig	/^setup_misc ()$/;"	f
+setup_tmux_env	commonyonienv.sh	/^setup_tmux_env () $/;"	f
 setup_vim_env	commonyonienv.sh	/^setup_vim_env () $/;"	f
-setup_vim_env	commonyonienv.sh.orig	/^setup_vim_env () $/;"	f
 showState	bashrc_nice.sh	/^showState()$/;"	f
 showosrelease	bashrc_fs.sh	/^showosrelease ()$/;"	f
 shutdown	bashrc_fs.sh	/^shutdown () $/;"	f
@@ -344,6 +320,7 @@ svnup	bashrc_svn.sh	/^svnup () $/;"	f
 svnupbranch	bashrc_svn.sh	/^svnupbranch ()$/;"	f
 syndrome_to_english	bashrc_mlx.sh	/^syndrome_to_english () $/;"	f
 t	bashrc_fs.sh	/^t () $/;"	f
+ta	bashrc_devel.sh	/^ta ()$/;"	f
 tag_ls	bashrc_svn.sh	/^tag_ls () {$/;"	f
 tagcompleteme	bashrc_tags.sh	/^tagcompleteme ()$/;"	f
 tagcscope	bashrc_tags.sh	/^tagcscope ()$/;"	f
@@ -358,10 +335,11 @@ tagmerdmacore	bashrc_mlx.sh	/^tagmerdmacore () $/;"	f
 tagmeupstreamkernel	bashrc_mlx.sh	/^tagmeupstreamkernel ()$/;"	f
 tailstatistics	bashrc_nice.sh	/^tailstatistics () $/;"	f
 task_list	bashrc_nice.sh	/^task_list () $/;"	f
+tl	bashrc_devel.sh	/^tl ()$/;"	f
+tn	bashrc_devel.sh	/^tn () $/;"	f
 ucxbuild	bashrc_mlx.sh	/^ucxbuild ()$/;"	f
 up	bashrc_misc.sh	/^function up() {$/;"	f
 usage	commonyonienv.sh	/^usage () $/;"	f
-usage	commonyonienv.sh.orig	/^usage () $/;"	f
 v	bashrc_vim.sh	/^v ()$/;"	f
 validateState	bashrc_nice.sh	/^validateState ()$/;"	f
 vconsole	bashrc_fs.sh	/^vconsole ()$/;"	f
@@ -372,6 +350,7 @@ virsh_complete	bashrc_fs.sh	/^virsh_complete ()$/;"	f
 vl	bashrc_fs.sh	/^vl ()$/;"	f
 vlinstall	bashrc_mlx.sh	/^vlinstall ()$/;"	f
 vm	bashrc_fs.sh	/^vm ()$/;"	f
+vmmkhelp	bashrc_mlx.sh	/^vmmkhelp()$/;"	f
 vn	bashrc_vim.sh	/^vn () $/;"	f
 vncwatcherslist	bashrc_fs.sh	/^vncwatcherslist () $/;"	f
 vorej	bashrc_devel.sh	/^vorej ()$/;"	f
