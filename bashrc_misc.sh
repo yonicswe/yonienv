@@ -92,6 +92,7 @@ yonideps_arr=(vim);
 yonideps_arr+=(vim-X11);
 yonideps_arr+=(ctags);
 yonideps_arr+=(cscope);
+yonideps_arr+=(tagging);
 yonideps_arr+=(cgdb);
 yonideps_arr+=(tree);
 yonideps_arr+=(screen);
@@ -116,6 +117,11 @@ yonimlxdeps_arr+=(libibverbs-devel);
 yonimlxdeps_arr+=(iproute);
 yonimlxdeps_arr+=(perftest);
 yonimlxdeps_arr+=(mlxver-scripts);
+#-------------------------------------
+#           ofed deps
+#-------------------------------------
+yonimlxdeps_arr+=(tk lsof pkgconf-pkg-config ethtool tcl);
+
 
 # infiniband-diags for ibstat
 yonimlxdeps_arr+=(infiniband-diags);
