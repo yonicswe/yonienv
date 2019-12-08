@@ -303,7 +303,7 @@ alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_d
 alias gitclone-iproute='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 alias gitclone-ucx='git clone https://github.com/openucx/ucx'
-alias gitclone-perftest='git clone https://yonatanc@l-gerrit.mtl.labs.mlnx:29418/Performance/perftest'
+alias gitclone-perftest='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/Performance/perftest'
 
 
 ucxbuild ()
@@ -313,7 +313,7 @@ ucxbuild ()
 
 gitclone-ofed-kernel() 
 {
-    local dest_name=${1-:mlnx-ofa_kernel-4.0};
+    local dest_name=${1:-mlnx-ofa_kernel-4.0};
     git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0 ${dest_name};
     cd ${dest_name};
     ofedmklinks;
@@ -869,6 +869,7 @@ alias kgb="sudo /.autodirect/GLIT/SCRIPTS/AUTOINSTALL/VIRTUALIZATION/kvm_guest_b
 alias vmmkredhat74="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.4_x86_64_virt_guest   "
 alias vmmkredhat75="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.5_x86_64_virt_guest   "
 alias vmmkfedora28="kgb -o linux  -c 16 -r 8192 -d 35 -l Fedora_28_x86_64_virt_guest"
+alias vmmkfedora29="kgb -o linux  -c 16 -r 8192 -d 35 -l Fedora_29_x86_64_virt_guest"
 alias vmmkubutu18.4="kgb -o linux  -c 16 -r 8192 -d 35 -l Ubuntu_18.04_x86_64_virt_guest"
 alias vmls="kgb -o linux"
 vmmkhelp()
@@ -888,6 +889,29 @@ listibuserlibs ()
     for (( i=0 ; i< ${#ib_libs[@]} ; i++))  ; do
         echo -e "\n\t\t\033[1;35m==== ${ib_libs[$i]#.*/} ====\033[0m"
         locate -r "${ib_libs[$i]}" | while read f ; do ls  --format='context'  $f ; done | awk '{$1="" ; print $0 }' | column -t
+    done
+}
+
+locatelibibverbs ()
+{
+    local str="${1:-libibverbs.so}";
+    local db="${yonienv}/iblibs_$(hostname -s).db";
+
+    if [ -e ${db} ] ; then 
+#       updatedb only if needed. installed lib newer than db
+        if [ /lib64/libibverbs.so -nt ${db} ] ; then
+            sudo updatedb -U /lib64 -o ${db};
+        fi
+    else
+        sudo updatedb -U /lib64 -o ${db};
+    fi
+
+    locate -d ${db} -L ${str} | while read f ; do 
+        if [ -L $f ] ; then 
+            ls -l $f;
+        else 
+            echo $f;
+        fi
     done
 }
 
@@ -1431,6 +1455,12 @@ ofedlistversions ()
         complete -W "$(cat ${tmpfile})" ofedinstallversion;
     fi
 
+}
+
+ofedlistinternalversions ()
+{
+    local version=${1:-4.7};
+    find /mswg/release/ofed/ -maxdepth 1 -type d  -name "*OFED-internal-${version}*"
 }
 
 ofed_list_os=( "rhel7.0")
