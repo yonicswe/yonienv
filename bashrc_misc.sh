@@ -101,6 +101,7 @@ yonideps_arr+=(the_silver_searcher);
 yonideps_arr+=(colordiff);
 yonideps_arr+=(words);
 yonideps_arr+=(tmux);
+yonideps_arr+=(figlet);
 
 # pax-utils for lddtree
 yonideps_arr+=(pax-utils);
@@ -117,6 +118,7 @@ yonimlxdeps_arr+=(libibverbs-devel);
 yonimlxdeps_arr+=(iproute);
 yonimlxdeps_arr+=(perftest);
 yonimlxdeps_arr+=(mlxver-scripts);
+yonimlxdeps_arr+=(pandoc);
 #-------------------------------------
 #           ofed deps
 #-------------------------------------
@@ -150,6 +152,11 @@ printlinefromfile ()
 {
     local line=$1;
     local file=$2;
+
+    if [ -z "${*}" ] ; then
+        echo "usage: printlinefromfile <line> <file>"
+        return;
+    fi
 
     sed -n ${line}p $file;
 }
