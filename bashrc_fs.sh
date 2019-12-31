@@ -614,11 +614,22 @@ alias freeh='free -h'
 
 myip ()
 {
-   if [ -z $(echo $(hostname -I | awk '{print $1}') ) ] ; then 
-       echo $(hostname -I)
-   else
-       echo $(hostname -I | awk '{print $1}')
-   fi
+    ip r  g 1 | awk '{if (FNR==1) {print $3} }'
+}
+
+myip_v1 ()
+{
+    hostnameflags="-I";
+    hostname -I 2>/dev/null;
+    [ $? -ne 0 ] && hostnameflags="-i";
+
+#   if [ -z $(echo $(hostname ${hostnameflags} | awk '{print $1}') ) ] ; then 
+    if [ -z $(echo $(hostname ${hostnameflags})) ] ; then 
+        echo $(hostname "${hostnameflags}");
+    else
+#       echo $(hostname "${hostnameflags}" | awk '{print $1}');
+        echo $(hostname "${hostnameflags}");
+    fi
 }
 
 mydistro ()
@@ -668,12 +679,6 @@ mydistro_v1 ()
     echo kernel : `uname -r`
 }
 
-m ()
-{
-    myip;
-    mydistro;
-    ofedversion;
-}
 
 alias ethlistroot='echo -n "root " ; su - -c "ethlist"'
 ethlist () 

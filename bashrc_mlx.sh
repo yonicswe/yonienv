@@ -127,6 +127,9 @@ alias randrlaptop12='xrandr -s "1360x768"'
 alias randroffice24='xrandr -s "1920x1080"'
 alias randroffice27='xrandr -s "1920x1080"'
 alias randrhome36='xrandr   -s "1280x720"'
+if [ -x /usr/bin/xdpyinfo ] ; then 
+alias randrme="xrandr -s $(xdpyinfo | awk '/dimension/ {print $2}')"
+fi
 
 alias gerritmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
 gitpushtogerrit ()
@@ -264,7 +267,8 @@ listgitrepos ()
     echo -e "            |-- legacy-libs";
     echo -e "            |      |-- libibverbs   : ${prefix}/mlnx_ofed_2_0/libibverbs";
     echo -e "            |      |-- libmlx4      : ${prefix}/mlnx_ofed_2_0/libmlx4";
-    echo -e "            |     \`-- libmlx5      : ${prefix}/connect-ib/libmlx5";
+    echo -e "            |      \`-- libmlx5      : ${prefix}/connect-ib/libmlx5";
+    echo -e "            |      \`-- librdmacm    : ${prefix}/a/mlnx_ofed_2_0/librdmacm";
     echo -e "            \`-- rdma-core   : ${prefix}/mlnx_ofed/rdma-core"; 
 
     echo;
@@ -280,8 +284,12 @@ listgitrepos ()
     echo;
     echo "mellanox github/devx            : https://github.com/Mellanox/devx.git";
     echo;
-    echo "perftest                        : ${prefix}/Performance/perftest";
-
+    echo -e "mellanox tools"
+    echo -e "   |-- perftest                        : ${prefix}/Performance/perftest";
+    echo -e "   |-- iproute2 for upstream           : ${prefix}/upstream/iproute2";
+    echo -e "   \'-- iproute2 for ofed              : ${prefix}/mlnx_ofed/iproute2";
+    echo;
+    echo "iproute E ker.org                      : git://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git"
 
     echo;
     echo "mellanox Firmware tavor      : ${prefix}/ConnectX"
@@ -295,12 +303,14 @@ alias gitclone-ofed-libibumad='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:2
 alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
 alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
 alias gitclone-ofed-librdmacm='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/librdmacm'
+alias gitclone-ofed-iproute2='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 
-alias gitclone-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
 alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
-alias gitclone-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
+alias gitclone-upstream-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
+alias gitclone-upstream-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
+alias gitclone-upstream-iproute2='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/iproute2'
+
 alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/directtests/'
-alias gitclone-iproute='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 alias gitclone-ucx='git clone https://github.com/openucx/ucx'
 alias gitclone-perftest='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/Performance/perftest'
@@ -332,7 +342,7 @@ gitclone-ofed-legacy-libs ()
     gitclone-ofed-libibverbs;
     gitclone-ofed-libmlx5;
     gitclone-ofed-libibumad;
-    echo -e "\nfinished clone, would you like to install ";
+    echo -e "\nfinished clone, would you like to build & install ";
     are_you_sure_default_no;
     [ $? -eq 0 ] && return;
     make-ofed-legacy-libs;
@@ -556,6 +566,10 @@ m ()
     myip;
     mydistro;
     ofedversion;
+
+    if [ -e /lib64/libibverbs.so ] ; then 
+        echo "/lib64/libibverbs.so -> $(readlink -f /lib64/libibverbs.so)";
+    fi
 }
 
 vlinstall ()
@@ -998,13 +1012,13 @@ manageiblibs ()
 #     ib_libs+=(libocrdma-rdmav2.so libhfi1verbs-rdmav2.so libipathverbs-rdmav2.so libqedr-rdmav2.so)
 #     ib_libs+=(libvmw_pvrdma-rdmav2.so librxe-rdmav2.so librspreload.so libibacmp.so);
 
-    ib_libs=(libibverbs.so)
+    ib_libs=("libibverbs\.*")
     ib_libs+=(libmlx4.so)
     ib_libs+=(libmlx4-rdmav*.so)
-    ib_libs+=(libmlx5.so)
+    ib_libs+=("libmlx5\.*")
     ib_libs+=(librxe-rdmav*.so)
     ib_libs+=(librxe-rdmav*.so)
-    ib_libs+=(libibumad.so)
+    ib_libs+=("libibumad\.*")
     ib_libs+=(libibcm.so)
     ib_libs+=(libipathverbs-rdmav*.so)
     ib_libs+=(libnes-rdmav*.so)
@@ -1059,7 +1073,8 @@ manageiblibs ()
 
         if [ -z $lib ] ; then
             echo -e "\033[1;35m--- ${i} ----\033[0m"
-            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+#             sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app} 2>/dev/null
+            sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}*" -type f -printf "%Ad/%Am/%AY %AH:%AM %h/%f\n" ${delete_app};
             sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}" -type l -ls ${delete_app} 2>/dev/null | awk '{print $11" --> " $13}'
 #           sudo find ${ib_libs_search_path[@]} -name "${ib_libs[${count}]}" -type l  -printf "%Ad/%Am/%AY %AH:%AM %h/%f %Y\n" ${delete_app} 2>/dev/null
         else
@@ -1586,7 +1601,7 @@ ofedfindindexforpackage ()
 {
     local pkg=$1;
     if [ -z ${pkg} ] ; then echo "ofedfindindexforpackage <pkg>" ; return ; fi
-    ofed_info |grep -m2  -A3 ${pkg} | sort -u | grep "${pkg}\|commit"
+    ofed_info |grep -m2 -B2 -A3 ${pkg} | sort -u | grep "${pkg}\|commit"
 #     ofed_info |grep -m2  -A1 ${pkg}
 }
 
