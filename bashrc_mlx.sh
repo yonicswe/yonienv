@@ -534,9 +534,9 @@ ofedmklinks ()
 
 ofedupdatebackports ()
 {
-    echo -n "run backport_fixup for new backports, ";
-    are_you_sure_default_yes 
-    [ $? -eq 1 ] && ./ofed_scripts/backports_fixup_changes.sh;
+    ./ofed_scripts/backports_fixup_changes.sh;
+    echo -n "continue with backport update " ; are_you_sure_default_yes ;
+    [ $? -eq 0 ] && return;
     ./ofed_scripts/ofed_get_patches.sh && ./ofed_scripts/cleanup && ./ofed_scripts/backports_copy_patches.sh 
     echo "git add relevant_patch from backports/ and discard the rest with git checkout ./backports"
 }
