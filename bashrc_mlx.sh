@@ -315,6 +315,8 @@ alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 alias gitclone-ucx='git clone https://github.com/openucx/ucx'
 alias gitclone-perftest='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/Performance/perftest'
 
+alias gitrebase-ofed-kernel-5-0='git fetch origin mlnx_ofed_5_0; git rebase FETCH_HEAD'
+
 
 ucxbuild ()
 {
@@ -528,6 +530,15 @@ ofedmklinks ()
     ln -snf ofed_scripts/Makefile Makefile
     ln -snf ofed_scripts/makefile makefile
     ln -snf ofed_scripts/configure configure
+}
+
+ofedupdatebackports ()
+{
+    echo -n "run backport_fixup for new backports, ";
+    are_you_sure_default_yes 
+    [ $? -eq 1 ] && ./ofed_scripts/backports_fixup_changes.sh;
+    ./ofed_scripts/ofed_get_patches.sh && ./ofed_scripts/cleanup && ./ofed_scripts/backports_copy_patches.sh 
+    echo "git add relevant_patch from backports/ and discard the rest with git checkout ./backports"
 }
 
 ofedapplybackports ()

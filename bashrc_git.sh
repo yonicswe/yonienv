@@ -27,7 +27,14 @@ gitd ()
 # alias gitdiscardunstaged='git checkout -- .'
 alias gitstashunstaged='git stash --keep-index'
 alias gitunstageall='git reset HEAD'
-alias gituncommit='git reset --soft HEAD^'
+
+gituncommit ()
+{
+    git log -1 --pretty=format:'%H' > .reuse_commit.txt;
+    echo "saved index ($(cat .reuse_commit.txt)) in .reuse_commit.txt";
+    git reset --soft HEAD^
+}
+
 gitb () 
 {
     local branch="$1"
