@@ -183,6 +183,10 @@ gitcommitmlx ()
 
 gitcommitmetadata ()
 {
+    local issue=${1};
+    if [ -n "${issue}" ] ; then 
+        sed -i "s/Issue:.*/Issue: ${issue}/g" ${yonienv}/git_templates/git_commit_metadata_template;
+    fi
     git config commit.template ${yonienv}/git_templates/git_commit_metadata_template;
     git commit;
     git config --unset commit.template;
