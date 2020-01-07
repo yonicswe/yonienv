@@ -587,6 +587,11 @@ findconflictfiles ()
 vorej ()
 {
     local rej_file=${1};    
+
+    if [ -z ${rej_file} ] ; then 
+        complete -W "$(findconflictfiles)" vorej;
+        return;
+    fi
     local orig_file=$(echo $rej_file | sed 's/.rej$//g');
     echo "${v_or_g} -O ${orig_file} ${rej_file}"; 
     ${v_or_g} -O ${orig_file} ${rej_file}; 
@@ -601,7 +606,7 @@ listerrnovalues ()
 alias listpci='lspci -tv'
 
 alias deletepatches='rm -fv *.patch'
-alias listpatches='ls -ltr *.patch'
+alias listpatches='ls -ltr *.patch 2>/dev/null'
 alias deletetags='rm -f cscope.* tags'
 
 killzombies ()
@@ -669,4 +674,12 @@ alias tk='tmux kill-session -t'
 dockerinstall ()
 {
     yuminstall docker-ce docker-ci
+}
+
+grubversion ()
+{
+    echo "find out the disk name /dev/sda ? /dev/sdb..."
+    echo -e "dd if=/dev/sda bs=512 count=1 2> /dev/null | grep -q GRUB && echo \"GRUB found\"";
+    echo "if GRUB found then do : sudo file -s /dev/sda"
+    echo -e "if you see this string \"GRand Unified Bootloader\", then its GRUB1 otherwise GRUB2"
 }
