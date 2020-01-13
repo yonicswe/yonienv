@@ -505,7 +505,7 @@ probe_topology ()
 
     print_underline "${processor_model}" "="
 
-    if [ $(id -u) -eq 0 ] ; then 
+#     if [ $(id -u) -eq 0 ] ; then 
         processor_properties=$(sudo dmidecode --type 4 | 
             awk '/Core Count/{cc++ ; if (cc <= 1) print $0} 
                  /Core Enabled/{ce++ ; if (ce <= 1) print $0} 
@@ -515,9 +515,9 @@ probe_topology ()
         d2="$(sudo dmidecode -s   system-product-name | tail -1 )"
         echo -n "Chassis :${d1}, ${d2}"
         
-    else
-        echo "!!!! invoke as root to get more info !!!!"
-    fi
+#     else
+#         echo "!!!! invoke as root to get more info !!!!"
+#     fi
 
 #   memory=$(cat /proc/meminfo |grep MemTotal);
     memory="Total Memory : $(free -m | awk '/Mem/{print $2}') MegaBytes";

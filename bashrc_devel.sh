@@ -306,11 +306,11 @@ editgrub ()
     # print the last modified file in /boot 
     # sudo find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3
     if [ "${v_or_g}" == "vim" ] ; then
-    su - -c "vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
+    sudo su - -c "vim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
         echo vim
     else
         echo gvim
-    su - -c "gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
+    sudo su - -c "gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'"
     fi
 
 #   sudo - gvim /boot/grub/grub.conf +':split' +':e x' +'r!find /boot -maxdepth 1   -type f | xargs ls -ltr | tail -n 3'

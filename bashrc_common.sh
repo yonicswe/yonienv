@@ -3,7 +3,7 @@
 unalias -a;
 unset SSH_ASKPASS
 alias editbashcommon='${v_or_g} ${yonienv}/bashrc_common.sh';
-grepbash () 
+grepyonienv () 
 {
     local grepme="${1}";
     [ -z "${grepme}" ] && return -1;

@@ -32,7 +32,7 @@ setup_bashrc ()
     echo $FUNCNAME
     echo "#startyonienv" >> ~/.bashrc;
     echo "export yonienv=${yonienv};" >> ~/.bashrc;
-    echo  'source ${yonienv}/bashrc_main.sh;' >> ~/.bashrc;
+    echo 'alias y="${yonienv}/bashrc_main.sh;"' >> ~/.bashrc;
     echo "#endyonienv" >> ~/.bashrc;
 }
 

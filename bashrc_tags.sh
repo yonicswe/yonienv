@@ -113,3 +113,4 @@ tagme ()
     chmod +x tagme.sh;
 }
 alias ttt='./tagme.sh'
+alias tttt='./tagme.sh 1'
