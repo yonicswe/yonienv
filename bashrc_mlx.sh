@@ -127,9 +127,14 @@ alias randrlaptop12='xrandr -s "1360x768"'
 alias randroffice24='xrandr -s "1920x1080"'
 alias randroffice27='xrandr -s "1920x1080"'
 alias randrhome36='xrandr   -s "1280x720"'
-if [ -x /usr/bin/xdpyinfo ] ; then 
-alias randrme="xrandr -s $(xdpyinfo | awk '/dimension/ {print $2}')"
-fi
+
+
+randrme ()
+{
+    if [ -x /usr/bin/xdpyinfo ] ; then 
+        xrandr -s $(xdpyinfo | awk '/dimension/ {print $2}');
+    fi
+}
 
 alias gerritmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
 gitpushtogerrit ()
@@ -372,6 +377,9 @@ ibmod ()
         modules_path+=" ${modules_base_path}/kernel/drivers/net/ethernet/mellanox";
     fi;
 
+    modules_path+=" ${modules_base_path}/compat"
+    modules_path+=" ${modules_base_path}/drivers/vfio";
+
     # ofed libs are usually under extra
     if [ -d ${modules_base_path}/extra ] ; then
         modules_path+=" ${modules_base_path}/extra";
@@ -554,12 +562,21 @@ alias ofedconfigure4.7='./configure -j ${ncoresformake} --with-core-mod --with-u
 ofedconfigureforkernel ()
 {
     local kernel_version=$1;
-    local kernel_headers=/mswg2/work/kernel.org/x86_64
+    local kernel_headers=/mswg2/work/kernel.org/x86_64;
+    local configure_options="--with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod"
 
-    if ! [ -d ${kernel_headers}/linux-${} ]  ; then
-        ./configure -j {ncoresformake}  --with-core-mod --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version}
+    if [ -d ${kernel_headers}/linux-${1} ]  ; then
+        echo "./configure -j ${ncoresformake} ${configure_options} --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version}";
+        are_you_sure_default_yes;
+        [ $? -eq 0 ] && return;
+        ./configure -j ${ncoresformake} ${configure_options} --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version};
+    else
+        echo "Did not find ${kernel_headers}/linux-"
     fi
 }
+
+alias ofedconfigureforkernel-5.2="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.2  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.2/
+"
 
 ofedorigindir ()
 {
@@ -1979,3 +1996,5 @@ fw_get_path() {
     echo "/mswg/release/host_fw/fw-${project_id}/fw-${project_id}-rel-${version}/../etc/${project}_basic_debug.sh"
     echo
 }
+
+alias cdmlxkernelsources='cd /mswg/work/kernel.org/x86_64'
