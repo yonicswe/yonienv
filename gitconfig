@@ -32,6 +32,7 @@
 [alias]
 
     amend = commit --amend --no-edit
+    amrej = am --reject
 
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 

@@ -122,11 +122,13 @@ gitdiscardcached	bashrc_git.sh	/^gitdiscardcached () $/;"	f
 gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
+gituncommit	bashrc_git.sh	/^gituncommit ()$/;"	f
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
-grepbash	bashrc_common.sh	/^grepbash () $/;"	f
 greptasks	bashrc_bookmarks.sh	/^greptasks ()$/;"	f
+grepyonienv	bashrc_common.sh	/^grepyonienv () $/;"	f
 grub2listentries	bashrc_devel.sh	/^grub2listentries () $/;"	f
 grub2setdefault	bashrc_devel.sh	/^grub2setdefault ()$/;"	f
+grubversion	bashrc_devel.sh	/^grubversion ()$/;"	f
 h	bashrc_fs.sh	/^h () $/;"	f
 howCleanIsMyHome	bashrc_mlx.sh	/^howCleanIsMyHome ()$/;"	f
 ibmod	bashrc_mlx.sh	/^ibmod ()$/;"	f
@@ -169,7 +171,6 @@ loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
 locatelibibverbs	bashrc_mlx.sh	/^locatelibibverbs ()$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
-m	bashrc_fs.sh	/^m ()$/;"	f
 m	bashrc_mlx.sh	/^m ()$/;"	f
 main	commonyonienv.sh	/^main  ()$/;"	f
 manageibapps	bashrc_mlx.sh	/^manageibapps ()$/;"	f
@@ -208,6 +209,7 @@ mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f
 mydistro	bashrc_fs.sh	/^mydistro ()$/;"	f
 mydistro_v1	bashrc_fs.sh	/^mydistro_v1 ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
+myip_v1	bashrc_fs.sh	/^myip_v1 ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
 ofedapplybackports	bashrc_mlx.sh	/^ofedapplybackports ()$/;"	f
 ofedbuildandinstallinternalversion	bashrc_mlx.sh	/^ofedbuildandinstallinternalversion ()$/;"	f
@@ -230,6 +232,7 @@ ofedmkmetadata	bashrc_mlx.sh	/^ofedmkmetadata () $/;"	f
 ofedorigindir	bashrc_mlx.sh	/^ofedorigindir ()$/;"	f
 ofedquerybuildidforversion	bashrc_mlx.sh	/^ofedquerybuildidforversion ()$/;"	f
 ofeduninstall	bashrc_mlx.sh	/^ofeduninstall ()$/;"	f
+ofedupdatebackports	bashrc_mlx.sh	/^ofedupdatebackports ()$/;"	f
 opensmmlx	bashrc_mlx.sh	/^opensmmlx ()$/;"	f
 parse_git_branch	bashrc_fs.sh	/^parse_git_branch() $/;"	f
 parse_svn_branch	bashrc_fs.sh	/^parse_svn_branch() {$/;"	f
@@ -256,6 +259,7 @@ prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
 prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f
 psmine	bashrc_fs.sh	/^psmine ()$/;"	f
 pu	bashrc_bookmarks.sh	/^pu ()$/;"	f
+randrme	bashrc_mlx.sh	/^randrme ()$/;"	f
 rdmacorebuild	bashrc_mlx.sh	/^rdmacorebuild ()$/;"	f
 rdmacorebuildapps	bashrc_mlx.sh	/^rdmacorebuildapps ()$/;"	f
 rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f

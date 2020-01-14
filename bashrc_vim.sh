@@ -5,6 +5,7 @@
 # \ V /| || '  \ 
 #  \_/ |_||_|_|_| 
 
+alias vim='vim -u NONE'
 
 export vimorgvimbackupfile=${HOME}/.vimorgvim.$(hostname -s);
 if ! [ -e ${vimorgvimbackupfile} ] ; then 
