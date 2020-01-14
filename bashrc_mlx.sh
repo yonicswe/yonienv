@@ -1622,7 +1622,14 @@ ofedbuildandinstallinternalversion ()
 
 ofedkernelversion ()
 {
-    awk '/KVERSION/{print $0}' configure.mk.kernel;
+    if [ -e configure.mk.kernel ] ; then
+        echo "ofed compiled with kernel" 
+        echo -e "\t$(grep KVERSION configure.mk.kernel)";
+        echo -e "\t$(grep MODULES_DIR configure.mk.kernel)";
+        echo -e "\t$(grep KSRC= configure.mk.kernel)";
+    else
+        echo "ofed not configured yet or your not invoking from an ofed source tree";
+    fi
 }
 
 ofedfindindexforpackage ()
