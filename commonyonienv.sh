@@ -32,7 +32,7 @@ setup_bashrc ()
     echo $FUNCNAME
     echo "#startyonienv" >> ~/.bashrc;
     echo "export yonienv=${yonienv};" >> ~/.bashrc;
-    echo 'alias y="${yonienv}/bashrc_main.sh;"' >> ~/.bashrc;
+    echo 'alias y="source ${yonienv}/bashrc_main.sh"' >> ~/.bashrc;
     echo "#endyonienv" >> ~/.bashrc;
 }
 
@@ -334,7 +334,6 @@ messages ()
     echo "sudo yum install the_silver_searcher"; 
 }
 
-
 main  ()
 {
     local yonienv=;
@@ -402,6 +401,6 @@ main  ()
     setup_tmux_env ${yonienv};
 #   setup_misc ${yonienv}
 #   setup_directories ${yonienv};
-    messages
+    messages;
 }
 
