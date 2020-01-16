@@ -32,6 +32,7 @@
 [alias]
 
     amend = commit --amend --no-edit
+    amendauthor = commit --amend --author="Yonatan Cohen <yonatanc@mellanox.com>"
     amrej = am --reject
 
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
@@ -171,7 +172,7 @@
            fi                       \
     }; f"
 
-    lg = !git lg1
+    lgraph = !git lg1
     lg1 = !git lg1-specific --all
     lg2 = !git lg2-specific --all
     lg3 = !git lg3-specific --all
