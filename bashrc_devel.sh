@@ -589,7 +589,7 @@ vorej ()
     local rej_file=${1};    
 
     if [ -z ${rej_file} ] ; then 
-        complete -W "$(findconflictfiles)" vorej;
+        complete -W "$(findreject)" vorej;
         return;
     fi
     local orig_file=$(echo $rej_file | sed 's/.rej$//g');
