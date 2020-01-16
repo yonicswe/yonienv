@@ -99,9 +99,17 @@ prompt_color ()
         export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]=> "
         # export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
     fi
+
+    if [ "${CS_PROMPT}" == "true" ] ; then 
+        export CS_PROMPT=false;
+        prompt_sc;
+    else
+        export CS_PROMPT=true;
+        prompt_sc
+    fi
 } 
 
-export CS_PROMPT=false;
+    
 prompt_sc () 
 {
     if [ ${CS_PROMPT} == true ] ; then 

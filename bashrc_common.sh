@@ -21,7 +21,7 @@ alias cdyonienv='cd ${yonienv}'
 source ${yonienv}/env_common_args.sh
 
 # return 0:no 1:yes
-are_you_sure_default_no ()
+ask_user_default_no ()
 {
     local choice=;
     read -p " [y|N]?" choice
@@ -35,7 +35,7 @@ are_you_sure_default_no ()
 }
 
 # return 0:no 1:yes
-are_you_sure_default_yes ()
+ask_user_default_yes ()
 {
     local choice=;
     read -p " [Y|n]?" choice

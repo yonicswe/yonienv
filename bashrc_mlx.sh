@@ -350,7 +350,7 @@ gitclone-ofed-legacy-libs ()
     gitclone-ofed-libmlx5;
     gitclone-ofed-libibumad;
     echo -e "\nfinished clone, would you like to build & install ";
-    are_you_sure_default_no;
+    ask_user_default_no;
     [ $? -eq 0 ] && return;
     make-ofed-legacy-libs;
 }
@@ -510,22 +510,24 @@ ofedmkmetadata ()
 
 ofeddeletebackport ()
 {
-    local ans=;
-    read -p "are you running this from ofed kernel root directory [Y/n] " ans;
-    [ "${ans}" == "n" ] && return;
-
-    read -p "are you checked out on the backport branch [Y/n] " ans;
-    [ "${ans}" == "n" ] && return;
-
-    if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then
-        echo "you need to run ofedmklinks";
-        return;
+#   echo -n "Are " ; ask_user_default_yes ;
+#   if [ $? -eq 0 ] && return;
+    if [ $(git remote -v | grep mlnx-ofa_kernel | wc -l ) -eq 0 ] ; then 
+        echo "You need to run this from ofed kernel root directory"; return;
     fi
 
-    read -p "are you sure about deleting backport branch ? [y/N] " ans;
-    if  [ ! "${ans}" == "y" ] ; then
-        return ;
-    fi ;
+    if [ $(git branch | awk '/^\*/{print $2}' | grep ^backport | wc -l ) -eq 0 ] ; then 
+        echo "You must be in the backoprt branch"; return;
+    fi
+
+    if  [ ! -L configure ] || [ ! -L makefile ] || [ ! -L Makefile ]  ; then
+        echo "You need to run ofedmklinks";
+        return;
+    fi;
+
+    echo -n "Delete backport branch"; ask_user_default_no;
+    [ $? -eq 0 ] && return;
+
     echo "./ofed_scripts/cleanup"
     ./ofed_scripts/cleanup
 
@@ -542,10 +544,10 @@ ofedmklinks ()
 
 ofedupdatebackports ()
 {
-    echo -n "Did you 'git add <your changes>"; are_you_sure_default_no;
+    echo -n "Did you 'git add <your changes>"; ask_user_default_no;
     [ $? -eq 0 ] && return;
     ./ofed_scripts/backports_fixup_changes.sh;
-    echo -n "continue with backport update " ; are_you_sure_default_no ;
+    echo -n "continue with backport update " ; ask_user_default_no ;
     [ $? -eq 0 ] && return;
     ./ofed_scripts/ofed_get_patches.sh && ./ofed_scripts/cleanup && ./ofed_scripts/backports_copy_patches.sh 
     echo "git add relevant_patch from backports/ and discard the rest with git checkout ./backports"
@@ -567,14 +569,38 @@ ofedconfigureforkernel ()
     local kernel_headers=/mswg2/work/kernel.org/x86_64;
     local configure_options="--with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod"
 
+    if [ -z "${kernel_version}" ] ; then 
+        echo "Please give a kernel version";
+        echo "you compiled with $(ofedkernelversion|grep KSRC )"
+        echo -n "would you like to see the kernel list"; ask_user_default_yes;
+        if [ $? -eq 0 ] ; then return ; fi;
+        find ${kernel_headers} -type d -maxdepth 1 | less;
+        return;
+    fi;
+
     if [ -d ${kernel_headers}/linux-${1} ]  ; then
         echo "./configure -j ${ncoresformake} ${configure_options} --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version}";
-        are_you_sure_default_yes;
+        echo -n "continue"; ask_user_default_yes;
         [ $? -eq 0 ] && return;
         ./configure -j ${ncoresformake} ${configure_options} --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version};
     else
         echo "Did not find ${kernel_headers}/linux-"
     fi
+}
+
+ofedcdkernelversion ()
+{
+    local ver=${1};
+    local kernel_headers=/mswg2/work/kernel.org/x86_64;
+
+    if [ -z ${var} ] ; then 
+        echo "Please give a kernel version";
+        echo -n "would you like to see the kernel list"; ask_user_default_yes;
+        if [ $? -eq 0 ] ; then return ; fi;
+        find ${kernel_headers} -type d -maxdepth 1 | less;
+        return;
+    fi
+    pushd ${kernel_headers}/${ver} 2>&1 1>/dev/null;
 }
 
 alias ofedconfigureforkernel-5.2="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.2  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.2/"
@@ -1483,7 +1509,7 @@ ofedinstallupstreamlib ()
 
 ofeduninstall ()
 {
-    are_you_sure_default_no;
+    ask_user_default_no;
     [ $? -eq 0 ] && return;
     sudo mft_uninstall.sh --force; 
     sudo ofed_uninstall.sh --force;
@@ -1673,7 +1699,7 @@ ofedkernelinstall ()
     fi
 
     echo "sudo make install INSTALL_MOD_DIR=${dst}";
-    are_you_sure_default_no;
+    ask_user_default_no;
     [ $? -eq 0 ] && return;
     sudo make install INSTALL_MOD_DIR=${dst};
 }

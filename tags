@@ -23,8 +23,8 @@ acs_sockets	bashrc_nice.sh	/^acs_sockets () $/;"	f
 acs_telnet	bashrc_nice.sh	/^acs_telnet ()$/;"	f
 acs_threads	bashrc_nice.sh	/^acs_threads () $/;"	f
 acx_threads	bashrc_nice.sh	/^acx_threads ()$/;"	f
-are_you_sure_default_no	bashrc_common.sh	/^are_you_sure_default_no ()$/;"	f
-are_you_sure_default_yes	bashrc_common.sh	/^are_you_sure_default_yes ()$/;"	f
+ask_user_default_no	bashrc_common.sh	/^ask_user_default_no ()$/;"	f
+ask_user_default_yes	bashrc_common.sh	/^ask_user_default_yes ()$/;"	f
 backupgitkernel	bashrc_mlx.sh	/^backupgitkernel ()$/;"	f
 branches	bashrc_svn.sh	/^branches () {$/;"	f
 cat_bash_env	commonyonienv.sh	/^cat_bash_env ()$/;"	f
