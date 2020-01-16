@@ -20,10 +20,11 @@ alias cdyonienv='cd ${yonienv}'
 
 source ${yonienv}/env_common_args.sh
 
+# return 0:no 1:yes
 are_you_sure_default_no ()
 {
     local choice=;
-    read -p "Are you sure [y|N]?" choice
+    read -p " [y|N]?" choice
     case "$choice" in 
       y|Y ) return 1;;
       * ) return 0;;
@@ -32,10 +33,12 @@ are_you_sure_default_no ()
 #       * ) echo "no";;
     esac
 }
+
+# return 0:no 1:yes
 are_you_sure_default_yes ()
 {
     local choice=;
-    read -p "Are you sure [Y|n]?" choice
+    read -p " [Y|n]?" choice
     case "$choice" in 
       n|N ) return 0;;
       * ) return 1;;
