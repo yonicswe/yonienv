@@ -542,8 +542,10 @@ ofedmklinks ()
 
 ofedupdatebackports ()
 {
+    echo -n "Did you 'git add <your changes>"; are_you_sure_default_no;
+    [ $? -eq 0 ] && return;
     ./ofed_scripts/backports_fixup_changes.sh;
-    echo -n "continue with backport update " ; are_you_sure_default_yes ;
+    echo -n "continue with backport update " ; are_you_sure_default_no ;
     [ $? -eq 0 ] && return;
     ./ofed_scripts/ofed_get_patches.sh && ./ofed_scripts/cleanup && ./ofed_scripts/backports_copy_patches.sh 
     echo "git add relevant_patch from backports/ and discard the rest with git checkout ./backports"
@@ -575,8 +577,8 @@ ofedconfigureforkernel ()
     fi
 }
 
-alias ofedconfigureforkernel-5.2="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.2  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.2/
-"
+alias ofedconfigureforkernel-5.2="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.2  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.2/"
+alias ofedconfigureforkernel-5.4="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.4  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.4/"
 
 ofedorigindir ()
 {
