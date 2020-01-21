@@ -109,6 +109,13 @@ whichbash ()
     grep -l ${yonienv_cmd} ${yonienv}/bashrc_* | sort -u | xargs basename
 }
 
+yonienvconfigureforputty ()
+{
+    ln -snf ${yonienv}/inputrc.for.putty ~/.inputrc ;
+    echo "for change to take effect, restart the session or just run bash"
+
+}
+
 if [ -e /usr/bin/nproc ] ; then 
     ncoresformake=$((   $(nproc) )) ;  
 else 
