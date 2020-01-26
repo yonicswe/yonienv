@@ -493,7 +493,15 @@ backupgitkernel ()
 alias backupusrlib64='tar -C / -cjvf usr_lib64.bkp.bz2 /usr/lib64'
 alias restoreusrlib64='tar -C / -xjvf usr_lib64.bkp.bz2'
 
-ofedmkmetadata () 
+ofedmetadataverify ()
+{
+    local developer=${1:-Yonatan_Cohen.csv};
+    complete -W "$(ls metadata/ | grep -v features_db)" ofedmetadataverify;
+    echo "./devtools/verify_metadata.sh -p metadata/${developer}";
+    ./devtools/verify_metadata.sh -p metadata/${developer};
+}
+
+ofedmetadatacreate () 
 {
     local num_of_commits=$1;
     if [ -n "${num_of_commits}" ] ; then 
@@ -563,11 +571,38 @@ alias ofedconfigurewithrxe='./configure -j ${ncoresformake} --with-core-mod --wi
 alias ofedconfigure='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-innova-flex --with-e_ipoib-mod --with-memtrack'
 alias ofedconfigure4.7='./configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod'
 
+__kernel_version_in_given_path ()
+{
+    local kernel_path=/lib/modules/$(uname -r)/build/;
+
+    pushd ${kernel_path} 2>&1 1>/dev/null;
+    awk 'BEGIN{FS = "="}
+        /^VERSION/{ printf $2"."}
+        /^PATCHLEVEL/{printf $2}' Makefile | sed 's/\ //g';
+
+#     awk 'BEGIN{FS = "="}
+#         /^VERSION/{ printf $2"-"}
+#         /^PATCHLEVEL/{printf $2"-"}
+#         /^SUBLEVEL/{printf $2}
+#         /^EXTRAVERSION/{printf $2}' Makefile | sed 's/\ //g';
+
+    popd 2>&1 1>/dev/null;
+
+}
+
 ofedconfigureforkernel ()
 {
     local kernel_version=$1;
+    local kernel_prefix="linux-";
     local kernel_headers=/mswg2/work/kernel.org/x86_64;
     local configure_options="--with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod"
+
+    if ! [ -d ${kernel_headers} ] ; then 
+        kernel_headers=$(readlink -f /lib/modules/$(uname -r)/build/);
+        kernel_version=$(__kernel_version_in_given_path );
+        echo "setting kernel headers to ${kernel_headers}";
+        echo "setting kernel version to ${kernel_version}";
+    fi
 
     if [ -z "${kernel_version}" ] ; then 
         echo "Please give a kernel version";
@@ -584,29 +619,45 @@ ofedconfigureforkernel ()
         [ $? -eq 0 ] && return;
         ./configure -j ${ncoresformake} ${configure_options} --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/linux-${kernel_version};
     else
-        echo "Did not find ${kernel_headers}/linux-"
+        echo "./configure -j ${ncoresformake} ${configure_options} --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/${kernel_version}";
+        echo -n "continue"; ask_user_default_yes;
+        [ $? -eq 0 ] && return;
+        ./configure -j ${ncoresformake} ${configure_options} --kernel-version=${kernel_version} --kernel-sources=${kernel_headers}/${kernel_version};
+#       echo "Did not find ${kernel_headers}/linux-"
     fi
 }
+
+# alias ofedconfigureforkernel-5.2="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.2  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.2/"
+# alias ofedconfigureforkernel-5.4="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.4  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.4/"
+alias ofedconfigureforkernel-5.4="ofedconfigureforkernel 5.4"
+alias ofedconfigureforkernel-5.2="ofedconfigureforkernel 5.2"
+alias ofedconfigureforkernel-4.18="ofedconfigureforkernel 4.18"
+alias ofedconfigureforkernel-3.10="ofedconfigureforkernel 3.10"
+alias ofedconfigureforkernel-2.6.32="ofedconfigureforkernel 2.6.32"
 
 ofedcdkernelversion ()
 {
     local ver=${1};
-    local kernel_headers=/mswg2/work/kernel.org/x86_64;
+    local kernel_headers=/mswg2/work/kernel.org/x86_64/linux-;
 
-    if [ -z ${var} ] ; then 
+    if [ -z ${ver} ] ; then 
         echo "Please give a kernel version";
+        echo -n "would you like to change to $(grep KSRC configure.mk.kernel)"; ask_user_default_yes;
+        if [ ${?} -eq 1 ] ; then 
+            pushd ${kernel-headers}${ver};
+            return;
+        fi;
         echo -n "would you like to see the kernel list"; ask_user_default_yes;
         if [ $? -eq 0 ] ; then return ; fi;
         find ${kernel_headers} -type d -maxdepth 1 | less;
         return;
     fi
-    pushd ${kernel_headers}/${ver} 2>&1 1>/dev/null;
+#   pushd ${kernel_headers}${ver} 2>&1 1>/dev/null;
+    pushd ${kernel_headers}${ver};
 }
 
-alias ofedconfigureforkernel-5.2="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.2  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.2/"
-alias ofedconfigureforkernel-5.4="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.4  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.4/"
 
-ofedorigindir ()
+ofedcdorigindir ()
 {
     cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
 }
