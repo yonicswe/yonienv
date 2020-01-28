@@ -111,8 +111,8 @@ whichbash ()
 
 yonienvconfigureforputty ()
 {
-    if [ -h ${yonienv}/.inputrc ] ; then 
-        rm -f ${yonienv}/.inputrc;
+    if [ -h ~/.inputrc ] ; then 
+        rm -f ~/.inputrc;
         echo "disabled, run bash to take effect";
     else
         ln -snf ${yonienv}/inputrc.for.putty ~/.inputrc ;

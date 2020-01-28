@@ -552,13 +552,27 @@ ofedmklinks ()
 
 ofedupdatebackports ()
 {
-    echo -n "Did you 'git add <your changes>"; ask_user_default_no;
-    [ $? -eq 0 ] && return;
+    if [ $(git diff --name-only | wc -l ) -gt 0 ] ; then 
+        echo "You forgot to 'git add' <your changes>"; 
+        return;
+    fi
+    echo "====1=======backports_fixup_changes.sh=================";
     ./ofed_scripts/backports_fixup_changes.sh;
     echo -n "continue with backport update " ; ask_user_default_no ;
     [ $? -eq 0 ] && return;
-    ./ofed_scripts/ofed_get_patches.sh && ./ofed_scripts/cleanup && ./ofed_scripts/backports_copy_patches.sh 
-    echo "git add relevant_patch from backports/ and discard the rest with git checkout ./backports"
+
+    echo "====2=======ofed_get_patches.sh=================";
+    ./ofed_scripts/ofed_get_patches.sh
+    [ $? -ne 0 ] && echo "failed" && return;
+    echo "====3=======cleanup=================";
+    ./ofed_scripts/cleanup
+    echo "====4=======backports_copy_patches=================";
+    ./ofed_scripts/backports_copy_patches.sh 
+
+    echo "=========================================================="
+    echo "git add backports/<relevant files>";
+    echo "then discard the rest with git checkout ./backports";
+    echo "=========================================================="
 }
 
 ofedapplybackports ()
@@ -627,8 +641,6 @@ ofedconfigureforkernel ()
     fi
 }
 
-# alias ofedconfigureforkernel-5.2="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.2  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.2/"
-# alias ofedconfigureforkernel-5.4="./configure -j --with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --kernel-version 5.4  --kernel-sources /mswg2/work/kernel.org/x86_64/linux-5.4/"
 alias ofedconfigureforkernel-5.4="ofedconfigureforkernel 5.4"
 alias ofedconfigureforkernel-5.2="ofedconfigureforkernel 5.2"
 alias ofedconfigureforkernel-4.18="ofedconfigureforkernel 4.18"
@@ -1738,13 +1750,14 @@ ofedkernelinstall ()
 {
     local ibcore_install_path=$(/sbin/modinfo ib_core|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
     local mlx5ib_install_path=$(/sbin/modinfo mlx5_ib|grep "filename:" | sed 's/.*filename://g' |sed 's/\ //g');
+    local ibcore_ofed_install_path=$(/sbin/modinfo -n ib_core | awk 'BEGIN{FS="/"} {print $5}');
     local dst=${1:-"extra/mlnx-ofa_kernel"};
     local installed_ibcore="/lib/modules/$(uname -r)/${dst}/drivers/infiniband/core/ib_core.ko"
 
     echo "About to install ofa-kernel to /lib/modules/$(uname -r)/$dst";
 
     if ! [ "${installed_ibcore}" = "${ibcore_install_path}" ] ; then 
-        echo "Pay attention that ofed installed kernel drivers to a different path";
+        echo "Pay attention you should  use INSTALL_MOD_DIR=${ibcore_ofed_install_path}";
         echo -e "\t${ibcore_install_path}";
         echo -e "\t${mlx5ib_install_path}";
     fi
