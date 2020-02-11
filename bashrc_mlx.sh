@@ -393,7 +393,7 @@ ibmod ()
         fi
     fi
 
-    find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |
+    2>/dev/null find ${modules_path}  -type f -exec basename {} \; | sed -e 's/\.ko$//g' -e 's/\.ko\.xz$//g' | sort -u |
         while read m ; do
             lsmod | awk '{print $1" "$3" " }' | \grep $m ;
 #             lsmod | cut -d' ' -f1  | \grep $m | \grep "ib\|mlx\|rxe";
@@ -492,7 +492,7 @@ backupgitkernel ()
 
 alias backupusrlib64='tar -C / -cjvf usr_lib64.bkp.bz2 /usr/lib64'
 alias restoreusrlib64='tar -C / -xjvf usr_lib64.bkp.bz2'
-
+alias ofedshowlastreleaseversion='ls -ld /auto/sw/release/mlnx_ofed/MLNX_OFED/latest-5.0'
 ofedmetadataverify ()
 {
     local developer=${1:-Yonatan_Cohen.csv};
@@ -516,7 +516,7 @@ ofedmetadatacreate ()
     ./devtools/verify_metadata.sh -p metadata/Yonatan_Cohen.csv;
 }
 
-ofeddeletebackport ()
+ofeddeletebackportbranch ()
 {
 #   echo -n "Are " ; ask_user_default_yes ;
 #   if [ $? -eq 0 ] && return;
@@ -550,7 +550,7 @@ ofedmklinks ()
     ln -snf ofed_scripts/configure configure
 }
 
-ofedupdatebackports ()
+ofedbackportsupdate ()
 {
     if [ $(git diff --name-only | wc -l ) -gt 0 ] ; then 
         echo "You forgot to 'git add' <your changes>"; 
@@ -558,12 +558,15 @@ ofedupdatebackports ()
     fi
     echo "====1=======backports_fixup_changes.sh=================";
     ./ofed_scripts/backports_fixup_changes.sh;
-    echo -n "continue with backport update " ; ask_user_default_no ;
+    echo -n "continue " ; ask_user_default_no ;
     [ $? -eq 0 ] && return;
 
     echo "====2=======ofed_get_patches.sh=================";
+    echo -n "continue " ; ask_user_default_yes ;
+    [ $? -eq 0 ] && return;
     ./ofed_scripts/ofed_get_patches.sh
     [ $? -ne 0 ] && echo "failed" && return;
+
     echo "====3=======cleanup=================";
     ./ofed_scripts/cleanup
     echo "====4=======backports_copy_patches=================";
@@ -575,7 +578,7 @@ ofedupdatebackports ()
     echo "=========================================================="
 }
 
-ofedapplybackports ()
+ofedbackportsapply ()
 {
     local kernel_version=${1:-2.6.16};
     ./configure -j ${ncoresformake} --kernel-version ${kernel_version} --skip-autoconf;
@@ -620,10 +623,11 @@ ofedconfigureforkernel ()
 
     if [ -z "${kernel_version}" ] ; then 
         echo "Please give a kernel version";
-        echo "you compiled with $(ofedkernelversion|grep KSRC )"
+        echo "you compiled with $( basename $(ofedkernelversion| awk -F = '/KSRC=/{print $2}' ))"
         echo -n "would you like to see the kernel list"; ask_user_default_yes;
         if [ $? -eq 0 ] ; then return ; fi;
-        find ${kernel_headers} -type d -maxdepth 1 | less;
+            find ${kernel_headers} -maxdepth 1 -type d  -name "*linux-*" | sort -n | 
+                sed 's/\(.*linux-\)\(.*\)/\1 \2/g'  | less;
         return;
     fi;
 
@@ -650,28 +654,45 @@ alias ofedconfigureforkernel-2.6.32="ofedconfigureforkernel 2.6.32"
 ofedcdkernelversion ()
 {
     local ver=${1};
-    local kernel_headers=/mswg2/work/kernel.org/x86_64/linux-;
+    local kernel_headers=/mswg2/work/kernel.org/x86_64/;
+    local configure_ksrc=;
 
     if [ -z ${ver} ] ; then 
-        echo "Please give a kernel version";
-        echo -n "would you like to change to $(grep KSRC configure.mk.kernel)"; ask_user_default_yes;
-        if [ ${?} -eq 1 ] ; then 
-            pushd ${kernel-headers}${ver};
-            return;
+        
+        if [ -d .git -a $(git remote -v | grep ofed | wc -l ) -gt 0 ] ; then
+#       this is an ofed directory
+            configure_ksrc=$(readlink -f $(awk -F = '/KSRC=/{print $2}' configure.mk.kernel));
+            echo -n "would you like to change to ${configure_ksrc}"; ask_user_default_yes;
+            if [ ${?} -eq 1 ] ; then  
+#           user said yes
+                cd ${configure_ksrc};
+                pwd;
+                return;
+            fi;
         fi;
+
         echo -n "would you like to see the kernel list"; ask_user_default_yes;
         if [ $? -eq 0 ] ; then return ; fi;
-        find ${kernel_headers} -type d -maxdepth 1 | less;
+        find ${kernel_headers} -type d -maxdepth 1 -name "*linux-*" | sort -n | 
+            sed 's/\(.*linux-\)\(.*\)/\1 \2/g'  | less;
         return;
     fi
-#   pushd ${kernel_headers}${ver} 2>&1 1>/dev/null;
-    pushd ${kernel_headers}${ver};
 }
 
 
 ofedcdorigindir ()
 {
-    cd /.autodirect/mswg/release/MLNX_OFED/$(ofed_info -s | sed 's/://g')
+    local ver=${1:-5.0-0.2.7.0};
+    local release_path=/.autodirect/mswg/release/MLNX_OFED/
+
+    if [ -x /usr/bin/ofed_info ] ; then
+        cd ${release_path}/$(ofed_info -s | sed 's/://g')
+    else
+        echo "ofed is not installed"
+        echo "would you like to see $ver" ; ask_user_default_yes ; [ $? -eq 0 ] && return;
+        cd ${release_path}/MLNX_OFED_LINUX-${ver}
+        pwd
+    fi
 }
 
 alias ofedversion='[ -e /usr/bin/ofed_info ] && ofed_info -s | sed "s/://g"'
@@ -1582,12 +1603,22 @@ ofedlistversions ()
 {
     local ver=$1;
     local tmpfile=/tmp/ofedversionlist.txt; 
-    if [ -z $ver ] ; then 
-        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n";
-    else
-        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver  | tee ${tmpfile};
-        complete -W "$(cat ${tmpfile})" ofedinstallversion;
+    local verlistfile=${yonienv}/share/tmp/ofedversions.txt;
+
+    if [ -e ${verlistfile} ] ; then 
+        cat ${verlistfile};
+        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"  >  ${verlistfile} &
+        return;
     fi
+
+    complete -W "$(cat ${verlistfile})" ofedinstallversion;
+
+#     if [ -z $ver ] ; then 
+#         find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | tee ${verlistfile};
+#     else
+#         find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver  | tee ${tmpfile};
+#         complete -W "$(cat ${tmpfile})" ofedinstallversion;
+#     fi
 
 }
 
@@ -1768,7 +1799,8 @@ ofedkernelinstall ()
     sudo make install INSTALL_MOD_DIR=${dst};
 }
 
-complete -W "updates kernel extra extra/mlnx-ofa_kernel" ofedkernelinstall
+complete -W "updates kernel extra extra/mlnx-ofa_kernel weak-updates/mlnx-ofa_kernel" ofedkernelinstall
+
 
 ofedfindpathofversion () 
 {
@@ -1785,7 +1817,7 @@ ofedfindpathofversion ()
     find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1 -type d -name "*${version}*" 
 }
 
-ofedmkbackport ()
+ofedmkbackportbranch ()
 {
     local configure_options=;
     local possible_backport_branch=;
@@ -2062,7 +2094,7 @@ remotereboot ()
 ofedhelp ()
 {
     echo "ofedmkmetadata - create Metadata"
-    echo "ofeddeletebackport - delete backport branch"
+    echo "ofeddeletebackportbranch - delete backport branch"
     echo "ofedbuildidforversion - show git indexs used for a specific ofed version"
 }
 
