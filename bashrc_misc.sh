@@ -119,6 +119,7 @@ yonimlxdeps_arr+=(iproute);
 yonimlxdeps_arr+=(perftest);
 yonimlxdeps_arr+=(mlxver-scripts);
 yonimlxdeps_arr+=(pandoc);
+yonimlxdeps_arr+=(diffstat);
 #-------------------------------------
 #           ofed deps
 #-------------------------------------

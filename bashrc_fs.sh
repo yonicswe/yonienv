@@ -102,23 +102,43 @@ prompt_color ()
 
     if [ "${CS_PROMPT}" == "true" ] ; then 
         export CS_PROMPT=false;
-        prompt_sc;
+        prompt_sc > /dev/null;
     else
         export CS_PROMPT=true;
-        prompt_sc
+        prompt_sc > /dev/null;
     fi
 } 
 
     
 prompt_sc () 
 {
-    if [ ${CS_PROMPT} == true ] ; then 
+    local _CS_PROMPT=
+
+    if ! [ -d .git ] ; then
+        echo "this is not a git directory. Exiting..."
         export CS_PROMPT=false;
         export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]=> "
-    else
-        export CS_PROMPT=true;
-        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
+        return;
     fi
+
+    export CS_PROMPT=true;
+    export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
+
+#     if [ -e .prompt_sc ] ; then
+#         _CS_PROMPT=$(cat .prompt_sc)
+#         [ ${_CS_PROMPT} == true ] && CS_PROMPT=false;
+#         [ ${_CS_PROMPT} == false ] && CS_PROMPT=true;
+#     fi
+#      
+#     
+#     if [ ${CS_PROMPT} == true ] ; then 
+#         export CS_PROMPT=false;
+#         export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]=> "
+#     else
+#         export CS_PROMPT=true;
+#         export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
+#     fi
+#     echo ${CS_PROMPT} > .prompt_sc
 }
 
 prompt_color
@@ -148,7 +168,10 @@ k () {
 }
 
 
-alias l='ls --group-directories-first -ltr --color -F'
+alias l='ls --group-directories-first -l --color -F'
+alias lt='ls --group-directories-first -lt --color -F'
+alias ltr='ls --group-directories-first -ltr --color -F'
+
 alias c='cd'
 alias ..='cd ../ ; pwd -P'
 alias p='pwd -P'

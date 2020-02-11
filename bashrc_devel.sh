@@ -492,6 +492,7 @@ kernelbuildinstallmodules ()
 }
 
 alias kernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=/usr'
+alias kernelcdsources='cd /lib/modules/$(uname -r)/build'
 
 alias makedebug='make CPPFLAGS="-O0 -g"'
 
@@ -564,8 +565,8 @@ alias dw='dmesg --color -Hxw'
 alias dcc='sudo dmesg -C'
 dyoni ()
 {
-    echo -n "root ";
-    su -c "echo =============yoni-debug============= > /dev/kmsg"
+# echo -n "root ";
+    sudo su -c "echo =============yoni-debug============= > /dev/kmsg"
 }
 # dmesg -w will continuously print to screen (like tail -f)
 
