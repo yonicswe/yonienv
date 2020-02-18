@@ -301,10 +301,14 @@ listgitrepos ()
     echo -e "          \`-- golan      : ${prefix}/golan_fw"
 }
 
-alias gitclone-ofed-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core'
-alias gitclone-ofed-libibverbs='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs'
-alias gitclone-ofed-libmlx5='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5'
-alias gitclone-ofed-libibumad='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/libibumad'
+gitclone-ofed-rdmacore () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core; }
+gitclone-ofed-rdmacore-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/mlnx_ofed/rdma-core; }
+gitclone-ofed-libibverbs() { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs; }
+gitclone-ofed-libibverbs-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/mlnx_ofed_2_0/libibverbs; }
+gitclone-ofed-libmlx5 () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5; }
+gitclone-ofed-libmlx5-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/connect-ib/libmlx5; }
+gitclone-ofed-libibumad () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/libibumad; }
+gitclone-ofed-libibumad-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/ib_mgmt/libibumad; }
 alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
 alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
 alias gitclone-ofed-librdmacm='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/librdmacm'
@@ -346,9 +350,12 @@ make-ofed-legacy-libs ()
 
 gitclone-ofed-legacy-libs ()
 {
-    gitclone-ofed-libibverbs;
-    gitclone-ofed-libmlx5;
-    gitclone-ofed-libibumad;
+    local anon=${1};
+    ! [ -z $anon ] && anon=-anon;
+
+    gitclone-ofed-libibverbs${anon};
+    gitclone-ofed-libmlx5${anon};
+    gitclone-ofed-libibumad${anon};
     echo -e "\nfinished clone, would you like to build & install ";
     ask_user_default_no;
     [ $? -eq 0 ] && return;
@@ -612,7 +619,7 @@ ofedconfigureforkernel ()
     local kernel_version=$1;
     local kernel_prefix="linux-";
     local kernel_headers=/mswg2/work/kernel.org/x86_64;
-    local configure_options="--with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod"
+    local configure_options="--with-core-mod --with-user_mad-mod --with-user_access-mod --with-addr_trans-mod --with-mlxfw-mod --with-mlx4-mod --with-mlx4_en-mod --with-mlx5-mod --with-ipoib-mod --with-rxe-mod"
 
     if ! [ -d ${kernel_headers} ] ; then 
         kernel_headers=$(readlink -f /lib/modules/$(uname -r)/build/);
