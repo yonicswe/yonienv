@@ -109,7 +109,7 @@ prompt_color ()
     fi
 } 
 
-    
+alias psc='prompt_sc'
 prompt_sc () 
 {
     local _CS_PROMPT=
@@ -175,7 +175,10 @@ alias ltr='ls --group-directories-first -ltr --color -F'
 alias c='cd'
 alias ..='cd ../ ; pwd -P'
 alias p='pwd -P'
-alias pp='echo $(hostname -i):$(pwd -P)/'
+pp ()
+{
+    echo $(hostname -i):$(pwd -P)/$1
+}
 alias mv='mv -v'
 alias rm='rm -iv'
 alias cp='cp -iv'
@@ -645,7 +648,8 @@ alias freeh='free -h'
 
 myip ()
 {
-    ip r  g 1 | awk '{if (FNR==1) {print $3} }'
+    hostname -I  | awk '{print $2}'
+#   ip r  g 1 | awk '{if (FNR==1) {print $3} }'
 }
 
 myip_v1 ()

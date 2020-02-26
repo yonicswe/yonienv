@@ -334,7 +334,7 @@ ucxbuild ()
 
 gitclone-ofed-kernel() 
 {
-    local dest_name=${1:-mlnx-ofa_kernel-4.0};
+    local dest_name=${1:-ofa};
     git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/mlnx-ofa_kernel-4.0 ${dest_name};
     cd ${dest_name};
     ofedmklinks;
@@ -1555,11 +1555,11 @@ mkupstreamlib1sttime ()
     \make clean 2>/dev/null;
     ./autogen.sh
     ./configure --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib64 CFLAGS="-g -O0"
-    make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1
+    make CFLAGS="-g -O0 -D_GNU_SOURCE" AM_DEFAULT_VERBOSITY=1
     # sudo make install
 }
 
-alias mkupstreamlib='make CFLAGS="-g -O0" AM_DEFAULT_VERBOSITY=1'
+alias mkupstreamlib='make CFLAGS="-g -O0 -D_GNU_SOURCE" AM_DEFAULT_VERBOSITY=1 '
 alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
 alias rdmacoreversion='grep Version redhat/rdma-core.spec'
