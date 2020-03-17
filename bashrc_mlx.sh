@@ -1806,7 +1806,7 @@ ofedkernelinstall ()
     sudo make install INSTALL_MOD_DIR=${dst};
 }
 
-complete -W "updates kernel extra extra/mlnx-ofa_kernel weak-updates/mlnx-ofa_kernel" ofedkernelinstall
+complete -W "updates updates/dkms kernel extra extra/mlnx-ofa_kernel weak-updates/mlnx-ofa_kernel" ofedkernelinstall
 
 
 ofedfindpathofversion () 
