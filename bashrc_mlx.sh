@@ -1792,7 +1792,7 @@ ofedkernelinstall ()
     local dst=${1:-"extra/mlnx-ofa_kernel"};
     local installed_ibcore="/lib/modules/$(uname -r)/${dst}/drivers/infiniband/core/ib_core.ko"
 
-    local install_mod_dir=`modinfo -n ib_core` | sed "s/\/lib\/modules\/$(uname -r)\///)";
+    local install_mod_dir=$(dirname `modinfo -n ib_core` | sed "s/\/lib\/modules\/$(uname -r)\///");
 
     echo "About to install ofa-kernel to /lib/modules/$(uname -r)/$dst";
 
