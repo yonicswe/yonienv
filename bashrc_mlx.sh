@@ -1792,14 +1792,17 @@ ofedkernelinstall ()
     local dst=${1:-"extra/mlnx-ofa_kernel"};
     local installed_ibcore="/lib/modules/$(uname -r)/${dst}/drivers/infiniband/core/ib_core.ko"
 
+    local install_mod_dir=`modinfo -n ib_core` | sed "s/\/lib\/modules\/$(uname -r)\///)";
+
     echo "About to install ofa-kernel to /lib/modules/$(uname -r)/$dst";
 
-    if ! [ "${installed_ibcore}" = "${ibcore_install_path}" ] ; then 
-        echo "Pay attention you should  use INSTALL_MOD_DIR=${ibcore_ofed_install_path}";
-        echo -e "\t${ibcore_install_path}";
-        echo -e "\t${mlx5ib_install_path}";
-    fi
+#     if ! [ "${installed_ibcore}" = "${ibcore_install_path}" ] ; then 
+#         echo "pay attention you should  use INSTALL_MOD_DIR=${ibcore_ofed_install_path}";
+#         echo -e "\t${ibcore_install_path}";
+#         echo -e "\t${mlx5ib_install_path}";
+#     fi
 
+    echo "pay attention you should use INSTALL_MOD_DIR=$(install_mod_dir)";
     echo "sudo make install INSTALL_MOD_DIR=${dst}";
     ask_user_default_no;
     [ $? -eq 0 ] && return;
