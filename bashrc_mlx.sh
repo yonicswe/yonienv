@@ -1802,7 +1802,7 @@ ofedkernelinstall ()
 #         echo -e "\t${mlx5ib_install_path}";
 #     fi
 
-    echo "pay attention you should use INSTALL_MOD_DIR=$(install_mod_dir)";
+    echo "pay attention you should use INSTALL_MOD_DIR=${install_mod_dir}";
     echo "sudo make install INSTALL_MOD_DIR=${dst}";
     ask_user_default_no;
     [ $? -eq 0 ] && return;
