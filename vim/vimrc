@@ -745,6 +745,7 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 " change directory to current file location
 " lcd %:h will change only for current file
 " !git log -p %:p // for current opened file
+" there are more under filename-modifiers in vim docs.
 map cdf :cd %:h<cr>
 map <leader>a <esc>ggVG<CR>
 map <leader>x :!chmod a+x %<cr>
