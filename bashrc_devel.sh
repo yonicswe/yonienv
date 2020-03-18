@@ -663,10 +663,7 @@ tl ()
 ta ()
 {
     local sess_name=${1};
-    if [ -z "${sess_name}" ] ; then
-        echo "Missing session name";
-        return;
-    fi;
+
     if [ -z "${sess_name}" ] ; then
         tmux -u attach;
     else 
