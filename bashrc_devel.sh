@@ -667,10 +667,16 @@ ta ()
         echo "Missing session name";
         return;
     fi;
-    tmux -u attach -t ${sess_name};
+    if [ -z "${sess_name}" ] ; then
+        tmux -u attach;
+    else 
+        tmux -u attach -t ${sess_name};
+    fi
 }
 
 alias tk='tmux kill-session -t'
+
+alias tagginginstall="yuminstall cscope ctags";
 
 dockerinstall ()
 {
