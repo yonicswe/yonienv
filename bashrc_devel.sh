@@ -637,6 +637,7 @@ extractkernelsrcrpm ()
 
 alias tmuxnewyoni='tmux -u new -s yoni'
 alias tmuxattachyoni='tmux -u attach -t yoni'
+alias tmuxconfig="v .tmux.conf"
 
 # 
 # tn - create a new tmux session 

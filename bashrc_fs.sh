@@ -715,8 +715,13 @@ mydistro_v1 ()
 }
 
 
-alias ethlistroot='echo -n "root " ; su - -c "ethlist"'
-ethlist () 
+ethlist ()
+{
+    ip -4  -o a show |awk '{print $2" "$4}' | column -t
+}
+
+alias Ethlistroot='echo -n "root " ; su - -c "ethlist"'
+Ethlist () 
 {    
     local link="???";
     local show_link=1;
@@ -760,7 +765,7 @@ ethlist ()
         printf "%-10s  %-5s  %-5s  %-10s  %-10s  %-10s %-20s %s\n" $e "${up_down}" "${link}"  ${promisc} "${speed}" ${mtu} ${ip_addr} "${mac}"; 
     done
 }
-export -f ethlist
+export -f Ethlist
 
 delete_executables ()
 { 

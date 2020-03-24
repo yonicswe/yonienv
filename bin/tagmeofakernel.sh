@@ -12,7 +12,7 @@ includeTagdir+=(./drivers/infiniband/ulp)
 # includeTagdir+=(./drivers/infiniband/vfio)
 includeTagdir+=(./drivers/infiniband/hw/mlx4)
 includeTagdir+=(./drivers/infiniband/hw/mlx5)
-# includeTagdir+=(./drivers/infiniband/hw/mthca)
+includeTagdir+=(/lib/modules/`uname -r`/build)
 
 excludeTagdir+=(./drivers/infiniband/ulp/ipoib_* )
 # excludeTagdir+=(+++ ./buildlib);
