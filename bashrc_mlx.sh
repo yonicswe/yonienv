@@ -710,7 +710,8 @@ alias ofedrestart='ofedstop; ofedstart'
 
 m ()
 {
-    myip;
+#   myip;
+    ethlist;
     mydistro;
     ofedversion;
 
@@ -734,6 +735,11 @@ vlinstall ()
 #     fi
 #  another script that could be used.
 #  sudo /mswg/projects/ver_tools/reg2_latest/install.sh;
+}
+
+pyverbs_install ()
+{
+    sudo /.autodirect/net_linux_verification/MARS/scripts/install_pyverbs.py
 }
 
 regression_tools_install ()
@@ -1610,22 +1616,23 @@ ofedlistversions ()
 {
     local ver=$1;
     local tmpfile=/tmp/ofedversionlist.txt; 
-    local verlistfile=${yonienv}/share/tmp/ofedversions.txt;
+#   local verlistfile=${yonienv}/share/tmp/ofedversions.txt;
 
-    if [ -e ${verlistfile} ] ; then 
-        cat ${verlistfile};
-        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"  >  ${verlistfile} &
-        return;
-    fi
+#   if [ -e ${verlistfile} ] ; then 
+#       cat ${verlistfile};
+#       find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"  >  ${verlistfile} &
+#       return;
+#   fi
 
-    complete -W "$(cat ${verlistfile})" ofedinstallversion;
+#   complete -W "$(cat ${verlistfile})" ofedinstallversion;
 
-#     if [ -z $ver ] ; then 
+      if [ -z $ver ] ; then 
 #         find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | tee ${verlistfile};
-#     else
-#         find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver  | tee ${tmpfile};
-#         complete -W "$(cat ${tmpfile})" ofedinstallversion;
-#     fi
+          find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | tee ${tmpfile};
+      else
+          find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver  | tee ${tmpfile};
+      fi
+      complete -W "$(cat ${tmpfile})" ofedinstallversion;
 
 }
 
@@ -1642,6 +1649,7 @@ ofed_list_os+=( "rhel7.3" )
 ofed_list_os+=( "rhel7.4" )
 ofed_list_os+=( "rhel7.5" )
 ofed_list_os+=( "rhel7.6" )
+ofed_list_os+=( "rhel8.0" )
 ofed_list_os+=( "fc27" )
 ofed_list_os+=( "fc29" )
 
