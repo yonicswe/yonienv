@@ -1568,7 +1568,12 @@ mkupstreamlib1sttime ()
 alias mkupstreamlib='make CFLAGS="-g -O0 -D_GNU_SOURCE" AM_DEFAULT_VERBOSITY=1 '
 alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
-alias rdmacoreversion='grep Version redhat/rdma-core.spec'
+rdmacoreversion ()
+{
+    grep Version redhat/rdma-core.spec;
+    grep PACKAGE_VERSION CMakeLists.txt;
+    grep ABI_VERSION\  CMakeLists.txt;
+}
 # alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null'
 rdmacorebuild ()
 {
