@@ -340,6 +340,15 @@ gitclone-ofed-kernel()
     ofedmklinks;
 }    
 
+
+install-ofed-legacy-libs ()
+{
+    cd libibverbs/  ; sudo make install ; 
+    cd ../libmlx5/ ; sudo make install ; 
+    cd ../libibumad ; sudo make install;
+    cd .. ;
+}
+
 make-ofed-legacy-libs ()
 {
     cd libibverbs/  ; mkupstreamlib1sttime ; sudo make install ; 
@@ -687,18 +696,27 @@ ofedcdkernelversion ()
 }
 
 
-ofedcdorigindir ()
+ofedcdreleasedir ()
 {
-    local ver=${1:-5.0-0.2.7.0};
+    local ver=${1};
     local release_path=/.autodirect/mswg/release/MLNX_OFED/
 
+        echo ${ver}
+    if [ -n "${ver}" ] ; then 
+        if [ -d ${release_path}/MLNX_OFED_LINUX-${ver} ] ; then
+            cd ${release_path}/MLNX_OFED_LINUX-${ver}
+        else
+            echo "Not found: ${release_path}/MLNX_OFED_LINUX-${ver}";
+        fi;
+        return;
+    fi
+
     if [ -x /usr/bin/ofed_info ] ; then
-        cd ${release_path}/$(ofed_info -s | sed 's/://g')
+        cd ${release_path}/$(ofed_info -s | sed 's/://g');
     else
         echo "ofed is not installed"
-        echo "would you like to see $ver" ; ask_user_default_yes ; [ $? -eq 0 ] && return;
-        cd ${release_path}/MLNX_OFED_LINUX-${ver}
-        pwd
+        echo "Would you like to see version list ?" ; ask_user_default_yes ; [ $? -eq 0 ] && return;
+        ofedlistversions;
     fi
 }
 
