@@ -203,7 +203,7 @@ alias grepmake='grep -nH -r -I --color --include=*[m,M]ake*'
 # }
 
 alias ag='ag --noheading'
-alias ssh='ssh -X -o ConnectTimeout=5'
+alias ssh='ssh -X -o ConnectTimeout=3'
 alias pstree='pstree -Uphacl'
 
 # list only directories 
