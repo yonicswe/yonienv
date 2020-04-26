@@ -340,6 +340,15 @@ gitclone-ofed-kernel()
     ofedmklinks;
 }    
 
+
+install-ofed-legacy-libs ()
+{
+    cd libibverbs/  ; sudo make install ; 
+    cd ../libmlx5/ ; sudo make install ; 
+    cd ../libibumad ; sudo make install;
+    cd .. ;
+}
+
 make-ofed-legacy-libs ()
 {
     cd libibverbs/  ; mkupstreamlib1sttime ; sudo make install ; 
@@ -687,18 +696,27 @@ ofedcdkernelversion ()
 }
 
 
-ofedcdorigindir ()
+ofedcdreleasedir ()
 {
-    local ver=${1:-5.0-0.2.7.0};
+    local ver=${1};
     local release_path=/.autodirect/mswg/release/MLNX_OFED/
 
+        echo ${ver}
+    if [ -n "${ver}" ] ; then 
+        if [ -d ${release_path}/MLNX_OFED_LINUX-${ver} ] ; then
+            cd ${release_path}/MLNX_OFED_LINUX-${ver}
+        else
+            echo "Not found: ${release_path}/MLNX_OFED_LINUX-${ver}";
+        fi;
+        return;
+    fi
+
     if [ -x /usr/bin/ofed_info ] ; then
-        cd ${release_path}/$(ofed_info -s | sed 's/://g')
+        cd ${release_path}/$(ofed_info -s | sed 's/://g');
     else
         echo "ofed is not installed"
-        echo "would you like to see $ver" ; ask_user_default_yes ; [ $? -eq 0 ] && return;
-        cd ${release_path}/MLNX_OFED_LINUX-${ver}
-        pwd
+        echo "Would you like to see version list ?" ; ask_user_default_yes ; [ $? -eq 0 ] && return;
+        ofedlistversions;
     fi
 }
 
@@ -710,7 +728,8 @@ alias ofedrestart='ofedstop; ofedstart'
 
 m ()
 {
-    myip;
+#   myip;
+    ethlist;
     mydistro;
     ofedversion;
 
@@ -734,6 +753,11 @@ vlinstall ()
 #     fi
 #  another script that could be used.
 #  sudo /mswg/projects/ver_tools/reg2_latest/install.sh;
+}
+
+pyverbs_install ()
+{
+    sudo /.autodirect/net_linux_verification/MARS/scripts/install_pyverbs.py
 }
 
 regression_tools_install ()
@@ -1562,7 +1586,12 @@ mkupstreamlib1sttime ()
 alias mkupstreamlib='make CFLAGS="-g -O0 -D_GNU_SOURCE" AM_DEFAULT_VERBOSITY=1 '
 alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \; ; mkupstreamlib'
 
-alias rdmacoreversion='grep Version redhat/rdma-core.spec'
+rdmacoreversion ()
+{
+    grep Version redhat/rdma-core.spec;
+    grep PACKAGE_VERSION CMakeLists.txt;
+    grep ABI_VERSION\  CMakeLists.txt;
+}
 # alias mkrdmacore='\make -C build -j ${ncoresformake} -s 1>/dev/null'
 rdmacorebuild ()
 {
@@ -1610,22 +1639,23 @@ ofedlistversions ()
 {
     local ver=$1;
     local tmpfile=/tmp/ofedversionlist.txt; 
-    local verlistfile=${yonienv}/share/tmp/ofedversions.txt;
+#   local verlistfile=${yonienv}/share/tmp/ofedversions.txt;
 
-    if [ -e ${verlistfile} ] ; then 
-        cat ${verlistfile};
-        find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"  >  ${verlistfile} &
-        return;
-    fi
+#   if [ -e ${verlistfile} ] ; then 
+#       cat ${verlistfile};
+#       find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n"  >  ${verlistfile} &
+#       return;
+#   fi
 
-    complete -W "$(cat ${verlistfile})" ofedinstallversion;
+#   complete -W "$(cat ${verlistfile})" ofedinstallversion;
 
-#     if [ -z $ver ] ; then 
+      if [ -z $ver ] ; then 
 #         find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | tee ${verlistfile};
-#     else
-#         find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver  | tee ${tmpfile};
-#         complete -W "$(cat ${tmpfile})" ofedinstallversion;
-#     fi
+          find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | tee ${tmpfile};
+      else
+          find /.autodirect/mswg/release/MLNX_OFED/ -maxdepth 1  -name "*MLNX_OFED_LINUX*" -type d -printf "%h %f\n" | grep $ver  | tee ${tmpfile};
+      fi
+      complete -W "$(cat ${tmpfile})" ofedinstallversion;
 
 }
 
@@ -1642,6 +1672,7 @@ ofed_list_os+=( "rhel7.3" )
 ofed_list_os+=( "rhel7.4" )
 ofed_list_os+=( "rhel7.5" )
 ofed_list_os+=( "rhel7.6" )
+ofed_list_os+=( "rhel8.0" )
 ofed_list_os+=( "fc27" )
 ofed_list_os+=( "fc29" )
 

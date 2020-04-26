@@ -550,6 +550,11 @@ function! Auto_comp_paren_disable ()
    inoremap { {
 endfunc
 
+function! Auto_comp_apostrophes_disable ()
+   inoremap " "
+endfunc
+call Auto_comp_apostrophes_disable ()
+
 function! SetIndent (indent)
    let v=a:indent
    execute 'set tabstop='.v

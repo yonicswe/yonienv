@@ -70,9 +70,9 @@ alias editbashfs='${v_or_g} ${yonienv}/bashrc_fs.sh'
 
 parse_git_branch() 
 {
-# if [ -d .git ] ; then 
+    if [ -d .git ] ; then 
         git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(git::\1)/';
-#    fi;
+    fi;
 }
 
 parse_svn_branch() {
@@ -122,6 +122,7 @@ prompt_sc ()
     fi
 
     export CS_PROMPT=true;
+#   export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
     export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\[\033[00m\]$\[\033[00m\]=> "
 
 #     if [ -e .prompt_sc ] ; then
@@ -202,7 +203,7 @@ alias grepmake='grep -nH -r -I --color --include=*[m,M]ake*'
 # }
 
 alias ag='ag --noheading'
-alias ssh='ssh -X'
+alias ssh='ssh -X -o ConnectTimeout=3'
 alias pstree='pstree -Uphacl'
 
 # list only directories 
@@ -717,7 +718,7 @@ mydistro_v1 ()
 
 ethlist ()
 {
-    ip -4  -o a show |awk '{print $2" "$4}' | column -t
+    ip -4  -o a show |awk '{print $2" "$4}' | column -t | grep -v lo
 }
 
 alias Ethlistroot='echo -n "root " ; su - -c "ethlist"'

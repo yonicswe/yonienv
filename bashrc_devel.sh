@@ -22,7 +22,15 @@ setup_gdbinit_dir_search_path ()
 }
 
 alias debug='cgdb --args '
-alias debuglibs='LD_DEBUG=libs '
+debuglibs ()
+{
+    if [ -z $1 ] ; then
+        echo "debuglibs <some app>";
+        echo "print the linked libs for <app>";
+    fi
+
+    LD_DEBUG=libs $1  2>&1 | grep -i "calling init";
+}
 
 setup_gdbinit () 
 {
