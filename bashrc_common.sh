@@ -38,7 +38,8 @@ ask_user_default_no ()
 ask_user_default_yes ()
 {
     local choice=;
-    read -p " [Y|n]?" choice
+    local user_string=${1};
+    read -p "${user_string} [Y|n]?" choice
     case "$choice" in 
       n|N ) return 0;;
       * ) return 1;;
