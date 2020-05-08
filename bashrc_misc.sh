@@ -174,3 +174,72 @@ checkifalive ()
         sleep 10
     done
 }
+
+subtitlenamesync ()
+{
+    movie_name=${1};
+    output_path=${2:-subs.out}
+
+    if [ -z ${movie_name} ] ; then 
+        echo -e "give me a movie name e.g : $ subtitlenamesync \"superman\"";
+        echo -e "also possible with an output path. e.g : $ subtitlenamesync \"super\" subs.super"
+        return -1;
+    fi
+
+    movie_name=$(basename $movie_name);
+
+    # * handle no srt files exist
+    if [ -z "$(ls *srt 2>/dev/null)" ] ; then
+        echo "No SRT files found";
+        # TBD offer user to unzip archives is such exist
+        if [ -n "$(ls *zip)" ] ; then
+            ask_user_default_yes "should i open the archives"
+            if [ $? -eq 0 ] ; then 
+                echo "Bye!";
+                return -1; 
+            fi
+
+            which 7za;
+            if [ $? -ne 0 ] ; then
+                echo "please install 7za and retry";
+                return -1;
+            fi
+
+            for i in $(ls *zip) ; do 
+                7za x "$i";
+            done;
+
+            ask_user_default_yes "should i clean all non srt files";
+            if [ $? -eq 0 ] ; then 
+                echo -e "Bye";
+                return -1;
+            fi;
+
+            echo -e "rm -f $(ls -I "*srt")";
+            ask_user_default_yes; 
+            if [ $? -eq 0 ] ; then 
+                echo "Bye";
+                return -1;
+            fi
+
+            rm -f $(ls -I "*srt");
+        fi 
+    fi;
+
+    j=1; 
+    for i in *srt ; do 
+        echo -e "install -D \"$i\" `pwd`/${output_path}/${movie_name}.$j.srt"; 
+        ((j++)) ; 
+    done
+
+    ask_user_default_yes;
+    [ $? -eq 0 ] && return;
+
+    j=1; 
+    for i in *srt ; do 
+        install -D "$i" `pwd`/${output_path}/${movie_name}.$j.srt ; 
+        ((j++)) ; 
+    done;
+
+    echo "done";
+}
