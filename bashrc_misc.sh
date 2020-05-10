@@ -243,3 +243,14 @@ subtitlenamesync ()
 
     echo "done";
 }
+
+findvideofiles ()
+{
+    local video_file_types="matroska|mp4"; 
+    find -type f |
+        xargs file | grep -i "${video_file_types}" | 
+        cut -f 1 -d ' ' | 
+        while read x ; do 
+            basename $x ; 
+        done;
+}
