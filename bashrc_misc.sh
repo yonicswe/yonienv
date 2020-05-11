@@ -182,7 +182,9 @@ subtitlenamesync ()
 
     if [ -z ${movie_name} ] ; then 
         echo -e "give me a movie name e.g : $ subtitlenamesync \"superman\"";
-        echo -e "also possible with an output path. e.g : $ subtitlenamesync \"super\" subs.super"
+        echo -e "also possible with an output path. e.g : $ subtitlenamesync \"super\" subs.super";
+        echo "found these movies : ";
+        tabcomplete_video_file_name;
         return -1;
     fi
 
@@ -191,7 +193,7 @@ subtitlenamesync ()
     # * handle no srt files exist
     if [ -z "$(ls *srt 2>/dev/null)" ] ; then
         echo "No SRT files found";
-        # TBD offer user to unzip archives is such exist
+
         if [ -n "$(ls *zip)" ] ; then
             ask_user_default_yes "should i open the archives"
             if [ $? -eq 0 ] ; then 
@@ -226,11 +228,12 @@ subtitlenamesync ()
         fi 
     fi;
 
-    j=1; 
-    for i in *srt ; do 
-        echo -e "install -D \"$i\" `pwd`/${output_path}/${movie_name}.$j.srt"; 
-        ((j++)) ; 
-    done
+#  debug prints
+#     j=1; 
+#     for i in *srt ; do 
+#         echo -e "install -D \"$i\" `pwd`/${output_path}/${movie_name}.$j.srt"; 
+#         ((j++)) ; 
+#     done
 
     ask_user_default_yes;
     [ $? -eq 0 ] && return;
@@ -242,11 +245,20 @@ subtitlenamesync ()
     done;
 
     echo "done";
+    tree -A ${output_path};
+}
+
+tabcomplete_video_file_name ()
+{
+    local comp_string="$( findvideofiles  |
+        while read f  ; do ff=${f%.*}; echo $ff; done;)";
+    echo ${comp_string};
+    complete -W "$(echo ${comp_string})" subtitlenamesync;
 }
 
 findvideofiles ()
 {
-    local video_file_types="matroska|mp4"; 
+    local video_file_types="matroska\|mp4"; 
     find -type f |
         xargs file | grep -i "${video_file_types}" | 
         cut -f 1 -d ' ' | 
