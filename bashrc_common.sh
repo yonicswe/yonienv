@@ -24,7 +24,8 @@ source ${yonienv}/env_common_args.sh
 ask_user_default_no ()
 {
     local choice=;
-    read -p " [y|N]?" choice
+    local user_string=${1};
+    read -p "${user_string} [y|N]?" choice
     case "$choice" in 
       y|Y ) return 1;;
       * ) return 0;;
