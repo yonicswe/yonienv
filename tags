@@ -4,13 +4,14 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+Ethlist	bashrc_fs.sh	/^Ethlist () $/;"	f
+__kernel_version_in_given_path	bashrc_mlx.sh	/^__kernel_version_in_given_path ()$/;"	f
 _bugs	docs_complete_dir.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
 _code	docs_complete_dir.sh	/^_code ()$/;"	f
 _devel	docs_complete_dir.sh	/^_devel ()$/;"	f
 _docs	docs_complete_dir.sh	/^_docs ()$/;"	f
-_features	docs_complete_dir.sh	/^_features ()$/;"	f
-_gcdcomplete	cdproject.sh	/^function _gcdcomplete()$/;"	f
+_downloads	docs_complete_dir.sh	/^_downloads ()$/;"	f
 _gcdcomplete	task_complete.sh	/^function _gcdcomplete()$/;"	f
 _gitdiscard	bashrc_git.sh	/^_gitdiscard () $/;"	f
 _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
@@ -41,7 +42,7 @@ cdbundle	bashrc_nice.sh	/^cdbundle () $/;"	f
 cdcode	docs_complete_dir.sh	/^cdcode() { cd $code_dir\/$1; }$/;"	f
 cddevel	docs_complete_dir.sh	/^cddevel() { cd $devel_dir\/$1; }$/;"	f
 cddocs	docs_complete_dir.sh	/^cddocs() { cd $docs_dir\/$1; }$/;"	f
-cdfeatures	docs_complete_dir.sh	/^cdfeatures() { cd $features_dir\/$1; }$/;"	f
+cddownloads	docs_complete_dir.sh	/^cddownloads() { cd ${_downloads_dir}\/$1; }$/;"	f
 cdofed	ofed_complete_dir.sh	/^cdofed()$/;"	f
 cdregression	regression_complete.sh	/^cdregression()$/;"	f
 cdshare	docs_complete_dir.sh	/^cdshare() { cd $share_dir\/$1; }$/;"	f
@@ -69,6 +70,7 @@ count	bashrc_misc.sh	/^function count() {$/;"	f
 create_alias_for_host	bashrc_mlx.sh	/^create_alias_for_host ()$/;"	f
 csfiles	bashrc_mlx.sh	/^csfiles ()$/;"	f
 cw	bashrc_fs.sh	/^cw () $/;"	f
+debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
 dfa	bashrc_fs.sh	/^dfa () $/;"	f
@@ -83,8 +85,9 @@ editBashrcScript	bashrc_vim.sh	/^editBashrcScript () $/;"	f
 editPythonScript	bashrc_vim.sh	/^editPythonScript () $/;"	f
 editbashrc	bashrc_common.sh	/^editbashrc () $/;"	f
 editgrub	bashrc_devel.sh	/^editgrub () $/;"	f
-ethlist	bashrc_fs.sh	/^ethlist () $/;"	f
+ethlist	bashrc_fs.sh	/^ethlist ()$/;"	f
 extract	bashrc_fs.sh	/^extract () {$/;"	f
+extract_srt_files_from_archive	bashrc_misc.sh	/^extract_srt_files_from_archive ()$/;"	f
 extractkernelsrcrpm	bashrc_devel.sh	/^extractkernelsrcrpm ()$/;"	f
 extractrpm	bashrc_fs.sh	/^extractrpm ()$/;"	f
 ff	bashrc_fs.sh	/^ff () $/;"	f
@@ -96,6 +99,7 @@ findexecutable	bashrc_fs.sh	/^findexecutable ()$/;"	f
 findiblib_old	bashrc_mlx.sh	/^findiblib_old ()$/;"	f
 findkernelsources	bashrc_devel.sh	/^findkernelsources ()$/;"	f
 findmin	bashrc_fs.sh	/^findmin ()$/;"	f
+findvideofiles	bashrc_misc.sh	/^findvideofiles ()$/;"	f
 findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
 freecachedmem	bashrc_fs.sh	/^freecachedmem ()$/;"	f
@@ -103,7 +107,6 @@ ftrace	bashrc_devel.sh	/^ftrace ()$/;"	f
 ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
 ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f
 fw_get_path	bashrc_mlx.sh	/^fw_get_path() {$/;"	f
-gcd	cdproject.sh	/^function gcd {$/;"	f
 gdbbt	bashrc_devel.sh	/^gdbbt () $/;"	f
 generate_wbe	bashrc_nice.sh	/^generate_wbe () $/;"	f
 get_branches	bashrc_svn.sh	/^get_branches () $/;"	f
@@ -211,10 +214,13 @@ mydistro_v1	bashrc_fs.sh	/^mydistro_v1 ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
 myip_v1	bashrc_fs.sh	/^myip_v1 ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
-ofedapplybackports	bashrc_mlx.sh	/^ofedapplybackports ()$/;"	f
+ofedbackportsapply	bashrc_mlx.sh	/^ofedbackportsapply ()$/;"	f
+ofedbackportsupdate	bashrc_mlx.sh	/^ofedbackportsupdate ()$/;"	f
 ofedbuildandinstallinternalversion	bashrc_mlx.sh	/^ofedbuildandinstallinternalversion ()$/;"	f
+ofedcdkernelversion	bashrc_mlx.sh	/^ofedcdkernelversion ()$/;"	f
+ofedcdreleasedir	bashrc_mlx.sh	/^ofedcdreleasedir ()$/;"	f
 ofedconfigureforkernel	bashrc_mlx.sh	/^ofedconfigureforkernel ()$/;"	f
-ofeddeletebackport	bashrc_mlx.sh	/^ofeddeletebackport ()$/;"	f
+ofeddeletebackportbranch	bashrc_mlx.sh	/^ofeddeletebackportbranch ()$/;"	f
 ofedfindindexforpackage	bashrc_mlx.sh	/^ofedfindindexforpackage ()$/;"	f
 ofedfindpathofversion	bashrc_mlx.sh	/^ofedfindpathofversion () $/;"	f
 ofedhelp	bashrc_mlx.sh	/^ofedhelp ()$/;"	f
@@ -226,13 +232,12 @@ ofedlistinternalversions	bashrc_mlx.sh	/^ofedlistinternalversions ()$/;"	f
 ofedlistosforversion	bashrc_mlx.sh	/^ofedlistosforversion ()$/;"	f
 ofedlistversionforos	bashrc_mlx.sh	/^ofedlistversionforos ()$/;"	f
 ofedlistversions	bashrc_mlx.sh	/^ofedlistversions ()$/;"	f
-ofedmkbackport	bashrc_mlx.sh	/^ofedmkbackport ()$/;"	f
+ofedmetadatacreate	bashrc_mlx.sh	/^ofedmetadatacreate () $/;"	f
+ofedmetadataverify	bashrc_mlx.sh	/^ofedmetadataverify ()$/;"	f
+ofedmkbackportbranch	bashrc_mlx.sh	/^ofedmkbackportbranch ()$/;"	f
 ofedmklinks	bashrc_mlx.sh	/^ofedmklinks ()$/;"	f
-ofedmkmetadata	bashrc_mlx.sh	/^ofedmkmetadata () $/;"	f
-ofedorigindir	bashrc_mlx.sh	/^ofedorigindir ()$/;"	f
 ofedquerybuildidforversion	bashrc_mlx.sh	/^ofedquerybuildidforversion ()$/;"	f
 ofeduninstall	bashrc_mlx.sh	/^ofeduninstall ()$/;"	f
-ofedupdatebackports	bashrc_mlx.sh	/^ofedupdatebackports ()$/;"	f
 opensmmlx	bashrc_mlx.sh	/^opensmmlx ()$/;"	f
 parse_git_branch	bashrc_fs.sh	/^parse_git_branch() $/;"	f
 parse_svn_branch	bashrc_fs.sh	/^parse_svn_branch() {$/;"	f
@@ -249,6 +254,7 @@ pdf_usage	bashrc_bookmarks.sh	/^pdf_usage ()$/;"	f
 pdp	bashrc_bookmarks.sh	/^pdp ()$/;"	f
 pgrep	bashrc_fs.sh	/^pgrep () $/;"	f
 pgrepa	bashrc_fs.sh	/^pgrepa () $/;"	f
+pp	bashrc_fs.sh	/^pp ()$/;"	f
 pr_debug	bashrc_devel.sh	/^pr_debug () $/;"	f
 pr_debug_usage	bashrc_devel.sh	/^pr_debug_usage ()$/;"	f
 print_underline	bashrc_common.sh	/^print_underline () $/;"	f
@@ -259,9 +265,11 @@ prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
 prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f
 psmine	bashrc_fs.sh	/^psmine ()$/;"	f
 pu	bashrc_bookmarks.sh	/^pu ()$/;"	f
+pyverbs_install	bashrc_mlx.sh	/^pyverbs_install ()$/;"	f
 randrme	bashrc_mlx.sh	/^randrme ()$/;"	f
 rdmacorebuild	bashrc_mlx.sh	/^rdmacorebuild ()$/;"	f
 rdmacorebuildapps	bashrc_mlx.sh	/^rdmacorebuildapps ()$/;"	f
+rdmacoreversion	bashrc_mlx.sh	/^rdmacoreversion ()$/;"	f
 rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f
 reboot	bashrc_fs.sh	/^reboot ()$/;"	f
 redpill	bashrc_fs.sh	/^redpill () $/;"	f
@@ -302,6 +310,7 @@ space_2_underscore	bashrc_fs.sh	/^space_2_underscore ()$/;"	f
 sriovsetupmlx5_1	bashrc_mlx.sh	/^sriovsetupmlx5_1 ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
+subtitlenamesync	bashrc_misc.sh	/^subtitlenamesync ()$/;"	f
 svl	bashrc_svn.sh	/^svl () $/;"	f
 svn_complete	bashrc_svn.sh	/^svn_complete () $/;"	f
 svn_reachable	bashrc_svn.sh	/^svn_reachable () $/;"	f
@@ -325,6 +334,7 @@ svnupbranch	bashrc_svn.sh	/^svnupbranch ()$/;"	f
 syndrome_to_english	bashrc_mlx.sh	/^syndrome_to_english () $/;"	f
 t	bashrc_fs.sh	/^t () $/;"	f
 ta	bashrc_devel.sh	/^ta ()$/;"	f
+tabcomplete_video_file_name	bashrc_misc.sh	/^tabcomplete_video_file_name ()$/;"	f
 tag_ls	bashrc_svn.sh	/^tag_ls () {$/;"	f
 tagcompleteme	bashrc_tags.sh	/^tagcompleteme ()$/;"	f
 tagcscope	bashrc_tags.sh	/^tagcscope ()$/;"	f
@@ -373,6 +383,7 @@ whichbash	bashrc_common.sh	/^whichbash ()$/;"	f
 wifiNotLan	bashrc_nice.sh	/^wifiNotLan ()$/;"	f
 wttr	bashrc_misc.sh	/^wttr()$/;"	f
 xtermblack	bashrc_misc.sh	/^xtermblack () $/;"	f
+yonienvconfigureforputty	bashrc_common.sh	/^yonienvconfigureforputty ()$/;"	f
 yonienvdepsinstall	bashrc_misc.sh	/^yonienvdepsinstall ()$/;"	f
 yuminstallfromrepo	bashrc_misc.sh	/^yuminstallfromrepo ()$/;"	f
 yuminstallifnotexist	bashrc_misc.sh	/^yuminstallifnotexist ()$/;"	f
