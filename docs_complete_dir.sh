@@ -95,19 +95,27 @@ cdbugs() { cd $bugs_dir/$1; }
 complete -F _bugs -o nospace cdbugs
 
 #==========================================================
-_features ()
+_downloads ()
 {
     local cmd=$1 cur=$2 pre=$3;
     local _cur compreply;
+    local the_dir=${_downloads_dir};
 
-    _cur=$features_dir/$cur
+    _cur=$the_dir/$cur
     compreply=( $( compgen -d "$_cur" ) )
-    COMPREPLY=( ${compreply[@]#$features_dir/} )
+    COMPREPLY=( ${compreply[@]#$the_dir/} )
     if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
         COMPREPLY[0]=${COMPREPLY[0]}/
     fi
 }
+# the directory to start  with is 
+_downloads_dir=${HOME}/Downloads
 
-features_dir=${HOME}/share/tasks/features
-cdfeatures() { cd $features_dir/$1; }
-complete -F _features -o nospace cdfeatures
+# the alias/function for the user
+cddownloads() { cd ${_downloads_dir}/$1; }
+
+# tab-comlete options for the alias/function "cddownloads"
+# by using the method _downloads() 
+# When user types "cddownloads" and double taps the [TAB] button
+# options to complete will appear on the screen
+complete -F _downloads -o nospace cddownloads
