@@ -180,63 +180,34 @@ subtitlenamesync ()
     movie_name=${1};
     output_path=${2:-subs.out}
 
+#   sanity check
     if [ -z ${movie_name} ] ; then 
         echo -e "give me a movie name e.g : $ subtitlenamesync \"superman\"";
         echo -e "also possible with an output path. e.g : $ subtitlenamesync \"super\" subs.super";
-        echo "found these movies : ";
+        echo "possible names : ";
         tabcomplete_video_file_name;
         return -1;
     fi
 
     movie_name=$(basename $movie_name);
 
-    # * handle no srt files exist
+#   sanity check
     if [ -z "$(ls *srt 2>/dev/null)" ] ; then
         echo "No SRT files found";
+    fi; 
 
-        if [ -n "$(ls *zip)" ] ; then
-            ask_user_default_yes "should i open the archives"
-            if [ $? -eq 0 ] ; then 
-                echo "Bye!";
-                return -1; 
-            fi
+    extract_srt_files_from_archive;
 
-            which 7za;
-            if [ $? -ne 0 ] ; then
-                echo "please install 7za and retry";
-                return -1;
-            fi
-
-            for i in $(ls *zip) ; do 
-                7za x "$i";
-            done;
-
-            ask_user_default_yes "should i clean all non srt files";
-            if [ $? -eq 0 ] ; then 
-                echo -e "Bye";
-                return -1;
-            fi;
-
-            echo -e "rm -f $(ls -I "*srt")";
-            ask_user_default_yes; 
-            if [ $? -eq 0 ] ; then 
-                echo "Bye";
-                return -1;
-            fi
-
-            rm -f $(ls -I "*srt");
-        fi 
-    fi;
-
-#  debug prints
+#  use this to debug
 #     j=1; 
 #     for i in *srt ; do 
 #         echo -e "install -D \"$i\" `pwd`/${output_path}/${movie_name}.$j.srt"; 
 #         ((j++)) ; 
 #     done
-
-    ask_user_default_yes;
-    [ $? -eq 0 ] && return;
+# 
+#     ask_user_default_yes;
+#     [ $? -eq 0 ] && return;
+#  use this to debug
 
     j=1; 
     for i in *srt ; do 
@@ -244,8 +215,55 @@ subtitlenamesync ()
         ((j++)) ; 
     done;
 
-    echo "done";
+#   echo "done";
     tree -A ${output_path};
+}
+
+extract_srt_files_from_archive ()
+{
+    if [ -n "$(ls *zip)" ] ; then
+        ask_user_default_yes "Hey I found zip files should i open them";
+        if [ $? -eq 0 ] ; then 
+#       user answered No!
+            echo "ok!";
+            return -1; 
+        fi;
+    else
+        return -1;
+    fi;
+
+#   sanity check
+    which 7za;
+    if [ $? -ne 0 ] ; then
+        echo "please install 7za and retry";
+        return -1;
+    fi;
+
+#   let the extraction begin
+    for i in $(ls *zip) ; do 
+        7za x "$i";
+    done;
+
+    ask_user_default_no "should i clean all non srt files";
+    if [ $? -eq 0 ] ; then 
+        echo -e "ok Bye";
+        return -1;
+    fi;
+    
+    if [ -n "$(findvideofiles)" ] ; then 
+        echo "video files found.. WILL NOT DELETE.";
+        return -1;
+    fi;
+
+    echo -e "rm -f $(ls -I "*srt")";
+    ask_user_default_yes "are you sure "; 
+    if [ $? -eq 0 ] ; then 
+        echo "ok Bye";
+        return -1;
+    fi;
+
+#   user chose to cleanup the folder    
+    rm -f $(ls -I "*srt");
 }
 
 tabcomplete_video_file_name ()
