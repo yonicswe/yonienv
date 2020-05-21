@@ -190,7 +190,7 @@ set complete-=i
 " au FileType c   set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
 " au FileType cpp set grepprg=grep\ -nHr\ --exclude=*svn*\ --exclude=tags\ --include=*.cpp\ --include=*\.\[c,h\]\ --exclude=*.log\ --exclude=*.vpj\ --exclude=*.git*\
 " au FileType c,cpp   set grepprg=grep\ -nHr\ --include=*.cpp\ --include=*\.\[c,h\]\
-au FileType c,cpp   set grepprg=ag\ --cc
+au FileType c,cpp   set grepprg=ag\ --cc\ --cpp
 
 
 
@@ -659,6 +659,7 @@ endfunction
 com! RestartSession call RestartSess()
 
 nnoremap ml : call RestartSess () <cr>
+nnoremap mk : mks!<cr>
 
 " file buffers
 nnoremap <A-down> :bnext<CR>
