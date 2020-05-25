@@ -3,7 +3,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 Ethlist	bashrc_fs.sh	/^Ethlist () $/;"	f
 __kernel_version_in_given_path	bashrc_mlx.sh	/^__kernel_version_in_given_path ()$/;"	f
 _bugs	docs_complete_dir.sh	/^_bugs ()$/;"	f
@@ -67,6 +67,7 @@ cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
 cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
 complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f
 count	bashrc_misc.sh	/^function count() {$/;"	f
+create_alias_for_host	bashrc_fs.sh	/^create_alias_for_host ()$/;"	f
 create_alias_for_host	bashrc_mlx.sh	/^create_alias_for_host ()$/;"	f
 csfiles	bashrc_mlx.sh	/^csfiles ()$/;"	f
 cw	bashrc_fs.sh	/^cw () $/;"	f

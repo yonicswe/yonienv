@@ -277,10 +277,10 @@ t ()
     local opts=""
     local dir=""        
 
-    if [ $(rpm -q tree | wc -l ) -eq 0 ] ; then 
-        echo "install tree : sudo yum install tree";
-        return;
-    fi
+#     if [ $(rpm -q tree | wc -l ) -eq 0 ] ; then 
+#         echo "install tree : sudo yum install tree";
+#         return;
+#     fi
 
     if [ $# -gt 0 ]  ; then
         if [[ $1 =~ [[:alpha:]] ]] ; then 
@@ -1155,4 +1155,15 @@ pgrepa ()
 freecachedmem ()
 {
     sync; echo 1 > /proc/sys/vm/drop_caches
+}
+
+create_alias_for_host ()
+{
+    alias_name=${1}
+    host_name=${2};
+    user_name=${3:-yonic}
+
+    alias ${alias_name}="sshpass -p ${yonipass} ssh -YX ${user_name}@${host_name}"
+    alias ${alias_name}root="sshpass -p 3tango ssh -YX root@${host_name}"
+    alias ${alias_name}ping="ping ${host_name}"
 }
