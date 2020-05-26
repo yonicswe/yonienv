@@ -49,22 +49,23 @@ tagme_base ()
 #     declare -a includeTagdir=("${!1}");
 #     declare -a excludeTagdir=("${!2}");
     local extra_filetypes=$3;
-    local filetypes=".*\.c\|.*\.h";
+#   local filetypes=".*\.c\|.*\.h\";
+    local filetypes=".*\.hh\|.*\.cc";
 
     filetypes+=${extra_filetypes};
 
 #   echo  includeTagdir: ${includeTagdir[@]}
 #   echo  excludeTagdir: ${excludeTagdir[@]}
 
-    rpm -q cscope > /dev/null;
-    if [ $? -ne 0 ] ; then echo "yum install cscope" ; return ; fi ; 
-    rpm -q ctags > /dev/null;
-    if [ $? -ne 0 ] ; then echo "yum install ctags" ; return ; fi ; 
+#     rpm -q cscope > /dev/null;
+#     if [ $? -ne 0 ] ; then echo "yum install cscope" ; return ; fi ; 
+#     rpm -q ctags > /dev/null;
+#     if [ $? -ne 0 ] ; then echo "yum install ctags" ; return ; fi ; 
 
     if [ -e cscope.files ] ; then 
         cscope -vkqb 2>/dev/null;
         echo "re-building ctags...";
-        ctags -u --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
+        ctags -uR --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
         exit
     fi
 
@@ -98,7 +99,7 @@ tagme_base ()
     fi    
 
     echo "Building ctags file...";
-    ctags -u --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+    ctags -uR --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
     echo > cscope.files
     for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
     cscope -vkqb 2>/dev/null
