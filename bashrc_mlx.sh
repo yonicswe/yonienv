@@ -726,18 +726,6 @@ alias ofedstart='sudo /etc/init.d/openibd start'
 alias ofedrestart='ofedstop; ofedstart'
 
 
-m ()
-{
-#   myip;
-    ethlist;
-    mydistro;
-    ofedversion;
-
-    if [ -e /lib64/libibverbs.so ] ; then 
-        echo "/lib64/libibverbs.so -> $(readlink -f /lib64/libibverbs.so)";
-    fi
-}
-
 vlinstall ()
 {
     local answer;
@@ -2170,3 +2158,12 @@ fw_get_path() {
 }
 
 alias cdmlxkernelsources='cd /mswg/work/kernel.org/x86_64'
+
+ofedversion ()
+{
+    ofedversion;
+
+    if [ -e /lib64/libibverbs.so ] ; then 
+        echo "/lib64/libibverbs.so -> $(readlink -f /lib64/libibverbs.so)";
+    fi
+}

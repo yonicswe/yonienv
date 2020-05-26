@@ -1167,3 +1167,13 @@ create_alias_for_host ()
     alias ${alias_name}root="sshpass -p 3tango ssh -YX root@${host_name}"
     alias ${alias_name}ping="ping ${host_name}"
 }
+
+
+
+m ()
+{
+#   myip;
+    ethlist;
+    mydistro;
+#     ofedversion;
+}
