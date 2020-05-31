@@ -46,11 +46,11 @@ alias tagyonienv='ctags --language-force=sh *sh'
 
 tagme_base ()
 {
-#     declare -a includeTagdir=("${!1}");
-#     declare -a excludeTagdir=("${!2}");
+#   declare -a includeTagdir=("${!1}");
+#   declare -a excludeTagdir=("${!2}");
     local extra_filetypes=$3;
-#   local filetypes=".*\.c\|.*\.h\";
-    local filetypes=".*\.hh\|.*\.cc";
+    local filetypes=".*\.c\|.*\.h\|.*\.hh\|.*\.cc\|.*\.cpp";
+#   local filetypes=".*\.hh\|.*\.cc\|.*\.cpp";
 
     filetypes+=${extra_filetypes};
 
