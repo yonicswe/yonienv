@@ -3,6 +3,7 @@
 unalias -a;
 unset SSH_ASKPASS
 alias editbashcommon='${v_or_g} ${yonienv}/bashrc_common.sh';
+alias gitclone-yonienv='git clone https://github.com/yonicswe/yonienv'
 grepyonienv () 
 {
     local grepme="${1}";
