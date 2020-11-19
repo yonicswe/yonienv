@@ -659,7 +659,7 @@ endfunction
 com! RestartSession call RestartSess()
 
 nnoremap ml : call RestartSess () <cr>
-nnoremap mk : mks!<cr>
+nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"
 
 " file buffers
 nnoremap <A-down> :bnext<CR>
