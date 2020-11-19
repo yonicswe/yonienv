@@ -696,3 +696,8 @@ grubversion ()
     echo "if GRUB found then do : sudo file -s /dev/sda"
     echo -e "if you see this string \"GRand Unified Bootloader\", then its GRUB1 otherwise GRUB2"
 }
+
+docker-attach-1st-container ()
+{
+    docker container attach $(docket container ls -q)
+}
