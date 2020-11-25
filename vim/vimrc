@@ -35,7 +35,11 @@ au BufNewfile,BufRead messages-* set filetype=messages
 "
 " show column designator on the cursor
 " set cursorcolumn or cuc
-"
+
+hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+" nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>>>
+
 " another method to be notified about passing the 80 chars line is
 " to color the passing char
 au FileType c,cpp call matchadd('ColorColumn', '\%80v', 100)
@@ -629,7 +633,8 @@ map <S-w><S-w> :tabclose!<cr>
 " map <S-left> :tabprevious<CR>
 
 function! DeleteAllBuffers ()
-    execute "1,100bd"
+"     execute "1,100bd"
+    bufdo bd
 endfunction
 com! BD call DeleteAllBuffers()
 com! Clipboard :r ~/share/clipboard.txt
@@ -790,6 +795,7 @@ function! AutoHighlightToggle()
   return 1
  endif
 endfunction
+
 
 " disable changing directory when opening a file with netrw explore
 " you can also browse files with :e [ctrl-d]
