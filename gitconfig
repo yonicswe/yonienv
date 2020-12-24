@@ -1,7 +1,7 @@
 [user]
 	author = Yonatan Cohen
 	name = Yonatan Cohen
-	email = yonatanc@mellanox.com
+	email = ycohen@habana.ai
 
 # accepted values are two of
 # normal, black, red, green, yellow, blue, magenta, cyan, white
@@ -207,7 +207,7 @@
 #     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
 [core]
-    editor = vim
+	editor = vim
 
 [diff]
 	tool = vimdiff
@@ -225,7 +225,7 @@
 #	helper = wincred
 
 [push]
-	default = matching
+	default = simple
 [core]
 	whitespace = trailing-space,space-before-tab,indent-with-non-tab
 [gc]
@@ -288,3 +288,5 @@
 #
 #   ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate 
 #   ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+[pull]
+	rebase = true

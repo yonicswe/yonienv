@@ -19,5 +19,6 @@ source ${yonienv}/bashrc_git.sh
 
 # office related 
 # source ${yonienv}/bashrc_nice.sh
-# source ${yonienv}/bashrc_mlx.sh
-source ${yonienv}/bashrc_huawei.sh
+source ${yonienv}/bashrc_mlx.sh
+# source ${yonienv}/bashrc_huawei.sh
+source ${yonienv}/bashrc_habana.sh
