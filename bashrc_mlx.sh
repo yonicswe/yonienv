@@ -33,64 +33,6 @@ alias chownyoni='sudo chown yonatanc:mtl'
 # create_alias_for_host 70 dev-r-vrt-070
 
 # my development hosts
-# create_mlx_alias_for_host 145 dev-l-vrt-145
-# create_mlx_alias_for_host 1455 dev-l-vrt-145-005
-# dev-l-vrt-145-006
-# create_mlx_alias_for_host 1456 10.134.145.6 
-# create_mlx_alias_for_host 1457 dev-l-vrt-145-007
-# create_mlx_alias_for_host 1458 dev-l-vrt-145-008
-# create_mlx_alias_for_host 1459 dev-l-vrt-145-009
-
-# dev-l-vrt-146
-# create_mlx_alias_for_host 146 10.134.146.1 
-# create_mlx_alias_for_host 1465 dev-l-vrt-146-005
-# create_mlx_alias_for_host 1466 dev-l-vrt-146-006
-# create_mlx_alias_for_host 1467 dev-l-vrt-146-007
-
-# dev-l-vrt-146-008
-# create_mlx_alias_for_host 1468 10.134.146.8
-# create_mlx_alias_for_host 1469 dev-l-vrt-146-009
-# create_mlx_alias_for_host 191 dev-r-vrt-191
-
-# stm server to run regression
-# create_mlx_alias_for_host stm88 mtl-stm-88
-# create_mlx_alias_for_host stmaz88 mtl-stm-az-088
-
-# performance setup
-# create_mlx_alias_for_host 94 dev-l-vrt-094
-# create_mlx_alias_for_host 97 dev-l-vrt-097
-
-# rxe regression setup
-# create_mlx_alias_for_host 5180 reg-l-vrt-5180
-# create_mlx_alias_for_host 5181 reg-l-vrt-5181
-# create_mlx_alias_for_host 51806 reg-l-vrt-5180-006
-# create_mlx_alias_for_host 51816 reg-l-vrt-5181-006
-
-# guy levi setup
-# create_mlx_alias_for_host 212 dev-l-vrt-212
-# create_mlx_alias_for_host 213 dev-l-vrt-213
-# create_mlx_alias_for_host 202 dev-l-vrt-202
-
-# parav
-# create_mlx_alias_for_host parav sw-mtx-036
-# create_mlx_alias_for_host danit reg-l-vrt-178
-
-# sriov
-# create_mlx_alias_for_host 165 10.134.3.165
-# create_mlx_alias_for_host 166 10.134.3.166
-# create_mlx_alias_for_host 188 10.136.1.188
-# create_mlx_alias_for_host 189 10.134.3.189
-=======
-# create_alias_for_host 1 r-ole01
-# create_alias_for_host 2 r-ole02
-# create_alias_for_host 8 r-ole08
-# create_alias_for_host 9 r-ole08
-# create_alias_for_host 10 r-ole08
-# create_alias_for_host 11 r-ole08
-# create_alias_for_host 15 r-ole15
-# create_alias_for_host 70 dev-r-vrt-070
-
-# my development hosts
 # create_alias_for_host 145 dev-l-vrt-145
 # create_alias_for_host 1455 dev-l-vrt-145-005
 # dev-l-vrt-145-006
@@ -138,7 +80,6 @@ alias chownyoni='sudo chown yonatanc:mtl'
 # create_alias_for_host 166 10.134.3.166
 # create_alias_for_host 188 10.136.1.188
 # create_alias_for_host 189 10.134.3.189
->>>>>>> habana: habana related
 
 ###########################################################
 #              build servers
