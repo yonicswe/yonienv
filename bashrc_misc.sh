@@ -284,3 +284,5 @@ findvideofiles ()
             basename $x ; 
         done;
 }
+
+source /home/ycohen/share/tmp/fzf/shell/key-bindings.bash
