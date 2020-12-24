@@ -374,22 +374,3 @@
 #   ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 [pull]
 	rebase = true
-[http]
-	postBuffer = 524288000
-[credential]
-	helper = cache
-[tig "bind"]
-    generic = D !git dt --no-prompt %(commit)^ %(commit)
-    main = w !git difftool  %(commit)^!
-    diff = w !git difftool --tool=vimdiff  %(commit)^!
-
-[tig]
-#   main-view-date = custom
-#   main-view-date-format = "%Y-%m-%d-%H:%M"
-#   main-view-date-display = relative-compact
-#   main-view-commit-title-graph = v1
-#   main-view-author-display = abbreviated
-#   main-view-id-display = yes
-    mouse = yes
-    blame-view-line-number = yes
-
