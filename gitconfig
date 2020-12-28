@@ -211,10 +211,10 @@
 	editor = vim
 
 [diff]
-	tool = vimdiff
+	tool = gvimdiff
 
 [merge]
-	tool = vimdiff
+	tool = gvimdiff
 
 [difftool]
 	prompt = true
@@ -291,3 +291,5 @@
 #   ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 [pull]
 	rebase = true
+[http]
+	postBuffer = 524288000

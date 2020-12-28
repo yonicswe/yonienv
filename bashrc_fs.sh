@@ -1174,3 +1174,5 @@ m ()
     mydistro;
 #     ofedversion;
 }
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
