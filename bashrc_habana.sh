@@ -31,6 +31,8 @@ create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
 alias kmdsrv='~/kmd-srv.py'
 alias kmdsrvfree='~/kmd-srv.py|grep -i free'
 alias kmdsrvyoni='~/kmd-srv.py|grep -i ycohen'
+alias kmdsrvgoya='~/kmd-srv.py|grep -i goya'
+alias kmdsrvgaudi='~/kmd-srv.py|grep -i gaudi'
 
 gitcommithabana ()
 {
