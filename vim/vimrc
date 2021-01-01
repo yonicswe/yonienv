@@ -659,9 +659,14 @@ com! TagmeAgain call TagmeAgain_func()
 
 function! RestartSess ()
    call DeleteAllBuffers ()
-   execute "source Session.vim"
+   execute "silent! source Session.vim"
+   execute "silent! source tags.vim"
 endfunction
 com! RestartSession call RestartSess()
+
+" function! MakeSession ()
+"    execute "silent! source tags.vim"
+" endfunction
 
 nnoremap ml : call RestartSess () <cr>
 nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"<cr>
