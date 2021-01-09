@@ -625,7 +625,7 @@ endfunction
 " map <F10> :call TabMove(1)<CR>
 
 map <C-S-Left>  :execute "tabmove" tabpagenr() - 2 <CR>
-map <C-S-Right> :execute "tabmove" tabpagenr() <CR>
+map <C-S-Right> :execute "tabmove" tabpagenr() + 1 <CR>
 " map <S-F9>  :execute "tabmove" tabpagenr() - 2 <CR>
 " map <S-F10> :execute "tabmove" tabpagenr() <CR>
 map <S-w> :tabedit
