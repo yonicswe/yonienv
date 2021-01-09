@@ -1,4 +1,6 @@
 source ~/.vim/vimrc.guifont
+winpos 50 10
+winsize 160 39
 
 set nowritebackup
 set hlsearch
@@ -136,7 +138,8 @@ endif
 "     set columns=100
 "   endif
 " endif
-
+" syn match    cCustomFuncDef display /\(\w\+\(\s\|*\)\+\)\@<=\w\+\s*(\@=/ 
+" hi def cCustomFuncDef ctermfg=lightblue
 
 "
 "                 _  _  _
