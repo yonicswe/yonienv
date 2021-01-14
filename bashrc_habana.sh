@@ -28,11 +28,31 @@ create_habana_alias_for_host k61c k62-c75-b  labuser Hab12345
 
 create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
 
-alias kmdsrv='~/kmd-srv.py'
-alias kmdsrvfree='~/kmd-srv.py|grep -i free'
-alias kmdsrvyoni='~/kmd-srv.py|grep -i ycohen'
-alias kmdsrvgoya='~/kmd-srv.py|grep -i goya'
-alias kmdsrvgaudi='~/kmd-srv.py|grep -i gaudi'
+kmsl () 
+{ 
+    local filter=${1:-' '};
+    kmdServers=( $(~/kmd-srv.py|grep -i "${filter}" | cut -f 1 -d ' ') );
+    complete -W "$( echo ${kmdServers[@]})" kms kmsssh;
+    ~/kmd-srv.py | grep -i "${filter}" | column -t;
+}
+
+alias kms='~/kmd-srv.py'
+alias kmsfree='kmsl  free'
+alias kmsyoni='kmsl  ycohen'
+alias kmsgoya='kmsl  goya'
+alias kmsgaudi='kmsl  gaudi'
+kmsrelease ()
+{
+    kmsyoni |awk '{print $1}' |  while read s ; do 
+        ~/kmd-srv.py -r $s   ; 
+    done
+}
+
+kmsssh ()
+{ 
+    sshpass -p Hab12345 ssh -YX labuser@$1
+}
+
 
 gitcommithabana ()
 {
@@ -44,4 +64,27 @@ gitcommithabana ()
     git config commit.template ${yonienv}/git_templates/git_commit_habana_template;
     git commit;
     git config --unset commit.template;
+}
+
+alias listhlpci="lspci |grep Proc |cut -f 1 -d' ' "
+alias showhlpcidevice='sudo lspci -vv -nn -s '
+showlspci ()
+{
+    local i;
+    local dev;
+    hl_pci_devices=( $(listhlpci) );
+    if (( ${#hl_pci_devices[@]} == 1 )) ; then 
+       showhlpcidevice ${hl_pci_devices[0]} ;
+    elif ( ${hl_pci_devices[*]} > 1 ) ; then
+        # ask user which device to print
+        for i in ${!hl_pci_devices[@]} ; do 
+            echo "${i}) ${hl_pci_devices[$i]}";
+            read -p "Enter device number : " dev;
+            if (( $dev >= 0 && $dev < ${#hl_pci_devices[@]})) ; then
+                showhlpcidevice ${hl_pci_devices[$dev]};
+            fi
+        done
+    else
+        echo "No habana devices found on pci bus";
+    fi
 }
