@@ -667,12 +667,14 @@ function! RestartSess ()
 endfunction
 com! RestartSession call RestartSess()
 
-" function! MakeSession ()
-"    execute "silent! source tags.vim"
-" endfunction
+function! MakeSessionYoni ()
+    execute "silent !echo source tags.vim >> Session.vim"
+    execute "silent !echo cs a cscope.out >> Session.vim"
+endfunction
 
 nnoremap ml : call RestartSess () <cr>
-nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"<cr>
+" nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"<cr>
+nnoremap mk : mks!<cr>: call MakeSessionYoni () <cr>
 
 " file buffers
 nnoremap <A-down> :bnext<CR>
