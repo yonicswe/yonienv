@@ -258,7 +258,7 @@ dfa ()
 du1 ()
 {
 	local path=$1
-	du -sh --max-depth=1 $path | sort -hr 
+	du -h --max-depth=1 $path | sort -h 
 }
 
 du11 ()
