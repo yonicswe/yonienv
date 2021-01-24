@@ -88,3 +88,5 @@ showlspci ()
         echo "No habana devices found on pci bus";
     fi
 }
+
+alias hlasictype='cat /sys/class/habanalabs/hl0/device_type'
