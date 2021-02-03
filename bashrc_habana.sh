@@ -48,6 +48,14 @@ kmsrelease ()
     done
 }
 
+kmsretake ()
+{
+    local yoni_server;
+    yoni_server=$(kmsyoni|cut -f 1 -d ' ');
+    kmsrelease;
+    kms -t ${yoni_server};
+}
+
 kmsssh ()
 { 
     sshpass -p Hab12345 ssh -YX labuser@$1
