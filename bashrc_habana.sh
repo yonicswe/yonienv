@@ -98,3 +98,6 @@ showlspci ()
 }
 
 alias hlasictype='cat /sys/class/habanalabs/hl0/device_type'
+alias hlsetloopbackmode="echo 0x3ff | sudo tee  /sys/kernel/debug/habanalabs/hl0/nic_mac_loopback"
+alias hlprintnetworkstatus="~/trees/npu-stack/automation/habana_scripts/manage_network_ifs.sh --status"
+alias hlstartnetword="~/trees/npu-stack/automation/habana_scripts/manage_network_ifs.sh --up"
