@@ -449,7 +449,7 @@ alias mkinfiniband="\make M=drivers/infiniband/ modules -j ${ncoresformake}"
 if [ -e ${yonienv}/cdlinux.bkp ] ; then 
     source ${yonienv}/cdlinux.bkp
 else
-    export linuxkernelsourcecode=/images/kernel/linux
+    export linuxkernelsourcecode=/home/ycohen/trees/npu-stack/embedded/linux
 fi
 
 alias cdlinux='cd ${linuxkernelsourcecode}'
@@ -1001,7 +1001,7 @@ _checkpatchcomplete ()
 {
     [ -z "$(ls *.patch 2>/dev/null)" ] && return;
     ls *.patch | tr ' ' '\n';
-    complete -W "$(ls *.patch)" checkpatch checkpatchkernel;
+    complete -W "$(ls *.patch)" checkpatchuserspace checkpatchkernel;
     return;
 }
 
@@ -1017,23 +1017,30 @@ checkpatchkernel ()
     cd -;
 }
 
-checkpatchuserpace ()
+checkpatchuserspace ()
 {
-    local patch_file=$(readlink -f $@);
+    local patch_file;
     local gerrit_ignore="CONST_STRUCT";
     gerrit_ignore+=",EXECUTE_PERMISSIONS";
     gerrit_ignore+=",FILE_PATH_CHANGES";
     gerrit_ignore+=",GERRIT_CHANGE_ID";
     gerrit_ignore+=",PREFER_KERNEL_TYPES";
     gerrit_ignore+=",USE_NEGATIVE_ERRNO";
+    gerrit_ignore+=",NAKED_SSCANF";
+    gerrit_ignore+=",SSCANF_TO_KSTRTO";
+    gerrit_ignore+=",PREFER_PACKED";
+    gerrit_ignore+=",SPLIT_STRING";
 
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
+    patch_file=$(readlink -f $@);
     if ! [ -e ./scripts/checkpatch.pl ]  ; then 
         cdlinux;
-        ./scripts/checkpatch.pl --strict --ignore=${gerrit_ignore} ${patch_file};
+        echo "./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file}";
+        ./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file};
         cd -;
     else
-        ./scripts/checkpatch.pl --strict --ignore=${gerrit_ignore} ${patch_file};
+        echo "./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file}";
+        ./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file};
     fi
 
 }
