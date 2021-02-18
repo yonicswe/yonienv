@@ -74,27 +74,33 @@ gitcommithabana ()
     git config --unset commit.template;
 }
 
-alias listhlpci="lspci |grep Proc |cut -f 1 -d' ' "
-alias showhlpcidevice='sudo lspci -vv -nn -s '
+alias hlpcidevicelist="lspci |grep Proc |cut -f 1 -d' ' "
+alias hlpcideviceshow='sudo lspci -vv -nn -s '
 showlspci ()
 {
     local i;
     local dev;
-    hl_pci_devices=( $(listhlpci) );
+    hl_pci_devices=( $(hlpcidevicelist) );
     if (( ${#hl_pci_devices[@]} == 1 )) ; then 
-       showhlpcidevice ${hl_pci_devices[0]} ;
+       hlpcidevicehow ${hl_pci_devices[0]} ;
     elif ( ${hl_pci_devices[*]} > 1 ) ; then
         # ask user which device to print
         for i in ${!hl_pci_devices[@]} ; do 
             echo "${i}) ${hl_pci_devices[$i]}";
             read -p "Enter device number : " dev;
             if (( $dev >= 0 && $dev < ${#hl_pci_devices[@]})) ; then
-                showhlpcidevice ${hl_pci_devices[$dev]};
+                hlpcidevicehow ${hl_pci_devices[$dev]};
             fi
         done
     else
         echo "No habana devices found on pci bus";
     fi
+}
+
+hlpcideviceremove ()
+{
+    pci_device=${1};
+    echo 1 | sudo tee /sys/bus/pci/device/${pci_device}/remove
 }
 
 alias hlasictype='cat /sys/class/habanalabs/hl0/device_type'
