@@ -28,6 +28,42 @@ create_habana_alias_for_host k61c k62-c75-b  labuser Hab12345
 
 create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
 
+hlsetupenvironment ()
+{
+    # setup git and gerrit 
+    git config --global user.name "labuser";
+    git config --global user.email "labuser@habana.ai";
+    git config --global pull.rebase true;
+	git config --global push.default simple;
+	git config --global core.editor vim;
+
+    ssh-keyscan -p 29418 gerrit.habana-labs.com >> $HOME/.ssh/known_hosts;
+    ssh-keyscan -p 29418 gerrit >> $HOME/.ssh/known_hosts;
+
+    # create the source tree and build directories 
+    mkdir $HOME/bin;
+	mkdir -p $HOME/trees/npu-stack;
+
+    # clone 3 basic directories  
+	cd $HOME/trees/npu-stack;
+    git clone ssh://gerrit:29418/habanalabs;
+    git clone ssh://gerrit:29418/hl-thunk;
+    git clone ssh://gerrit:29418/automation;
+
+    # copy the automation scripts to labuser home directory.
+    cp $HOME/trees/npu-stack/automation/habana_scripts/.bashrc ~/
+	cp $HOME/trees/npu-stack/automation/habana_scripts/.bash_aliases ~/
+	cp $HOME/trees/npu-stack/automation/habana_scripts/git-completion.bash ~/bin/
+	cp $HOME/trees/npu-stack/automation/habana_scripts/.vimrc ~/
+	source ~/.bashrc
+
+    # for the creation of /dev/hl0 we setup udev
+    sudo cp $HOME/trees/npu-stack/automation/habana_scripts/habana.rules /etc/udev/rules.d/
+	sudo udevadm control --reload
+
+
+}
+
 kmsl () 
 { 
     local filter=${1:-' '};
