@@ -166,6 +166,15 @@ gdbbt ()
     gdb --batch --quiet -ex "thread apply all bt full" -ex "quit" ${exe} ${corefile}
 }
 
+setupcoredump ()
+{
+# kernel.core_pattern = |/usr/share/apport/apport %p %s %c %d %P %E
+    set -x;
+    sudo sysctl kernel.core_pattern;
+    sudo sysctl -w kernel.core_pattern=/tmp/core-%e.%p.%h.%t;
+    ulimit -c unlimited;
+    set +x;
+}
 
 alias cdlibmodules='cd /lib/modules/`uname -r`'
 listkernelmodules ()
