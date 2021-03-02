@@ -169,7 +169,7 @@
   	   if [ $# -eq 0 ] ; then   \
               git commit --amend ;  \
 	   else                     \
-	      GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; \
+	      GIT_EDITOR=~/yonienv/bin/gitedit.sh git rebase -i $1^; \
            fi                       \
     }; f"
 
