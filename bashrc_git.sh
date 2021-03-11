@@ -212,3 +212,5 @@ gitcommitfixup ()
     local index=$1;
     git commit -m "fixup: ${index}"
 }
+
+alias gitconfignopasswd='git config --global credential.helper cache'
