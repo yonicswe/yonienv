@@ -7,7 +7,7 @@ tagcompleteme ()
     if [ -z "${name_spec}" ] ; then
         complete -W "$( awk '{print $1}' tags )" gt vt
     else
-        complete -W "$(awk '{print $1}' tags | /usr/bin/grep -i ${name_spec} )" gt vt
+        complete -W "$(awk '{print $1}' tags | /bin/grep -i ${name_spec} )" gt vt
     fi
 }
 
