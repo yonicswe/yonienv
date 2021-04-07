@@ -293,3 +293,5 @@
 	rebase = true
 [http]
 	postBuffer = 524288000
+[credential]
+	helper = cache
