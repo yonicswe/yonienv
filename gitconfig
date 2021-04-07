@@ -200,6 +200,7 @@
 
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
+    logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 
     logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 #   also can track  changes to file with tig -- <file>
