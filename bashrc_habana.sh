@@ -145,3 +145,21 @@ alias hlprintnetworkstatus="~/trees/npu-stack/automation/habana_scripts/manage_n
 alias hlstartnetword="~/trees/npu-stack/automation/habana_scripts/manage_network_ifs.sh --up"
 
 alias hlbuildsimulator='build_func_sim6 -c -r'
+
+hlstartdriversimulator ()
+{
+    pushd ~/builds/habanalabs_build/drivers/misc/habanalabs
+    sudo insmod habanalabs.ko timeout_locked=40000 bringup_flags_enable=1 nic_ports_mask=1 nic_ports_ext_mask=1 bfe_tpc_mask=0 bfe_mmu_enable=1 bfe_pmmu_pgt_hr=1 bfe_security_enable=0 sim_mode=1 dyndbg==pf
+    popd 2>&1 > /dev/null
+}
+
+hlstopdriver ()
+{
+    sudo rmmod habanalabs
+}
+
+hlrestartdriver ()
+{
+    hlstopdriver;
+    hlstartdriversimulator;
+}
