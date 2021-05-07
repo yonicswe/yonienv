@@ -16,6 +16,7 @@ create_habana_alias_for_host omer  oshpigelman-vm ycohen  yo1st21Hab
 create_habana_alias_for_host k62 kvm-srv62-tlv labuser Hab12345
 create_habana_alias_for_host k62u18a k62-u18-a  labuser Hab12345
 create_habana_alias_for_host k62u18b k62-u18-b  labuser Hab12345
+create_habana_alias_for_host k61u18c k61-u18-c  labuser Hab12345
 create_habana_alias_for_host k62u18c k62-u18-c  labuser Hab12345
 create_habana_alias_for_host k62c75a k62-c75-a  labuser Hab12345
 create_habana_alias_for_host k62c75b k62-c75-b  labuser Hab12345
@@ -25,6 +26,8 @@ create_habana_alias_for_host k61u18a k62-u18-a  labuser Hab12345
 create_habana_alias_for_host k61u18b k62-u18-b  labuser Hab12345
 create_habana_alias_for_host k61c k62-c75-a  labuser Hab12345
 create_habana_alias_for_host k61c k62-c75-b  labuser Hab12345
+create_habana_alias_for_host pldm2 pldm-edk0-csr  labuser Hab12345
+create_habana_alias_for_host pldm6 pldm-edk0-idc  labuser Hab12345
 
 create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
 
@@ -68,15 +71,17 @@ kmsl ()
 { 
     local filter=${1:-' '};
     kmdServers=( $(~/kmd-srv.py|grep -i "${filter}" | cut -f 1 -d ' ') );
-    complete -W "$( echo ${kmdServers[@]})" kms kmsssh;
+    complete -W "$( echo ${kmdServers[@]})" kms kmsssh kmsping;
     ~/kmd-srv.py | grep -i "${filter}" | column -t;
 }
 
 alias kms='~/kmd-srv.py'
 alias kmsfree='kmsl  free'
+alias kmsfreegaudi='kmsl  "free.*gaudi"'
 alias kmsyoni='kmsl  ycohen'
 alias kmsgoya='kmsl  goya'
 alias kmsgaudi='kmsl  gaudi'
+alias kmsping='ping'
 kmsrelease ()
 {
     kmsyoni |awk '{print $1}' |  while read s ; do 
