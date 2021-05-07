@@ -589,6 +589,7 @@ dyoni ()
 
 alias findreject='find -name "*rej"'
 alias findorig='find -name "*orig"'
+alias findmergetoolfiles='find -regex ".*_BASE_.*\|.*_BACKUP_.*\|.*_REMOTE_.*\|.*_LOCAL_.*"'
 findconflictfiles ()
 {
     local delete=
@@ -599,6 +600,7 @@ findconflictfiles ()
 
     findreject ${delete};
     findorig ${delete};
+    findmergetoolfiles ${delete};
     complete -W "$(findreject)" vorej
 }
 
