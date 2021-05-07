@@ -32,7 +32,7 @@
 [alias]
 
     amend = commit --amend --no-edit
-    amendauthor = commit --amend --author="Yonatan Cohen <yonatanc@mellanox.com>"
+    amendauthor = commit --amend --author="Yonatan Cohen <ycohen@habana.ai>"
     amrej = am --reject
 
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
@@ -41,8 +41,12 @@
     bdelete = branch -D 
     brename = branch -M
 
+#   print the name of the currently checked branch
+    bb = rev-parse --abbrev-ref HEAD
+
     commitempty = commit --allow-empty
     c = checkout
+    cb = checkout -b
 
 #   dg = difftool --tool=gvimdiff
 #   d = diff --color
@@ -70,6 +74,8 @@
     s = status -uno
     su = status -u
     ss = show --stat
+    track = status -uno -sb
+    trackmaster = branch --set-upstream-to=origin/master
 
     unstage = reset HEAD
     uncommit = reset HEAD^
@@ -79,6 +85,13 @@
     		}; f"
 
     untrackfile = rm --cached 
+
+    checkoutbranchfrommaster = "!f() {   \
+	  if [ -n $1 ] ; then		 \
+		git fetch origin master; \
+		git cb $1 FETCH_HEAD;    \
+	  fi;                            \
+	}; f"
 
     dg = "!f() {					     \
 	  if [ -z $1 ] ; then				     \
