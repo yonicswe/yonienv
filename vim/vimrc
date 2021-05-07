@@ -1,6 +1,6 @@
 source ~/.vim/vimrc.guifont
 winpos 50 10
-winsize 170 40
+winsize 180 39
 
 set nowritebackup
 set hlsearch
@@ -27,7 +27,6 @@ au FileType xml set expandtab
 au FileType gdb set expandtab
 
 au BufNewfile,BufRead messages-* set filetype=messages
-	
 
 " show a column marker to help keep the code
 " shorter than 80 chars.
@@ -675,6 +674,23 @@ endfunction
 nnoremap ml : call RestartSess () <cr>
 " nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"<cr>
 nnoremap mk : mks!<cr>: call MakeSessionYoni () <cr>
+
+function! MakeSessionYoniWithArg (name)
+    execute "mks! vimsess." . a:name . ".vim"
+    execute "silent !echo source tags.vim >> " . "vimsess." . a:name . ".vim"
+    execute "silent !echo cs a cscope.out >> " . "vimsess." . a:name . ".vim"
+endfunction
+command! -nargs=1 MKS call MakeSessionYoniWithArg(<f-args>)
+
+function! MakeSessionYoniAskUserForName ()
+    call inputsave()
+    let name = input('Session name: ')
+    call inputrestore()
+    execute "mks! vimsess." . l:name . ".vim"
+    execute "silent !echo source tags.vim >> " . "vimsess." . l:name . ".vim"
+    execute "silent !echo cs a cscope.out >> " . "vimsess." . l:name . ".vim"
+endfunction
+command! MKSS call MakeSessionYoniAskUserForName()
 
 " file buffers
 nnoremap <A-down> :bnext<CR>
