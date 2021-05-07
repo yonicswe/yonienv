@@ -11,8 +11,9 @@ tagcompleteme ()
     fi
 }
 
-alias cpptags='ctags -uR --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
-alias pythontags='ctags -R --python-kinds=-i'
+alias tagcpp='ctags -uR --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
+alias tagpython='ctags -R --python-kinds=-i'
+alias tagbash='ctags --language-force=sh *sh'
 
 tagcscope ()
 {
@@ -42,7 +43,6 @@ tagcscopemlx5 ()
     cscope -vkqb;
 }
 
-alias tagyonienv='ctags --language-force=sh *sh'
 
 tagme_base ()
 {
