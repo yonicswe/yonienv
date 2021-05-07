@@ -119,8 +119,8 @@ vscript ()
 # gsessls () 
 vsl () 
 {
-    session_ls=$(find -maxdepth 1 -name "*.vim" -printf "%f\n");
-    find -maxdepth 1 -name "*.vim" -printf "%f\n";
+    session_ls=$(find -maxdepth 1 -name "vimsess*" -printf "%f\n");
+    find -maxdepth 1 -name "vimsess*" -printf "%f\n";
     complete -W "${session_ls}" vs;
 #     complete -W "${session_ls}" gsess vs;
 }
