@@ -8,24 +8,28 @@ create_habana_alias_for_host ()
     host_name=${2};
     user_name=${3};
     user_pass=${4};
-    alias ${alias_name}="sshpass -p ${user_pass} ssh -YX ${user_name}@${host_name}"
+    alias ${alias_name}="sshpass -p ${user_pass} ssh ${user_name}@${host_name}"
     alias ${alias_name}ping="ping ${host_name}"
 }
 
 create_habana_alias_for_host omer  oshpigelman-vm ycohen  yo1st21Hab
-create_habana_alias_for_host k62 kvm-srv62-tlv labuser Hab12345
-create_habana_alias_for_host k62u18a k62-u18-a  labuser Hab12345
-create_habana_alias_for_host k62u18b k62-u18-b  labuser Hab12345
-create_habana_alias_for_host k61u18c k61-u18-c  labuser Hab12345
-create_habana_alias_for_host k62u18c k62-u18-c  labuser Hab12345
-create_habana_alias_for_host k62c75a k62-c75-a  labuser Hab12345
-create_habana_alias_for_host k62c75b k62-c75-b  labuser Hab12345
 
-create_habana_alias_for_host k61 kvm-srv61-tlv labuser Hab12345
+create_habana_alias_for_host k62     kvm-srv62-csr labuser Hab12345
+create_habana_alias_for_host k62u18a k62-u18-a     labuser Hab12345
+create_habana_alias_for_host k62u18b k62-u18-b     labuser Hab12345
+create_habana_alias_for_host k62u18c k62-u18-c     labuser Hab12345
+create_habana_alias_for_host k62u18d k62-u18-d     labuser Hab12345
+
+
+create_habana_alias_for_host k227    kvm-srv227-csr labuser Hab12345
+
+create_habana_alias_for_host k61     kvm-srv61-csr labuser Hab12345
+create_habana_alias_for_host k61u18c k61-u18-c  labuser Hab12345
 create_habana_alias_for_host k61u18a k62-u18-a  labuser Hab12345
 create_habana_alias_for_host k61u18b k62-u18-b  labuser Hab12345
-create_habana_alias_for_host k61c k62-c75-a  labuser Hab12345
-create_habana_alias_for_host k61c k62-c75-b  labuser Hab12345
+
+create_habana_alias_for_host k20 kvm-srv20-csr labuser Hab12345
+
 create_habana_alias_for_host pldm2 pldm-edk0-csr  labuser Hab12345
 create_habana_alias_for_host pldm6 pldm-edk0-idc  labuser Hab12345
 
@@ -81,6 +85,7 @@ alias kmsfreegaudi='kmsl  "free.*gaudi"'
 alias kmsyoni='kmsl  ycohen'
 alias kmsgoya='kmsl  goya'
 alias kmsgaudi='kmsl  gaudi'
+alias kmsfreegaudi='kmsl  gaudi'
 alias kmsping='ping'
 kmsrelease ()
 {
@@ -151,6 +156,11 @@ alias hlstartnetword="~/trees/npu-stack/automation/habana_scripts/manage_network
 
 alias hlbuildsimulator='build_func_sim6 -c -r'
 
+hlrepoupdate ()
+{
+    repo init -u ssh://gerrit.habana-labs.com:29418/software-repo -m default.xml -b master 
+}
+
 hlstartdriversimulator ()
 {
     pushd ~/builds/habanalabs_build/drivers/misc/habanalabs
@@ -168,3 +178,73 @@ hlrestartdriver ()
     hlstopdriver;
     hlstartdriversimulator;
 }
+
+alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON'"
+
+hlsimulatorstart ()
+{
+	echo "run_func_sim6 -spdlog 0  -i -r -D 12";
+	run_func_sim6 -spdlog 0  -i -r -D 12
+}
+
+hldriverstartsimulator ()
+{
+    local ports=${1:-0x1};
+    local driver_args;
+
+    driver_args="timeout_locked=40000";
+    driver_args+=" bringup_flags_enable=1";
+    driver_args+=" nic_ports_mask=${ports}";
+    driver_args+=" nic_ports_ext_mask=${ports}"
+    driver_args+=" bfe_mmu_enable=1";
+    driver_args+=" bfe_pmmu_pgt_hr=1";
+    driver_args+=" bfe_security_enable=0";
+    driver_args+=" bfe_tpc_mask=0";
+    driver_args+=" sim_mode=1";
+    driver_args+=" dyndbg==pf";
+
+    pushd ~/builds/habanalabs_build/drivers/misc/habanalabs
+    set -x;
+    sudo insmod habanalabs.ko ${driver_args};
+    set +x;
+    popd 2>&1 > /dev/null
+}
+
+hldriverstart()
+{
+    local driver_args;
+
+    driver_args+=" dyndbg==pf";
+
+    pushd ~/builds/habanalabs_build/drivers/misc/habanalabs
+    set -x;
+    sudo insmod habanalabs.ko ${driver_args};
+    set +x;
+    popd 2>&1 > /dev/null
+}
+
+hldriverstop()
+{
+    sudo rmmod habanalabs
+}
+
+hlethlist () 
+{ 
+    header=(INTF DRIVER IP-ADDR)
+
+    intf=( $(ls /sys/class/net/ ) );
+    ipaddr=( $( for i in $(echo ${intf[*]}) ; do ip a s $i | awk '/inet/{print $2}' ; done ) );
+    driver=( $( for i in $(echo ${intf[*]}) ; do ethtool -i $i  2>/dev/null; done | awk '/driver/{print $2}' ) ) 
+
+    (echo ${header[*]}
+    for ((i=0 ; i<${#intf[*]} ; i++)) ; do 
+    	echo "${intf[$i]} ${driver[$i]} ${ipaddr[$i]}"	
+    done) | column -t
+}
+
+alias hldriverstatus='lsmod |grep habanalabs'
+
+alias hlnetwork='~/trees/npu-stack/automation/habana_scripts/manage_network_ifs.sh'
+alias hlnetworkstatus='hlnetwork --status'
+alias hlnetworkup='hlnetwork --up'
+alias hlnetworkdown='hlnetwork --down'
