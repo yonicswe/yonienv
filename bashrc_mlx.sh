@@ -1030,6 +1030,7 @@ checkpatchuserspace ()
     gerrit_ignore+=",SSCANF_TO_KSTRTO";
     gerrit_ignore+=",PREFER_PACKED";
     gerrit_ignore+=",SPLIT_STRING";
+    gerrit_ignore+=",CONSTANT_COMPARISON";
 
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
     patch_file=$(readlink -f $@);
