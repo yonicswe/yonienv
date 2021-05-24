@@ -180,6 +180,25 @@ hlrestartdriver ()
 }
 
 alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON'"
+hlcheckpatches ()
+{
+    local num_of_patches=${1:-1};
+
+    $((num_of_patches--));
+
+    for (( i=${num_of_patches}; i >= 0  ; i-- )) ; do 
+        echo;
+        git log --pretty=format:'%C(yellow)%h %Cblue%an %Creset%s' HEAD~${i}^!
+        echo "==================================================================="
+        git show --format=email HEAD~${i}^! | checkpatchhabana 
+        echo "==================================================================="
+        
+        if (( $i > 0 )) ; then 
+            ask_user_default_yes "Continue"; 
+            [ $? -eq 0 ] && break; 
+        fi 
+    done;
+}
 
 hlsimulatorstart ()
 {
