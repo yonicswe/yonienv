@@ -40,6 +40,13 @@
     b = branch -vv
     bdelete = branch -D 
     brename = branch -M
+    deleteremotebranch = "!f()  {             \
+	  echo delete branch on the remote;   \
+	  echo :   git push -d remote branch;     \
+                                              \
+	  echo other checkedout repo from this remote need to run; \
+	  echo :   git fetch -p ;\
+	  }; f" 
 
 #   print the name of the currently checked branch
     bb = rev-parse --abbrev-ref HEAD
