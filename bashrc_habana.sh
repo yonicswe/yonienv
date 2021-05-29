@@ -15,18 +15,18 @@ create_habana_alias_for_host ()
 create_habana_alias_for_host omer  oshpigelman-vm ycohen  yo1st21Hab
 
 create_habana_alias_for_host k62     kvm-srv62-csr labuser Hab12345
-create_habana_alias_for_host k62u18a k62-u18-a     labuser Hab12345
-create_habana_alias_for_host k62u18b k62-u18-b     labuser Hab12345
-create_habana_alias_for_host k62u18c k62-u18-c     labuser Hab12345
-create_habana_alias_for_host k62u18d k62-u18-d     labuser Hab12345
+create_habana_alias_for_host k62a k62-u18-a     labuser Hab12345
+create_habana_alias_for_host k62b k62-u18-b     labuser Hab12345
+create_habana_alias_for_host k62c k62-u18-c     labuser Hab12345
+create_habana_alias_for_host k62d k62-u18-d     labuser Hab12345
 
 
 create_habana_alias_for_host k227    kvm-srv227-csr labuser Hab12345
 
 create_habana_alias_for_host k61     kvm-srv61-csr labuser Hab12345
-create_habana_alias_for_host k61u18c k61-u18-c  labuser Hab12345
-create_habana_alias_for_host k61u18a k62-u18-a  labuser Hab12345
-create_habana_alias_for_host k61u18b k62-u18-b  labuser Hab12345
+create_habana_alias_for_host k61c k61-u18-c  labuser Hab12345
+create_habana_alias_for_host k61a k62-u18-a  labuser Hab12345
+create_habana_alias_for_host k61b k62-u18-b  labuser Hab12345
 
 create_habana_alias_for_host k20 kvm-srv20-csr labuser Hab12345
 
@@ -99,7 +99,10 @@ kmsretake ()
     local yoni_server;
     yoni_server=$(kmsyoni|cut -f 1 -d ' ');
     kmsrelease;
-    kms -t ${yoni_server};
+    for i in `echo ${yoni_server[@]}` ; do 
+        echo "retaking $i";
+        kms -t ${i};
+    done;
 }
 
 kmsssh ()
@@ -107,6 +110,12 @@ kmsssh ()
     sshpass -p Hab12345 ssh -YX labuser@$1
 }
 
+kmssshyoni ()
+{
+    local yonihost;
+    yonihost=$(kmsyoni|cut -f 1 -d ' ');
+    kmsssh ${yonihost};
+}
 
 gitcommithabana ()
 {
