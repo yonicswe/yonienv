@@ -201,9 +201,10 @@ hlcheckpatches ()
         echo "==================================================================="
         git show --format=email HEAD~${i}^! | checkpatchhabana 
         echo "==================================================================="
+        echo;
         
         if (( $i > 0 )) ; then 
-            ask_user_default_yes "Continue"; 
+            ask_user_default_yes "Continue to next patch"; 
             [ $? -eq 0 ] && break; 
         fi 
     done;
@@ -276,3 +277,4 @@ alias hlnetwork='~/trees/npu-stack/automation/habana_scripts/manage_network_ifs.
 alias hlnetworkstatus='hlnetwork --status'
 alias hlnetworkup='hlnetwork --up'
 alias hlnetworkdown='hlnetwork --down'
+alias buildhabanalabs='build_and_insmod_habanalabs -b'
