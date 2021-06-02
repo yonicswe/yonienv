@@ -32,6 +32,7 @@
 [alias]
 
     amend = commit --amend --no-edit
+    amendcommit = commit --amend
     amendauthor = commit --amend --author="Yonatan Cohen <ycohen@habana.ai>"
     amrej = am --reject
 
@@ -47,6 +48,14 @@
 	  echo other checkedout repo from this remote need to run; \
 	  echo :   git fetch -p ;\
 	  }; f" 
+
+    pushtoremote = "!f() {                                  \
+		  if [ -z $1 ] ; then                       \
+			  echo you must specify a remote;   \
+		  else                                     \
+			  git push -u $1 $(git rev-parse --abbrev-ref HEAD);         \
+		  fi;                                       \
+	  }; f"
 
 #   print the name of the currently checked branch
     bb = rev-parse --abbrev-ref HEAD
@@ -96,7 +105,7 @@
     checkoutbranchfrommaster = "!f() {   \
 	  if [ -n $1 ] ; then		 \
 		git fetch origin master; \
-		git cb $1 FETCH_HEAD;    \
+		git cb dev/ycohen/$1 FETCH_HEAD;    \
 	  fi;                            \
 	}; f"
 
