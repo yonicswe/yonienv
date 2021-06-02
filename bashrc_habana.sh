@@ -75,7 +75,7 @@ kmsl ()
 { 
     local filter=${1:-' '};
     kmdServers=( $(~/kmd-srv.py|grep -i "${filter}" | cut -f 1 -d ' ') );
-    complete -W "$( echo ${kmdServers[@]})" kms kmsssh kmsping;
+    complete -W "$( echo ${kmdServers[@]})" kms kmsssh kmsping kmstake kmsrelease;
     ~/kmd-srv.py | grep -i "${filter}" | column -t;
 }
 
@@ -87,7 +87,8 @@ alias kmsgoya='kmsl  goya'
 alias kmsgaudi='kmsl  gaudi'
 alias kmsfreegaudi='kmsl  gaudi'
 alias kmsping='ping'
-kmsrelease ()
+alias kmsrelease='~/kmd-srv.py -r'
+kmsreleaseyoni ()
 {
     kmsyoni |awk '{print $1}' |  while read s ; do 
         ~/kmd-srv.py -r $s   ; 
@@ -104,6 +105,9 @@ kmsretake ()
         kms -t ${i};
     done;
 }
+
+alias kmstake='kms --force -t '
+
 
 kmsssh ()
 { 
@@ -188,7 +192,7 @@ hlrestartdriver ()
     hlstartdriversimulator;
 }
 
-alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON'"
+alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl  --max-line-length=80 --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON'"
 hlcheckpatches ()
 {
     local num_of_patches=${1:-1};
