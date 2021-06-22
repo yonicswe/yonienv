@@ -24,13 +24,15 @@ create_habana_alias_for_host k62d k62-u18-d     labuser Hab12345
 create_habana_alias_for_host k227    kvm-srv227-csr labuser Hab12345
 
 create_habana_alias_for_host k61     kvm-srv61-csr labuser Hab12345
+create_habana_alias_for_host k61a k61-u18-a  labuser Hab12345
+create_habana_alias_for_host k61b k61-u18-b  labuser Hab12345
 create_habana_alias_for_host k61c k61-u18-c  labuser Hab12345
-create_habana_alias_for_host k61a k62-u18-a  labuser Hab12345
-create_habana_alias_for_host k61b k62-u18-b  labuser Hab12345
+create_habana_alias_for_host k61d k61-u18-d  labuser Hab12345
 
 create_habana_alias_for_host k20 kvm-srv20-csr labuser Hab12345
 
 create_habana_alias_for_host pldm2 pldm-edk0-csr  labuser Hab12345
+create_habana_alias_for_host pldm2controler  vlsi-palad01-csr.iil.intel.com palad "Cho\$ShaChu2"
 create_habana_alias_for_host pldm6 pldm-edk0-idc  labuser Hab12345
 
 create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
@@ -79,15 +81,28 @@ kmsl ()
     ~/kmd-srv.py | grep -i "${filter}" | column -t;
 }
 
+hlsl ()
+{
+    /software/data/hls-srv.py |columnt -t
+}
+
 alias kms='~/kmd-srv.py'
 alias kmsfree='kmsl  free'
 alias kmsfreegaudi='kmsl  "free.*gaudi"'
 alias kmsyoni='kmsl  ycohen'
 alias kmsgoya='kmsl  goya'
 alias kmsgaudi='kmsl  gaudi'
-alias kmsfreegaudi='kmsl  gaudi'
+alias kmsfreegaudi='kmsl  "free.*gaudi"'
 alias kmsping='ping'
-alias kmsrelease='~/kmd-srv.py -r'
+kmsrelease ()
+{
+    if [ -z ${1} ] ; then 
+        echo "your missing a <server> to release";
+        return;
+    fi;
+
+    ~/kmd-srv.py -r ${1};
+}
 kmsreleaseyoni ()
 {
     kmsyoni |awk '{print $1}' |  while read s ; do 
@@ -99,9 +114,9 @@ kmsretake ()
 {
     local yoni_server;
     yoni_server=$(kmsyoni|cut -f 1 -d ' ');
-    kmsrelease;
     for i in `echo ${yoni_server[@]}` ; do 
         echo "retaking $i";
+        kmsrelease $i; 
         kms -t ${i};
     done;
 }
@@ -282,3 +297,10 @@ alias hlnetworkstatus='hlnetwork --status'
 alias hlnetworkup='hlnetwork --up'
 alias hlnetworkdown='hlnetwork --down'
 alias buildhabanalabs='build_and_insmod_habanalabs -b'
+alias buildhlthunk='build_hlthunk -c'
+
+alias hlfirmwareversion='sudo hl-smi|grep -i version'
+
+alias cdhabanalabs='cd ~/trees/npu-stack/habanalabs'
+alias cdhlthunk='cd ~/trees/npu-stack/hl-thunk'
+alias cdautomation='cd ~/trees/npu-stack/automation'
