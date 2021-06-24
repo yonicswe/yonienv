@@ -83,7 +83,7 @@ kmsl ()
 
 hlsl ()
 {
-    /software/data/hls-srv.py |columnt -t
+    /software/data/hls-srv.py |column -t
 }
 
 alias kms='~/kmd-srv.py'
@@ -207,7 +207,7 @@ hlrestartdriver ()
     hlstartdriversimulator;
 }
 
-alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl  --max-line-length=80 --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON'"
+alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl  --max-line-length=80 --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON,MACRO_WITH_FLOW_CONTROL,MULTISTATEMENT_MACRO_USE_DO_WHILE,SINGLE_STATEMENT_DO_WHILE_MACRO,COMPLEX_MACRO'"
 hlcheckpatches ()
 {
     local num_of_patches=${1:-1};
