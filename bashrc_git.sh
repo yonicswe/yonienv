@@ -214,3 +214,38 @@ gitcommitfixup ()
 }
 
 alias gitconfignopasswd='git config --global credential.helper cache'
+
+gitshowfilefromindex ()
+{
+    sha=${1};
+    file=${2};
+
+    if [ $# -ne 2 ] ; then 
+        echo "gitshowfilefromindex <sha> <file>";
+        return -1;
+    fi
+
+    if ! [ -e "${file}" ] ; then
+        echo -e "file : \"${file}\" not found";
+        return -1;
+    fi    
+
+    git show --stat ${sha} 2>/dev/null > /dev/null;
+    if (( $? !=  0 )) ; then 
+        echo -e "index : ${sha} does not exist";
+        return -1;
+    fi
+
+    git show ${sha}:${file} | gvim - +:"set ft=c"
+}
+
+gitclearcache ()
+{
+    ask_user_default_no "are you sure "
+    if [ $? -eq 0 ] ; then 
+        return -1;
+    fi;
+
+    echo "rm -rf .git/rr-cache"
+    rm -rf .git/rr-cache
+}
