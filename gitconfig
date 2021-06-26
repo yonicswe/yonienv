@@ -32,6 +32,7 @@
 [alias]
 
     amend = commit --amend --no-edit
+#     amend = commit --amend --reuse-message=HEAD
     amendcommit = commit --amend
     amendauthor = commit --amend --author="Yonatan Cohen <ycohen@habana.ai>"
     amrej = am --reject
@@ -49,13 +50,15 @@
 	  echo :   git fetch -p ;\
 	  }; f" 
 
-    pushtoremote = "!f() {                                  \
+    pushthisbranchtoremote = "!f() {                                  \
 		  if [ -z $1 ] ; then                       \
 			  echo you must specify a remote;   \
 		  else                                     \
 			  git push -u $1 $(git rev-parse --abbrev-ref HEAD);         \
 		  fi;                                       \
 	  }; f"
+
+    syncbranches = fetch -p
 
 #   print the name of the currently checked branch
     bb = rev-parse --abbrev-ref HEAD
@@ -102,10 +105,17 @@
 
     untrackfile = rm --cached 
 
+    savework = commit -a -m "save work"
+
+    checkoutmaster = "!f() { \
+	git fetch origin master; \
+	git checkout -b master FETCH_HEAD; \
+    }; f"
+
     checkoutbranchfrommaster = "!f() {   \
 	  if [ -n $1 ] ; then		 \
 		git fetch origin master; \
-		git cb dev/ycohen/$1 FETCH_HEAD;    \
+		git cb dev/ycohen/sw-$1 FETCH_HEAD;    \
 	  fi;                            \
 	}; f"
 
@@ -325,3 +335,5 @@
 	postBuffer = 524288000
 [credential]
 	helper = cache
+[tig "bind"]
+    generic = D !git difftool --tool=vimdiff --no-prompt %(commit)^ %(commit)
