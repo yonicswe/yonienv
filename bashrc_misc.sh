@@ -240,9 +240,13 @@ extract_srt_files_from_archive ()
     fi;
 
 #   let the extraction begin
-    for i in $(ls *zip) ; do 
-        7za x "$i";
-    done;
+    find -maxdepth 1 -name "*zip" -exec 7za x {} \; 
+#         echo -e "7za x \"$i\"";
+#         7za x "$i";
+#         if [ $? -ne 0 ] ; then
+#             echo "failed to extract " $i;
+#         fi
+#     done;
 
     ask_user_default_no "should i clean all non srt files";
     if [ $? -eq 0 ] ; then 
