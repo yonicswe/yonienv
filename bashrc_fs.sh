@@ -259,7 +259,7 @@ dfa ()
 du1 ()
 {
 	local path=$1
-	du -sh --max-depth=1 $path | sort -hr 
+	du -h --max-depth=1 $path | sort -h 
 }
 
 du11 ()
@@ -337,7 +337,7 @@ h ()
     if [ -z $a ] ; then 
         history 
     else 
-        history | /usr/bin/grep --color -i $a 
+        history | /bin/grep --color -i $a 
     fi
 }
 
@@ -1170,13 +1170,11 @@ create_alias_for_host ()
     alias_name=${1}
     host_name=${2};
     user_name=${3:-yonic}
-
+    echo -e "alias ${alias_name}=\"sshpass -p ${yonipass} ssh -YX ${user_name}@${host_name}\""
     alias ${alias_name}="sshpass -p ${yonipass} ssh -YX ${user_name}@${host_name}"
     alias ${alias_name}root="sshpass -p 3tango ssh -YX root@${host_name}"
     alias ${alias_name}ping="ping ${host_name}"
 }
-
-
 
 m ()
 {
@@ -1185,3 +1183,5 @@ m ()
     mydistro;
 #     ofedversion;
 }
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

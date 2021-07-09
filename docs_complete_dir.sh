@@ -53,7 +53,7 @@ _devel ()
 }
 
 
-devel_dir=${HOME}/devel
+devel_dir=${HOME}/trees/npu-stack
 cddevel() { cd $devel_dir/$1; }
 complete -F _devel -o nospace cddevel
 

@@ -1,4 +1,6 @@
 source ~/.vim/vimrc.guifont
+winpos 50 10
+winsize 170 40
 
 set nowritebackup
 set hlsearch
@@ -136,7 +138,8 @@ endif
 "     set columns=100
 "   endif
 " endif
-
+" syn match    cCustomFuncDef display /\(\w\+\(\s\|*\)\+\)\@<=\w\+\s*(\@=/ 
+" hi def cCustomFuncDef ctermfg=lightblue
 
 "
 "                 _  _  _
@@ -622,7 +625,7 @@ endfunction
 " map <F10> :call TabMove(1)<CR>
 
 map <C-S-Left>  :execute "tabmove" tabpagenr() - 2 <CR>
-map <C-S-Right> :execute "tabmove" tabpagenr() <CR>
+map <C-S-Right> :execute "tabmove" tabpagenr() + 1 <CR>
 " map <S-F9>  :execute "tabmove" tabpagenr() - 2 <CR>
 " map <S-F10> :execute "tabmove" tabpagenr() <CR>
 map <S-w> :tabedit
@@ -659,12 +662,19 @@ com! TagmeAgain call TagmeAgain_func()
 
 function! RestartSess ()
    call DeleteAllBuffers ()
-   execute "source Session.vim"
+   execute "silent! source Session.vim"
+   execute "silent! source tags.vim"
 endfunction
 com! RestartSession call RestartSess()
 
+function! MakeSessionYoni ()
+    execute "silent !echo source tags.vim >> Session.vim"
+    execute "silent !echo cs a cscope.out >> Session.vim"
+endfunction
+
 nnoremap ml : call RestartSess () <cr>
-nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"<cr>
+" nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"<cr>
+nnoremap mk : mks!<cr>: call MakeSessionYoni () <cr>
 
 " file buffers
 nnoremap <A-down> :bnext<CR>

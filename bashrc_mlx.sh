@@ -11,83 +11,83 @@ fi
 
 alias editbashmlx='${v_or_g} ${yonienv}/bashrc_mlx.sh'
 alias chownyoni='sudo chown yonatanc:mtl'
-export yonipass="yonatanc11"
-create_alias_for_host ()
-{
-    alias_name=${1}
-    host_name=${2};
-
-    alias ${alias_name}="sshpass -p ${yonipass} ssh -YX yonatanc@${host_name}"
-    alias ${alias_name}root="sshpass -p 3tango ssh -YX root@${host_name}"
-    alias ${alias_name}ping="ping ${host_name}"
-}
+# export yonipass="yonatanc11"
+# create_mlx_alias_for_host ()
+# {
+#     alias_name=${1}
+#     host_name=${2};
+# 
+#     alias ${alias_name}="sshpass -p ${yonipass} ssh -YX yonatanc@${host_name}"
+#     alias ${alias_name}root="sshpass -p 3tango ssh -YX root@${host_name}"
+#     alias ${alias_name}ping="ping ${host_name}"
+# }
 
 # vnc hosts
-create_alias_for_host 1 r-ole01
-create_alias_for_host 2 r-ole02
-create_alias_for_host 8 r-ole08
-create_alias_for_host 9 r-ole08
-create_alias_for_host 10 r-ole08
-create_alias_for_host 11 r-ole08
-create_alias_for_host 15 r-ole15
-create_alias_for_host 70 dev-r-vrt-070
+# create_mlx_alias_for_host 1 r-ole01
+# create_mlx_alias_for_host 2 r-ole02
+# create_mlx_alias_for_host 8 r-ole08
+# create_mlx_alias_for_host 9 r-ole08
+# create_mlx_alias_for_host 10 r-ole08
+# create_mlx_alias_for_host 11 r-ole08
+# create_mlx_alias_for_host 15 r-ole15
+# create_mlx_alias_for_host 70 dev-r-vrt-070
 
 # my development hosts
-create_alias_for_host 145 dev-l-vrt-145
-create_alias_for_host 1455 dev-l-vrt-145-005
+# create_mlx_alias_for_host 145 dev-l-vrt-145
+# create_mlx_alias_for_host 1455 dev-l-vrt-145-005
 # dev-l-vrt-145-006
-create_alias_for_host 1456 10.134.145.6 
-create_alias_for_host 1457 dev-l-vrt-145-007
-create_alias_for_host 1458 dev-l-vrt-145-008
-create_alias_for_host 1459 dev-l-vrt-145-009
+# create_mlx_alias_for_host 1456 10.134.145.6 
+# create_mlx_alias_for_host 1457 dev-l-vrt-145-007
+# create_mlx_alias_for_host 1458 dev-l-vrt-145-008
+# create_mlx_alias_for_host 1459 dev-l-vrt-145-009
 
 # dev-l-vrt-146
-create_alias_for_host 146 10.134.146.1 
-create_alias_for_host 1465 dev-l-vrt-146-005
-create_alias_for_host 1466 dev-l-vrt-146-006
-create_alias_for_host 1467 dev-l-vrt-146-007
+# create_mlx_alias_for_host 146 10.134.146.1 
+# create_mlx_alias_for_host 1465 dev-l-vrt-146-005
+# create_mlx_alias_for_host 1466 dev-l-vrt-146-006
+# create_mlx_alias_for_host 1467 dev-l-vrt-146-007
 
 # dev-l-vrt-146-008
-create_alias_for_host 1468 10.134.146.8
-create_alias_for_host 1469 dev-l-vrt-146-009
-create_alias_for_host 191 dev-r-vrt-191
+# create_mlx_alias_for_host 1468 10.134.146.8
+# create_mlx_alias_for_host 1469 dev-l-vrt-146-009
+# create_mlx_alias_for_host 191 dev-r-vrt-191
 
 # stm server to run regression
-create_alias_for_host stm88 mtl-stm-88
-create_alias_for_host stmaz88 mtl-stm-az-088
+# create_mlx_alias_for_host stm88 mtl-stm-88
+# create_mlx_alias_for_host stmaz88 mtl-stm-az-088
 
 # performance setup
-create_alias_for_host 94 dev-l-vrt-094
-create_alias_for_host 97 dev-l-vrt-097
+# create_mlx_alias_for_host 94 dev-l-vrt-094
+# create_mlx_alias_for_host 97 dev-l-vrt-097
 
 # rxe regression setup
-create_alias_for_host 5180 reg-l-vrt-5180
-create_alias_for_host 5181 reg-l-vrt-5181
-create_alias_for_host 51806 reg-l-vrt-5180-006
-create_alias_for_host 51816 reg-l-vrt-5181-006
+# create_mlx_alias_for_host 5180 reg-l-vrt-5180
+# create_mlx_alias_for_host 5181 reg-l-vrt-5181
+# create_mlx_alias_for_host 51806 reg-l-vrt-5180-006
+# create_mlx_alias_for_host 51816 reg-l-vrt-5181-006
 
 # guy levi setup
-create_alias_for_host 212 dev-l-vrt-212
-create_alias_for_host 213 dev-l-vrt-213
-create_alias_for_host 202 dev-l-vrt-202
+# create_mlx_alias_for_host 212 dev-l-vrt-212
+# create_mlx_alias_for_host 213 dev-l-vrt-213
+# create_mlx_alias_for_host 202 dev-l-vrt-202
 
 # parav
-create_alias_for_host parav sw-mtx-036
-create_alias_for_host danit reg-l-vrt-178
+# create_mlx_alias_for_host parav sw-mtx-036
+# create_mlx_alias_for_host danit reg-l-vrt-178
 
 # sriov
-create_alias_for_host 165 10.134.3.165
-create_alias_for_host 166 10.134.3.166
-create_alias_for_host 188 10.136.1.188
-create_alias_for_host 189 10.134.3.189
+# create_mlx_alias_for_host 165 10.134.3.165
+# create_mlx_alias_for_host 166 10.134.3.166
+# create_mlx_alias_for_host 188 10.136.1.188
+# create_mlx_alias_for_host 189 10.134.3.189
 
 ###########################################################
 #              build servers
 ###########################################################
 # l-net-build06-006
-create_alias_for_host ppc64buildserver 10.141.114.6 
-create_alias_for_host x86buildserver 10.141.137.239 
-create_alias_for_host cluster12 clx-cratus-12
+# create_mlx_alias_for_host ppc64buildserver 10.141.114.6 
+# create_mlx_alias_for_host x86buildserver 10.141.137.239 
+# create_mlx_alias_for_host cluster12 clx-cratus-12
 
 sm ()
 {
@@ -449,7 +449,7 @@ alias mkinfiniband="\make M=drivers/infiniband/ modules -j ${ncoresformake}"
 if [ -e ${yonienv}/cdlinux.bkp ] ; then 
     source ${yonienv}/cdlinux.bkp
 else
-    export linuxkernelsourcecode=/images/kernel/linux
+    export linuxkernelsourcecode=/home/ycohen/trees/npu-stack/embedded/linux
 fi
 
 alias cdlinux='cd ${linuxkernelsourcecode}'
@@ -1001,7 +1001,7 @@ _checkpatchcomplete ()
 {
     [ -z "$(ls *.patch 2>/dev/null)" ] && return;
     ls *.patch | tr ' ' '\n';
-    complete -W "$(ls *.patch)" checkpatch checkpatchkernel;
+    complete -W "$(ls *.patch)" checkpatchuserspace checkpatchkernel;
     return;
 }
 
@@ -1017,23 +1017,30 @@ checkpatchkernel ()
     cd -;
 }
 
-checkpatchuserpace ()
+checkpatchuserspace ()
 {
-    local patch_file=$(readlink -f $@);
+    local patch_file;
     local gerrit_ignore="CONST_STRUCT";
     gerrit_ignore+=",EXECUTE_PERMISSIONS";
     gerrit_ignore+=",FILE_PATH_CHANGES";
     gerrit_ignore+=",GERRIT_CHANGE_ID";
     gerrit_ignore+=",PREFER_KERNEL_TYPES";
     gerrit_ignore+=",USE_NEGATIVE_ERRNO";
+    gerrit_ignore+=",NAKED_SSCANF";
+    gerrit_ignore+=",SSCANF_TO_KSTRTO";
+    gerrit_ignore+=",PREFER_PACKED";
+    gerrit_ignore+=",SPLIT_STRING";
 
     if  [ $# -eq 0 ] ; then _checkpatchcomplete ; return ; fi
+    patch_file=$(readlink -f $@);
     if ! [ -e ./scripts/checkpatch.pl ]  ; then 
         cdlinux;
-        ./scripts/checkpatch.pl --strict --ignore=${gerrit_ignore} ${patch_file};
+        echo "./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file}";
+        ./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file};
         cd -;
     else
-        ./scripts/checkpatch.pl --strict --ignore=${gerrit_ignore} ${patch_file};
+        echo "./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file}";
+        ./scripts/checkpatch.pl --ignore=${gerrit_ignore} ${patch_file};
     fi
 
 }
@@ -2159,11 +2166,11 @@ fw_get_path() {
 
 alias cdmlxkernelsources='cd /mswg/work/kernel.org/x86_64'
 
-ofedversion ()
-{
-    ofedversion;
-
-    if [ -e /lib64/libibverbs.so ] ; then 
-        echo "/lib64/libibverbs.so -> $(readlink -f /lib64/libibverbs.so)";
-    fi
-}
+# ofedversion ()
+# {
+#     ofedversion;
+# 
+#     if [ -e /lib64/libibverbs.so ] ; then 
+#         echo "/lib64/libibverbs.so -> $(readlink -f /lib64/libibverbs.so)";
+#     fi
+# }

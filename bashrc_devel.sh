@@ -166,6 +166,15 @@ gdbbt ()
     gdb --batch --quiet -ex "thread apply all bt full" -ex "quit" ${exe} ${corefile}
 }
 
+setupcoredump ()
+{
+# kernel.core_pattern = |/usr/share/apport/apport %p %s %c %d %P %E
+    set -x;
+    sudo sysctl kernel.core_pattern;
+    sudo sysctl -w kernel.core_pattern=/tmp/core-%e.%p.%h.%t;
+    ulimit -c unlimited;
+    set +x;
+}
 
 alias cdlibmodules='cd /lib/modules/`uname -r`'
 listkernelmodules ()
@@ -580,6 +589,7 @@ dyoni ()
 
 alias findreject='find -name "*rej"'
 alias findorig='find -name "*orig"'
+alias findmergetoolfiles='find -regex ".*_BASE_.*\|.*_BACKUP_.*\|.*_REMOTE_.*\|.*_LOCAL_.*"'
 findconflictfiles ()
 {
     local delete=
@@ -590,6 +600,7 @@ findconflictfiles ()
 
     findreject ${delete};
     findorig ${delete};
+    findmergetoolfiles ${delete};
     complete -W "$(findreject)" vorej
 }
 

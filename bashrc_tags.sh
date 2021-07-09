@@ -7,12 +7,13 @@ tagcompleteme ()
     if [ -z "${name_spec}" ] ; then
         complete -W "$( awk '{print $1}' tags )" gt vt
     else
-        complete -W "$(awk '{print $1}' tags | /usr/bin/grep -i ${name_spec} )" gt vt
+        complete -W "$(awk '{print $1}' tags | /bin/grep -i ${name_spec} )" gt vt
     fi
 }
 
-alias cpptags='ctags -uR --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
-alias pythontags='ctags -R --python-kinds=-i'
+alias tagcpp='ctags -uR --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
+alias tagpython='ctags -R --python-kinds=-i'
+alias tagbash='ctags --language-force=sh *sh'
 
 tagcscope ()
 {
@@ -42,7 +43,6 @@ tagcscopemlx5 ()
     cscope -vkqb;
 }
 
-alias tagyonienv='ctags --language-force=sh *sh'
 
 tagme_base ()
 {

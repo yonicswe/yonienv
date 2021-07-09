@@ -1,7 +1,7 @@
 [user]
 	author = Yonatan Cohen
 	name = Yonatan Cohen
-	email = yonatanc@mellanox.com
+	email = ycohen@habana.ai
 
 # accepted values are two of
 # normal, black, red, green, yellow, blue, magenta, cyan, white
@@ -32,7 +32,8 @@
 [alias]
 
     amend = commit --amend --no-edit
-    amendauthor = commit --amend --author="Yonatan Cohen <yonatanc@mellanox.com>"
+    amendcommit = commit --amend
+    amendauthor = commit --amend --author="Yonatan Cohen <ycohen@habana.ai>"
     amrej = am --reject
 
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
@@ -40,9 +41,28 @@
     b = branch -vv
     bdelete = branch -D 
     brename = branch -M
+    deleteremotebranch = "!f()  {             \
+	  echo delete branch on the remote;   \
+	  echo :   git push -d remote branch;     \
+                                              \
+	  echo other checkedout repo from this remote need to run; \
+	  echo :   git fetch -p ;\
+	  }; f" 
+
+    pushtoremote = "!f() {                                  \
+		  if [ -z $1 ] ; then                       \
+			  echo you must specify a remote;   \
+		  else                                     \
+			  git push -u $1 $(git rev-parse --abbrev-ref HEAD);         \
+		  fi;                                       \
+	  }; f"
+
+#   print the name of the currently checked branch
+    bb = rev-parse --abbrev-ref HEAD
 
     commitempty = commit --allow-empty
     c = checkout
+    cb = checkout -b
 
 #   dg = difftool --tool=gvimdiff
 #   d = diff --color
@@ -70,6 +90,8 @@
     s = status -uno
     su = status -u
     ss = show --stat
+    track = status -uno -sb
+    trackmaster = branch --set-upstream-to=origin/master
 
     unstage = reset HEAD
     uncommit = reset HEAD^
@@ -79,6 +101,13 @@
     		}; f"
 
     untrackfile = rm --cached 
+
+    checkoutbranchfrommaster = "!f() {   \
+	  if [ -n $1 ] ; then		 \
+		git fetch origin master; \
+		git cb dev/ycohen/$1 FETCH_HEAD;    \
+	  fi;                            \
+	}; f"
 
     dg = "!f() {					     \
 	  if [ -z $1 ] ; then				     \
@@ -132,6 +161,7 @@
 
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
+    logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 
     # diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
     diffcommit =  "!f() {                                   \
@@ -168,7 +198,7 @@
   	   if [ $# -eq 0 ] ; then   \
               git commit --amend ;  \
 	   else                     \
-	      GIT_EDITOR=/.autodirect/mtrswgwork/yonatanc/yonienv/bin/gitedit.sh git rebase -i $1^; \
+	      GIT_EDITOR=~/yonienv/bin/gitedit.sh git rebase -i $1^; \
            fi                       \
     }; f"
 
@@ -207,13 +237,13 @@
 #     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
 [core]
-    editor = vim
+	editor = vim
 
 [diff]
-	tool = vimdiff
+	tool = gvimdiff
 
 [merge]
-	tool = vimdiff
+	tool = gvimdiff
 
 [difftool]
 	prompt = true
@@ -222,10 +252,10 @@
 # template = ~/share/yonienv/git_commit_template
 
 [credential]
-#	helper = wincred
+	helper = cache
 
 [push]
-	default = matching
+	default = simple
 [core]
 	whitespace = trailing-space,space-before-tab,indent-with-non-tab
 [gc]
@@ -288,3 +318,9 @@
 #
 #   ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate 
 #   ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+[pull]
+	rebase = true
+[http]
+	postBuffer = 524288000
+[credential]
+	helper = cache
