@@ -188,7 +188,7 @@ extract_srt_files_from_archive ()
             return -1; 
         fi;
     else
-        return -1;
+        return 0;
     fi;
 
 #   sanity check
@@ -201,7 +201,7 @@ extract_srt_files_from_archive ()
 #   extract all zip files.
 #   echo "find -maxdepth 1 -name "*zip" -exec 7za x -o ${output_path} {} \; "
     find -maxdepth 1 -name "*zip" | while read subfile ; do 
-        7za x ${subfile} -o${output_path};
+        7za x "${subfile}" -o${output_path};
         if [ $? -ne 0 ] ; then 
             echo "failed to unzip ${subfile}";
             return 1;
@@ -250,10 +250,10 @@ subtitlenamesync ()
         return -1;
     fi
 
-    if ! [ -e ${movie_name} ] ; then 
-        echo -e "No such file \'${movie_name}\'";
-        return -1;
-    fi
+#     if ! [ -e ${movie_name} ] ; then 
+#         echo -e "No such file \'${movie_name}\'";
+#         return -1;
+#     fi
 
     if [ -d subs ] ; then 
         echo -e "there is already a \'subs' directory here. remove it before we continue"
@@ -279,9 +279,14 @@ subtitlenamesync ()
         popd
     fi
 
+    if ! [ -d ${output_path} ] ; then
+        output_path=.;
+    fi
+
     j=1; 
     for i in ${output_path}/*srt ; do 
-        install -D "$i" `pwd`/subs/${movie_name}.$j.srt ; 
+        echo -e "install -D \"$i\" `pwd`/subs/${movie_name}.$j.srt" ; 
+        install -D "$i" "`pwd`/subs/${movie_name}.$j.srt" ; 
         if [ $? -ne 0 ] ; then 
             echo "failed rename srt files."
             return -1;
