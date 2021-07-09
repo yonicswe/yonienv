@@ -182,6 +182,7 @@ pp ()
 }
 alias mv='mv -v'
 alias rm='rm -iv'
+alias rmd='rm -rf'
 alias cp='cp -iv'
 alias po='popd 1>/dev/null ; pd ; pd_complete'
 alias dirs='dirs -l -v'
@@ -388,10 +389,17 @@ mv2dir ()
 # by replacing space with underscore
 space_2_underscore ()
 {
-    fileName="$1"
+    fileName="$1";
 
-    newFileName=$(echo "$fileName" | sed 's/\ /_/g')
-    mv -i -v "$fileName" $newFileName 
+    if [ -z "${filename}" ] ; then
+        for i  in * ; do 
+            newFileName=$(echo "$i" | sed 's/\ /_/g')
+            mv -i -v "$i" $newFileName 
+        done
+    else
+        newFileName=$(echo "$fileName" | sed 's/\ /_/g')
+        mv -i -v "$fileName" $newFileName 
+    fi;
 } 
 
 rpmsearch () 
