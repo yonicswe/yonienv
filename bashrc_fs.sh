@@ -92,13 +92,15 @@ prompt_color ()
     if [ $COLORED_PROMPT == "true" ] ; then 
         export COLORED_PROMPT=false
         # export PS1="(\u) \h:\!=> " 
-        export PS1="(\u) \h:/\W=> " 
+        export PS1="(\u) \h:/\W\n\[$(tput sgr0)\]=> " 
     else
         export COLORED_PROMPT=true
         # export PS1="\[\033[1;31m\](\u) \[\033[1;32m\]\h:\!=> \[\033[0m\] "
-        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]=> "
+        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]\n\[$(tput sgr0)\]=> "
         # export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
     fi
+
+    return;
 
     if [ "${CS_PROMPT}" == "true" ] ; then 
         export CS_PROMPT=false;
@@ -117,13 +119,14 @@ prompt_sc ()
     if ! [ -d .git ] ; then
         echo "this is not a git directory. Exiting..."
         export CS_PROMPT=false;
-        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]=> "
+        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]\n\[$(tput sgr0)\]=> "
         return;
     fi
 
     export CS_PROMPT=true;
 #   export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
-    export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\[\033[00m\]$\[\033[00m\]=> "
+#   export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\[\033[00m\]$\[\033[00m\]=> "
+    export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\[\033[00m\]$\[\033[00m\]\n\[$(tput sgr0)\]=> "
 
 #     if [ -e .prompt_sc ] ; then
 #         _CS_PROMPT=$(cat .prompt_sc)
@@ -772,7 +775,7 @@ delete_executables ()
 { 
 #     local executable_file_list;
 #     executable_file_list=$(find . -maxdepth 1 -exec file {} \; |\grep "ELF.*executable"|awk '{print $1}'|sed 's/:$//')
-    find . -maxdepth 1 -exec file {} \; |\grep "ELF.*executable"|awk '{print $1}'|sed 's/:$//' | while read i ; do 
+    find . -maxdepth 1 -exec file {} \; |\grep "ELF.*executable\|dynamically linked"|awk '{print $1}'|sed 's/:$//' | while read i ; do 
 #         for i in ${executable_file_list} ; do
             echo "rm -f $i";
         rm -f $i;

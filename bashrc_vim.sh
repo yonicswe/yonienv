@@ -43,17 +43,19 @@ vimorgvim ()
         export v_or_g="gvim";
         export _vd="gvimdiff";
         export EDITOR="gvim";
+        export VISUAL="gvim";
     else
         export v_or_g="vim";
         export _vd="vimdiff"
         export EDITOR="vim";
+        export VISUAL="vim";
     fi
 
     git config --global diff.tool ${_vd};
     git config --global merge.tool ${_vd};
     echo $v_or_g | tee ${vimorgvimbackupfile};
 
-    r;
+#     r;
 }
 export EDITOR="vim";
 complete -W "vim gvim" vimorgvim;
@@ -89,7 +91,23 @@ v ()
 
 alias vo="${v_or_g} -O" 
 
-vt () { ${v_or_g} -t $1; }
+vt () { 
+    if [ 0 -eq $# ] ; then 
+        if [ -e tags.vim ] ; then
+            ${v_or_g} +"source tags.vim" 
+            return;
+        fi
+        ${v_or_g};
+        return;
+    fi
+
+    if [ -e tags.vim ] ; then
+        ${v_or_g} -t "/$1" +"source tags.vim" 
+        return;
+    fi
+
+    ${v_or_g};
+}
 # alias gt="g -t"
 
 # open vi with a compound string of file and number

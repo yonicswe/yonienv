@@ -1,6 +1,6 @@
 source ~/.vim/vimrc.guifont
 winpos 50 10
-winsize 180 39
+winsize 180 45
 
 set nowritebackup
 set hlsearch
@@ -58,6 +58,8 @@ if has("mouse_sgr")
 else
     set ttymouse=xterm2
 end
+
+noremap <S-RightMouse> :tn<cr>
 
 "              _    _                     _           __   __
 "  _ __  _  _ | |_ | |_   ___  _ _    ___| |_  _  _  / _| / _|
@@ -559,7 +561,7 @@ endfunc
 function! Auto_comp_apostrophes_disable ()
    inoremap " "
 endfunc
-call Auto_comp_apostrophes_disable ()
+" call Auto_comp_apostrophes_disable ()
 
 function! SetIndent (indent)
    let v=a:indent
@@ -667,7 +669,10 @@ endfunction
 com! RestartSession call RestartSess()
 
 function! MakeSessionYoni ()
-    execute "silent !echo source tags.vim >> Session.vim"
+    let tagsfile='tags.vim'
+    if filereadable(tagsfile)
+        execute "silent !echo source tags.vim >> Session.vim"
+    endif
     execute "silent !echo cs a cscope.out >> Session.vim"
 endfunction
 
@@ -685,9 +690,13 @@ command! -nargs=1 MKS call MakeSessionYoniWithArg(<f-args>)
 function! MakeSessionYoniAskUserForName ()
     call inputsave()
     let name = input('Session name: ')
+    let tagsfile='tags.vim'
     call inputrestore()
     execute "mks! vimsess." . l:name . ".vim"
-    execute "silent !echo source tags.vim >> " . "vimsess." . l:name . ".vim"
+
+    if filereadable(tagsfile)
+        execute "silent !echo source tags.vim >> " . "vimsess." . l:name . ".vim"
+    endif
     execute "silent !echo cs a cscope.out >> " . "vimsess." . l:name . ".vim"
 endfunction
 command! MKSS call MakeSessionYoniAskUserForName()
@@ -834,7 +843,19 @@ let g:netrw_list_hide= '\.[ch]$'
 "  cscope
 "  -------------------------
 source ~/.vim/cscope.vim
-com! Css :cscope add cscope.out
+
+function! SourceTags ()
+   let tagsfile='tags.vim'
+   if filereadable(tagsfile)
+      cs k -1
+      source tags.vim
+   else
+      cscope add cscope.out
+   endif
+endfunc
+com! Css call SourceTags()<CR>
+map <S-M> :call SourceTags()<CR>
+" com! Css :cscope add cscope.out
 " shortcut for cscope search where method under cursor is being called.
 " map <leader>fc :cs f c <cword><CR>
 
@@ -917,6 +938,7 @@ fun! ShowFuncName()
   call search("\\%" . lnum . "l" . "\\%" . col . "c")
 endfun
 map f :call ShowFuncName() <CR>
+" can also do :normal [[<cr>
 
 
 " add the following line and 

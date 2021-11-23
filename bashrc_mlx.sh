@@ -142,7 +142,7 @@ gitpushtogerrit ()
 #     local branch=${1};
 #     local topic=${2};
 #     local remote=${3:-origin};
-    local branch=;
+    local branch=master;
     local topic=;
     local remote=origin;
     local head=HEAD;

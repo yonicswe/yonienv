@@ -34,6 +34,10 @@ create_habana_alias_for_host k20 kvm-srv20-csr labuser Hab12345
 create_habana_alias_for_host pldm2 pldm-edk0-csr  labuser Hab12345
 create_habana_alias_for_host pldm2controler  vlsi-palad01-csr.iil.intel.com palad "Cho\$ShaChu2"
 create_habana_alias_for_host pldm6 pldm-edk0-idc  labuser Hab12345
+create_habana_alias_for_host pldm8 pldm-edk02-idc  labuser Hab12345
+
+create_habana_alias_for_host pldmfsm1 fmepsb0001.fm.intel.com labuser Hab12345
+create_habana_alias_for_host pldmfsm2 fmepsb0002.fm.intel.com labuser Hab12345
 
 create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
 
@@ -207,12 +211,14 @@ hlrestartdriver ()
     hlstartdriversimulator;
 }
 
-alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl  --max-line-length=80 --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON,MACRO_WITH_FLOW_CONTROL,MULTISTATEMENT_MACRO_USE_DO_WHILE,SINGLE_STATEMENT_DO_WHILE_MACRO,COMPLEX_MACRO'"
+# alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl  --max-line-length=100 --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,GERRIT_CHANGE_ID,NAKED_SSCANF,SSCANF_TO_KSTRTO,PREFER_PACKED,SPLIT_STRING,CONSTANT_COMPARISON,MACRO_WITH_FLOW_CONTROL,MULTISTATEMENT_MACRO_USE_DO_WHILE,SINGLE_STATEMENT_DO_WHILE_MACRO,COMPLEX_MACRO'"
+alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl  --max-line-length=100 --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,VSPRINTF_SPECIFIER_PX,VSPRINTF_POINTER_EXTENSION,IF_0,LINUX_VERSION_CODE,CONSTANT_COMPARISON,UNKNOWN_COMMIT_ID'"
+# alias checkpatchhabana="$linuxkernelsourcecode/scripts/checkpatch.pl  --max-line-length=80 --ignore gerrit_change_id --ignore='FILE_PATH_CHANGES,VSPRINTF_SPECIFIER_PX,VSPRINTF_POINTER_EXTENSION,IF_0,LINUX_VERSION_CODE,CONSTANT_COMPARISON'"
 hlcheckpatches ()
 {
     local num_of_patches=${1:-1};
 
-    $((num_of_patches--));
+    ((num_of_patches--));
 
     for (( i=${num_of_patches}; i >= 0  ; i-- )) ; do 
         echo;
@@ -231,31 +237,47 @@ hlcheckpatches ()
 
 hlsimulatorstart ()
 {
-	echo "run_func_sim6 -spdlog 0  -i -r -D 12";
-	run_func_sim6 -spdlog 0  -i -r -D 12
+# 	echo "run_func_sim6 -spdlog 0  -i -r -D 12";
+# 	run_func_sim6 -spdlog 0  -i -r -D 12
+    echo "run_coral_sim -C gaudi2 -D 16"
+    run_coral_sim -C gaudi2 -D 16
 }
+
+
+hl_driver_file=~/builds/habanalabs_build/drivers/misc/habanalabs/habanalabs.ko;
+hl_driver_en_file=~/builds/habanalabs_build/drivers/net/ethernet/habanalabs/habanalabs_en.ko;
 
 hldriverstartsimulator ()
 {
-    local ports=${1:-0x1};
-    local driver_args;
+    local ports=${1:-0xffff};
+    local driver_args="${2}";
+    local driver_en_args;
 
-    driver_args="timeout_locked=40000";
-    driver_args+=" bringup_flags_enable=1";
+    driver_args+=" timeout_locked=40000";
+#     driver_args+=" bringup_flags_enable=1";
     driver_args+=" nic_ports_mask=${ports}";
     driver_args+=" nic_ports_ext_mask=${ports}"
-    driver_args+=" bfe_mmu_enable=1";
-    driver_args+=" bfe_pmmu_pgt_hr=1";
-    driver_args+=" bfe_security_enable=0";
-    driver_args+=" bfe_tpc_mask=0";
+#     driver_args+=" bfe_mmu_enable=1";
+#     driver_args+=" bfe_pmmu_pgt_hr=1";
+#     driver_args+=" bfe_security_enable=0";
+#     driver_args+=" bfe_tpc_mask=0";
     driver_args+=" sim_mode=1";
     driver_args+=" dyndbg==pf";
 
-    pushd ~/builds/habanalabs_build/drivers/misc/habanalabs
+    driver_en_args="dyndbg==pf"
+
     set -x;
-    sudo insmod habanalabs.ko ${driver_args};
+    sudo insmod ${hl_driver_en_file} ${driver_en_args};
+    sudo insmod ${hl_driver_file} ${driver_args};
     set +x;
-    popd 2>&1 > /dev/null
+}
+
+hldriverrestartsimulator()
+{
+    local port_mask=${1:-0xfffff};
+    local driver_args="${2}";
+    hldriverstop;
+    hldriverstartsimulator ${port_mask} ${driver_args};
 }
 
 hldriverstart()
@@ -273,7 +295,15 @@ hldriverstart()
 
 hldriverstop()
 {
-    sudo rmmod habanalabs
+    if [ $(lsmod | cut -d' ' -f 1 | grep -w habanalabs  | wc -l) -eq 1 ] ; then 
+        echo "sudo rmmod habanalabs";
+        sudo rmmod habanalabs;
+    fi;
+
+    if [ $(lsmod | cut -d' ' -f 1 | grep -w habanalabs_en  | wc -l) -eq 1 ] ; then 
+        echo "sudo rmmod habanalabs_en";
+        sudo rmmod habanalabs_en;
+    fi;
 }
 
 hlethlist () 
@@ -296,8 +326,8 @@ alias hlnetwork='~/trees/npu-stack/automation/habana_scripts/manage_network_ifs.
 alias hlnetworkstatus='hlnetwork --status'
 alias hlnetworkup='hlnetwork --up'
 alias hlnetworkdown='hlnetwork --down'
-alias buildhabanalabs='build_and_insmod_habanalabs -b'
-alias buildhlthunk='build_hlthunk -c'
+alias hldriverbuild='build_and_insmod_habanalabs -b'
+alias hlthunkbuild='build_hlthunk -c'
 
 alias hlfirmwareversion='sudo hl-smi|grep -i version'
 
@@ -305,5 +335,14 @@ alias cdhabanalabs='cd ~/trees/npu-stack/habanalabs'
 alias cdhlthunk='cd ~/trees/npu-stack/hl-thunk'
 alias cdautomation='cd ~/trees/npu-stack/automation'
 alias cdspecs='cd ~/trees/npu-stack/specs'
+alias cdtmp='cd /home_local/ycohen/tmp'
 alias hlcoverity-hlthunk='/home/ycohen/trees/npu-stack/automation/habana_scripts/run_coverity.sh -p hlthunk --local -f -F'
 alias hlcoverity-habanalabs='/home/ycohen/trees/npu-stack/automation/habana_scripts/run_coverity.sh -p habanalabs --local -f -F'
+alias hlcopyenvtopldmfsm1='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@fmepsb0001.fm.intel.com:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldmfsm2='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@fmepsb0002.fm.intel.com:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldm2='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@pldm-edk0-csr:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldm6='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@pldm-edk0-idc:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldm8='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@pldm-edk02-idc:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok61c='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@k61-u18-c:/local_home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok61a='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@k61-u18-a:/local_home/labuser/Documents/users/ycohen/'
+alias hlclonehabanalabs='git clone ssh://gerrit:29418/habanalabs'

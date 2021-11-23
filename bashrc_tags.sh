@@ -63,17 +63,28 @@ tagme_base ()
 #     if [ $? -ne 0 ] ; then echo "yum install ctags" ; return ; fi ; 
 
     if [ -e cscope.files ] ; then 
+        echo "cscope.files has $(wc -l cscope.files|cut -f 1 -d ' ') files (size: $(ls -sh cscope.files|cut -f 1 -d ' '))"
+        echo -e "\033[0;33mRe-Tagging ctags...\033[0m";
+#       ctags -uR --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
+            set -x
+        ctags -u --fields=+niaS --c-kinds=+cdefglmpstuvx --c++-kinds=+p --extra=+q --extra=+f -L cscope.files
+            set +x
+        echo -e "\033[0;33mRe-Tagging cscope...\033[0m";
+#       echo "cscope -vkqb 2>/dev/null";
         cscope -vkqb 2>/dev/null;
-        echo "re-building ctags...";
-        ctags -uR --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
         exit
     fi
 
-    printf "tag     : %s\n" ${includeTagdir[@]}
-    if [ ${#excludeTagdir[@]} -eq  0 ] ; then
-#       source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h" -exec readlink -f {} \; ) )
+    echo -e "\033[0;31mTagging\033[0m   : ${includeTagdir[@]}"; 
+    echo -e "\033[0;31mGenerating file list\033[0m";
+    echo ""
 
-        source_files=($( find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; ) )
+    if [ ${#excludeTagdir[@]} -eq  0 ] ; then
+#       source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h" -exec readlink -f {} \; ) ) 
+#       source_files=($( find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; ) )
+
+#       echo "find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files" 
+        find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files &
 
 #=================================================================================================
 #       echo "Building ctags file...";
@@ -86,9 +97,13 @@ tagme_base ()
 #=================================================================================================
 
     else 
-        printf "exclude : %s\n" ${excludeTagdir[@]/+++/}
+#       printf "exclude : %s\n" ${excludeTagdir[@]/+++/}
         prune="-path ${excludeTagdir[@]/+++/-o -path}";
-        source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
+#       source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
+
+#       echo "find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h" > cscope.files;"
+        find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h" > cscope.files & 
+
 #=================================================================================================
 #         echo "Building ctags file...";
 #         ctags --sort=yes --fields=+niaS --c-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
@@ -98,10 +113,39 @@ tagme_base ()
 #=================================================================================================
     fi    
 
-    echo "Building ctags file...";
-    ctags -uR --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
-    echo > cscope.files
-    for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+    file=cscope.files;
+
+    while true ; do 
+        sleep 0.2
+        if [ ! -f ${file} ] ; then 
+            continue;
+        fi;
+        break;
+    done;
+
+    size=$(ls -s $file | cut -f 1 -d ' ');
+    while true ; do 
+
+        if [ "$(ls -s $file | cut -f 1 -d ' ')" -eq "$size" ] ; then 
+            break;
+        fi 
+
+        echo -ne "$(tail -1 $file)                                ";
+        echo -ne "\r"
+        size=$(ls -s $file | cut -f 1 -d ' ');
+    done
+
+    echo -e "\ncscope.files has $(wc -l cscope.files|cut -f 1 -d ' ') files (size: $(ls -sh cscope.files|cut -f 1 -d ' '))"
+    echo -e "\033[0;31mTagging ctags...\033[0m";
+#   echo "ctags -u --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f -L cscope.files"
+    ctags -u --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f -L cscope.files
+
+#   ctags -uR --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f $(echo ${source_files[@]})
+#   echo > cscope.files
+#   for f in ${source_files[@]} ; do echo $f  >> cscope.files ; done 
+
+    echo -e "\033[0;31mTagging cscope...\033[0m"
+#   echo "cscope -vkqb 2>/dev/null"
     cscope -vkqb 2>/dev/null
 }
 
