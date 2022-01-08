@@ -21,7 +21,7 @@ setup_gdbinit_dir_search_path ()
             done
 }
 
-alias debug='cgdb --args '
+alias debug='/usr/local/bin/cgdb --args '
 debuglibs ()
 {
     if [ -z $1 ] ; then

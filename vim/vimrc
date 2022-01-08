@@ -1,6 +1,4 @@
 source ~/.vim/vimrc.guifont
-winpos 50 10
-winsize 180 45
 
 set nowritebackup
 set hlsearch
@@ -538,7 +536,7 @@ autocmd FileType diff       nnoremap <silent> <leader>vd :call Vimdiff()<CR>
 
 function! Auto_comp_paren ()
    inoremap ( ()<esc>i
-   inoremap < <><esc>i
+"  inoremap < <><esc>i
    inoremap [ []<esc>i
    inoremap " ""<esc>i
    inoremap ' ''<esc>i
@@ -551,7 +549,7 @@ call Auto_comp_paren ()
 
 function! Auto_comp_paren_disable ()
    inoremap ( (
-   inoremap < <
+"  inoremap < <
    inoremap [ [
    inoremap " "
    inoremap ' '
@@ -759,6 +757,10 @@ set tags=tags
 set complete+=t
 let g:ctags_statusline=1
 
+map <C-w>[ :vertical stag <cword><CR>
+" [ctrl]wH - change horizontal split to vertical
+" [ctrl]wK - change vertical split to horizontal
+
 "    GDB
 "   ___  ___   ___
 "  / __||   \ | _ )
@@ -887,7 +889,8 @@ endfunction
 "---------------------------------------
 "     preset registers
 "-------------------------------------
-let @p = '      printk("-->%d: %s():\n", __LINE__,  __func__);' . "\n"
+" let @p = '      printk("-->%d: %s():\n", __LINE__,  __func__);' . "\n"
+let @p = '      dev_dbg(hdev->dev, " ");' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
 let @l =  "─────────────────────────────────────────────────────────────────────────────\n"
 let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n"
@@ -1011,3 +1014,5 @@ let g:ctrlp_max_depth=40
 "
 " vmap <Enter> <Plug>(EasyAlign)
 " set sc
+"
+au FileType gitcommit setlocal spell

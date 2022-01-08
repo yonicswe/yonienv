@@ -58,4 +58,42 @@ document showretval
 print the return value of a func before you actually return from it
 end
 
+define xac
+    dont-repeat
+    if $argc == 3
+        set $width = $arg2
+    else
+        set $width = 8
+    end
+    set $addr = (char *)($arg0)
+    set $endaddr = $addr + $arg1
+    while $addr < $endaddr
+        printf "%p: ", $addr
+        set $lineendaddr = $addr + $width
+        if $lineendaddr > $endaddr
+            set $lineendaddr = $endaddr
+        end
+        set $a = $addr
+        while $a < $lineendaddr
+            printf "0x%02x ", *(unsigned char *)$a
+            set $a++
+        end
+        while $a < $addr + $width
+            printf "     "
+            set $a++
+        end
+        printf "'"
+        set $a = $addr
+        while $a < $lineendaddr
+            printf "%c", *(char *)$a < 32 || *(char *)$a > 126 ? '.' : *(char *)$a
+            set $a++
+        end
+        printf "'\n"
+        set $addr = $addr + $width
+    end
+end
+
+document xac
+    usage: xac address count [width=8]
+end
 source .gdb_breakpoints

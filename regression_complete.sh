@@ -1,4 +1,4 @@
-regression_proj_dir=/labhome/yonatanc/devel/regression
+regression_proj_dir=/home/ycohen/trees/npu-stack/regression
 
 _regression ()
 {

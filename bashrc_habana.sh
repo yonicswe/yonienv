@@ -40,6 +40,8 @@ create_habana_alias_for_host pldmfsm1 fmepsb0001.fm.intel.com labuser Hab12345
 create_habana_alias_for_host pldmfsm2 fmepsb0002.fm.intel.com labuser Hab12345
 
 create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
+create_habana_alias_for_host srv649 kvm-srv649-csr labuser Hab12345
+create_habana_alias_for_host k2033e k203-u18-3e labuser Hab12345
 
 hlsetupenvironment ()
 {
@@ -122,7 +124,7 @@ kmsretake ()
         echo "retaking $i";
         kmsrelease $i; 
         kms -t ${i};
-    done;
+    done | column -t
 }
 
 alias kmstake='kms --force -t '
@@ -335,14 +337,20 @@ alias cdhabanalabs='cd ~/trees/npu-stack/habanalabs'
 alias cdhlthunk='cd ~/trees/npu-stack/hl-thunk'
 alias cdautomation='cd ~/trees/npu-stack/automation'
 alias cdspecs='cd ~/trees/npu-stack/specs'
+alias cdhldk='cd ~/trees/npu-stack/hldk'
 alias cdtmp='cd /home_local/ycohen/tmp'
 alias hlcoverity-hlthunk='/home/ycohen/trees/npu-stack/automation/habana_scripts/run_coverity.sh -p hlthunk --local -f -F'
 alias hlcoverity-habanalabs='/home/ycohen/trees/npu-stack/automation/habana_scripts/run_coverity.sh -p habanalabs --local -f -F'
-alias hlcopyenvtopldmfsm1='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@fmepsb0001.fm.intel.com:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvtopldmfsm2='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@fmepsb0002.fm.intel.com:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvtopldm2='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@pldm-edk0-csr:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvtopldm6='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@pldm-edk0-idc:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvtopldm8='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@pldm-edk02-idc:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvtok61c='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@k61-u18-c:/local_home/labuser/Documents/users/ycohen/'
-alias hlcopyenvtok61a='rsync -av -e ssh --exclude='.git' yonienv.files/ labuser@k61-u18-a:/local_home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldmfsm1='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@fmepsb0001.fm.intel.com:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldmfsm2='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@fmepsb0002.fm.intel.com:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldm2='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@pldm-edk0-csr:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldm6='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@pldm-edk0-idc:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtopldm8='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@pldm-edk02-idc:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok61a='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k61-u18-a:/local_home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok61b='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k61-u18-b:/local_home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok61c='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k61-u18-c:/local_home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok62a='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k62-u18-a:/local_home/labuser/Documents/users/ycohen/'
+alias hlcopyenvto-hls2-srv11-csr='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@hls2-srv11-csr:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvto-srv649='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@kvm-srv649-csr:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvto-k2033e='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-3e:/home/labuser/Documents/users/ycohen/'
 alias hlclonehabanalabs='git clone ssh://gerrit:29418/habanalabs'

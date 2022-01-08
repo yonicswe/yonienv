@@ -54,12 +54,14 @@
 	  echo :   git fetch -p ;\
 	  }; f" 
 
-    pushthisbranchtoremote = "!f() {                                  \
-		  if [ -z $1 ] ; then                       \
-			  echo you must specify a remote;   \
-		  else                                     \
-			  git push -u $1 $(git rev-parse --abbrev-ref HEAD);         \
-		  fi;                                       \
+    pushthisbranchtoremote = "!f() {                                 \
+		  remote=${1:-origin};                               \
+		  git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
+	  }; f"
+
+    pushthisbranchtoremotewithforce = "!f() {                                 \
+		  remote=${1:-origin};                               \
+		  git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
 	  }; f"
 
     syncbranches = fetch -p
@@ -103,7 +105,9 @@
     su = status -u
     ss = show --stat
     track = status -uno -sb
+    t = track
     trackmaster = branch --set-upstream-to=origin/master
+    tm = trackmaster
 
     unstage = reset HEAD
     uncommit = reset HEAD^

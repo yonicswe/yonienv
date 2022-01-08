@@ -1,7 +1,7 @@
 set as=long
 set hls
 set color
-set eld=block
+set eld=longarrow
 set ic
 set winsplit=even
 set autosourcereload
