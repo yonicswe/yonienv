@@ -318,4 +318,4 @@ findvideofiles ()
         done;
 }
 
-source /home/ycohen/share/tmp/fzf/shell/key-bindings.bash
+# source /home/ycohen/share/tmp/fzf/shell/key-bindings.bash

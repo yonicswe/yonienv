@@ -240,10 +240,10 @@
 	editor = vim
 
 [diff]
-	tool = gvimdiff
+	tool = vimdiff
 
 [merge]
-	tool = gvimdiff
+	tool = vimdiff
 
 [difftool]
 	prompt = true
@@ -278,6 +278,8 @@
 [gpg]
 	program = gpg2
 
+[credential]
+	helper = cache
 
 
 
