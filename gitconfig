@@ -61,7 +61,7 @@
 		  else                                     \
 			  git push -u $1 $(git rev-parse --abbrev-ref HEAD);         \
 		  fi;                                       \
-
+	  }; f"
     pushthisbranchtoremotewithforce = "!f() {                                 \
 		  remote=${1:-origin};                               \
 		  git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
