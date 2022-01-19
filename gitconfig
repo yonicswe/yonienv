@@ -54,10 +54,12 @@
 	  echo :   git fetch -p ;\
 	  }; f" 
 
-    pushthisbranchtoremote = "!f() {                                 \
-		  remote=${1:-origin};                               \
-		  git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
-	  }; f"
+    pushthisbranchtoremote = "!f() {                                  \
+		  if [ -z $1 ] ; then                       \
+			  echo you must specify a remote;   \
+		  else                                     \
+			  git push -u $1 $(git rev-parse --abbrev-ref HEAD);         \
+		  fi;                                       \
 
     pushthisbranchtoremotewithforce = "!f() {                                 \
 		  remote=${1:-origin};                               \
@@ -200,8 +202,6 @@
 
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
-
-    logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 
     logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 #   also can track  changes to file with tig -- <file>
@@ -375,3 +375,22 @@
 #   ls = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
 [pull]
 	rebase = true
+[http]
+	postBuffer = 524288000
+[credential]
+	helper = cache
+[tig "bind"]
+    generic = D !git dt --no-prompt %(commit)^ %(commit)
+    main = w !git difftool  %(commit)^!
+    diff = w !git difftool --tool=vimdiff  %(commit)^!
+
+[tig]
+#   main-view-date = custom
+#   main-view-date-format = "%Y-%m-%d-%H:%M"
+#   main-view-date-display = relative-compact
+#   main-view-commit-title-graph = v1
+#   main-view-author-display = abbreviated
+#   main-view-id-display = yes
+    mouse = yes
+    blame-view-line-number = yes
+
