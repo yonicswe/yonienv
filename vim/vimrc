@@ -41,7 +41,7 @@ hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=whi
 
 " another method to be notified about passing the 80 chars line is
 " to color the passing char
-au FileType c,cpp call matchadd('ColorColumn', '\%80v', 100)
+au FileType c,cpp call matchadd('ColorColumn', '\%100v', 100)
 
 
 "  __  __

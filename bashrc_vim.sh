@@ -115,6 +115,14 @@ vn ()
 {
     file_and_line="$*"
     vi_param=$(echo "$file_and_line" | sed 's/\ //g' | sed 's/:/\ +/' | sed 's/://')
+
+    if [ -e tags.vim ] ; then
+        set -x
+        ${v_or_g} $vi_param +"source tags.vim"
+        set +x
+        return;
+    fi
+
     ${v_or_g} $vi_param
 }
 

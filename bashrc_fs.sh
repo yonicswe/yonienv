@@ -1188,3 +1188,8 @@ m ()
 }
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+function ww ()
+{
+    w --no-header| awk '{print $3}' | while read i ; do nslookup $i ; done  |grep name 
+}

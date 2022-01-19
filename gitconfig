@@ -44,6 +44,7 @@
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 
     b = branch -vv
+    ba = branch -avv
     bdelete = branch -D 
     brename = branch -M
     deleteremotebranch = "!f()  {             \
@@ -110,6 +111,10 @@
     t = track
     trackmaster = branch --set-upstream-to=origin/master
     tm = trackmaster
+    trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
+		   echo tracking ; git t; }; f"
+    tb = trackbranch
+
 
     unstage = reset HEAD
     uncommit = reset HEAD^
