@@ -1,0 +1,3 @@
+bind main w !git difftool  %(commit)^!
+bind diff w !git difftool --tool=vimdiff  %(commit)^!
+set vertical-split = true
