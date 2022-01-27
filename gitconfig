@@ -110,7 +110,9 @@
     track = status -uno -sb
     t = track
     trackmaster = branch --set-upstream-to=origin/master
+    trackmasternext = branch --set-upstream-to=origin/master_next
     tm = trackmaster
+    tmn = trackmasternext
     trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
 		   echo tracking ; git t; }; f"
     tb = trackbranch
@@ -388,14 +390,17 @@
     generic = D !git dt --no-prompt %(commit)^ %(commit)
     main = w !git difftool  %(commit)^!
     diff = w !git difftool --tool=vimdiff  %(commit)^!
+#   main = = !git commit --fixup=%(commit)
+#   main = <ctrl-r> !git rebase --autosquash -i %(commit)
 
 [tig]
 #   main-view-date = custom
 #   main-view-date-format = "%Y-%m-%d-%H:%M"
 #   main-view-date-display = relative-compact
 #   main-view-commit-title-graph = v1
-#   main-view-author-display = abbreviated
-#   main-view-id-display = yes
+    main-view-author-display = abbreviated
+    main-view-id-display = yes
+    vertical-split = yes
     mouse = yes
     blame-view-line-number = yes
 
