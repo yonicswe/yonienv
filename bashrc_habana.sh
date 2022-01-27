@@ -22,6 +22,7 @@ create_habana_alias_for_host k62d k62-u20-d     labuser Hab12345
 
 
 create_habana_alias_for_host k227    kvm-srv227-csr labuser Hab12345
+create_habana_alias_for_host k227b    k227-u20-3b labuser Hab12345
 
 create_habana_alias_for_host k61     kvm-srv61-csr labuser Hab12345
 create_habana_alias_for_host k61a k61-u18-a  labuser Hab12345
@@ -42,6 +43,7 @@ create_habana_alias_for_host pldmfsm2 fmepsb0002.fm.intel.com labuser Hab12345
 create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
 create_habana_alias_for_host srv649 kvm-srv649-csr labuser Hab12345
 create_habana_alias_for_host srv621 kvm-srv621-csr labuser Hab12345
+create_habana_alias_for_host srv693 kvm-srv693-csr labuser Hab12345
 create_habana_alias_for_host k2033e k203-u18-3e labuser Hab12345
 
 hlsetupenvironment ()
@@ -330,7 +332,8 @@ alias hlnetworkstatus='hlnetwork --status'
 alias hlnetworkup='hlnetwork --up'
 alias hlnetworkdown='hlnetwork --down'
 alias hldriverbuild='build_and_insmod_habanalabs -b'
-alias hlthunkbuild='build_hlthunk -c'
+alias hlthunkbuild='2>&1 build_hlthunk | tee build.log'
+alias hlthunkbuildverbose='2>&1 VREBOSE=1 build_hlthunk | tee build.log'
 
 alias hlfirmwareversion='sudo hl-smi|grep -i version'
 
@@ -356,6 +359,7 @@ alias hlcopyenvtok62b='rsync -av -e ssh --exclude='.git' /home/ycohen/share/task
 alias hlcopyenvto-hls2-srv11-csr='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@hls2-srv11-csr:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-srv649='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@kvm-srv649-csr:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-srv621='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@kvm-srv621-csr:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvto-srv693='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@kvm-srv693-csr:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-k203u18a='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-1a:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-k203u18b='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-1b:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-k203u18d='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-3d:/home/labuser/Documents/users/ycohen/'
