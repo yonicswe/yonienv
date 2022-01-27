@@ -42,7 +42,7 @@ hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=whi
 " another method to be notified about passing the 80 chars line is
 " to color the passing char
 au FileType c,cpp call matchadd('ColorColumn', '\%100v', 100)
-
+nmap <C-d> mzyyp`z
 
 "  __  __
 " |  \/  | ___  _  _  ___ ___
@@ -547,9 +547,18 @@ endfunc
 call Auto_comp_paren ()
 
 
+function! Auto_comp_paren_enable ()
+   inoremap ( ()<esc>i
+   inoremap < <><esc>i
+   inoremap [ []<esc>i
+   inoremap " ""<esc>i
+   inoremap ' ''<esc>i
+   inoremap { {<CR>}<esc><up>o
+endfunc
+
 function! Auto_comp_paren_disable ()
    inoremap ( (
-"  inoremap < <
+   inoremap < <
    inoremap [ [
    inoremap " "
    inoremap ' '
