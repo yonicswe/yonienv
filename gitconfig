@@ -31,14 +31,20 @@
 
 [alias]
 
-    amend = commit --amend --no-edit
-    amendcommit = commit --amend
-    amendauthor = commit --amend --author="Yonatan Cohen <ycohen@habana.ai>"
+#   print the alias implementation
+#   git config --get-regexp alias.<alias name>	
+
+    amendsources= commit --amend --no-edit
+#     amend = commit --amend --reuse-message=HEAD
+    amendcommitlog = commit --amend
+    amendauthor = commit --amend --author='Yonatan Cohen <ycohen@habana.ai>'
+    amenddatenow = git commit --amend --no-edit --date "$(date)"
     amrej = am --reject
 
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 
     b = branch -vv
+    ba = branch -avv
     bdelete = branch -D 
     brename = branch -M
     deleteremotebranch = "!f()  {             \
@@ -49,7 +55,7 @@
 	  echo :   git fetch -p ;\
 	  }; f" 
 
-    pushtoremote = "!f() {                                  \
+    pushthisbranchtoremote = "!f() {                                  \
 		  if [ -z $1 ] ; then                       \
 			  echo you must specify a remote;   \
 		  else                                     \
@@ -57,6 +63,12 @@
 		  fi;                                       \
 	  }; f"
 
+    pushthisbranchtoremotewithforce = "!f() {                                 \
+		  remote=${1:-origin};                               \
+		  git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
+	  }; f"
+
+    syncbranches = fetch -p
 #   print the name of the currently checked branch
     bb = rev-parse --abbrev-ref HEAD
 
@@ -67,6 +79,7 @@
 #   dg = difftool --tool=gvimdiff
 #   d = diff --color
     d = diff
+    dw = diff --ws-error-highlight=all
     dfile = difftool --no-prompt
     dv = difftool
     dc = diff --cached
@@ -87,10 +100,15 @@
 
     r = remote -vv
 
-    s = status -uno
+    s = "!f() {             \
+	    git track;       \
+	    git status -uno;  \
+    }; f"
+    
     su = status -u
     ss = show --stat
     track = status -uno -sb
+    t = track
     trackmaster = branch --set-upstream-to=origin/master
        
     trackmasternext = branch --set-upstream-to=origin/master_next
@@ -109,11 +127,34 @@
 
     untrackfile = rm --cached 
 
-    checkoutbranchfrommaster = "!f() {   \
-	  if [ -n $1 ] ; then		 \
-		git fetch origin master; \
-		git cb dev/ycohen/$1 FETCH_HEAD;    \
-	  fi;                            \
+    savework = "!f() { \
+	    git commit -a -m 'save work'; \
+    }; f"
+
+#   if branch name is posixed with v<number> 
+#   increment the version v<number++>
+    branchincversion = "!f() { \
+        v=$(git bb |grep -E -o "v[0-9]+$"); \
+	if [ -z $v ] ; then return ; fi ; \
+	v=$(echo $v | grep -E -o "[0-9]"); \
+	bnewname=$(git bb | sed 's/v[0-9]//'); \
+	v=$((v + 1)) ;\
+	git brename ${bnewname}v$v; \
+    };f "
+
+
+    checkoutmaster = "!f() { \
+	git fetch origin master; \
+	git checkout -b master FETCH_HEAD; \
+    }; f"
+
+    checkoutbranchfrommaster = "!f() {                      \
+	  if [ -n $1 ] ; then		                    \
+		git fetch origin master;                    \
+		git cb dev/ycohen/sw-$1 FETCH_HEAD;         \
+		git branch --set-upstream-to=origin/master; \
+		git pull --rebase;                          \
+	  fi;                                               \
 	}; f"
 
     dg = "!f() {					     \
@@ -168,6 +209,7 @@
 
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
+#   also can track  changes to file with tig -- <file>
     logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 
     # diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
@@ -185,6 +227,13 @@
 	else                                                \
     	   git difftool $1^..$1  -y $2;      \
 	fi;                                                 \
+    }; f"
+
+    difffilebetweenbranches = "!f() {  \
+	branchA=$1; \
+	branchB=$2; \
+	file=$3; \
+	git dt $branchA $branchB -- $file; \
     }; f"
 
     format-patch-commit = "!f() {              \
@@ -209,6 +258,8 @@
            fi                       \
     }; f"
 
+    # list only untracked files
+    lu = ls-files --others
     lgraph = !git lg1
     lg1 = !git lg1-specific --all
     lg2 = !git lg2-specific --all
@@ -235,6 +286,9 @@
 			git diff --stat --cached origin/master ; \
 		fi; \
 		}; f"
+
+    cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
+#   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
 #     rebase-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git rebase FETCH_HEAD ; }; f"
