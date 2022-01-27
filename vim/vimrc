@@ -548,6 +548,15 @@ endfunc
 call Auto_comp_paren ()
 
 
+function! Auto_comp_paren_enable ()
+   inoremap ( ()<esc>i
+   inoremap < <><esc>i
+   inoremap [ []<esc>i
+   inoremap " ""<esc>i
+   inoremap ' ''<esc>i
+   inoremap { {<CR>}<esc><up>o
+endfunc
+
 function! Auto_comp_paren_disable ()
    inoremap ( (
    inoremap < <
