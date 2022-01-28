@@ -5,6 +5,9 @@ winsize 170 40
 set rtp+=/home/ycohen/share/tmp/fzf/
 nmap <C-P> :FZF<cr>
 
+set rtp+=/home/ycohen/share/tmp/fzf/
+nmap <C-P> :FZF<cr>
+
 set nowritebackup
 set hlsearch
 set noincsearch
