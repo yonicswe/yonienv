@@ -1,5 +1,8 @@
 source ~/.vim/vimrc.guifont
 
+set rtp+=/home/ycohen/share/tmp/fzf/
+nmap <C-P> :FZF<cr>
+
 set nowritebackup
 set hlsearch
 set noincsearch
@@ -1006,10 +1009,17 @@ let g:ctrlp_max_depth=40
 " ----------------------------------
 "  plugins
 " ----------------------------------
-" call plug#begin('~/.vim/plugged')
-" Plug 'junegunn/vim-easy-align'
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 " Plug 'francoiscabrol/ranger.vim'
-" call plug#end()
+Plug 'tpope/vim-fugitive'
+" Plug 'ggreer/the_silver_searcher'
+" Plug 'zackhsi/fzf-tags'
+" Plug 'Nequo/vim-allomancer'
+Plug 'iberianpig/tig-explorer.vim'
+call plug#end()
 
 " function RangerExplorer()
 "     exec "silent !ranger --choosefile=/tmp/vim_ranger_current_file " . expand("%:p:h")
@@ -1024,4 +1034,12 @@ let g:ctrlp_max_depth=40
 " vmap <Enter> <Plug>(EasyAlign)
 " set sc
 "
+
+"use spell checker in git commit
 au FileType gitcommit setlocal spell
+
+" for the vim-east-align plug
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
