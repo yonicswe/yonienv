@@ -331,9 +331,10 @@ alias hlnetwork='~/trees/npu-stack/automation/habana_scripts/manage_network_ifs.
 alias hlnetworkstatus='hlnetwork --status'
 alias hlnetworkup='hlnetwork --up'
 alias hlnetworkdown='hlnetwork --down'
-alias hldriverbuild='build_and_insmod_habanalabs -b'
+alias hldriverbuild='2>&1 build_and_insmod_habanalabs -b | tee build.log'
+alias hldriverbuildverbose='2>&1 build_and_insmod_habanalabs -b -v | tee build.log'
 alias hlthunkbuild='2>&1 build_hlthunk | tee build.log'
-alias hlthunkbuildverbose='2>&1 VREBOSE=1 build_hlthunk | tee build.log'
+alias hlthunkbuildverbose='2>&1 VERBOSE=1 build_hlthunk | tee build.log'
 
 alias hlfirmwareversion='sudo hl-smi|grep -i version'
 
