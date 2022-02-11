@@ -175,6 +175,7 @@ k () {
 alias l='ls --group-directories-first -l --color -F'
 alias lt='ls --group-directories-first -lt --color -F'
 alias ltr='ls --group-directories-first -ltr --color -F'
+alias rr=ranger
 
 alias c='cd'
 alias ..='cd ../ ; pwd -P'

@@ -236,6 +236,51 @@ extract_srt_files_from_archive ()
     fi
 }
 
+srtnamesync ()
+{
+    movie_name=${1};
+    output_path=${2:-subs.out}
+
+#   sanity check
+    if [ -z ${movie_name} ] ; then 
+        echo -e "give me a movie name e.g : $ subtitlenamesync \"superman\"";
+        echo -e "also possible with an output path. e.g : $ subtitlenamesync \"super\" subs.super";
+        echo "possible names : ";
+        tabcomplete_video_file_name;
+        return -1;
+    fi
+
+    if ! [ -e ${movie_name} ] ; then 
+        echo -e "No such file \'${movie_name}\'";
+        return -1;
+    fi
+
+    movie_name=$(basename $movie_name);
+
+#   sanity check
+    if [ -z "$(ls *srt 2>/dev/null)" ] ; then
+        echo "No SRT files found";
+    fi; 
+
+    j=1; 
+    for i in ${output_path}/*srt ; do 
+        install -D "$i" `pwd`/subs/${movie_name}.$j.srt ; 
+        if [ $? -ne 0 ] ; then 
+            echo "failed rename srt files."
+            return -1;
+        fi
+        ((j++)) ; 
+    done;
+
+    ask_user_default_no "delete ${output_path}";
+    if [ $? -eq 1 ] ; then 
+        rm -rf ${output_path}
+    fi
+
+#   echo "done";
+    tree -A ${output_path};
+}
+
 subtitlenamesync ()
 {
     movie_name=${1};
