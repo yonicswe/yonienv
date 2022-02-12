@@ -21,4 +21,4 @@ source ${yonienv}/bashrc_git.sh
 # source ${yonienv}/bashrc_nice.sh
 source ${yonienv}/bashrc_mlx.sh
 # source ${yonienv}/bashrc_huawei.sh
-source ${yonienv}/bashrc_habana.sh
+# source ${yonienv}/bashrc_habana.sh

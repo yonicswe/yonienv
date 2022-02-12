@@ -240,10 +240,10 @@
 	editor = vim
 
 [diff]
-	tool = vimdiff
+	tool = gvimdiff
 
 [merge]
-	tool = vimdiff
+	tool = gvimdiff
 
 [difftool]
 	prompt = true
