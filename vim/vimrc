@@ -1026,6 +1026,13 @@ Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
 call plug#end()
 
+
+map <leader>b :Buffers<cr>
+map <leader>n :NERDTree<cr>
+
+map <leader>gw :Gitgrep <cword><cr>
+map <leader>ga :GitgrepAdd <cword><cr>
+
 map <leader>tb :TigBlame<cr>
 map <leader>gd :Gdiffsplit<cr>
 
