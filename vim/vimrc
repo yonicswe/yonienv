@@ -1024,17 +1024,36 @@ Plug 'tpope/vim-fugitive'
 Plug 'iberianpig/tig-explorer.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
+"Plug 'git://github.com/ajh17/VimCompletesMe.git'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'https://github.com/yegappan/grep'
+Plug 'tyru/open-browser.vim' " opens url in browser
 call plug#end()
 
+map <leader>p :PlugInstall<cr>
+map <leader>pc :PlugClean<cr>
+map <leader>ps :PlugStatus<cr>
 
+
+" my fzf mappings
 map <leader>b :Buffers<cr>
+
+" my nerdtree mappings.
 map <leader>n :NERDTree<cr>
+let NERDTreeShowBookmarks=1
+let NERDTreeChDirMode=0
+let NERDTreeQuitOnOpen=1
+let NERDTreeShowHidden=1
+let NERDTreeKeepTreeInNewTab=1
+noremap <leader>nt :NERDTreeFind<CR>
 
 map <leader>gw :Gitgrep <cword><cr>
 map <leader>ga :GitgrepAdd <cword><cr>
 
+map <leader>t :Tig<cr>
 map <leader>tb :TigBlame<cr>
 map <leader>gd :Gdiffsplit<cr>
+
 
 " function RangerExplorer()
 "     exec "silent !ranger --choosefile=/tmp/vim_ranger_current_file " . expand("%:p:h")
