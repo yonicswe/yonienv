@@ -176,8 +176,6 @@ endif
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 
-
-
 let g:netrw_liststyle=3
 let g:netrw_keepdir=0
 set lcs=tab::\ ,eol:$,trail:. "
@@ -218,7 +216,7 @@ map <S-F10> :cnewer<cr>
 
 map <S-s> :w<CR>
 noremap <S-l> :set nohlsearch!<CR>
-noremap lll :set nohlsearch!<CR>
+"noremap lll :set nohlsearch!<CR>
 
 " map <S-h> :/ababababababababab<CR>
 map <C-n> :set nu!<CR>
@@ -308,16 +306,16 @@ au FileType gdb set shiftwidth=4
 " endif
 
 " Commenting blocks of code.
-autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
-autocmd FileType sh,ruby,python   let b:comment_leader = '# '
-autocmd FileType make             let b:comment_leader = '# '
-autocmd FileType conf,fstab       let b:comment_leader = '# '
-autocmd FileType gitconfig        let b:comment_leader = '# '
-autocmd FileType tex              let b:comment_leader = '% '
-autocmd FileType mail             let b:comment_leader = '> '
-autocmd FileType vim              let b:comment_leader = '" '
-noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>==<CR>
-noremap <silent> ,cu :<C-B>silent <C-E>s/^.*\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>==<CR>
+"autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
+"autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+"autocmd FileType make             let b:comment_leader = '# '
+"autocmd FileType conf,fstab       let b:comment_leader = '# '
+"autocmd FileType gitconfig        let b:comment_leader = '# '
+"autocmd FileType tex              let b:comment_leader = '% '
+"autocmd FileType mail             let b:comment_leader = '> '
+"autocmd FileType vim              let b:comment_leader = '" '
+"noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>==<CR>
+"noremap <silent> ,cu :<C-B>silent <C-E>s/^.*\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>==<CR>
 
 
 
@@ -714,7 +712,7 @@ command! MKSS call MakeSessionYoniAskUserForName()
 " file buffers
 nnoremap <A-down> :bnext<CR>
 nnoremap <A-up> :bprevious<CR>
-nnoremap <S-F8> :ls<cr>
+nnoremap <S-F8> :Buffers<cr>
 
 " tag browsing
 nnoremap <C-S-Up> :pop<CR>
@@ -911,6 +909,7 @@ let @b = "┌─────┐\n│     │\n│     │\n│     │\n└─�
 " let @b = " ┌─────┐^J│     │^J│     │^J│     │^J└─────┘"
 let @s = "<<<<<"
 let @c = "console=tty0 console=ttyS0,115200n8"
+let @n = '●'
 
 " increase/decrease font size
 
@@ -956,8 +955,8 @@ map f :call ShowFuncName() <CR>
 " can also do :normal [[<cr>
 
 
-" add the following line and 
-" Now any plugins you wish to install can be extracted to a subdirectory under
+" add the following line and
+" any plugins you wish to install can be extracted to a subdirectory under
 " ~/.vim/bundle, and they will be added to the 'runtimepath'
 " execute pathogen#infect()
 
@@ -1009,6 +1008,10 @@ let g:ctrlp_max_depth=40
 " ----------------------------------
 "  plugins
 " ----------------------------------
+" to install plug you need to downlad plug.vim to .vim/autoload/
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" then use the following commands
+"
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf'
@@ -1019,7 +1022,12 @@ Plug 'tpope/vim-fugitive'
 " Plug 'zackhsi/fzf-tags'
 " Plug 'Nequo/vim-allomancer'
 Plug 'iberianpig/tig-explorer.vim'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree'
 call plug#end()
+
+map <leader>tb :TigBlame<cr>
+map <leader>gd :Gdiffsplit<cr>
 
 " function RangerExplorer()
 "     exec "silent !ranger --choosefile=/tmp/vim_ranger_current_file " . expand("%:p:h")
