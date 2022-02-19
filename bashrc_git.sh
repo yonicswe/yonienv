@@ -7,6 +7,12 @@ alias gitdiff='git d'
 alias gitdiffkdiff3='git difftool --tool=kdiff3 --no-prompt'
 alias gitdiffstat='git --no-pager diff --stat'
 alias gitlog='git log --name-status'
+gl ()
+{
+    n=${1:-1000};
+    git log --decorate --date=short --pretty=format:"%C(green)%cd - %C(red)%h%Creset - %C(auto)%d%C(reset) %s %C(bold blue)<%an>%Creset" -$n;
+}
+
 # alias gitmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.labs.mlnx:hooks/commit-msg ${gitdir}/hooks/'
 gitd ()
 {

@@ -145,7 +145,7 @@ prompt_sc ()
 #     echo ${CS_PROMPT} > .prompt_sc
 }
 
-prompt_color
+# prompt_color
 
 # colors for ls command
 eval $(dircolors ${yonienv}/dir_colors)
@@ -1193,3 +1193,5 @@ function ww ()
 {
     w --no-header| awk '{print $3}' | while read i ; do nslookup $i ; done  |grep name 
 }
+
+alias rr=ranger
