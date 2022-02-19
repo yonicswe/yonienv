@@ -21,7 +21,7 @@
   meta = yellow
   frag = magenta bold
   old = red
-  new = blue
+  new = green
   whitespace = magenta reverse
 
 [color "status"]
@@ -41,12 +41,12 @@
     amenddatenow = git commit --amend --no-edit --date "$(date)"
     amrej = am --reject
 
-    gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 
     b = branch -vv
     ba = branch -avv
     bdelete = branch -D 
     brename = branch -M
+    byoni = ba --list "*ycohen*"
     deleteremotebranch = "!f()  {             \
 	  echo delete branch on the remote;   \
 	  echo :   git push -d remote branch;     \
@@ -90,6 +90,7 @@
     g = grep --color -n
     gi = grep --color -n --ignore-case
 
+    gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
     h = log -n1 --pretty=oneline
 
     listmodified = diff --name-only
@@ -117,13 +118,17 @@
 		   echo tracking ; git t; }; f"
     tb = trackbranch
 
-
     unstage = reset HEAD
-    uncommit = reset HEAD^
+    # uncommit = reset HEAD^
 
     saveheadindex = "!f() { \
 		   git log -n1 --pretty=oneline | cut -d ' ' -f1 > reuse_commit.txt; \
+		   echo "saved head index $(cat reuse_commit.txt) to reuse_commit.txt" ; \
     		}; f"
+
+    reusecommit = "!f() { git commit --amend --reuse-message=$(cat reuse_commit.txt); }; f"
+
+    uncommit = "!f() { git saveheadindex ; git reset HEAD^ ; }; f"
 
     untrackfile = rm --cached 
 
@@ -197,7 +202,7 @@
 
 #                                   SHA          date                   name             msg
     lll =    log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
-    l =    log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
+    l = "!f() { n=${1:-200}; git log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short ${count} -$n; }; f"
     lyoni = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author='Yonatan Cohen'
     l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
     l20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n20
@@ -258,6 +263,7 @@
 	      GIT_EDITOR=~/yonienv/bin/gitedit.sh git rebase -i $1^; \
            fi                       \
     }; f"
+    e = edit
 
     # list only untracked files
     lu = ls-files --others
@@ -289,6 +295,7 @@
 		}; f"
 
     cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
+    showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | grep --color $me;}; f"
 #   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
@@ -403,4 +410,3 @@
     vertical-split = yes
     mouse = yes
     blame-view-line-number = yes
-
