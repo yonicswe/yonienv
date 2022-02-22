@@ -782,7 +782,6 @@ function! SetBreakPoint ()
     "     execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . taskpath . "/.gdb_breakpoints"
     execute "silent !echo b " .  "%:t" . ":" . line(".")  ">>" . ".gdb_breakpoints"
 endfunc
-" com! B call SetBreakPoint()
 map <S-B> :call SetBreakPoint()<cr>
 
 " ConqueGdb plugin will run gdb inside vim
@@ -1026,7 +1025,7 @@ Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
 "Plug 'git://github.com/ajh17/VimCompletesMe.git'
 Plug 'francoiscabrol/ranger.vim'
-Plug 'https://github.com/yegappan/grep'
+"Plug 'https://github.com/yegappan/grep'
 Plug 'tyru/open-browser.vim' " opens url in browser
 call plug#end()
 
@@ -1055,6 +1054,8 @@ map <leader>tb :TigBlame<cr>
 map <leader>g :Git<cr>
 map <leader>gd :Gdiffsplit<cr>
 
+com! T :Tags<cr>
+com! B :Buffers<cr>
 
 " function RangerExplorer()
 "     exec "silent !ranger --choosefile=/tmp/vim_ranger_current_file " . expand("%:p:h")
