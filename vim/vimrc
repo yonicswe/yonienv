@@ -40,7 +40,7 @@ au BufNewfile,BufRead messages-* set filetype=messages
 
 hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-" nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>>>
+nnoremap <Leader>s :set cursorline! cursorcolumn!<cr>
 
 " another method to be notified about passing the 80 chars line is
 " to color the passing char
@@ -77,7 +77,7 @@ au FileType sh     command! R let f=expand("%")|vnew|execute '.! /bin/bash "' . 
 command! RR :bd!
 
 set encoding=utf-8
-set fileencoding=utf-8
+"set fileencoding=utf-8
 
 " au FileType cpp set makeprg=gcc\ -O0\ -g\ -o\ %<\ %
 " :make<cr>
@@ -1025,7 +1025,7 @@ Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
 "Plug 'git://github.com/ajh17/VimCompletesMe.git'
 Plug 'francoiscabrol/ranger.vim'
-"Plug 'https://github.com/yegappan/grep'
+Plug 'https://github.com/yegappan/grep'
 Plug 'tyru/open-browser.vim' " opens url in browser
 call plug#end()
 
@@ -1054,8 +1054,7 @@ map <leader>tb :TigBlame<cr>
 map <leader>g :Git<cr>
 map <leader>gd :Gdiffsplit<cr>
 
-com! T :Tags<cr>
-com! B :Buffers<cr>
+map <leader>T :Tags<cr>
 
 " function RangerExplorer()
 "     exec "silent !ranger --choosefile=/tmp/vim_ranger_current_file " . expand("%:p:h")
@@ -1079,3 +1078,5 @@ au FileType gitcommit setlocal spell
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+cs a .
