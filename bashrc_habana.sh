@@ -44,7 +44,10 @@ create_habana_alias_for_host dali23 dali-srv23 labuser Hab12345
 create_habana_alias_for_host srv649 kvm-srv649-csr labuser Hab12345
 create_habana_alias_for_host srv621 kvm-srv621-csr labuser Hab12345
 create_habana_alias_for_host srv693 kvm-srv693-csr labuser Hab12345
-create_habana_alias_for_host k2033e k203-u18-3e labuser Hab12345
+create_habana_alias_for_host k203a k203-u20-1a labuser Hab12345
+create_habana_alias_for_host k203b k203-u20-1b labuser Hab12345
+create_habana_alias_for_host k203d k203-u20-3d labuser Hab12345
+create_habana_alias_for_host k203e k203-u20-3e labuser Hab12345
 
 hlsetupenvironment ()
 {
@@ -228,16 +231,16 @@ hlcheckpatches ()
     for (( i=${num_of_patches}; i >= 0  ; i-- )) ; do 
         echo;
         git log --pretty=format:'%C(yellow)%h %Cblue%an %Creset%s' HEAD~${i}^!
-        echo "==================================================================="
+        echo -e "\n===================================================================\n"
         git show --format=email HEAD~${i}^! | checkpatchhabana 
-        echo "==================================================================="
+        echo -e "=====================================================================\n"
         echo;
         
         if (( $i > 0 )) ; then 
             ask_user_default_yes "Continue to next patch"; 
             [ $? -eq 0 ] && break; 
         fi 
-    done;
+    done | tee checkpatches.log
 }
 
 hlsimulatorstart ()
@@ -334,6 +337,7 @@ alias hlnetworkdown='hlnetwork --down'
 alias hldriverbuild='2>&1 build_and_insmod_habanalabs -b | tee build.log'
 alias hldriverbuildverbose='2>&1 build_and_insmod_habanalabs -b -v | tee build.log'
 alias hlthunkbuild='2>&1 build_hlthunk | tee build.log'
+alias hlthunkbuildlib='2>&1 build_hlthunk -l | tee build.log'
 alias hlthunkbuildverbose='2>&1 VERBOSE=1 build_hlthunk | tee build.log'
 
 alias hlfirmwareversion='sudo hl-smi|grep -i version'
@@ -356,13 +360,18 @@ alias hlcopyenvtok61b='rsync -av -e ssh --exclude='.git' /home/ycohen/share/task
 alias hlcopyenvtok61c='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k61-u18-c:/local_home/labuser/Documents/users/ycohen/'
 alias hlcopyenvtok61d='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k61-u18-d:/local_home/labuser/Documents/users/ycohen/'
 alias hlcopyenvtok62a='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k62-u20-a:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvtok62b='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k62-u20-b:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok62b='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k62-u20-b:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok62c='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k62-u20-c:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok62d='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k62-u20-d:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-hls2-srv11-csr='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@hls2-srv11-csr:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-srv649='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@kvm-srv649-csr:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-srv621='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@kvm-srv621-csr:/home/labuser/Documents/users/ycohen/'
 alias hlcopyenvto-srv693='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@kvm-srv693-csr:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvto-k203u18a='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-1a:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvto-k203u18b='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-1b:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvto-k203u18d='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-3d:/home/labuser/Documents/users/ycohen/'
-alias hlcopyenvto-k203u18e='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u18-3e:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok203a='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u20-1a:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok203b='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u20-1b:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok203d='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u20-3d:/home/labuser/Documents/users/ycohen/'
+alias hlcopyenvtok203e='rsync -av -e ssh --exclude='.git' /home/ycohen/share/tasks/yonienv.files/ labuser@k203-u20-3e:/home/labuser/Documents/users/ycohen/'
 alias hlclonehabanalabs='git clone ssh://gerrit:29418/habanalabs'
+
+export HL_MENU_PATH=/home/ycohen/share/bash/bash-menu
+alias hl="${HL_MENU_PATH}/hlMainMenu.sh"
