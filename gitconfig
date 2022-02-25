@@ -75,7 +75,8 @@
     commitempty = commit --allow-empty
     c = checkout
     cb = checkout -b
-
+    cm = checkout master
+    cmn = checkout master_next
 #   dg = difftool --tool=gvimdiff
 #   d = diff --color
     d = diff
@@ -101,10 +102,7 @@
 
     r = remote -vv
 
-    s = "!f() {             \
-	    git track;       \
-	    git status -uno;  \
-    }; f"
+    s = "!f() { git track ;  git status -uno; }; f"
     
     su = status -u
     ss = show --stat
@@ -153,13 +151,13 @@
 	git checkout -b master FETCH_HEAD; \
     }; f"
 
-    checkoutbranchfrommaster = "!f() {                      \
-	  if [ -n $1 ] ; then		                    \
-		git fetch origin master;                    \
-		git cb dev/ycohen/sw-$1 FETCH_HEAD;         \
-		git branch --set-upstream-to=origin/master; \
-		git pull --rebase;                          \
-	  fi;                                               \
+    checkoutbranchfrommasternext = "!f() {                       \
+	  if [ -n $1 ] ; then		                         \
+		git fetch origin master_next;                    \
+		git cb dev/ycohen/sw-$1 FETCH_HEAD;              \
+		git branch --set-upstream-to=origin/master_next; \
+		git pull --rebase;                               \
+	  fi;                                                    \
 	}; f"
 
     dg = "!f() {					     \
