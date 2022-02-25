@@ -27,7 +27,6 @@ au FileType xml set expandtab
 au FileType gdb set expandtab
 
 au BufNewfile,BufRead messages-* set filetype=messages
-	
 
 " show a column marker to help keep the code
 " shorter than 80 chars.
@@ -40,12 +39,12 @@ au BufNewfile,BufRead messages-* set filetype=messages
 
 hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
-" nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>>>
+nnoremap <Leader>s :set cursorline! cursorcolumn!<cr>
 
 " another method to be notified about passing the 80 chars line is
 " to color the passing char
-au FileType c,cpp call matchadd('ColorColumn', '\%80v', 100)
-
+au FileType c,cpp call matchadd('ColorColumn', '\%100v', 100)
+nmap <C-d> mzyyp`z
 
 "  __  __
 " |  \/  | ___  _  _  ___ ___
@@ -59,6 +58,8 @@ if has("mouse_sgr")
 else
     set ttymouse=xterm2
 end
+
+noremap <S-RightMouse> :tn<cr>
 
 "              _    _                     _           __   __
 "  _ __  _  _ | |_ | |_   ___  _ _    ___| |_  _  _  / _| / _|
@@ -174,8 +175,6 @@ endif
 filetype plugin on
 set omnifunc=syntaxcomplete#Complete
 
-
-
 let g:netrw_liststyle=3
 let g:netrw_keepdir=0
 set lcs=tab::\ ,eol:$,trail:. "
@@ -216,7 +215,7 @@ map <S-F10> :cnewer<cr>
 
 map <S-s> :w<CR>
 noremap <S-l> :set nohlsearch!<CR>
-noremap lll :set nohlsearch!<CR>
+"noremap lll :set nohlsearch!<CR>
 
 " map <S-h> :/ababababababababab<CR>
 map <C-n> :set nu!<CR>
@@ -306,16 +305,16 @@ au FileType gdb set shiftwidth=4
 " endif
 
 " Commenting blocks of code.
-autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
-autocmd FileType sh,ruby,python   let b:comment_leader = '# '
-autocmd FileType make             let b:comment_leader = '# '
-autocmd FileType conf,fstab       let b:comment_leader = '# '
-autocmd FileType gitconfig        let b:comment_leader = '# '
-autocmd FileType tex              let b:comment_leader = '% '
-autocmd FileType mail             let b:comment_leader = '> '
-autocmd FileType vim              let b:comment_leader = '" '
-noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>==<CR>
-noremap <silent> ,cu :<C-B>silent <C-E>s/^.*\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>==<CR>
+"autocmd FileType c,cpp,java,scala let b:comment_leader = '// '
+"autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+"autocmd FileType make             let b:comment_leader = '# '
+"autocmd FileType conf,fstab       let b:comment_leader = '# '
+"autocmd FileType gitconfig        let b:comment_leader = '# '
+"autocmd FileType tex              let b:comment_leader = '% '
+"autocmd FileType mail             let b:comment_leader = '> '
+"autocmd FileType vim              let b:comment_leader = '" '
+"noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>==<CR>
+"noremap <silent> ,cu :<C-B>silent <C-E>s/^.*\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>==<CR>
 
 
 
@@ -548,6 +547,15 @@ endfunc
 call Auto_comp_paren ()
 
 
+function! Auto_comp_paren_enable ()
+   inoremap ( ()<esc>i
+   inoremap < <><esc>i
+   inoremap [ []<esc>i
+   inoremap " ""<esc>i
+   inoremap ' ''<esc>i
+   inoremap { {<CR>}<esc><up>o
+endfunc
+
 function! Auto_comp_paren_disable ()
    inoremap ( (
    inoremap < <
@@ -560,7 +568,7 @@ endfunc
 function! Auto_comp_apostrophes_disable ()
    inoremap " "
 endfunc
-call Auto_comp_apostrophes_disable ()
+" call Auto_comp_apostrophes_disable ()
 
 function! SetIndent (indent)
    let v=a:indent
@@ -956,10 +964,54 @@ let g:ctrlp_max_depth=40
 " ----------------------------------
 "  plugins
 " ----------------------------------
-" call plug#begin('~/.vim/plugged')
-" Plug 'junegunn/vim-easy-align'
+" to install plug you need to downlad plug.vim to .vim/autoload/
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" then use the following commands
+"
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 " Plug 'francoiscabrol/ranger.vim'
-" call plug#end()
+Plug 'tpope/vim-fugitive'
+" Plug 'ggreer/the_silver_searcher'
+" Plug 'zackhsi/fzf-tags'
+" Plug 'Nequo/vim-allomancer'
+Plug 'iberianpig/tig-explorer.vim'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree'
+"Plug 'git://github.com/ajh17/VimCompletesMe.git'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'https://github.com/yegappan/grep'
+Plug 'tyru/open-browser.vim' " opens url in browser
+call plug#end()
+
+map <leader>p :PlugInstall<cr>
+map <leader>pc :PlugClean<cr>
+map <leader>ps :PlugStatus<cr>
+
+
+" my fzf mappings
+map <leader>b :Buffers<cr>
+
+" my nerdtree mappings.
+map <leader>n :NERDTree<cr>
+let NERDTreeShowBookmarks=1
+let NERDTreeChDirMode=0
+let NERDTreeQuitOnOpen=1
+let NERDTreeShowHidden=1
+let NERDTreeKeepTreeInNewTab=1
+noremap <leader>nt :NERDTreeFind<CR>
+
+map <leader>gw :Gitgrep <cword><cr>
+map <leader>ga :GitgrepAdd <cword><cr>
+
+map <leader>t :Tig<cr>
+map <leader>tb :TigBlame<cr>
+map <leader>g :Git<cr>
+map <leader>gd :Gdiffsplit<cr>
+
+map <leader>T :Tags<cr>
 
 " function RangerExplorer()
 "     exec "silent !ranger --choosefile=/tmp/vim_ranger_current_file " . expand("%:p:h")
@@ -973,3 +1025,15 @@ let g:ctrlp_max_depth=40
 "
 " vmap <Enter> <Plug>(EasyAlign)
 " set sc
+"
+
+"use spell checker in git commit
+au FileType gitcommit setlocal spell
+
+" for the vim-east-align plug
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+cs a .
