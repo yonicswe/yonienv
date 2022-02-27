@@ -15,7 +15,7 @@ grepyonienv ()
 }
 
 export LANG=en_US.UTF-8
-export LC_ALL=C
+#export LC_ALL=C
 export LESSCHARSET=UTF-8
 
 alias cdyonienv='cd ${yonienv}'
