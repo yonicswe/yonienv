@@ -954,6 +954,8 @@ map f :call ShowFuncName() <CR>
 " can also do :normal [[<cr>
 
 
+let g:termdebug_wide=1
+
 " add the following line and
 " any plugins you wish to install can be extracted to a subdirectory under
 " ~/.vim/bundle, and they will be added to the 'runtimepath'
@@ -1027,6 +1029,9 @@ Plug 'preservim/nerdtree'
 Plug 'francoiscabrol/ranger.vim'
 Plug 'https://github.com/yegappan/grep'
 Plug 'tyru/open-browser.vim' " opens url in browser
+"Plug 'cpiger/neoDebug'
+Plug 'dense-analysis/ale'
+"Plug 'valloric/youcompleteme'
 call plug#end()
 
 map <leader>p :PlugInstall<cr>
@@ -1078,5 +1083,13 @@ au FileType gitcommit setlocal spell
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+"set nocompatible
+"filetype off
+"set rtp+=~/.vim/bundle/Vundle.vim
+"call vundle#begin()
+"Plugin 'valloric/youcompleteme'
+"call vundle#end()
+
 
 cs a .
