@@ -23,9 +23,13 @@
 " au FileType gitconfig set guifont=VL\ Gothic\ 14
 " au FileType gitcommit set guifont=VL\ Gothic\ 14
 " au FileType conf set guifont=VL\ Gothic\ 14
-set guifont=Monospace\ 16
+set guifont=Monospace\ 13
 " au FileType txt set guifont=Monospace\ 9
 "
-winpos 151 40
-set lines=35
-set columns=172
+" to get current winpos
+" :winpos<cr> 
+winpos 319 0
+" echo winheight(0)
+set lines=43
+" echo winwidth(0)
+set columns=210
