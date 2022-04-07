@@ -1,7 +1,7 @@
 #!/bin/bash
 
 unalias -a;
-source ~/.bash_aliases
+[ -f ~/.bash_aliases ] && source ~/.bash_aliases
 unset SSH_ASKPASS
 alias editbashcommon='${v_or_g} ${yonienv}/bashrc_common.sh';
 alias gitclone-yonienv='git clone https://github.com/yonicswe/yonienv'

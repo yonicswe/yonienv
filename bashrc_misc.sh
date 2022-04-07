@@ -323,4 +323,8 @@ findvideofiles ()
         done;
 }
 
-source /home/ycohen/share/tmp/fzf/shell/key-bindings.bash
+if [ -f /usr/share/fzf/shell/key-bindings.bash ] ; then
+    source /usr/share/fzf/shell/key-bindings.bash
+else
+    echo -e "install fzf : \"sudo dnf install fzf ripgrep\"";
+fi
