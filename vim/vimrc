@@ -1,5 +1,10 @@
 source ~/.vim/vimrc.guifont
 
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let g:mapleader = ","
+" "let g:mapleader = ","
+"
 set rtp+=/home/ycohen/share/tmp/fzf/
 nmap <C-P> :FZF<cr>
 
@@ -201,11 +206,6 @@ au FileType c,cpp   set grepprg=ag\ --cc\ --cpp
 
 
 
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-" "let g:mapleader = ","
-"
 
 " map <leader>[ :cp<cr>
 " map <leader>] :cn<cr>
@@ -216,6 +216,7 @@ map <S-F10> :cnewer<cr>
 
 map <S-s> :w<CR>
 noremap <S-l> :set nohlsearch!<CR>
+noremap <S-l><S-l> :/kakaka<CR>
 "noremap lll :set nohlsearch!<CR>
 
 " map <S-h> :/ababababababababab<CR>
@@ -681,12 +682,12 @@ function! MakeSessionYoni ()
     if filereadable(tagsfile)
         execute "silent !echo source tags.vim >> Session.vim"
     endif
-    execute "silent !echo cs a cscope.out >> Session.vim"
+    "execute "silent !echo cs a cscope.out >> Session.vim"
 endfunction
 
 nnoremap ml : call RestartSess () <cr>
 " nnoremap mk : mks!<cr>:execute "silent !echo cs a cscope.out >> Session.vim"<cr>
-nnoremap mk : mks!<cr>: call MakeSessionYoni () <cr>
+nnoremap mk : mks!<cr>: call MakeSessionYoni () <cr>:redraw!<cr>
 
 function! MakeSessionYoniWithArg (name)
     execute "mks! vimsess." . a:name . ".vim"
@@ -1032,12 +1033,20 @@ Plug 'tyru/open-browser.vim' " opens url in browser
 "Plug 'cpiger/neoDebug'
 Plug 'dense-analysis/ale'
 "Plug 'valloric/youcompleteme'
+"Plug 'https://github.com/vim-syntastic/syntastic.git'
+"Plug 'szw/vim-tags'
+Plug 'https://github.com/vimwiki/vimwiki'
+"Plug 'neoclide/coc.nvim'
 call plug#end()
 
 map <leader>p :PlugInstall<cr>
 map <leader>pc :PlugClean<cr>
 map <leader>ps :PlugStatus<cr>
 
+" vimwiki required settings
+set nocompatible
+filetype plugin on
+syntax on
 
 " my fzf mappings
 map <leader>b :Buffers<cr>
@@ -1093,3 +1102,4 @@ nmap ga <Plug>(EasyAlign)
 
 
 cs a .
+packadd termdebug
