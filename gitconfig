@@ -55,12 +55,9 @@
 	  echo :   git fetch -p ;\
 	  }; f" 
 
-    pushthisbranchtoremote = "!f() {                                  \
-		  if [ -z $1 ] ; then                       \
-			  echo you must specify a remote;   \
-		  else                                     \
-			  git push -u $1 $(git rev-parse --abbrev-ref HEAD);         \
-		  fi;                                       \
+    pushthisbranchtoremote = "!f() {                               \
+		remote=${1:-origin};                               \
+		git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
 	  }; f"
     pushthisbranchtoremotewithforce = "!f() {                                 \
 		  remote=${1:-origin};                               \
