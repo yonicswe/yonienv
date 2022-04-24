@@ -172,9 +172,9 @@ k () {
 }
 
 
-alias l='ls --group-directories-first -l --color -F'
-alias lt='ls --group-directories-first -lt --color -F'
-alias ltr='ls --group-directories-first -ltr --color -F'
+alias l='/usr/bin/ls --group-directories-first -l --color -F'
+alias lt='/usr/bin/ls --group-directories-first -lt --color -F'
+alias ltr='/usr/bin/ls --group-directories-first -ltr --color -F'
 
 alias c='cd'
 alias ..='cd ../ ; pwd -P'
@@ -1187,7 +1187,7 @@ m ()
 #     ofedversion;
 }
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f /usr/share/fzf/shell/key-bindings.bash ] && source /usr/share/fzf/shell/key-bindings.bash
 
 function ww ()
 {
