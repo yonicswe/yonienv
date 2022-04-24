@@ -247,7 +247,12 @@ setup_vim_env ()
 		mkdir -p ~/.config/nvim;
 	fi
 
+	if ! [ -e ~/.local/share/nvim ] ; then 
+		mkdir -p ~/.local/share/nvim;
+	fi
+
 	ln -snf ${yonienv}/nvim ~/.config/nvim;
+	ln -snf ${yonienv}/nvim ~/.local/share/nvim;
 }
 
 clean_vim_env ()
