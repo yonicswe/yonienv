@@ -231,6 +231,19 @@ setup_vim_env ()
         fi
     fi
     echo "source ~/.vim/vimrc" >> ~/.vimrc;
+
+	# neovim configuration
+	if [ -e ~/.config/nvim ] ; then
+		echo "found existing ~/.config/nvim directory : bail out or backup and continue ?"
+		read -p "backup and continue ? [y/N]" ans;
+		if [ "$ans" == "y" ] ; then
+			set -x ; mv ~/.config/nvim ~/.config/nvim.yonienv ; set +x;
+		else
+			exit;
+		fi
+	fi
+
+	ln -snf ${yonienv}/nvim ~/.config/nvim;
 }
 
 clean_vim_env ()
@@ -251,7 +264,7 @@ clean_vim_env ()
         echo "Found yonienv backup for .vimrc, restoring..."
         mv ~/.vimrc.yonienv ~/.vimrc
     else
-        rm -f ~/.vimrc;
+        rm ~/.vimrc;
         echo "Deleted .vimrc file !!!"
     fi
 
@@ -260,8 +273,18 @@ clean_vim_env ()
         rm -f ~/.vim;
         mv ~/.vim.yonienv ~/.vim
     else
-        rm -f ~/.vim;
+        rm ~/.vim;
         echo "Deleted .vim link/directory !!!"
+    fi
+
+	# neovim configuration
+    if [ -e ~/.config/nvim.yonienv ] ;then 
+        echo "Found yonienv neovim backup, restoring..."
+        rm -f ~/.config/nvim;
+        mv ~/.config/nvim.yonienv ~/.config/nvim
+    else
+        rm ~/.config/nvim;
+        echo "Deleted ~/.config/nvim !!!"
     fi
 }
 
