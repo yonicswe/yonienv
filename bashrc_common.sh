@@ -20,7 +20,7 @@ export LESSCHARSET=UTF-8
 
 alias cdyonienv='cd ${yonienv}'
 
-source ${yonienv}/env_common_args.sh
+[ -e ${yonienv}/env_common_args.sh ] && source ${yonienv}/env_common_args.sh
 
 # return 0:no 1:yes
 ask_user_default_no ()
