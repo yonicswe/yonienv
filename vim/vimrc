@@ -1101,5 +1101,5 @@ nmap ga <Plug>(EasyAlign)
 "call vundle#end()
 
 
-cs a .
+silent! cs a .
 packadd termdebug

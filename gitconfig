@@ -304,10 +304,13 @@
 	editor = vim
 
 [diff]
-	tool = gvimdiff
+	tool = nvimdiff
 
-[merge]
-	tool = gvimdiff
+[diff "nvimdiff"]
+	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+
+[merge] 
+	tool = vimdiff
 
 [difftool]
 	prompt = true
