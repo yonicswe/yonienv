@@ -84,32 +84,32 @@ cat_bash_env ()
 setup_git_env () 
 {
     local yonienv=$1;
-    local git_user_name=
-    local git_user_email=
+    local git_user_name=$2
+    local git_user_email=$3
     echo $FUNCNAME
 
-    if [ -e ~/.gitconfig ] ; then 
-        echo "found existing .gitconfig : Bail out OR Backup and continue ?"
-        read -p "backup and continue ? [y/N]" ans;
-        if [ "$ans" == "y" ] ; then 
-            git_user_name=$(git config --global user.name);
-            git_user_email=$(git config --global user.email);
+	# clear previous yonienv backups
+	rm -f ~/.gitconfig.yonienv 2>/dev/null;
+
+    if [[  -e ~/.gitconfig ]] ; then 
+        read -p "~/.gitconfig exit, backup and continue or skip ? [Y/s]" ans;
+        if [[ ! "$ans" == "s" ]] ; then 
             set -x ; mv ~/.gitconfig ~/.gitconfig.yonienv; set +x
-        else
-            return;
         fi
     fi
 
     ln -snf ${yonienv}/gitconfig ~/.gitconfig;
 
-    read -p "set git user name to be ${git_user_name} ? [y/N]" ans;
-    if [ "$ans" == "y" ] ; then 
-        git config --global user.name ${git_user_name};
-    fi
-    read -p "set git user email to be ${git_user_email} ? [y/N]" ans;
-    if [ "$ans" == "y" ] ; then 
-        git config --global user.email ${git_user_email};
-    fi
+	read -p "setting git user/pass to Yonatan.Cohen <yonic.swe@gmail.com> ? [Y/n]" ans;
+	if [[ ! "$ans" == "n" ]] ; then 
+		git config --global user.name "Yonatan.Cohen";
+		git config --global user.email yonic.swe@gmail.com;
+	else
+		read -p "Enter git user name: " git_user_name; 
+		git config --global user.name "${git_user_name}";
+		read -p "Enter git user email: " git_user_email; 
+		git config --global user.email "${git_user_email}";
+	fi
 
     # git ignore files that change from setup to setup
     git update-index --assume-unchanged env_common_args.sh

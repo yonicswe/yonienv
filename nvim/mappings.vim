@@ -17,3 +17,4 @@ vmap / y/<C-R>"<CR>
 " select text and move it up/down with ctrl-up/down
 vnoremap <C-Down> :m '>+1<CR>gv=gv
 vnoremap <C-Up>   :m '<-2<CR>gv=gv
+map <S-w> :tabedit 
