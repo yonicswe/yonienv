@@ -25,6 +25,7 @@ Plug 'https://github.com/terryma/vim-multiple-cursors' " CTRL + N for multiple c
 
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
+Plug 'preservim/nerdcommenter'
 call plug#end()
 
 " ============ nerdtree mappings/settings ===================
@@ -34,18 +35,17 @@ nnoremap <C-t> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
 
-" =========== coc.nvim mappings/settings ====================
-nnoremap <C-l> :call CocActionAsync('jumpDefinition')<CR>
-
 " =========== tagbar mappings/settings ==================
 nmap <leader>t :TagbarToggle<CR>
 
 " ============= coc.nvim settings/mappings ===============
-" :CocInstall coc-python
 " :CocInstall coc-clangd
+" :CocInstall coc-sh
+" :CocInstall coc-python
 " :CocInstall coc-snippets
 " :CocCommand snippets.edit... FOR EACH FILE TYPE
 inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
+nnoremap <C-l> :call CocActionAsync('jumpDefinition')<CR>
 
 " ============== vim-airline mappings/settings =========================
 let g:airline_powerline_fonts = 1

@@ -74,14 +74,12 @@
     cb = checkout -b
     cm = checkout master
     cmn = checkout master_next
-#   dg = difftool --tool=gvimdiff
-#   d = diff --color
     d = diff
     dw = diff --ws-error-highlight=all
     dfile = difftool --no-prompt
-    dv = difftool
+    dt = difftool
     dc = diff --cached
-    dcv = difftool  --cached
+    dtc = difftool  --cached
     dt = difftool
     ds = diff --stat
 

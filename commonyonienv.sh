@@ -232,20 +232,32 @@ setup_vim_env ()
     fi
     echo "source ~/.vim/vimrc" >> ~/.vimrc;
 
-	# neovim configuration
-	if [ -e ~/.config/nvim ] ; then
-		echo "found existing ~/.config/nvim directory : bail out or backup and continue ?"
-		read -p "backup and continue ? [y/N]" ans;
-		if [ "$ans" == "y" ] ; then
+	# 
+	#                  setup neovim configuration
+	#
+
+	# clean previous yonienv backups
+	rm -f ~/.config/nvim.yonienv 2>/dev/null;
+	rm -f ~/.local/share/nvim.yonienv 2>/dev/null;
+
+	if [[ -e ~/.config/nvim ]] ; then
+		echo -e "\'~/.config/nvim\' already exist"
+		read -p "backup and continue or skip ? [Y/s]" ans;
+		if [[ ! "$ans" == "s" ]] ; then
 			set -x ; mv ~/.config/nvim ~/.config/nvim.yonienv ; set +x;
-		else
-			exit;
+		fi
+	fi
+	
+	if [[ -e ~/.local/share/nvim ]] ; then 
+		echo -e "\'~/.local/share/nvim\' already exist";
+		read -p "backup and continue or skip ? [Y/s]" ans;
+		if [[ ! "$ans" == "s" ]] ; then 
+			set -x; mv ~/.local/share/nvim ~/.local/share/nvim.yonienv ; set +x;
 		fi
 	fi
 
-	if ! [ -e ~/.config ] ; then 
-		mkdir ~/.config;
-	fi
+	[[ ! -e ~/.config ]] && mkdir ~/.config 
+	[[ ! -e ~/.local ]] && mkdir -p ~/.local/share/
 
 	ln -snf ${yonienv}/nvim ~/.config/nvim;
 	ln -snf ${yonienv}/nvim ~/.local/share/nvim;
@@ -282,15 +294,24 @@ clean_vim_env ()
         echo "Deleted .vim link/directory !!!"
     fi
 
-	# neovim configuration
-    if [ -e ~/.config/nvim.yonienv ] ;then 
-        echo "Found yonienv neovim backup, restoring..."
+	#
+	#             clean neovim configuration
+	# 
+    if [ -e ~/.config/nvim.yonienv ] ; then 
+        echo "Found yonienv neovim conf backup, restoring..."
         rm -f ~/.config/nvim;
         mv ~/.config/nvim.yonienv ~/.config/nvim
-    else
+	elif [[ $(readlink -f ~/.config/nvim | grep yonienv | wc -l) -gt 0 ]] ; then 
         rm ~/.config/nvim;
-        echo "Deleted ~/.config/nvim !!!"
     fi
+
+	if [[ -e ~/.local/share/nvim ]] ; then 
+        echo "Found yonienv neovim conf backup, restoring..."
+		rm -f ~/.local/share/nvim
+		mv ~/.local/share/nvim.yonienv ~/.local/share/nvim;
+	elif [[ $(readlink -f ~/.local/share/nvim | grep yonienv | wc -l) -gt 0 ]] ; then 
+		rm ~/.local/share/nvim;
+	fi
 }
 
 cat_vim_env () 
