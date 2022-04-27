@@ -308,7 +308,7 @@
 	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 
 [merge] 
-	tool = vimdiff
+	tool = nvimdiff
 
 [difftool]
 	prompt = true
