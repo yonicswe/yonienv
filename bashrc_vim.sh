@@ -224,3 +224,5 @@ function vsources ()
 }
 
 alias viminstall='sudo yum install -y vim-X11 ctags'
+
+alias nv=nvim
