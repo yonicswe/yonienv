@@ -100,9 +100,9 @@ setup_git_env ()
 
     ln -snf ${yonienv}/gitconfig ~/.gitconfig;
 
-	read -p "setting git user/pass to Yonatan.Cohen <yonic.swe@gmail.com> ? [Y/n]" ans;
+	read -p "setting git user/pass to Yonatan Cohen <yonic.swe@gmail.com> ? [Y/n]" ans;
 	if [[ ! "$ans" == "n" ]] ; then 
-		git config --global user.name "Yonatan.Cohen";
+		git config --global user.name "Yonatan Cohen";
 		git config --global user.email yonic.swe@gmail.com;
 	else
 		read -p "Enter git user name: " git_user_name; 
