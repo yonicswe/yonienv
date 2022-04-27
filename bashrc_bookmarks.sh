@@ -272,7 +272,7 @@ greptasks ()
 }
 alias gcode="cdcode ; g +e."
 
-source ${yonienv}/docs_complete_dir.sh
+source ${yonienv}/folder_name_complete.sh
 # cddocs () { cd ${yonidocs}    ; [ -n "$1" ] && cd $1; completecddocs; }
 # completecddocs () { complete -W "$(find ${yonidocs} -maxdepth 1 -type d -exec basename {} \; )" cddocs; }
 # if [ -d ${yonidocs} ] ; then completecddocs ; fi
