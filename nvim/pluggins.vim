@@ -26,6 +26,7 @@ Plug 'https://github.com/terryma/vim-multiple-cursors' " CTRL + N for multiple c
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
 Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-fugitive'
 call plug#end()
 
 " ============ nerdtree mappings/settings ===================
@@ -83,3 +84,7 @@ nnoremap <silent>    <A-c> :BufferClose<CR>
 
 " ===================== nerdcommenter mappings/settings ==============
 let g:NERDSpaceDelims = 1
+
+" ================== vim-fugitive mappings/settings ====================
+map <leader>gw :Git grep <cword><cr>
+

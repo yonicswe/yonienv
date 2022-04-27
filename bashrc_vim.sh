@@ -17,7 +17,7 @@ export v_or_g="$(cat ${vimorgvimbackupfile})";
 if [ "${v_or_g}" == "gvim" ] ; then 
     export _vd="gvimdiff"
 else
-    export _vd="vimdiff";
+    export _vd="nvimdiff";
 fi
 
 git config --global diff.tool ${_vd};
@@ -45,10 +45,10 @@ vimorgvim ()
         export EDITOR="gvim";
         export VISUAL="gvim";
     else
-        export v_or_g="vim";
-        export _vd="vimdiff"
-        export EDITOR="vim";
-        export VISUAL="vim";
+        export v_or_g="nvim";
+        export _vd="nvimdiff"
+        export EDITOR="nvim";
+        export VISUAL="nvim";
     fi
 
     git config --global diff.tool ${_vd};
