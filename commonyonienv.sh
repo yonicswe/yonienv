@@ -329,30 +329,18 @@ cat_vim_env ()
 
 source env_common_args.sh
 
-setup_directories ()
+setup_folders ()
 {
-    local yonienv=${1};
-
-    echo "$FUNCNAME will create";
-    echo "$yonidocs";
-    echo "$yonicode";
-    echo "$yonitasks";
-
-    if [ -d $yonidocs ]  ; then 
-        echo -e "$FUNCNAME(): \"$yonidocs\" already exists";
-    else
-        mkdir -p $yonidocs;
-    fi
-    if [ -d $yonicode ]  ; then 
-        echo -e "$FUNCNAME(): \"$yonicode\" already exists";
-    else
-        mkdir -p $yonicode;
-    fi
-    if [ -d $yonitasks ]  ; then 
-        echo -e "$FUNCNAME(): \"$yonitasks\" already exists";
-    else
-        mkdir -p $yonitasks;
-    fi
+	ask_user_default_no "create yonienv folders"
+	[[ $? -eq 0 ]] && return;
+	set -x
+	mkdir -p $yonidocs;
+	mkdir -p $yonicode;
+	mkdir -p $yonitasks;
+	mkdir -p $yonidevel
+	mkdir -p $yonibugs;
+	mkdir -p $yonishare;
+	set +x
 }
 
 clean ()
@@ -449,7 +437,7 @@ main  ()
     setup_cgdb_env ${yonienv};
     setup_tmux_env ${yonienv};
 #   setup_misc ${yonienv}
-#   setup_directories ${yonienv};
+	setup_folders;
     messages;
 }
 

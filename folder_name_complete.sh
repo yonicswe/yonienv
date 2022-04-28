@@ -1,4 +1,23 @@
 
+_tasks ()
+{
+    local cmd=$1 cur=$2 pre=$3;
+    local _cur compreply;
+
+
+    _cur=$tasks_dir/$cur
+    compreply=( $( compgen -d "$_cur" ) )
+    COMPREPLY=( ${compreply[@]#$tasks_dir/} )
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        COMPREPLY[0]=${COMPREPLY[0]}/
+    fi
+}
+
+tasks_dir=${yonitasks};
+cdtasks() { cd $tasks_dir/$1; }
+complete -F _tasks -o nospace cdtasks
+
+#==========================================================
 _docs ()
 {
     local cmd=$1 cur=$2 pre=$3;
@@ -53,7 +72,7 @@ _devel ()
 }
 
 
-devel_dir=${HOME}/trees/npu-stack
+devel_dir=${yonidevel};
 cddevel() { cd $devel_dir/$1; }
 complete -F _devel -o nospace cddevel
 
@@ -72,7 +91,7 @@ _share ()
 }
 
 
-share_dir=${HOME}/share
+share_dir=${yonishare};
 cdshare() { cd $share_dir/$1; }
 complete -F _share -o nospace cdshare
 
@@ -90,7 +109,7 @@ _bugs ()
     fi
 }
 
-bugs_dir=${HOME}/share/tasks/bugs
+bugs_dir=${yonibugs};
 cdbugs() { cd $bugs_dir/$1; }
 complete -F _bugs -o nospace cdbugs
 

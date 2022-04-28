@@ -263,8 +263,6 @@ fi
 
 complete -d cd c;
 
-alias gdocs="cddocs ; g +e."
-alias gtasks="cdtasks ; g +e."
 greptasks ()
 {
     local search_str=${1};
@@ -281,7 +279,7 @@ source ${yonienv}/folder_name_complete.sh
 # completecdcode () { complete -W "$(find ${yonicode} -maxdepth 1 -type d -exec basename {} \; )" cdcode; }
 # if [ -d ${yonicode} ] ; then completecdcode ; fi
 
-source ${yonienv}/task_complete.sh
+# source ${yonienv}/task_complete.sh
 # cdtask () { cd ${yonitasks} ; [ -n "$1" ] && cd "$1" ; completecdtask ;}
 # completecdtask () { complete -W "$(find ${yonitasks} -maxdepth 1 -type d -exec basename {} \; )" cdtask; }
 # if [ -d ${yonitasks} ] ; then completecdtask ; fi

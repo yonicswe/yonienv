@@ -1,6 +1,9 @@
 #!/bin/bash
-export  yonidocs=${yonienv}/share/docs
-export  yonicode=${yonienv}/share/code
-export yonitasks=${yonienv}/share/tasks
+export  yonidocs=~/docs
+export  yonicode=~/code
+export yonitasks=~/tasks
+export yonidevel=~/devel
+export yonibugs=~/bugs
+export yonishare=~/share
 
 
