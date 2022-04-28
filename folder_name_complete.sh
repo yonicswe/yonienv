@@ -1,4 +1,23 @@
 
+_yonienv ()
+{
+    local cmd=$1 cur=$2 pre=$3;
+    local _cur compreply;
+
+
+    _cur=$yonienv_dir/$cur
+    compreply=( $( compgen -d "$_cur" ) )
+    COMPREPLY=( ${compreply[@]#$yonienv_dir/} )
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        COMPREPLY[0]=${COMPREPLY[0]}/
+    fi
+}
+
+yonienv_dir=${yonienv};
+cdyonienv() { cd $yonienv_dir/$1; }
+complete -F _yonienv -o nospace cdyonienv
+
+#==========================================================
 _tasks ()
 {
     local cmd=$1 cur=$2 pre=$3;
