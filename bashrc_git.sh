@@ -255,3 +255,5 @@ gitclearcache ()
     echo "rm -rf .git/rr-cache"
     rm -rf .git/rr-cache
 }
+
+alias yonienvtoken='echo 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'
