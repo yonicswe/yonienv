@@ -1,0 +1,7 @@
+
+
+install languageserver
+======================
+sudo dnf install ccls
+sudo ln -snf /var/lib/snapd/snap /snap
+sudo snap install ccls --classic
