@@ -133,6 +133,24 @@ cdbugs() { cd $bugs_dir/$1; }
 complete -F _bugs -o nospace cdbugs
 
 #==========================================================
+_tmp ()
+{
+    local cmd=$1 cur=$2 pre=$3;
+    local _cur compreply;
+
+    _cur=$tmp_dir/$cur
+    compreply=( $( compgen -d "$_cur" ) )
+    COMPREPLY=( ${compreply[@]#$tmp_dir/} )
+    if [[ ${#COMPREPLY[@]} -eq 1 ]]; then
+        COMPREPLY[0]=${COMPREPLY[0]}/
+    fi
+}
+
+tmp_dir=${yonitmp};
+cdtmp() { cd $tmp_dir/$1; }
+complete -F _tmp -o nospace cdtmp
+
+#==========================================================
 _downloads ()
 {
     local cmd=$1 cur=$2 pre=$3;
