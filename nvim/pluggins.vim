@@ -7,28 +7,38 @@
 " :PlugClean :PlugInstall :UpdateRemotePlugins
 
 call plug#begin()
-Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
+
+" -------- ide plugs -------------
+Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'https://github.com/preservim/nerdtree' " NerdTree
-Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
+" Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
+Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
+
+Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
+" Plug 'https://github.com/terryma/vim-multiple-cursors' " CTRL + N for multiple cursors
+
+" -------- debug tools plugs -----------
+" Plug 'voldikss/vim-floaterm'
+" Plug 'https://github.com/tc50cal/vim-terminal' " Vim Terminal
+
+" -------- office plugs ---------------
+Plug 'vimwiki/vimwiki'
+Plug 'mhinz/vim-startify'
+
+" -------- visuality plugs ---------
 Plug 'https://github.com/vim-airline/vim-airline' " Status bar
 Plug 'https://github.com/ap/vim-css-color' " CSS Color Preview
 Plug 'https://github.com/rafi/awesome-vim-colorschemes' " Retro Scheme
 Plug 'https://github.com/ryanoasis/vim-devicons' " Developer Icons
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
-" Plug 'https://github.com/terryma/vim-multiple-cursors' " CTRL + N for multiple cursors
-Plug 'vimwiki/vimwiki'
-Plug 'voldikss/vim-floaterm'
+" Plug 'itchyny/lightline.vim'
 
-Plug 'romgrk/barbar.nvim'
-" Plug 'preservim/nerdcommenter'
-Plug 'tpope/vim-fugitive'
+Plug 'romgrk/barbar.nvim' " Tabs manipulation
  
-" Plug 'https://github.com/tc50cal/vim-terminal' " Vim Terminal
-Plug 'mhinz/vim-startify'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()
 
 " ============ nerdtree mappings/settings ===================
