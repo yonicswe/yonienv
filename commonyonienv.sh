@@ -340,6 +340,7 @@ setup_folders ()
 	mkdir -p $yonidevel
 	mkdir -p $yonibugs;
 	mkdir -p $yonishare;
+	mkdir -p $yonitmp;
 	set +x
 }
 
