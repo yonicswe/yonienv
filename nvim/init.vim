@@ -87,3 +87,6 @@ fun! ShowFuncName()
 endfun
 map f :call ShowFuncName() <CR>
 " can also do :normal [[<cr>
+
+silent! cs a .
+packadd termdebug
