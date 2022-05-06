@@ -18,3 +18,37 @@ vmap / y/<C-R>"<CR>
 vnoremap <C-Down> :m '>+1<CR>gv=gv
 vnoremap <C-Up>   :m '<-2<CR>gv=gv
 map <S-w> :tabedit 
+
+" open help in vertical split window on the right
+nnoremap <C-H> :vert bo help 
+
+" ------------------------
+"  cscope mappings
+"  -------------------------
+source ~/.vim/cscope.vim
+
+nnoremap <S-F6> :ts<cr>
+map <F11> :cp<cr>
+map <F12> :cn<cr>
+map <S-F9> :colder<cr>
+map <S-F10> :cnewer<cr>
+map <F3> :set spell!<cr>
+
+
+function! ToggleQuickFix()
+  if exists("g:qwindow")
+"     lclose
+    ccl
+    unlet g:qwindow
+  else
+    copen
+    let g:qwindow = 1
+"     try
+"       lopen 10
+"       let g:qwindow = 1
+"     catch
+"       echo "No Errors found!"
+"     endtry
+  endif
+endfunction
+nmap <script> <silent> <F6> :call ToggleQuickFix()<CR>
