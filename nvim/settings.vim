@@ -19,4 +19,4 @@
 :set noro
 
 :set termguicolors
-
+:set cul
