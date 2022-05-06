@@ -21,12 +21,20 @@ Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
 Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
 " Plug 'https://github.com/terryma/vim-multiple-cursors' " CTRL + N for multiple cursors
 
+" required for telescope : plenary, treesitter and ripgrep.
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'https://github.com/BurntSushi/ripgrep'
+Plug 'nvim-telescope/telescope.nvim'
+
 " -------- debug tools plugs -----------
 " Plug 'voldikss/vim-floaterm'
 " Plug 'https://github.com/tc50cal/vim-terminal' " Vim Terminal
 
 " -------- office plugs ---------------
 Plug 'vimwiki/vimwiki'
+" Plug 'tbaej/taskwiki'
+" Plug 'https://github.com/tools-life/taskwiki'
 Plug 'mhinz/vim-startify'
 
 " -------- visuality plugs ---------
@@ -43,8 +51,7 @@ call plug#end()
 
 " ============ nerdtree mappings/settings ===================
 nnoremap <C-f> :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
 
@@ -99,8 +106,7 @@ nnoremap <silent>    <A-c> :BufferClose<CR>
 let g:NERDSpaceDelims = 1
 
 " ================== vim-fugitive mappings/settings ====================
-map <leader>gw :Git grep <cword><cr>
+" map <leader>gw :Git grep <cword><cr>
 
 " ================== vimwiki mappings/settings =====================    
-let g:vimwiki_list=[{'path': '~/docs/', 'ext': '.txt'}, {'path': '~/tasks/', 'ext': '.txt'}]
-
+let g:vimwiki_list=[{'path': '~/tasks/', 'ext': '.txt'}, {'path': '~/docs/', 'ext': '.txt'}]
