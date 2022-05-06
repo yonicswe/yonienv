@@ -14,14 +14,14 @@ fi
 
 export v_or_g="$(cat ${vimorgvimbackupfile})";
 
-if [ "${v_or_g}" == "gvim" ] ; then 
-    export _vd="gvimdiff"
-else
-    export _vd="nvimdiff";
-fi
+# if [ "${v_or_g}" == "gvim" ] ; then 
+    # export _vd="gvimdiff"
+# else
+    # export _vd="vimdiff";
+# fi
 
-git config --global diff.tool ${_vd};
-git config --global merge.tool ${_vd};
+# git config --global diff.tool ${_vd};
+# git config --global merge.tool ${_vd};
 
 # if [ -e /usr/bin/gvim ] ; then
 # else
@@ -30,35 +30,36 @@ git config --global merge.tool ${_vd};
 # fi
 vimorgvim ()
 {
-    local user_choice=$1;
-    if [ -n "${user_choice}" ] ; then 
-        if [ "${user_choice}" == "vim" ] ; then
-            export v_or_g="gvim";
-        elif [ "${user_choice}" == "gvim" ] ; then 
-            export v_or_g="vim";
-        fi
-    fi;
+    echo "deprecated using nvim"
+    # local user_choice=$1;
+    # if [ -n "${user_choice}" ] ; then 
+        # if [ "${user_choice}" == "vim" ] ; then
+            # export v_or_g="gvim";
+        # elif [ "${user_choice}" == "gvim" ] ; then 
+            # export v_or_g="vim";
+        # fi
+    # fi;
 
-    if [ "${v_or_g}" == "vim" ] ; then
-        export v_or_g="gvim";
-        export _vd="gvimdiff";
-        export EDITOR="gvim";
-        export VISUAL="gvim";
-    else
-        export v_or_g="nvim";
-        export _vd="nvimdiff"
-        export EDITOR="nvim";
-        export VISUAL="nvim";
-    fi
+    # if [ "${v_or_g}" == "vim" ] ; then
+        # export v_or_g="gvim";
+        # export _vd="gvimdiff";
+        # export EDITOR="gvim";
+        # export VISUAL="gvim";
+    # else
+        # export v_or_g="nvim";
+        # export _vd="nvimdiff"
+        # export EDITOR="nvim";
+        # export VISUAL="nvim";
+    # fi
 
-    git config --global diff.tool ${_vd};
-    git config --global merge.tool ${_vd};
-    echo $v_or_g | tee ${vimorgvimbackupfile};
+    # git config --global diff.tool ${_vd};
+    # git config --global merge.tool ${_vd};
+    # echo $v_or_g | tee ${vimorgvimbackupfile};
 
-#     r;
+# #     r;
 }
-export EDITOR="vim";
-complete -W "vim gvim" vimorgvim;
+# export EDITOR="vim";
+# complete -W "vim gvim" vimorgvim;
 
 vd () { ${_vd} $1 $2 ;}
 
@@ -225,4 +226,5 @@ function vsources ()
 
 alias viminstall='sudo yum install -y vim-X11 ctags'
 
-alias nv=nvim
+alias nvim=nvim.appimage
+alias vimdiff='nvim.appimage -d'

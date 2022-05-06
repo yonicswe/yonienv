@@ -80,7 +80,6 @@
     dt = difftool
     dc = diff --cached
     dtc = difftool  --cached
-    dt = difftool
     ds = diff --stat
 
     g = grep --color -n
@@ -299,16 +298,16 @@
 #     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
 [core]
-	editor = vim
+	editor = /home/daniel/yonienv/bin/nvim.appimage
 
 [diff]
-	tool = nvimdiff
+	tool = vimdiff
 
-[diff "nvimdiff"]
-	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+# [diff "nvdiff"]
+# 	cmd = "/home/daniel/yonienv/bin/nvim.appimage -d \"$LOCAL\" \"$REMOTE\""
 
 [merge] 
-	tool = nvimdiff
+	tool = vimdiff
 
 [difftool]
 	prompt = true

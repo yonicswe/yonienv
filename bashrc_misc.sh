@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # afaik this is only good ranger
-export VISUAL=gvim
+export VISUAL=nvim
+export EDITOR=$VISUAL
 
 alias connect2remoteDesktop='source $(yonienv)/bin/connectToRemoteDesk.sh'
 alias yuminstallfromiso='yum install --disablerepo=\* --enablerepo=c7-media'
