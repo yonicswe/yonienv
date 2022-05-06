@@ -1028,7 +1028,7 @@ Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
 "Plug 'git://github.com/ajh17/VimCompletesMe.git'
 Plug 'francoiscabrol/ranger.vim'
-Plug 'https://github.com/yegappan/grep'
+"Plug 'https://github.com/yegappan/grep'
 Plug 'tyru/open-browser.vim' " opens url in browser
 "Plug 'cpiger/neoDebug'
 Plug 'dense-analysis/ale'
