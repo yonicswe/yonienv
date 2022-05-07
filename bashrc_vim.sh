@@ -227,4 +227,5 @@ function vsources ()
 alias viminstall='sudo yum install -y vim-X11 ctags'
 
 alias nvim=nvim.appimage
+alias nv=nvim
 alias vimdiff='nvim.appimage -d'
