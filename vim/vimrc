@@ -718,8 +718,6 @@ nnoremap <S-F8> :Buffers<cr>
 " tag browsing
 nnoremap <C-S-Up> :pop<CR>
 nnoremap <C-S-Down> :tag<CR>
-nnoremap <A-up> :bprevious<CR>
-" nnoremap <F6> :bprevious<CR>
 nnoremap <S-F6> :ts<cr>
 
 

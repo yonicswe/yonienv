@@ -52,3 +52,20 @@ function! ToggleQuickFix()
   endif
 endfunction
 nmap <script> <silent> <F6> :call ToggleQuickFix()<CR>
+
+" file buffers
+nnoremap <A-down> :bnext<CR>
+nnoremap <A-up> :bprevious<CR>
+nnoremap <S-F8> :Buffers<cr>
+
+" tag browsing
+nnoremap <C-S-Up> :pop<CR>
+nnoremap <C-S-Down> :tag<CR>
+nnoremap <S-F6> :ts<cr>
+
+" redraw screen up/downward while keeping cursor in the middle of the screen
+map <C-y> kzz
+map <C-e> jzz
+
+" erase trailing white space
+vmap <f12> :s/\s\+$//<CR>
