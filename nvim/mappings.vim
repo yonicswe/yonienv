@@ -69,3 +69,12 @@ map <C-e> jzz
 
 " erase trailing white space
 vmap <f12> :s/\s\+$//<CR>
+
+" move cursor in insert mode
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+inoremap <C-k> <Up>
+inoremap <C-j> <Down>
+
+" save in insert mode
+inoremap <c-x><c-s> <c-\><c-o>:w<cr>
