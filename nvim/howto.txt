@@ -3,3 +3,14 @@
 install curl
 intstall nvm : curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 install node  : nvm install node
+
+install nerdfonts
+	git clone https://github.com/ryanoasis/nerd-fonts.git
+	
+install fzf 
+
+install synth-shell
+	git clone --recursive https://github.com/andresgongora/synth-shell.gi
+	chmod +x synth-shell/setup.sh
+	cd synth-shell
+	./setup.sh
