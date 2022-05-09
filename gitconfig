@@ -1,7 +1,7 @@
 [user]
 	author = Yonatan Cohen
-	name = Yonatan Cohen
-	email = yonic.swe@gmail.com
+	name = yonatan.cohen
+	email = yonatan.cohen@dell.com
 
 # accepted values are two of
 # normal, black, red, green, yellow, blue, magenta, cyan, white
@@ -298,13 +298,13 @@
 #     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
 [core]
-	editor = /home/daniel/yonienv/bin/nvim.appimage
+	editor = /home/y_cohen/yonienv/bin/nvim.appimage
 
 [diff]
 	tool = vimdiff
 
 # [diff "nvdiff"]
-# 	cmd = "/home/daniel/yonienv/bin/nvim.appimage -d \"$LOCAL\" \"$REMOTE\""
+# 	cmd = "/home/y_cohen/yonienv/bin/nvim.appimage -d \"$LOCAL\" \"$REMOTE\""
 
 [merge] 
 	tool = vimdiff
