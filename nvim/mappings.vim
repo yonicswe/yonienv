@@ -77,4 +77,4 @@ inoremap <C-k> <Up>
 inoremap <C-j> <Down>
 
 " save in insert mode
-inoremap <c-x><c-s> <c-\><c-o>:w<cr>
+inoremap <c-s><c-s> <c-\><c-o>:w<cr>
