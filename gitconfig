@@ -154,6 +154,16 @@
 	  fi;                                                    \
 	}; f"
 
+    checkoutfilefrombranch = "!f() {                                \
+	branch=$1;                                                  \
+	file=$2;                                                    \
+	if [ $# -ne 2 ] ; then                                      \
+		echo 'usage checkoutfilefrombranch <file> <branch>' \
+		return;                                             \
+	fi;                                                         \
+        git checkout ${branch} -- ${file};                          \
+    }; f"
+
     dg = "!f() {					     \
 	  if [ -z $1 ] ; then				     \
 		git difftool --tool=gvimdiff;		     \
@@ -288,6 +298,10 @@
 
     cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
     showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | grep --color $me;}; f"
+
+	sm = submodule
+	smadd = submodule update --init
+	smremove = submodule deinit
 #   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
@@ -298,19 +312,20 @@
 #     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
 [core]
-	editor = /home/y_cohen/yonienv/bin/nvim.appimage
+	editor = nvim
 
 [diff]
-	tool = vimdiff
+	tool = nvimdiff
 
-# [diff "nvdiff"]
-# 	cmd = "/home/y_cohen/yonienv/bin/nvim.appimage -d \"$LOCAL\" \"$REMOTE\""
-
-[merge] 
-	tool = vimdiff
-
-[difftool]
+[difftool "nvimdiff"]
+	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 	prompt = true
+
+[merge]
+	tool = nvimdiff
+
+[mergetool "nvimdiff"]
+  cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
 
 [commit]
 # template = ~/share/yonienv/git_commit_template
