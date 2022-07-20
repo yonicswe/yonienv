@@ -1,17 +1,10 @@
 !_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
 !_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
-!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
-!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
-!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
-!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
-!_TAG_PROC_CWD	/home/daniel/yonienv/	//
-!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
-!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
-!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
-!_TAG_PROGRAM_VERSION	5.9.0	/f95bb349/
-EOF	bashrc_devel.sh	/^cat << EOF >> ${gdbinit}$/;"	h
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
 Ethlist	bashrc_fs.sh	/^Ethlist () $/;"	f
-Ethlistroot	bashrc_fs.sh	/^alias Ethlistroot='echo -n "root " ; su - -c "ethlist"'$/;"	a
 __kernel_version_in_given_path	bashrc_mlx.sh	/^__kernel_version_in_given_path ()$/;"	f
 _bugs	folder_name_complete.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
@@ -25,6 +18,7 @@ _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
 _regression	regression_complete.sh	/^_regression ()$/;"	f
 _share	folder_name_complete.sh	/^_share ()$/;"	f
 _tasks	folder_name_complete.sh	/^_tasks ()$/;"	f
+_tmp	folder_name_complete.sh	/^_tmp ()$/;"	f
 _upstream	upstream_complete_dir.sh	/^_upstream ()$/;"	f
 _weather	bashrc_misc.sh	/^_weather(){ curl -s "wttr.in?m1" ;}$/;"	f
 _yonienv	folder_name_complete.sh	/^_yonienv ()$/;"	f
@@ -33,16 +27,10 @@ acs_sockets	bashrc_nice.sh	/^acs_sockets () $/;"	f
 acs_telnet	bashrc_nice.sh	/^acs_telnet ()$/;"	f
 acs_threads	bashrc_nice.sh	/^acs_threads () $/;"	f
 acx_threads	bashrc_nice.sh	/^acx_threads ()$/;"	f
-ag	bashrc_fs.sh	/^alias ag='ag --noheading'$/;"	a
 ask_user_default_no	bashrc_common.sh	/^ask_user_default_no ()$/;"	f
 ask_user_default_yes	bashrc_common.sh	/^ask_user_default_yes ()$/;"	f
-b	bashrc_fs.sh	/^alias b='bg'$/;"	a
-backup_apps=	bashrc_mlx.sh	/^    local -a backup_apps=();$/;"	f
-backup_libs=	bashrc_mlx.sh	/^    local -a backup_libs=();$/;"	f
 backupgitkernel	bashrc_mlx.sh	/^backupgitkernel ()$/;"	f
-backupusrlib64	bashrc_mlx.sh	/^alias backupusrlib64='tar -C \/ -cjvf usr_lib64.bkp.bz2 \/usr\/lib64'$/;"	a
 branches	bashrc_svn.sh	/^branches () {$/;"	f
-c	bashrc_fs.sh	/^alias c='cd'$/;"	a
 cat_bash_env	commonyonienv.sh	/^cat_bash_env ()$/;"	f
 cat_bash_profile	commonyonienv.sh	/^cat_bash_profile ()$/;"	f
 cat_bashrc	commonyonienv.sh	/^cat_bashrc () $/;"	f
@@ -50,49 +38,29 @@ cat_cgdb_env	commonyonienv.sh	/^cat_cgdb_env ()$/;"	f
 cat_git_env	commonyonienv.sh	/^cat_git_env ()$/;"	f
 cat_vim_env	commonyonienv.sh	/^cat_vim_env () $/;"	f
 cat_yoni_env	commonyonienv.sh	/^cat_yoni_env ()$/;"	f
-catgrub	bashrc_devel.sh	/^alias catgrub='cat \/boot\/grub\/grub.conf'$/;"	a
 catgrubsetdefault	bashrc_devel.sh	/^catgrubsetdefault ()$/;"	f
 catgrubvsinstalled	bashrc_devel.sh	/^catgrubvsinstalled ()$/;"	f
-cdacx	bashrc_nice.sh	/^alias cdacx="cd \/home\/kuser\/work\/acx\/acx\/acx"$/;"	a
-cdacxbin	bashrc_nice.sh	/^alias cdacxbin="cd \/home\/kuser\/work\/acx\/acx\/acx\/Debug"$/;"	a
-cdacxconfig	bashrc_nice.sh	/^alias cdacxconfig="cd \/home\/kuser\/work\/acx\/config"$/;"	a
-cdacxlogs	bashrc_nice.sh	/^alias cdacxlogs="cd \/home\/kuser\/work\/acx\/logs"$/;"	a
-cdacxsrc	bashrc_nice.sh	/^alias cdacxsrc="cd \/home\/kuser\/work\/acx\/acx\/"$/;"	a
-cdacxstorage	bashrc_nice.sh	/^alias cdacxstorage="cd \/home\/kuser\/work\/acx\/storage"$/;"	a
-cdautomation	bashrc_habana.sh	/^alias cdautomation='cd ~\/trees\/npu-stack\/automation'$/;"	a
 cdbugs	folder_name_complete.sh	/^cdbugs() { cd $bugs_dir\/$1; }$/;"	f
 cdbundle	bashrc_nice.sh	/^cdbundle () $/;"	f
 cdcode	folder_name_complete.sh	/^cdcode() { cd $code_dir\/$1; }$/;"	f
-cdconfig	bashrc_nice.sh	/^alias cdconfig='cd $(getconfigdir)'$/;"	a
 cddevel	folder_name_complete.sh	/^cddevel() { cd $devel_dir\/$1; }$/;"	f
 cddocs	folder_name_complete.sh	/^cddocs() { cd $docs_dir\/$1; }$/;"	f
 cddownloads	folder_name_complete.sh	/^cddownloads() { cd ${_downloads_dir}\/$1; }$/;"	f
-cdhabanalabs	bashrc_habana.sh	/^alias cdhabanalabs='cd ~\/trees\/npu-stack\/habanalabs'$/;"	a
-cdhldk	bashrc_habana.sh	/^alias cdhldk='cd ~\/trees\/npu-stack\/hldk'$/;"	a
-cdhlthunk	bashrc_habana.sh	/^alias cdhlthunk='cd ~\/trees\/npu-stack\/hl-thunk'$/;"	a
-cdlibmodules	bashrc_devel.sh	/^alias cdlibmodules='cd \/lib\/modules\/`uname -r`'$/;"	a
-cdlinux	bashrc_mlx.sh	/^alias cdlinux='cd ${linuxkernelsourcecode}'$/;"	a
-cdlog	bashrc_nice.sh	/^alias cdlog='cd $(getlogdir)'$/;"	a
-cdmarsdirecttest	bashrc_mlx.sh	/^alias cdmarsdirecttest='cd \/tmp\/mars_tests\/SW_NET_VERIFICATION-directtest_db.xml\/directtests/;"	a
-cdmlxkernelsources	bashrc_mlx.sh	/^alias cdmlxkernelsources='cd \/mswg\/work\/kernel.org\/x86_64'$/;"	a
 cdofed	ofed_complete_dir.sh	/^cdofed()$/;"	f
 cdregression	regression_complete.sh	/^cdregression()$/;"	f
 cdshare	folder_name_complete.sh	/^cdshare() { cd $share_dir\/$1; }$/;"	f
-cdspecs	bashrc_habana.sh	/^alias cdspecs='cd ~\/trees\/npu-stack\/specs'$/;"	a
 cdsrc	bashrc_nice.sh	/^cdsrc () $/;"	f
 cdtask	bashrc_nice.sh	/^cdtask () $/;"	f
 cdtasks	folder_name_complete.sh	/^cdtasks() { cd $tasks_dir\/$1; }$/;"	f
 cdtasks	task_complete.sh	/^function cdtasks () {$/;"	f
-cdtmp	bashrc_habana.sh	/^alias cdtmp='cd \/home_local\/ycohen\/tmp'$/;"	a
+cdtmp	folder_name_complete.sh	/^cdtmp() { cd $tmp_dir\/$1; }$/;"	f
 cdupstream	upstream_complete_dir.sh	/^cdupstream()$/;"	f
 cdyonienv	folder_name_complete.sh	/^cdyonienv() { cd $yonienv_dir\/$1; }$/;"	f
 changeState	bashrc_nice.sh	/^changeState () $/;"	f
 changecdlinux	bashrc_mlx.sh	/^changecdlinux () {$/;"	f
 checkifalive	bashrc_misc.sh	/^checkifalive ()$/;"	f
-checkpatchhabana	bashrc_habana.sh	/^alias checkpatchhabana="$linuxkernelsourcecode\/scripts\/checkpatch.pl  --max-line-length=100 --/;"	a
 checkpatchkernel	bashrc_mlx.sh	/^checkpatchkernel ()$/;"	f
 checkpatchuserspace	bashrc_mlx.sh	/^checkpatchuserspace ()$/;"	f
-chownyoni	bashrc_mlx.sh	/^alias chownyoni='sudo chown yonatanc:mtl'$/;"	a
 clean	commonyonienv.sh	/^clean ()$/;"	f
 clean_bash_env	commonyonienv.sh	/^clean_bash_env ()$/;"	f
 clean_bash_profile	commonyonienv.sh	/^clean_bash_profile ()$/;"	f
@@ -103,59 +71,39 @@ clean_tmux_env	commonyonienv.sh	/^clean_tmux_env () $/;"	f
 clean_vim_env	commonyonienv.sh	/^clean_vim_env ()$/;"	f
 cleanibconfiguration	bashrc_mlx.sh	/^cleanibconfiguration ()$/;"	f
 cleanibheaders	bashrc_mlx.sh	/^cleanibheaders ()$/;"	f
-cleartrailingwhitespace	bashrc_vim.sh	/^alias cleartrailingwhitespace="sed -i 's\/[ \\t]*$\/\/'"$/;"	a
-clipboard	bashrc_mlx.sh	/^alias clipboard='cat ~\/share\/clipboard.txt'$/;"	a
 complete_task_list	bashrc_nice.sh	/^complete_task_list () $/;"	f
-configure	bashrc_devel.sh	/^alias configure=".\/configure -j ${ncoresformake}"$/;"	a
-connect2remoteDesktop	bashrc_misc.sh	/^alias connect2remoteDesktop='source $(yonienv)\/bin\/connectToRemoteDesk.sh'$/;"	a
 count	bashrc_misc.sh	/^function count() {$/;"	f
-cp	bashrc_fs.sh	/^alias cp='cp -iv'$/;"	a
+create_alias_for_host	bashrc_dell.sh	/^create_alias_for_host ()$/;"	f
 create_alias_for_host	bashrc_fs.sh	/^create_alias_for_host ()$/;"	f
 create_habana_alias_for_host	bashrc_habana.sh	/^create_habana_alias_for_host ()$/;"	f
 csfiles	bashrc_mlx.sh	/^csfiles ()$/;"	f
 cw	bashrc_fs.sh	/^cw () $/;"	f
-d	bashrc_devel.sh	/^alias d='dmesg --color -HxP'$/;"	a
-dcc	bashrc_devel.sh	/^alias dcc='sudo dmesg -C'$/;"	a
-debug	bashrc_devel.sh	/^alias debug='\/usr\/local\/bin\/cgdb --args '$/;"	a
 debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
-deletepatches	bashrc_devel.sh	/^alias deletepatches='rm -fv *.patch'$/;"	a
-deletetags	bashrc_devel.sh	/^alias deletetags='rm -f cscope.* tags'$/;"	a
+dellbuilddebug	bashrc_dell.sh	/^dellbuilddebug ()$/;"	f
+dellclusterdeploy	bashrc_dell.sh	/^dellclusterdeploy ()$/;"	f
+dellclusterenvsetup	bashrc_dell.sh	/^dellclusterenvsetup ()$/;"	f
+dellclusteruserspaceupdate	bashrc_dell.sh	/^dellclusteruserspaceupdate ()$/;"	f
+dellclusteryoni	bashrc_dell.sh	/^dellclusteryoni ()$/;"	f
+dellenvsetup	bashrc_dell.sh	/^dellenvsetup ()$/;"	f
 dfa	bashrc_fs.sh	/^dfa () $/;"	f
-diff	bashrc_misc.sh	/^alias diff='diff -up'$/;"	a
 dirdiff	bashrc_fs.sh	/^dirdiff () $/;"	f
 dirdiffbrief	bashrc_fs.sh	/^dirdiffbrief () $/;"	f
-dirs	bashrc_fs.sh	/^alias dirs='dirs -l -v'$/;"	a
-docker-attach-1st-container	bashrc_devel.sh	/^docker-attach-1st-container ()$/;"	f
 dockerinstall	bashrc_devel.sh	/^dockerinstall ()$/;"	f
-dp	bashrc_devel.sh	/^alias dp='dmesg --color -Hx'$/;"	a
 du1	bashrc_fs.sh	/^du1 ()$/;"	f
 du11	bashrc_fs.sh	/^du11 ()$/;"	f
 duroot	bashrc_fs.sh	/^duroot ()$/;"	f
-dw	bashrc_devel.sh	/^alias dw='dmesg --color -Hxw'$/;"	a
 dyoni	bashrc_devel.sh	/^dyoni ()$/;"	f
 editBashrcScript	bashrc_vim.sh	/^editBashrcScript () $/;"	f
 editPythonScript	bashrc_vim.sh	/^editPythonScript () $/;"	f
-editbashbookmarks	bashrc_bookmarks.sh	/^alias editbashbookmarks='${v_or_g} ${yonienv}\/bashrc_bookmarks.sh'$/;"	a
-editbashcommon	bashrc_common.sh	/^alias editbashcommon='${v_or_g} ${yonienv}\/bashrc_common.sh';$/;"	a
-editbashdevel	bashrc_devel.sh	/^alias editbashdevel='${v_or_g} ${yonienv}\/bashrc_devel.sh'$/;"	a
-editbashfs	bashrc_fs.sh	/^alias editbashfs='${v_or_g} ${yonienv}\/bashrc_fs.sh'$/;"	a
-editbashgit	bashrc_git.sh	/^alias editbashgit='${v_or_g} ${yonienv}\/bashrc_git.sh'$/;"	a
-editbashhabana	bashrc_habana.sh	/^alias editbashhabana='${v_or_g} ${yonienv}\/bashrc_habana.sh'$/;"	a
-editbashhuawei	bashrc_huawei.sh	/^alias editbashhuawei='${v_or_g} ${yonienv}\/bashrc_huawei.sh'$/;"	a
-editbashmain	bashrc_main.sh	/^alias editbashmain='${v_or_g} ${yonienv}\/bashrc_main.sh'$/;"	a
-editbashmlx	bashrc_mlx.sh	/^alias editbashmlx='${v_or_g} ${yonienv}\/bashrc_mlx.sh'$/;"	a
-editbashnice	bashrc_nice.sh	/^alias editbashnice='g ${yonienv}\/bashrc_nice.sh'$/;"	a
 editbashrc	bashrc_common.sh	/^editbashrc () $/;"	f
-editbashvim	bashrc_vim.sh	/^alias editbashvim="${v_or_g} ${yonienv}\/bashrc_vim.sh"$/;"	a
 editgrub	bashrc_devel.sh	/^editgrub () $/;"	f
 ethlist	bashrc_fs.sh	/^ethlist ()$/;"	f
 extract	bashrc_fs.sh	/^extract () {$/;"	f
 extract_srt_files_from_archive	bashrc_misc.sh	/^extract_srt_files_from_archive ()$/;"	f
 extractkernelsrcrpm	bashrc_devel.sh	/^extractkernelsrcrpm ()$/;"	f
 extractrpm	bashrc_fs.sh	/^extractrpm ()$/;"	f
-f	bashrc_fs.sh	/^alias f='fg'$/;"	a
 ff	bashrc_fs.sh	/^ff () $/;"	f
 ffd	bashrc_fs.sh	/^ffd () $/;"	f
 ffdi	bashrc_fs.sh	/^ffdi () $/;"	f
@@ -164,25 +112,17 @@ findconflictfiles	bashrc_devel.sh	/^findconflictfiles ()$/;"	f
 findexecutable	bashrc_fs.sh	/^findexecutable ()$/;"	f
 findiblib_old	bashrc_mlx.sh	/^findiblib_old ()$/;"	f
 findkernelsources	bashrc_devel.sh	/^findkernelsources ()$/;"	f
-findmergetoolfiles	bashrc_devel.sh	/^alias findmergetoolfiles='find -regex ".*_BASE_.*\\|.*_BACKUP_.*\\|.*_REMOTE_.*\\|.*_LOCAL_.*"'$/;"	a
 findmin	bashrc_fs.sh	/^findmin ()$/;"	f
-findorig	bashrc_devel.sh	/^alias findorig='find -name "*orig"'$/;"	a
-findreject	bashrc_devel.sh	/^alias findreject='find -name "*rej"'$/;"	a
 findvideofiles	bashrc_misc.sh	/^findvideofiles ()$/;"	f
 findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
 freecachedmem	bashrc_fs.sh	/^freecachedmem ()$/;"	f
-freeh	bashrc_fs.sh	/^alias freeh='free -h'$/;"	a
 ftrace	bashrc_devel.sh	/^ftrace ()$/;"	f
-ftracedump	bashrc_devel.sh	/^alias ftracedump="sudo cat \/sys\/kernel\/debug\/tracing\/trace"$/;"	a
 ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
 ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f
 fw_get_path	bashrc_mlx.sh	/^fw_get_path() {$/;"	f
-gbash	bashrc_vim.sh	/^alias gbash='editBashrcScript g' $/;"	a
-gcode	bashrc_bookmarks.sh	/^alias gcode="cdcode ; g +e."$/;"	a
 gdbbt	bashrc_devel.sh	/^gdbbt () $/;"	f
 generate_wbe	bashrc_nice.sh	/^generate_wbe () $/;"	f
-gerritmkhook	bashrc_mlx.sh	/^alias gerritmkhook='gitdir=$(git rev-parse --git-dir); scp -p -P 29418 yonatanc@l-gerrit.mtl.lab/;"	a
 get_branches	bashrc_svn.sh	/^get_branches () $/;"	f
 getconfigdir	bashrc_nice.sh	/^getconfigdir () $/;"	f
 getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f
@@ -191,181 +131,75 @@ gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
 gitcheckouttag	bashrc_git.sh	/^gitcheckouttag ()$/;"	f
 gitclearcache	bashrc_git.sh	/^gitclearcache ()$/;"	f
-gitclone-directtests	bashrc_mlx.sh	/^alias gitclone-directtests='git clone ssh:\/\/l-gerrit.mtl.labs.mlnx:29418\/Linux_drivers_verifi/;"	a
-gitclone-dpdk	bashrc_mlx.sh	/^alias gitclone-dpdk='git clone https:\/\/github.com\/mellanox\/dpdk.org'$/;"	a
-gitclone-ofed-iproute2	bashrc_mlx.sh	/^alias gitclone-ofed-iproute2='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/mlnx_ofed/;"	a
-gitclone-ofed-kernel	bashrc_mlx.sh	/^gitclone-ofed-kernel() $/;"	f
-gitclone-ofed-legacy-libs	bashrc_mlx.sh	/^gitclone-ofed-legacy-libs ()$/;"	f
-gitclone-ofed-libibumad	bashrc_mlx.sh	/^gitclone-ofed-libibumad () { git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/ib_mgmt\/l/;"	f
-gitclone-ofed-libibumad-anon	bashrc_mlx.sh	/^gitclone-ofed-libibumad-anon () { git clone http:\/\/l-gerrit.mtl.labs.mlnx:8080\/ib_mgmt\/libib/;"	f
-gitclone-ofed-libibverbs	bashrc_mlx.sh	/^gitclone-ofed-libibverbs() { git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/mlnx_ofed_/;"	f
-gitclone-ofed-libibverbs-anon	bashrc_mlx.sh	/^gitclone-ofed-libibverbs-anon () { git clone http:\/\/l-gerrit.mtl.labs.mlnx:8080\/mlnx_ofed_2_0/;"	f
-gitclone-ofed-libmlx4	bashrc_mlx.sh	/^alias gitclone-ofed-libmlx4='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/mlnx_ofed_/;"	a
-gitclone-ofed-libmlx5	bashrc_mlx.sh	/^gitclone-ofed-libmlx5 () { git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/connect-ib\//;"	f
-gitclone-ofed-libmlx5-anon	bashrc_mlx.sh	/^gitclone-ofed-libmlx5-anon () { git clone http:\/\/l-gerrit.mtl.labs.mlnx:8080\/connect-ib\/libm/;"	f
-gitclone-ofed-librdmacm	bashrc_mlx.sh	/^alias gitclone-ofed-librdmacm='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/mlnx_ofe/;"	a
-gitclone-ofed-librxe	bashrc_mlx.sh	/^alias gitclone-ofed-librxe='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/mlnx_ofed\//;"	a
-gitclone-ofed-rdmacore	bashrc_mlx.sh	/^gitclone-ofed-rdmacore () { git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/mlnx_ofed\//;"	f
-gitclone-ofed-rdmacore-anon	bashrc_mlx.sh	/^gitclone-ofed-rdmacore-anon () { git clone http:\/\/l-gerrit.mtl.labs.mlnx:8080\/mlnx_ofed\/rdma/;"	f
-gitclone-perftest	bashrc_mlx.sh	/^alias gitclone-perftest='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/Performance\/p/;"	a
-gitclone-ucx	bashrc_mlx.sh	/^alias gitclone-ucx='git clone https:\/\/github.com\/openucx\/ucx'$/;"	a
-gitclone-upstream-iproute2	bashrc_mlx.sh	/^alias gitclone-upstream-iproute2='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/upstr/;"	a
-gitclone-upstream-kernel	bashrc_mlx.sh	/^alias gitclone-upstream-kernel='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/upstrea/;"	a
-gitclone-upstream-opensm	bashrc_mlx.sh	/^alias gitclone-upstream-opensm='git clone git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:2941/;"	a
-gitclone-upstream-rdmacore	bashrc_mlx.sh	/^alias gitclone-upstream-rdmacore='git clone ssh:\/\/yonatanc@l-gerrit.mtl.labs.mlnx:29418\/upstr/;"	a
-gitclone-yonienv	bashrc_common.sh	/^alias gitclone-yonienv='git clone https:\/\/github.com\/yonicswe\/yonienv'$/;"	a
 gitcommitfixup	bashrc_git.sh	/^gitcommitfixup ()$/;"	f
 gitcommithabana	bashrc_habana.sh	/^gitcommithabana ()$/;"	f
 gitcommitmetadata	bashrc_git.sh	/^gitcommitmetadata ()$/;"	f
 gitcommitmlx	bashrc_git.sh	/^gitcommitmlx ()$/;"	f
 gitcommityoni	bashrc_git.sh	/^gitcommityoni ()$/;"	f
-gitconfig	bashrc_git.sh	/^alias gitconfig="nv ~\/.gitconfig";$/;"	a
-gitconfignopasswd	bashrc_git.sh	/^alias gitconfignopasswd='git config --global credential.helper cache'$/;"	a
 gitd	bashrc_git.sh	/^gitd ()$/;"	f
-gitdiff	bashrc_git.sh	/^alias gitdiff='git d'$/;"	a
-gitdiffkdiff3	bashrc_git.sh	/^alias gitdiffkdiff3='git difftool --tool=kdiff3 --no-prompt'$/;"	a
-gitdiffstat	bashrc_git.sh	/^alias gitdiffstat='git --no-pager diff --stat'$/;"	a
 gitdiscardcached	bashrc_git.sh	/^gitdiscardcached () $/;"	f
 gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
-gitlog	bashrc_git.sh	/^alias gitlog='git log --name-status'$/;"	a
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
-gitrebase-ofed-kernel-5-0	bashrc_mlx.sh	/^alias gitrebase-ofed-kernel-5-0='git fetch origin mlnx_ofed_5_0; git rebase FETCH_HEAD'$/;"	a
 gitshowfilefromindex	bashrc_git.sh	/^gitshowfilefromindex ()$/;"	f
-gitstashunstaged	bashrc_git.sh	/^alias gitstashunstaged='git stash --keep-index'$/;"	a
 gituncommit	bashrc_git.sh	/^gituncommit ()$/;"	f
-gitunstageall	bashrc_git.sh	/^alias gitunstageall='git reset HEAD'$/;"	a
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
-gitwhichbranch	bashrc_git.sh	/^alias gitwhichbranch="git  s  | awk '\/On branch\/{print $4}'"$/;"	a
 gl	bashrc_git.sh	/^gl ()$/;"	f
-gpython	bashrc_vim.sh	/^alias gpython='editPythonScript g' $/;"	a
-grepascii	bashrc_fs.sh	/^alias grepascii='grep -nH -r -I --color '$/;"	a
-grepc	bashrc_fs.sh	/^alias grepc='ag --cc --noheading'$/;"	a
-grepfiles	bashrc_fs.sh	/^alias grepfiles='grep -nH --color --binary-files=without-match -D skip'$/;"	a
-grepmake	bashrc_fs.sh	/^alias grepmake='grep -nH -r -I --color --include=*[m,M]ake*'$/;"	a
 greptasks	bashrc_bookmarks.sh	/^greptasks ()$/;"	f
-greptxt	bashrc_fs.sh	/^alias greptxt='ag -G .*\\.txt'$/;"	a
 grepyonienv	bashrc_common.sh	/^grepyonienv () $/;"	f
 grub2listentries	bashrc_devel.sh	/^grub2listentries () $/;"	f
 grub2setdefault	bashrc_devel.sh	/^grub2setdefault ()$/;"	f
-grub2upadte	bashrc_devel.sh	/^alias grub2upadte='sudo grub2-mkconfig -o \/boot\/grub2\/grub.cfg'$/;"	a
 grubversion	bashrc_devel.sh	/^grubversion ()$/;"	f
 h	bashrc_fs.sh	/^h () $/;"	f
-hl	bashrc_habana.sh	/^alias hl="${HL_MENU_PATH}\/hlMainMenu.sh"$/;"	a
-hlasictype	bashrc_habana.sh	/^alias hlasictype='cat \/sys\/class\/habanalabs\/hl0\/device_type'$/;"	a
-hlbuildsimulator	bashrc_habana.sh	/^alias hlbuildsimulator='build_func_sim6 -c -r'$/;"	a
 hlcheckpatches	bashrc_habana.sh	/^hlcheckpatches ()$/;"	f
-hlclonehabanalabs	bashrc_habana.sh	/^alias hlclonehabanalabs='git clone ssh:\/\/gerrit:29418\/habanalabs'$/;"	a
-hlcopyenvto-hls2-srv11-csr	bashrc_habana.sh	/^alias hlcopyenvto-hls2-srv11-csr='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks/;"	a
-hlcopyenvto-srv621	bashrc_habana.sh	/^alias hlcopyenvto-srv621='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonien/;"	a
-hlcopyenvto-srv649	bashrc_habana.sh	/^alias hlcopyenvto-srv649='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonien/;"	a
-hlcopyenvto-srv693	bashrc_habana.sh	/^alias hlcopyenvto-srv693='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonien/;"	a
-hlcopyenvtok203a	bashrc_habana.sh	/^alias hlcopyenvtok203a='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv./;"	a
-hlcopyenvtok203b	bashrc_habana.sh	/^alias hlcopyenvtok203b='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv./;"	a
-hlcopyenvtok203d	bashrc_habana.sh	/^alias hlcopyenvtok203d='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv./;"	a
-hlcopyenvtok203e	bashrc_habana.sh	/^alias hlcopyenvtok203e='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv./;"	a
-hlcopyenvtok61a	bashrc_habana.sh	/^alias hlcopyenvtok61a='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv.f/;"	a
-hlcopyenvtok61b	bashrc_habana.sh	/^alias hlcopyenvtok61b='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv.f/;"	a
-hlcopyenvtok61c	bashrc_habana.sh	/^alias hlcopyenvtok61c='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv.f/;"	a
-hlcopyenvtok61d	bashrc_habana.sh	/^alias hlcopyenvtok61d='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv.f/;"	a
-hlcopyenvtok62a	bashrc_habana.sh	/^alias hlcopyenvtok62a='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' \/home\/ycohen\/sha/;"	a
-hlcopyenvtok62b	bashrc_habana.sh	/^alias hlcopyenvtok62b='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' \/home\/ycohen\/sha/;"	a
-hlcopyenvtok62c	bashrc_habana.sh	/^alias hlcopyenvtok62c='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' \/home\/ycohen\/sha/;"	a
-hlcopyenvtok62d	bashrc_habana.sh	/^alias hlcopyenvtok62d='sshpass -p Hab12345 rsync -av -e ssh --exclude='.git' \/home\/ycohen\/sha/;"	a
-hlcopyenvtopldm2	bashrc_habana.sh	/^alias hlcopyenvtopldm2='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv./;"	a
-hlcopyenvtopldm6	bashrc_habana.sh	/^alias hlcopyenvtopldm6='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv./;"	a
-hlcopyenvtopldm8	bashrc_habana.sh	/^alias hlcopyenvtopldm8='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonienv./;"	a
-hlcopyenvtopldmfsm1	bashrc_habana.sh	/^alias hlcopyenvtopldmfsm1='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonie/;"	a
-hlcopyenvtopldmfsm2	bashrc_habana.sh	/^alias hlcopyenvtopldmfsm2='rsync -av -e ssh --exclude='.git' \/home\/ycohen\/share\/tasks\/yonie/;"	a
-hlcoverity-habanalabs	bashrc_habana.sh	/^alias hlcoverity-habanalabs='\/home\/ycohen\/trees\/npu-stack\/automation\/habana_scripts\/run_c/;"	a
-hlcoverity-hlthunk	bashrc_habana.sh	/^alias hlcoverity-hlthunk='\/home\/ycohen\/trees\/npu-stack\/automation\/habana_scripts\/run_cove/;"	a
-hldriverbuild	bashrc_habana.sh	/^alias hldriverbuild='2>&1 build_and_insmod_habanalabs -b | tee build.log'$/;"	a
-hldriverbuildverbose	bashrc_habana.sh	/^alias hldriverbuildverbose='2>&1 build_and_insmod_habanalabs -b -v | tee build.log'$/;"	a
 hldriverrestartsimulator	bashrc_habana.sh	/^hldriverrestartsimulator()$/;"	f
 hldriverstart	bashrc_habana.sh	/^hldriverstart()$/;"	f
 hldriverstartsimulator	bashrc_habana.sh	/^hldriverstartsimulator ()$/;"	f
-hldriverstatus	bashrc_habana.sh	/^alias hldriverstatus='lsmod |grep habanalabs'$/;"	a
 hldriverstop	bashrc_habana.sh	/^hldriverstop()$/;"	f
 hlethlist	bashrc_habana.sh	/^hlethlist () $/;"	f
-hlfirmwareversion	bashrc_habana.sh	/^alias hlfirmwareversion='sudo hl-smi|grep -i version'$/;"	a
-hlnetwork	bashrc_habana.sh	/^alias hlnetwork='~\/trees\/npu-stack\/automation\/habana_scripts\/manage_network_ifs.sh'$/;"	a
-hlnetworkdown	bashrc_habana.sh	/^alias hlnetworkdown='hlnetwork --down'$/;"	a
-hlnetworkstatus	bashrc_habana.sh	/^alias hlnetworkstatus='hlnetwork --status'$/;"	a
-hlnetworkup	bashrc_habana.sh	/^alias hlnetworkup='hlnetwork --up'$/;"	a
-hlpcidevicelist	bashrc_habana.sh	/^alias hlpcidevicelist="lspci |grep Proc |cut -f 1 -d' ' "$/;"	a
 hlpcideviceremove	bashrc_habana.sh	/^hlpcideviceremove ()$/;"	f
-hlpcideviceshow	bashrc_habana.sh	/^alias hlpcideviceshow='sudo lspci -vv -nn -s '$/;"	a
-hlprintnetworkstatus	bashrc_habana.sh	/^alias hlprintnetworkstatus="~\/trees\/npu-stack\/automation\/habana_scripts\/manage_network_ifs./;"	a
 hlrepoupdate	bashrc_habana.sh	/^hlrepoupdate ()$/;"	f
 hlrestartdriver	bashrc_habana.sh	/^hlrestartdriver ()$/;"	f
-hlsetloopbackmode	bashrc_habana.sh	/^alias hlsetloopbackmode="echo 0x3ff | sudo tee  \/sys\/kernel\/debug\/habanalabs\/hl0\/nic_mac_l/;"	a
 hlsetupenvironment	bashrc_habana.sh	/^hlsetupenvironment ()$/;"	f
 hlsimulatorstart	bashrc_habana.sh	/^hlsimulatorstart ()$/;"	f
 hlsl	bashrc_habana.sh	/^hlsl ()$/;"	f
 hlstartdriversimulator	bashrc_habana.sh	/^hlstartdriversimulator ()$/;"	f
-hlstartnetword	bashrc_habana.sh	/^alias hlstartnetword="~\/trees\/npu-stack\/automation\/habana_scripts\/manage_network_ifs.sh --u/;"	a
 hlstopdriver	bashrc_habana.sh	/^hlstopdriver ()$/;"	f
-hlthunkbuild	bashrc_habana.sh	/^alias hlthunkbuild='2>&1 build_hlthunk | tee build.log'$/;"	a
-hlthunkbuildlib	bashrc_habana.sh	/^alias hlthunkbuildlib='2>&1 build_hlthunk -l | tee build.log'$/;"	a
-hlthunkbuildverbose	bashrc_habana.sh	/^alias hlthunkbuildverbose='2>&1 VERBOSE=1 build_hlthunk | tee build.log'$/;"	a
 howCleanIsMyHome	bashrc_mlx.sh	/^howCleanIsMyHome ()$/;"	f
 ibmod	bashrc_mlx.sh	/^ibmod ()$/;"	f
 icm_kill	bashrc_nice.sh	/^icm_kill () $/;"	f
 icm_sbuild_vars	bashrc_nice.sh	/^icm_sbuild_vars ()$/;"	f
 icm_sockets	bashrc_nice.sh	/^icm_sockets () $/;"	f
 icm_threads	bashrc_nice.sh	/^icm_threads () $/;"	f
-install-ofed-legacy-libs	bashrc_mlx.sh	/^install-ofed-legacy-libs ()$/;"	f
 ips_affinity_threads	bashrc_nice.sh	/^ips_affinity_threads () $/;"	f
 ips_kill	bashrc_nice.sh	/^ips_kill () $/;"	f
 ips_sockets	bashrc_nice.sh	/^ips_sockets () $/;"	f
 ips_telnet	bashrc_nice.sh	/^ips_telnet () $/;"	f
 ips_threads	bashrc_nice.sh	/^ips_threads () $/;"	f
-iserinitiatorstart	bashrc_mlx.sh	/^alias iserinitiatorstart='sudo modprobe ib_iser'$/;"	a
 iserstart	bashrc_mlx.sh	/^iserstart ()$/;"	f
-iserstop	bashrc_mlx.sh	/^alias iserstop='sudo modprobe -r ib_isert ib_iser'$/;"	a
-isertargetstart	bashrc_mlx.sh	/^alias isertargetstart='sudo modprobe ib_isert'$/;"	a
 ismoduleup	bashrc_mlx.sh	/^ismoduleup ()$/;"	f
-isnfsMountPoint	bashrc_fs.sh	/^alias isnfsMountPoint='stat -f -L -c %T' $/;"	a
-j	bashrc_fs.sh	/^alias j='jobs -l'$/;"	a
 k	bashrc_fs.sh	/^k () {$/;"	f
 kernelbuild	bashrc_devel.sh	/^kernelbuild ()$/;"	f
 kernelbuildall	bashrc_devel.sh	/^kernelbuildall ()$/;"	f
 kernelbuildinstallall	bashrc_devel.sh	/^kernelbuildinstallall ()$/;"	f
 kernelbuildinstallmodules	bashrc_devel.sh	/^kernelbuildinstallmodules ()$/;"	f
-kernelbuildmlx	bashrc_mlx.sh	/^alias kernelbuildmlx='kernelbuildmlx5; kernelbuildmlx4'$/;"	a
-kernelbuildmlx4	bashrc_mlx.sh	/^alias kernelbuildmlx4='kernelbuildmlx4ib; kernelbuildmlx4core'$/;"	a
 kernelbuildmlx4core	bashrc_mlx.sh	/^kernelbuildmlx4core ()$/;"	f
 kernelbuildmlx4ib	bashrc_mlx.sh	/^kernelbuildmlx4ib ()$/;"	f
-kernelbuildmlx5	bashrc_mlx.sh	/^alias kernelbuildmlx5='kernelbuildmlx5ib; kernelbuildmlx5core'$/;"	a
-kernelbuildmlx5again	bashrc_mlx.sh	/^alias kernelbuildmlx5again='kernelbuildmlx5ib -B; kernelbuildmlx5core -B'$/;"	a
 kernelbuildmlx5core	bashrc_mlx.sh	/^kernelbuildmlx5core ()$/;"	f
 kernelbuildmlx5ib	bashrc_mlx.sh	/^kernelbuildmlx5ib ()$/;"	f
 kernelbuildmodules	bashrc_devel.sh	/^kernelbuildmodules () $/;"	f
-kernelcdsources	bashrc_devel.sh	/^alias kernelcdsources='cd \/lib\/modules\/$(uname -r)\/build'$/;"	a
 kernelinstall	bashrc_devel.sh	/^kernelinstall ()$/;"	f
 kernelinstallall	bashrc_devel.sh	/^kernelinstallall () $/;"	f
-kernelinstallheaders	bashrc_devel.sh	/^alias kernelinstallheaders='sudo make headers_install INSTALL_HDR_PATH=\/usr'$/;"	a
 kernelinstallmodules	bashrc_devel.sh	/^kernelinstallmodules ()$/;"	f
 kernelversion	bashrc_devel.sh	/^kernelversion ()$/;"	f
-kgb	bashrc_mlx.sh	/^alias kgb="sudo \/.autodirect\/GLIT\/SCRIPTS\/AUTOINSTALL\/VIRTUALIZATION\/kvm_guest_builder"$/;"	a
 killzombies	bashrc_devel.sh	/^killzombies ()$/;"	f
-kms	bashrc_habana.sh	/^alias kms='~\/kmd-srv.py'$/;"	a
-kmsfree	bashrc_habana.sh	/^alias kmsfree='kmsl  free'$/;"	a
-kmsfreegaudi	bashrc_habana.sh	/^alias kmsfreegaudi='kmsl  "free.*gaudi"'$/;"	a
-kmsgaudi	bashrc_habana.sh	/^alias kmsgaudi='kmsl  gaudi'$/;"	a
-kmsgoya	bashrc_habana.sh	/^alias kmsgoya='kmsl  goya'$/;"	a
 kmsl	bashrc_habana.sh	/^kmsl () $/;"	f
-kmsping	bashrc_habana.sh	/^alias kmsping='ping'$/;"	a
 kmsrelease	bashrc_habana.sh	/^kmsrelease ()$/;"	f
 kmsreleaseyoni	bashrc_habana.sh	/^kmsreleaseyoni ()$/;"	f
 kmsretake	bashrc_habana.sh	/^kmsretake ()$/;"	f
 kmsssh	bashrc_habana.sh	/^kmsssh ()$/;"	f
 kmssshyoni	bashrc_habana.sh	/^kmssshyoni ()$/;"	f
-kmstake	bashrc_habana.sh	/^alias kmstake='kms --force -t '$/;"	a
-kmsyoni	bashrc_habana.sh	/^alias kmsyoni='kmsl  ycohen'$/;"	a
-l	bashrc_fs.sh	/^alias l='\/usr\/bin\/ls --group-directories-first -l --color -F'$/;"	a
 la	bashrc_fs.sh	/^la ()$/;"	f
-less	bashrc_misc.sh	/^alias less='less -r'$/;"	a
 listbuildservers	bashrc_mlx.sh	/^listbuildservers () { less \/auto\/integration\/builders.txt ; }$/;"	f
 listdevelservers	bashrc_mlx.sh	/^listdevelservers ()$/;"	f
 listerrnovalues	bashrc_devel.sh	/^listerrnovalues ()$/;"	f
@@ -373,21 +207,13 @@ listgitrepos	bashrc_mlx.sh	/^listgitrepos ()$/;"	f
 listibuserlibs	bashrc_mlx.sh	/^listibuserlibs ()$/;"	f
 listinstalledkernels	bashrc_devel.sh	/^listinstalledkernels ()$/;"	f
 listkernelmodules	bashrc_devel.sh	/^listkernelmodules ()$/;"	f
-listpatches	bashrc_devel.sh	/^alias listpatches='ls -ltr *.patch 2>\/dev\/null'$/;"	a
-listpci	bashrc_devel.sh	/^alias listpci='lspci -tv'$/;"	a
 lld	bashrc_fs.sh	/^lld ()$/;"	f
 loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
 locatelibibverbs	bashrc_mlx.sh	/^locatelibibverbs ()$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
-lt	bashrc_fs.sh	/^alias lt='\/usr\/bin\/ls --group-directories-first -lt --color -F'$/;"	a
-ltr	bashrc_fs.sh	/^alias ltr='\/usr\/bin\/ls --group-directories-first -ltr --color -F'$/;"	a
 m	bashrc_fs.sh	/^m ()$/;"	f
 main	commonyonienv.sh	/^main  ()$/;"	f
-make	bashrc_devel.sh	/^alias make="make -j ${ncoresformake}"$/;"	a
-make-ofed-legacy-libs	bashrc_mlx.sh	/^make-ofed-legacy-libs ()$/;"	f
-makeacx	bashrc_nice.sh	/^alias makeacx="cdacx; make --makefile=acx.mak CFG=Debug"$/;"	a
-makedebug	bashrc_devel.sh	/^alias makedebug='make -B CPPFLAGS="-O0 -g"'$/;"	a
 manageibapps	bashrc_mlx.sh	/^manageibapps ()$/;"	f
 manageiblibs	bashrc_mlx.sh	/^manageiblibs ()$/;"	f
 md2man	bashrc_mlx.sh	/^md2man ()$/;"	f
@@ -404,69 +230,38 @@ mftsetlinktypeinfiniband	bashrc_mlx.sh	/^mftsetlinktypeinfiniband ()$/;"	f
 mftstart	bashrc_mlx.sh	/^mftstart ()$/;"	f
 mftstatus	bashrc_mlx.sh	/^mftstatus ()$/;"	f
 mkcoverletter	bashrc_mlx.sh	/^mkcoverletter ()$/;"	f
-mkcoverletternet-next	bashrc_mlx.sh	/^mkcoverletternet-next ()  $/;"	f
-mkcoverletterrdma-next	bashrc_mlx.sh	/^mkcoverletterrdma-next ()$/;"	f
 mkcoverletterrdmacore	bashrc_mlx.sh	/^mkcoverletterrdmacore ()$/;"	f
 mkcoverletterusage	bashrc_mlx.sh	/^mkcoverletterusage ()$/;"	f
-mkinfiniband	bashrc_mlx.sh	/^alias mkinfiniband="\\make M=drivers\/infiniband\/ modules -j ${ncoresformake}"$/;"	a
-mkinfinibandcore	bashrc_mlx.sh	/^alias mkinfinibandcore="make M=drivers\/infiniband\/core modules -j ${ncoresformake}"$/;"	a
-mkinfinibandiser	bashrc_mlx.sh	/^alias mkinfinibandiser="make M=drivers\/infiniband\/ulp\/iser modules -j ${ncoresformake}"$/;"	a
 mkinfinibandmlx4	bashrc_mlx.sh	/^mkinfinibandmlx4 ()$/;"	f
 mkinfinibandmlx5	bashrc_mlx.sh	/^mkinfinibandmlx5 ()$/;"	f
-mkinfinibandrxe	bashrc_mlx.sh	/^alias mkinfinibandrxe="make M=drivers\/infiniband\/sw\/rxe modules -j ${ncoresformake}"$/;"	a
 mkrootmountdir	bashrc_mlx.sh	/^mkrootmountdir ()$/;"	f
 mkrxelib	bashrc_mlx.sh	/^mkrxelib ()$/;"	f
 mktask	bashrc_bookmarks.sh	/^mktask () $/;"	f
-mkupstreamlib	bashrc_mlx.sh	/^alias mkupstreamlib='make CFLAGS="-g -O0 -D_GNU_SOURCE" AM_DEFAULT_VERBOSITY=1 '$/;"	a
 mkupstreamlib1sttime	bashrc_mlx.sh	/^mkupstreamlib1sttime ()$/;"	f
-mkupstreamlibagain	bashrc_mlx.sh	/^alias mkupstreamlibagain='find -name "*.[c,h]" -exec touch {} \\; ; mkupstreamlib'$/;"	a
 mlx	bashrc_mlx.sh	/^mlx ()$/;"	f
-mlx4restart	bashrc_mlx.sh	/^alias mlx4restart='mlx4stop; mlx4start'$/;"	a
 mlx4start	bashrc_mlx.sh	/^mlx4start ()$/;"	f
 mlx4stop	bashrc_mlx.sh	/^mlx4stop ()$/;"	f
-mlx5restart	bashrc_mlx.sh	/^alias mlx5restart='mlx5stop; mlx5start'$/;"	a
 mlx5start	bashrc_mlx.sh	/^mlx5start ()$/;"	f
 mlx5stop	bashrc_mlx.sh	/^mlx5stop ()$/;"	f
-mlxrestart	bashrc_mlx.sh	/^alias mlxrestart='mlxstop ; mlxstart'$/;"	a
 mlxstart	bashrc_mlx.sh	/^mlxstart ()$/;"	f
 mlxstop	bashrc_mlx.sh	/^mlxstop ()$/;"	f
 mountkernelsources	bashrc_mlx.sh	/^mountkernelsources () {$/;"	f
-mv	bashrc_fs.sh	/^alias mv='mv -v'$/;"	a
 mv2dir	bashrc_fs.sh	/^mv2dir ()$/;"	f
 mydistro	bashrc_fs.sh	/^mydistro ()$/;"	f
 mydistro_v1	bashrc_fs.sh	/^mydistro_v1 ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
 myip_v1	bashrc_fs.sh	/^myip_v1 ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
-now	bashrc_misc.sh	/^alias now='date +"%d%b%Y_%H%M%S"'$/;"	a
-nox	bashrc_mlx.sh	/^alias nox='lspci | grep --color nox'$/;"	a
-noxx	bashrc_mlx.sh	/^alias noxx='lspci -tvv | grep --color -C 3 nox'$/;"	a
-nv	bashrc_vim.sh	/^alias nv=nvim$/;"	a
 ofedbackportsapply	bashrc_mlx.sh	/^ofedbackportsapply ()$/;"	f
 ofedbackportsupdate	bashrc_mlx.sh	/^ofedbackportsupdate ()$/;"	f
 ofedbuildandinstallinternalversion	bashrc_mlx.sh	/^ofedbuildandinstallinternalversion ()$/;"	f
 ofedcdkernelversion	bashrc_mlx.sh	/^ofedcdkernelversion ()$/;"	f
 ofedcdreleasedir	bashrc_mlx.sh	/^ofedcdreleasedir ()$/;"	f
-ofedconfigure	bashrc_mlx.sh	/^alias ofedconfigure='.\/configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --with/;"	a
-ofedconfigure4	bashrc_mlx.sh	/^alias ofedconfigure4.7='.\/configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod --w/;"	a
 ofedconfigureforkernel	bashrc_mlx.sh	/^ofedconfigureforkernel ()$/;"	f
-ofedconfigureforkernel-2	bashrc_mlx.sh	/^alias ofedconfigureforkernel-2.6.32="ofedconfigureforkernel 2.6.32"$/;"	a
-ofedconfigureforkernel-3	bashrc_mlx.sh	/^alias ofedconfigureforkernel-3.10="ofedconfigureforkernel 3.10"$/;"	a
-ofedconfigureforkernel-4	bashrc_mlx.sh	/^alias ofedconfigureforkernel-4.18="ofedconfigureforkernel 4.18"$/;"	a
-ofedconfigureforkernel-5	bashrc_mlx.sh	/^alias ofedconfigureforkernel-5.2="ofedconfigureforkernel 5.2"$/;"	a
-ofedconfigureforkernel-5	bashrc_mlx.sh	/^alias ofedconfigureforkernel-5.4="ofedconfigureforkernel 5.4"$/;"	a
-ofedconfigurewithcore	bashrc_mlx.sh	/^alias ofedconfigurewithcore='.\/configure -j ${ncoresformake} --with-core-mod'$/;"	a
-ofedconfigurewithrxe	bashrc_mlx.sh	/^alias ofedconfigurewithrxe='.\/configure -j ${ncoresformake} --with-core-mod --with-user_mad-mod/;"	a
 ofeddeletebackportbranch	bashrc_mlx.sh	/^ofeddeletebackportbranch ()$/;"	f
-ofedfindindexforlibibverbs	bashrc_mlx.sh	/^alias ofedfindindexforlibibverbs='ofedfindindexforpackage libibverbs'$/;"	a
-ofedfindindexforlibmlx4	bashrc_mlx.sh	/^alias ofedfindindexforlibmlx4='ofedfindindexforpackage libmlx4:'$/;"	a
-ofedfindindexforlibmlx5	bashrc_mlx.sh	/^alias ofedfindindexforlibmlx5='ofedfindindexforpackage libmlx5:'$/;"	a
-ofedfindindexforofakernel	bashrc_mlx.sh	/^alias ofedfindindexforofakernel='ofedfindindexforpackage ofa_kernel:'$/;"	a
 ofedfindindexforpackage	bashrc_mlx.sh	/^ofedfindindexforpackage ()$/;"	f
-ofedfindindexforrdma-core	bashrc_mlx.sh	/^alias ofedfindindexforrdma-core='ofedfindindexforpackage rdma-core'$/;"	a
 ofedfindpathofversion	bashrc_mlx.sh	/^ofedfindpathofversion () $/;"	f
 ofedhelp	bashrc_mlx.sh	/^ofedhelp ()$/;"	f
-ofedinstallupstream	bashrc_mlx.sh	/^alias ofedinstallupstream='sudo build=latest-upstream \/mswg\/release\/ofed\/ofed_install --all /;"	a
 ofedinstallupstreamlib	bashrc_mlx.sh	/^ofedinstallupstreamlib ()$/;"	f
 ofedinstallversion	bashrc_mlx.sh	/^ofedinstallversion ()$/;"	f
 ofedkernelinstall	bashrc_mlx.sh	/^ofedkernelinstall ()$/;"	f
@@ -480,18 +275,8 @@ ofedmetadataverify	bashrc_mlx.sh	/^ofedmetadataverify ()$/;"	f
 ofedmkbackportbranch	bashrc_mlx.sh	/^ofedmkbackportbranch ()$/;"	f
 ofedmklinks	bashrc_mlx.sh	/^ofedmklinks ()$/;"	f
 ofedquerybuildidforversion	bashrc_mlx.sh	/^ofedquerybuildidforversion ()$/;"	f
-ofedrestart	bashrc_mlx.sh	/^alias ofedrestart='ofedstop; ofedstart'$/;"	a
-ofedshowlastreleaseversion	bashrc_mlx.sh	/^alias ofedshowlastreleaseversion='ls -ld \/auto\/sw\/release\/mlnx_ofed\/MLNX_OFED\/latest-5.0'$/;"	a
-ofedstart	bashrc_mlx.sh	/^alias ofedstart='sudo \/etc\/init.d\/openibd start'$/;"	a
-ofedstop	bashrc_mlx.sh	/^alias ofedstop='sudo \/etc\/init.d\/openibd force-stop'$/;"	a
 ofeduninstall	bashrc_mlx.sh	/^ofeduninstall ()$/;"	f
-ofedversion	bashrc_mlx.sh	/^alias ofedversion='[ -e \/usr\/bin\/ofed_info ] && ofed_info -s | sed "s\/:\/\/g"'$/;"	a
 opensmmlx	bashrc_mlx.sh	/^opensmmlx ()$/;"	f
-opensmmlx4_0	bashrc_mlx.sh	/^alias opensmmlx4_0='opensmmlx mlx4_0'$/;"	a
-opensmmlx4_1	bashrc_mlx.sh	/^alias opensmmlx4_1='opensmmlx mlx4_1'$/;"	a
-opensmmlx5_0	bashrc_mlx.sh	/^alias opensmmlx5_0='opensmmlx mlx5_0'$/;"	a
-opensmmlx5_1	bashrc_mlx.sh	/^alias opensmmlx5_1='opensmmlx mlx5_1'$/;"	a
-p	bashrc_fs.sh	/^alias p='pwd -P'$/;"	a
 parse_git_branch	bashrc_fs.sh	/^parse_git_branch() $/;"	f
 parse_svn_branch	bashrc_fs.sh	/^parse_svn_branch() {$/;"	f
 parse_svn_repository_root	bashrc_fs.sh	/^parse_svn_repository_root() {$/;"	f
@@ -500,7 +285,6 @@ path2URL	bashrc_svn.sh	/^path2URL () $/;"	f
 pd	bashrc_bookmarks.sh	/^pd () $/;"	f
 pd_complete	bashrc_bookmarks.sh	/^pd_complete () $/;"	f
 pdc	bashrc_bookmarks.sh	/^pdc () $/;"	f
-pdedit	bashrc_bookmarks.sh	/^alias pdedit="${v_or_g} ${BM} ; cat ${BM}"$/;"	a
 pdf	bashrc_bookmarks.sh	/^pdf ()$/;"	f
 pdf2pd	bashrc_bookmarks.sh	/^pdf2pd ()$/;"	f
 pdf_complete	bashrc_bookmarks.sh	/^pdf_complete ()$/;"	f
@@ -508,7 +292,6 @@ pdf_usage	bashrc_bookmarks.sh	/^pdf_usage ()$/;"	f
 pdp	bashrc_bookmarks.sh	/^pdp ()$/;"	f
 pgrep	bashrc_fs.sh	/^pgrep () $/;"	f
 pgrepa	bashrc_fs.sh	/^pgrepa () $/;"	f
-po	bashrc_fs.sh	/^alias po='popd 1>\/dev\/null ; pd ; pd_complete'$/;"	a
 pp	bashrc_fs.sh	/^pp ()$/;"	f
 pr_debug	bashrc_devel.sh	/^pr_debug () $/;"	f
 pr_debug_usage	bashrc_devel.sh	/^pr_debug_usage ()$/;"	f
@@ -516,29 +299,14 @@ print_underline	bashrc_common.sh	/^print_underline () $/;"	f
 print_underline_size	bashrc_common.sh	/^print_underline_size () $/;"	f
 printlinefromfile	bashrc_misc.sh	/^printlinefromfile ()$/;"	f
 probe_topology	bashrc_fs.sh	/^probe_topology () $/;"	f
-probe_topology_root	bashrc_fs.sh	/^alias probe_topology_root='echo -n "root " ; su - -c "probe_topology"'$/;"	a
 prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
 prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f
-psc	bashrc_fs.sh	/^alias psc='prompt_sc'$/;"	a
 psmine	bashrc_fs.sh	/^psmine ()$/;"	f
-pstree	bashrc_fs.sh	/^alias pstree='pstree -Uphacl'$/;"	a
 pu	bashrc_bookmarks.sh	/^pu ()$/;"	f
 pyverbs_install	bashrc_mlx.sh	/^pyverbs_install ()$/;"	f
-r	bashrc_bookmarks.sh	/^alias r='rebash'$/;"	a
-randrhome36	bashrc_mlx.sh	/^alias randrhome36='xrandr   -s "1280x720"'$/;"	a
-randrlaptop12	bashrc_mlx.sh	/^alias randrlaptop12='xrandr -s "1360x768"'$/;"	a
 randrme	bashrc_mlx.sh	/^randrme ()$/;"	f
-randroffice24	bashrc_mlx.sh	/^alias randroffice24='xrandr -s "1920x1080"'$/;"	a
-randroffice27	bashrc_mlx.sh	/^alias randroffice27='xrandr -s "1920x1080"'$/;"	a
 rdmacorebuild	bashrc_mlx.sh	/^rdmacorebuild ()$/;"	f
-rdmacorebuild1sttime	bashrc_mlx.sh	/^alias rdmacorebuild1sttime='rdma-core_build.sh 1>\/dev\/null'$/;"	a
-rdmacorebuildagain	bashrc_mlx.sh	/^alias rdmacorebuildagain='find libibverbs providers -name "*.c" -exec touch {} \\; ;  make -C bu/;"	a
 rdmacorebuildapps	bashrc_mlx.sh	/^rdmacorebuildapps ()$/;"	f
-rdmacorebuildibverbs	bashrc_mlx.sh	/^alias rdmacorebuildibverbs='\\make -C build ibverbs -j ${ncoresformake} -s 1>\/dev\/null'$/;"	a
-rdmacorebuildmlx4	bashrc_mlx.sh	/^alias rdmacorebuildmlx4='\\make -C build mlx4 -j ${ncoresformake} -s 1>\/dev\/null'$/;"	a
-rdmacorebuildmlx5	bashrc_mlx.sh	/^alias rdmacorebuildmlx5='\\make -C build mlx5 -j ${ncoresformake} -s 1>\/dev\/null'$/;"	a
-rdmacorebuildrcping	bashrc_mlx.sh	/^alias rdmacorebuildrcping='\\make -C build ibv_rc_pingpong -j ${ncoresformake} -s 1>\/dev\/null'$/;"	a
-rdmacoreinstall	bashrc_mlx.sh	/^alias rdmacoreinstall='sudo make -C build install > \/dev\/null'$/;"	a
 rdmacoreversion	bashrc_mlx.sh	/^rdmacoreversion ()$/;"	f
 rebash	bashrc_bookmarks.sh	/^rebash ()$/;"	f
 reboot	bashrc_fs.sh	/^reboot ()$/;"	f
@@ -549,12 +317,7 @@ reloadmodule	bashrc_mlx.sh	/^reloadmodule ()$/;"	f
 remotereboot	bashrc_mlx.sh	/^remotereboot ()$/;"	f
 removemoduleifloaded	bashrc_mlx.sh	/^removemoduleifloaded ()$/;"	f
 restartDhcp	bashrc_nice.sh	/^restartDhcp () $/;"	f
-restoreusrlib64	bashrc_mlx.sh	/^alias restoreusrlib64='tar -C \/ -xjvf usr_lib64.bkp.bz2'$/;"	a
-rm	bashrc_fs.sh	/^alias rm='rm -iv'$/;"	a
-rmd	bashrc_fs.sh	/^alias rmd='rm -rf'$/;"	a
 rpmsearch	bashrc_fs.sh	/^rpmsearch () $/;"	f
-rr	bashrc_fs.sh	/^alias rr=ranger$/;"	a
-runacx	bashrc_nice.sh	/^alias runacx="cdacx; .\/Debug\/acx -f \/home\/kuser\/work\/ACX_TRUNK\/acx\/acx\/acx-fc-dum-rep.x/;"	a
 rw	bashrc_fs.sh	/^rw () $/;"	f
 rxe	bashrc_mlx.sh	/^rxe ()        { sudo rxe_cfg ;      }$/;"	f
 rxecounters	bashrc_mlx.sh	/^rxecounters ()$/;"	f
@@ -562,8 +325,6 @@ rxerestart	bashrc_mlx.sh	/^rxerestart ()$/;"	f
 rxestart	bashrc_mlx.sh	/^rxestart ()$/;"	f
 rxestop	bashrc_mlx.sh	/^rxestop ()$/;"	f
 sbuild_vars	bashrc_nice.sh	/^sbuild_vars () $/;"	f
-sd	bashrc_misc.sh	/^alias sd='echo $TERM'$/;"	a
-sd	bashrc_screen.sh	/^alias sd='echo $TERM'$/;"	a
 setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f
 setup_bash_env	commonyonienv.sh	/^setup_bash_env ()$/;"	f
 setup_bash_profile	commonyonienv.sh	/^setup_bash_profile ()$/;"	f
@@ -585,15 +346,11 @@ showosrelease	bashrc_fs.sh	/^showosrelease ()$/;"	f
 shutdown	bashrc_fs.sh	/^shutdown () $/;"	f
 sl	bashrc_screen.sh	/^sl () $/;"	f
 sm	bashrc_mlx.sh	/^sm ()$/;"	f
-sp	bashrc_mlx.sh	/^alias sp='showprettygids.sh'$/;"	a
 space_2_underscore	bashrc_fs.sh	/^space_2_underscore ()$/;"	f
-sr	bashrc_screen.sh	/^alias sr='screen -dr'$/;"	a
 sriovsetupmlx5_1	bashrc_mlx.sh	/^sriovsetupmlx5_1 ()$/;"	f
-ssh	bashrc_fs.sh	/^alias ssh='ssh -X -o ConnectTimeout=3'$/;"	a
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
 subtitlenamesync	bashrc_misc.sh	/^subtitlenamesync ()$/;"	f
-svi	bashrc_svn.sh	/^alias svi='svn info'$/;"	a
 svl	bashrc_svn.sh	/^svl () $/;"	f
 svn_complete	bashrc_svn.sh	/^svn_complete () $/;"	f
 svn_reachable	bashrc_svn.sh	/^svn_reachable () $/;"	f
@@ -604,8 +361,6 @@ svndiff	bashrc_svn.sh	/^svndiff () $/;"	f
 svndiffbrief	bashrc_svn.sh	/^svndiffbrief () $/;"	f
 svndiffhead	bashrc_svn.sh	/^svndiffhead () $/;"	f
 svndiffr	bashrc_svn.sh	/^svndiffr () $/;"	f
-svngvimdiff	bashrc_svn.sh	/^alias svngvimdiff='svn diff --diff-cmd gvimdiff-svn-wrapper -x -upbBw'$/;"	a
-svnkdiff3	bashrc_svn.sh	/^alias svnkdiff3='svn diff --diff-cmd kdiff3caller.sh'$/;"	a
 svnlog	bashrc_svn.sh	/^svnlog () {$/;"	f
 svnlogforfile	bashrc_svn.sh	/^svnlogforfile () $/;"	f
 svnmergebranch	bashrc_svn.sh	/^svnmergebranch () $/;"	f
@@ -616,70 +371,43 @@ svnstatu	bashrc_svn.sh	/^svnstatu () {$/;"	f
 svnsw	bashrc_svn.sh	/^svnsw () $/;"	f
 svnup	bashrc_svn.sh	/^svnup () $/;"	f
 svnupbranch	bashrc_svn.sh	/^svnupbranch ()$/;"	f
-svnvimdiff	bashrc_svn.sh	/^alias svnvimdiff='svn diff --diff-cmd vimdiff-svn-wrapper -x -upbBw'$/;"	a
 syndrome_to_english	bashrc_mlx.sh	/^syndrome_to_english () $/;"	f
 t	bashrc_fs.sh	/^t () $/;"	f
 ta	bashrc_devel.sh	/^ta ()$/;"	f
 tabcomplete_video_file_name	bashrc_misc.sh	/^tabcomplete_video_file_name ()$/;"	f
 tag_ls	bashrc_svn.sh	/^tag_ls () {$/;"	f
-tagbash	bashrc_tags.sh	/^alias tagbash='ctags --language-force=sh *sh'$/;"	a
 tagcompleteme	bashrc_tags.sh	/^tagcompleteme ()$/;"	f
-tagcpp	bashrc_tags.sh	/^alias tagcpp='ctags -uR --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -r/;"	a
 tagcscope	bashrc_tags.sh	/^tagcscope ()$/;"	f
 tagcscopeinfiniband	bashrc_tags.sh	/^tagcscopeinfiniband ()$/;"	f
 tagcscopekernel	bashrc_tags.sh	/^tagcscopekernel ()$/;"	f
 tagcscopemlx5	bashrc_tags.sh	/^tagcscopemlx5 ()$/;"	f
-tagginginstall	bashrc_devel.sh	/^alias tagginginstall="yuminstall cscope ctags";$/;"	a
 tagme	bashrc_tags.sh	/^tagme ()$/;"	f
 tagme_base	bashrc_tags.sh	/^tagme_base ()$/;"	f
 tagmeofakernel	bashrc_mlx.sh	/^tagmeofakernel ()$/;"	f
 tagmeofedlibs	bashrc_mlx.sh	/^tagmeofedlibs ()$/;"	f
 tagmerdmacore	bashrc_mlx.sh	/^tagmerdmacore () $/;"	f
 tagmeupstreamkernel	bashrc_mlx.sh	/^tagmeupstreamkernel ()$/;"	f
-tagpython	bashrc_tags.sh	/^alias tagpython='ctags -R --python-kinds=-i'$/;"	a
 tailstatistics	bashrc_nice.sh	/^tailstatistics () $/;"	f
 task_list	bashrc_nice.sh	/^task_list () $/;"	f
-tk	bashrc_devel.sh	/^alias tk='tmux kill-session -t'$/;"	a
 tl	bashrc_devel.sh	/^tl ()$/;"	f
-tmuxattachyoni	bashrc_devel.sh	/^alias tmuxattachyoni='tmux -u attach -t yoni'$/;"	a
-tmuxconfig	bashrc_devel.sh	/^alias tmuxconfig="v ~\/.tmux.conf"$/;"	a
-tmuxnewyoni	bashrc_devel.sh	/^alias tmuxnewyoni='tmux -u new -s yoni'$/;"	a
 tn	bashrc_devel.sh	/^tn () $/;"	f
-touchmlx5	bashrc_mlx.sh	/^alias touchmlx5='touchmlx5ib ; touchmlx5core'$/;"	a
-touchmlx5core	bashrc_mlx.sh	/^alias touchmlx5core='find drivers\/net\/ethernet\/mellanox\/mlx5\/ -name "*.c" -exec touch {} \\/;"	a
-touchmlx5ib	bashrc_mlx.sh	/^alias touchmlx5ib='find drivers\/infiniband\/hw\/mlx5\/ -name "*.c" -exec touch {} \\;'$/;"	a
-tt	bashrc_fs.sh	/^alias tt='probe_topology'$/;"	a
-ttt	bashrc_tags.sh	/^alias ttt='.\/tagme.sh'$/;"	a
-tttt	bashrc_tags.sh	/^alias tttt='.\/tagme.sh 1'$/;"	a
 ucxbuild	bashrc_mlx.sh	/^ucxbuild ()$/;"	f
-umountkernelsources	bashrc_mlx.sh	/^alias umountkernelsources='set -x ; cd ; sudo umount \/images\/ ; set +x'$/;"	a
 up	bashrc_misc.sh	/^function up() {$/;"	f
 usage	commonyonienv.sh	/^usage () $/;"	f
 v	bashrc_vim.sh	/^v ()$/;"	f
 validateState	bashrc_nice.sh	/^validateState ()$/;"	f
-vbash	bashrc_vim.sh	/^alias vbash='editBashrcScript v'$/;"	a
 vconsole	bashrc_fs.sh	/^vconsole ()$/;"	f
 vd	bashrc_vim.sh	/^vd () { ${_vd} $1 $2 ;}$/;"	f
 vforcestop	bashrc_fs.sh	/^vforcestop ()$/;"	f
-vim	bashrc_vim.sh	/^alias vim='vim -u NONE'$/;"	a
-viminstall	bashrc_vim.sh	/^alias viminstall='sudo yum install -y vim-X11 ctags'$/;"	a
 vimorgvim	bashrc_vim.sh	/^vimorgvim ()$/;"	f
 virsh_complete	bashrc_fs.sh	/^virsh_complete ()$/;"	f
 vl	bashrc_fs.sh	/^vl ()$/;"	f
 vlinstall	bashrc_mlx.sh	/^vlinstall ()$/;"	f
 vm	bashrc_fs.sh	/^vm ()$/;"	f
-vmls	bashrc_mlx.sh	/^alias vmls="kgb -o linux"$/;"	a
-vmmkfedora28	bashrc_mlx.sh	/^alias vmmkfedora28="kgb -o linux  -c 16 -r 8192 -d 35 -l Fedora_28_x86_64_virt_guest"$/;"	a
-vmmkfedora29	bashrc_mlx.sh	/^alias vmmkfedora29="kgb -o linux  -c 16 -r 8192 -d 35 -l Fedora_29_x86_64_virt_guest"$/;"	a
 vmmkhelp	bashrc_mlx.sh	/^vmmkhelp()$/;"	f
-vmmkredhat74	bashrc_mlx.sh	/^alias vmmkredhat74="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.4_x86_64_virt_guest   "$/;"	a
-vmmkredhat75	bashrc_mlx.sh	/^alias vmmkredhat75="kgb -o linux  -c 16 -r 8192 -d 35 -l RH_7.5_x86_64_virt_guest   "$/;"	a
-vmmkubutu18	bashrc_mlx.sh	/^alias vmmkubutu18.4="kgb -o linux  -c 16 -r 8192 -d 35 -l Ubuntu_18.04_x86_64_virt_guest"$/;"	a
 vn	bashrc_vim.sh	/^vn () $/;"	f
 vncwatcherslist	bashrc_fs.sh	/^vncwatcherslist () $/;"	f
-vo	bashrc_vim.sh	/^alias vo="${v_or_g} -O" $/;"	a
 vorej	bashrc_devel.sh	/^vorej ()$/;"	f
-vpython	bashrc_vim.sh	/^alias vpython='editPythonScript v'$/;"	a
 vrename	bashrc_fs.sh	/^vrename ()$/;"	f
 vreset	bashrc_fs.sh	/^vreset ()$/;"	f
 vs	bashrc_vim.sh	/^vs () $/;"	f
@@ -698,10 +426,5 @@ ww	bashrc_fs.sh	/^function ww ()$/;"	f
 xtermblack	bashrc_misc.sh	/^xtermblack () $/;"	f
 yonienvconfigureforputty	bashrc_common.sh	/^yonienvconfigureforputty ()$/;"	f
 yonienvdepsinstall	bashrc_misc.sh	/^yonienvdepsinstall ()$/;"	f
-yuminfoiniso	bashrc_misc.sh	/^alias yuminfoiniso='yum info --disablerepo=\\* --enablerepo=c7-media'$/;"	a
-yuminstall	bashrc_misc.sh	/^alias yuminstall='sudo yum install -y'$/;"	a
-yuminstallfromiso	bashrc_misc.sh	/^alias yuminstallfromiso='yum install --disablerepo=\\* --enablerepo=c7-media'$/;"	a
 yuminstallfromrepo	bashrc_misc.sh	/^yuminstallfromrepo ()$/;"	f
 yuminstallifnotexist	bashrc_misc.sh	/^yuminstallifnotexist ()$/;"	f
-yumlocalinstall	bashrc_misc.sh	/^alias yumlocalinstall='sudo yum localinstall -y'$/;"	a
-yumsearchiniso	bashrc_misc.sh	/^alias yumsearchiniso='yum search --disablerepo=\\* --enablerepo=c7-media'$/;"	a

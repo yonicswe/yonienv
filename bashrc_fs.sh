@@ -1,6 +1,12 @@
 #!/bin/bash
 
-alias editbashfs='${v_or_g} ${yonienv}/bashrc_fs.sh'
+alias editbashfs='nvim ${yonienv}/bashrc_fs.sh'
+
+if [[ ${USE_SYNTH_SHELL} == yes ]] ; then 
+    if [ -f /home/y_cohen/.config/synth-shell/synth-shell-prompt.sh ] && [ -n "$( echo $- | grep i )" ]; then
+        source /home/y_cohen/.config/synth-shell/synth-shell-prompt.sh
+    fi
+fi
 
 #  ___                         _   
 # | _ \ _ _  ___  _ __   _ __ | |_ 
@@ -110,7 +116,7 @@ prompt_color ()
         prompt_sc > /dev/null;
     fi
 } 
-
+prompt_color;
 alias psc='prompt_sc'
 prompt_sc () 
 {
@@ -144,8 +150,6 @@ prompt_sc ()
 #     fi
 #     echo ${CS_PROMPT} > .prompt_sc
 }
-
-# prompt_color
 
 # colors for ls command
 eval $(dircolors ${yonienv}/dir_colors)
@@ -209,6 +213,7 @@ alias grepmake='grep -nH -r -I --color --include=*[m,M]ake*'
 alias ag='ag --noheading'
 alias ssh='ssh -X -o ConnectTimeout=3'
 alias pstree='pstree -Uphacl'
+alias mkp='mkdir -p'
 
 # list only directories 
 lld ()

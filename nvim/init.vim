@@ -89,4 +89,5 @@ map f :call ShowFuncName() <CR>
 " can also do :normal [[<cr>
 
 silent! cs a .
+silent! source tags.vim
 packadd termdebug

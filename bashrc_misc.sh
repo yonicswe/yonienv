@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # afaik this is only good ranger
-export VISUAL=nvim
+export VISUAL=/home/y_cohen/yonienv/bin/nvim.appimage
 export EDITOR=$VISUAL
 
 alias connect2remoteDesktop='source $(yonienv)/bin/connectToRemoteDesk.sh'
@@ -20,11 +20,17 @@ export LESS_TERMCAP_us=$'\e[1;4;31m'    # begin underline
 yuminstallfromrepo ()
 {
     local repo=${1};
+    local pkg=${2};
     if [ -z ${repo} ] ; then 
         echo "forgot the repo ? ";
         return;
     fi
-    sudo yum install -y --disablerepo=\* --enablerepo=${repo} ;
+
+    if [[ -z ${pkg} ]] ; then 
+        echo "forgot which pkg to install";
+        return;
+    fi;
+    sudo yum install -y --disablerepo=\* --enablerepo=${repo} ${pkg};
 }
 
 alias yumsearchiniso='yum search --disablerepo=\* --enablerepo=c7-media'

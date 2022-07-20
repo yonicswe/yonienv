@@ -255,3 +255,7 @@ gitclearcache ()
     echo "rm -rf .git/rr-cache"
     rm -rf .git/rr-cache
 }
+
+# howtos and trouble shooting
+# delete .git/index.lock 
+#   - when this happens "another git process seems to be running in this repository

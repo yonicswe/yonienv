@@ -90,15 +90,24 @@ setup_git_env ()
 
 	# clear previous yonienv backups
 	rm -f ~/.gitconfig.yonienv 2>/dev/null;
+	rm -f ~/.tigrc.yonienv 2>/dev/null;
 
     if [[  -e ~/.gitconfig ]] ; then 
-        read -p "~/.gitconfig exit, backup and continue or skip ? [Y/s]" ans;
+        read -p "found ~/.gitconfig !! backup and continue or skip ? [Y/s]" ans;
         if [[ ! "$ans" == "s" ]] ; then 
             set -x ; mv ~/.gitconfig ~/.gitconfig.yonienv; set +x
         fi
     fi
 
+    if [[  -e ~/.tigrc ]] ; then 
+        read -p "found ~/.tigrc !! backup and continue or skip ? [Y/s]" ans;
+        if [[ ! "$ans" == "s" ]] ; then 
+            set -x ; mv ~/.tigrc ~/.tigrc.yonienv; set +x
+        fi
+    fi
+
     ln -snf ${yonienv}/gitconfig ~/.gitconfig;
+    ln -snf ${yonienv}/tigrc ~/.tigrc;
 
 	read -p "setting git user/pass to Yonatan Cohen <yonic.swe@gmail.com> ? [Y/n]" ans;
 	if [[ ! "$ans" == "n" ]] ; then 

@@ -42,8 +42,8 @@
     amrej = am --reject
 
 
-    b = branch -vv
-    ba = branch -avv
+    b = branch
+    ba = branch -a
     bdelete = branch -D 
     brename = branch -M
     byoni = ba --list "*ycohen*"
@@ -72,8 +72,7 @@
     commitempty = commit --allow-empty
     c = checkout
     cb = checkout -b
-    cm = checkout master
-    cmn = checkout master_next
+#   cmn = checkout master_next
     d = diff
     dw = diff --ws-error-highlight=all
     dfile = difftool --no-prompt
@@ -144,15 +143,16 @@
 	git fetch origin master; \
 	git checkout -b master FETCH_HEAD; \
     }; f"
+    cm = checkout master
 
-    checkoutbranchfrommasternext = "!f() {                       \
-	  if [ -n $1 ] ; then		                         \
-		git fetch origin master_next;                    \
-		git cb dev/ycohen/sw-$1 FETCH_HEAD;              \
-		git branch --set-upstream-to=origin/master_next; \
-		git pull --rebase;                               \
-	  fi;                                                    \
-	}; f"
+#   checkoutbranchfrommasternext = "!f() {                       \
+#     if [ -n $1 ] ; then		                         \
+#   	git fetch origin master_next;                    \
+#   	git cb dev/ycohen/sw-$1 FETCH_HEAD;              \
+#   	git branch --set-upstream-to=origin/master_next; \
+#   	git pull --rebase;                               \
+#     fi;                                                    \
+#   }; f"
 
     checkoutfilefrombranch = "!f() {                                \
 	branch=$1;                                                  \
@@ -203,9 +203,10 @@
 
 
 #                                   SHA          date                   name             msg
-    lll =    log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
+    lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
+    ll = log --pretty=format:'%C(yellow)%h %Cred%cd %C(magenta)[author %ad] %Cblue%an%Cgreen%d %Creset%s' --date=short
     l = "!f() { n=${1:-200}; git log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short ${count} -$n; }; f"
-    lyoni = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author='Yonatan Cohen'
+    lyoni = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author='yonatan.cohen'
     l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
     l20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n20
     l30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n30
@@ -297,10 +298,11 @@
 		}; f"
 
     cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
-    showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | grep --color $me;}; f"
+    # showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | sed 's/alias\.//g' | grep -w --color $me;}; f"
+    showuser = "!f() { me=${1-:*} ; git config --get-regex alias.$me | grep --color $me;}; f"
 
 	sm = submodule
-	smadd = submodule update --init
+	smupdate = submodule update --init
 	smremove = submodule deinit
 #   cleanuntracked = clean -df	
 
@@ -420,3 +422,7 @@
     vertical-split = yes
     mouse = yes
     blame-view-line-number = yes
+
+[fetch]
+    recurseSubmodules = false
+

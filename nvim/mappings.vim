@@ -78,3 +78,5 @@ inoremap <C-j> <Down>
 
 " save in insert mode
 inoremap <c-s><c-s> <c-\><c-o>:w<cr>
+
+map cdf :cd %:h<cr>

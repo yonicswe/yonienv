@@ -9,7 +9,7 @@ if ! [ -e ~/.bashmlx_once.$(hostname -s) ] ; then
     touch ~/.bashmlx_once.$(hostname -s); 
 fi
 
-alias editbashmlx='${v_or_g} ${yonienv}/bashrc_mlx.sh'
+alias editbashmlx='n ${yonienv}/bashrc_mlx.sh'
 alias chownyoni='sudo chown yonatanc:mtl'
 # export yonipass="yonatanc11"
 # create_alias_for_host ()
@@ -301,24 +301,24 @@ listgitrepos ()
     echo -e "          \`-- golan      : ${prefix}/golan_fw"
 }
 
-gitclone-ofed-rdmacore () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core; }
-gitclone-ofed-rdmacore-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/mlnx_ofed/rdma-core; }
-gitclone-ofed-libibverbs() { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs; }
-gitclone-ofed-libibverbs-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/mlnx_ofed_2_0/libibverbs; }
-gitclone-ofed-libmlx5 () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5; }
-gitclone-ofed-libmlx5-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/connect-ib/libmlx5; }
-gitclone-ofed-libibumad () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/libibumad; }
-gitclone-ofed-libibumad-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/ib_mgmt/libibumad; }
-alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
-alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
-alias gitclone-ofed-librdmacm='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/librdmacm'
-alias gitclone-ofed-iproute2='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
+# gitclone-ofed-rdmacore () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/rdma-core; }
+# gitclone-ofed-rdmacore-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/mlnx_ofed/rdma-core; }
+# gitclone-ofed-libibverbs() { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libibverbs; }
+# gitclone-ofed-libibverbs-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/mlnx_ofed_2_0/libibverbs; }
+# gitclone-ofed-libmlx5 () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/connect-ib/libmlx5; }
+# gitclone-ofed-libmlx5-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/connect-ib/libmlx5; }
+# gitclone-ofed-libibumad () { git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/libibumad; }
+# gitclone-ofed-libibumad-anon () { git clone http://l-gerrit.mtl.labs.mlnx:8080/ib_mgmt/libibumad; }
+# alias gitclone-ofed-libmlx4='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/libmlx4'
+# alias gitclone-ofed-librxe='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/librxe'
+# alias gitclone-ofed-librdmacm='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed_2_0/librdmacm'
+# alias gitclone-ofed-iproute2='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/mlnx_ofed/iproute2'
 
-alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
-alias gitclone-upstream-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
-alias gitclone-upstream-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
-alias gitclone-upstream-iproute2='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/iproute2'
-
+# alias gitclone-upstream-kernel='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/linux'
+# alias gitclone-upstream-opensm='git clone git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/ib_mgmt/opensm'
+# alias gitclone-upstream-rdmacore='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/rdma-core'
+# alias gitclone-upstream-iproute2='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/upstream/iproute2'
+#
 alias gitclone-directtests='git clone ssh://l-gerrit.mtl.labs.mlnx:29418/Linux_drivers_verification/directtests/'
 alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 alias gitclone-ucx='git clone https://github.com/openucx/ucx'

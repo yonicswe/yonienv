@@ -1,6 +1,6 @@
 #!/bin/bash
 
-alias editbashdevel='${v_or_g} ${yonienv}/bashrc_devel.sh'
+alias editbashdevel='nvim ${yonienv}/bashrc_devel.sh'
 
 #   ___  ___   ___ 
 #  / __||   \ | _ )
@@ -656,7 +656,7 @@ extractkernelsrcrpm ()
 
 alias tmuxnewyoni='tmux -u new -s yoni'
 alias tmuxattachyoni='tmux -u attach -t yoni'
-alias tmuxconfig="v ~/.tmux.conf"
+alias tmuxconfig="nvim ~/.tmux.conf"
 
 # 
 # tn - create a new tmux session 

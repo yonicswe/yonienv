@@ -5,7 +5,9 @@
 # \ V /| || '  \ 
 #  \_/ |_||_|_|_| 
 
-alias vim='vim -u NONE'
+alias editbashvim="nvim ${yonienv}/bashrc_vim.sh"
+alias cdnvimconfig="cd ~/.config/nvim/"
+# alias vim='vim -u NONE'
 
 export vimorgvimbackupfile=${HOME}/.vimorgvim.$(hostname -s);
 if ! [ -e ${vimorgvimbackupfile} ] ; then 
@@ -64,7 +66,6 @@ vimorgvim ()
 vd () { ${_vd} $1 $2 ;}
 
 
-alias editbashvim="${v_or_g} ${yonienv}/bashrc_vim.sh"
 
 vim_args="-p"
 
@@ -158,6 +159,8 @@ vsl ()
 #     gsess ${sess} v;
 # }
 
+alias ns='nvim -S Session.vim'
+
 # gsess () 
 vs () 
 {
@@ -226,6 +229,35 @@ function vsources ()
 
 alias viminstall='sudo yum install -y vim-X11 ctags'
 
-alias nvim=nvim.appimage
-alias nv=nvim
-alias vimdiff='nvim.appimage -d'
+alias nvimgetconfig='l -d ~/.config/nvim ~/.local/share/nvim'
+function nvimsetconfig ()
+{
+    local path=${1};
+
+    if [[ -z ${path} ]] ; then 
+        echo "path cannot be empty";
+        return -1;
+    fi;
+
+    path=$(readlink -f ${path});
+
+    if ! [[ -d ${path} ]] ; then 
+        echo -e "\'${path}\' does not exist";
+        return -1;
+    fi;
+
+    ln -snf ${path} ~/.config/nvim;
+    ln -snf ${path} ~/.local/share/nvim;
+    return 0;
+}
+
+alias viminstallplug='curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+function nviminstallplug ()
+{
+    curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+} 
+
+alias nv=${yonienv}/bin/nvim.appimage
+alias vimdiff='nv -d'
+alias n=nvim

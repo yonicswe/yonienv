@@ -1,6 +1,13 @@
 #!/bin/bash
 
-alias editbashdell='${v_or_g} ${yonienv}/bashrc_dell.sh'
+alias editbashdell='nvim ${yonienv}/bashrc_dell.sh'
+alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
+alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
+alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.23'
+
+trident_cluster_list=(WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023);
+
+[ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
 
 create_alias_for_host ()
 {
@@ -12,7 +19,7 @@ create_alias_for_host ()
     alias ${alias_name}ping="ping ${host_name}"
 }
 
-dellenvsetup ()
+dellcyclonedevelenvsetup ()
 {
 	git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git
 	cd cyclone
@@ -21,50 +28,354 @@ dellenvsetup ()
 	git submodule update --init source/bedrock
 	git submodule update --init source/stack
 	git submodule update --init source/cyclone-controlpath
-    git submodule update --init source/nt-nvmeof-frontend
-    git c int/foothills-prime/main-pl
-    git submodule update
-    git fetch origin
-    git reset --hard origin/int/foothills-prime/main-pl
+	git submodule update --init source/nt-nvmeof-frontend
+	git c int/foothills-prime/main-pl
+	git submodule update
+	git fetch origin
+	git reset --hard origin/int/foothills-prime/main-pl
 }
 
-dellbuilddebug ()
+alias gitclone-dell-cyclone='git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git'
+
+dellsubmodulesdiscard ()
 {
-    make prune
-    make cyc_core flavor=RETAIL force=yes
+	git submodule update --checkout source/cyc_core
+	git submodule update --checkout source/devops-scripts
+	git submodule update --checkout source/bedrock
+	git submodule update --checkout source/stack
+	git submodule update --checkout source/cyclone-controlpath
+    git submodule update --checkout source/nt-nvmeof-frontend
 }
 
-alias dellclusterlist='/home/public/scripts/xpool_trident/prd/xpool list -a -g Trident-kernel-IL'
+dellcyclonebuild ()
+{
+	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		echo "you must be in arwen to build";
+		return;
+	fi
+
+    pushd ~/devel/cyclone;
+
+	ask_user_default_no "prune before build ?"
+	[[ $? -eq 1 ]] && make prune
+	echo -e "\n========== start build ===================\n"
+	make cyc_core flavor=RETAIL force=yes
+
+    popd;
+}
+
+alias dellclusterlist='/home/public/scripts/xpool_trident/prd/xpool list -f -a'
+alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -f -a -g Trident-kernel-IL'
+alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
+alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
 alias dellclusterlease='/home/public/scripts/xpool_trident/prd/xpool lease 7d -c '
-alias dellcdconfigs='cd /home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs'
-alias dellcdcyc_helpers='cd /home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_helpers'
+
+dellclusterruntimeenvbkpfile=~/.dellclusterruntimeenvbkpfile
+
+dellclusterruntimeenvget ()  
+{ 
+    local last_used_cluster=;
+    
+    if [[ -z ${YONI_CLUSTER} ]] ; then
+        if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
+            last_used_cluster=$(grep YONI_CLUSTER ${dellclusterruntimeenvbkpfile});
+        fi;
+        
+        echo "CYC_CONFIG not set";
+        if [[ -n ${last_used_cluster} ]] ; then
+            echo "last used cluster : ${last_used_cluster}"
+        fi;
+        
+        return;
+    fi;
+    
+    echo -e "YONI_CLUSTER=$YONI_CLUSTER\nCYC_CONFIG=${CYC_CONFIG}"
+}
+
+dellclusterruntimeenvset ()
+{
+    local cluster=${1};
+    local cluster_config_file=;
+
+    # user should give cluster parameter. in case he did not
+    # use the default from YONI_CLUSTER
+    if [[ -z ${cluster} ]] ; then 
+        if [[ -z ${YONI_CLUSTER} ]] ; then
+            echo "usage : dellclusterlease <cluster name>";
+            return;
+        fi;
+        cluster=${YONI_CLUSTER};
+    fi
+
+    if ! [[ -d source/cyc_core/cyc_platform/src/package/cyc_configs ]] ; then
+        echo "source/cyc_core/cyc_platform/src/package/cyc_configs not found!!"
+        return;
+    fi;
+    
+    cyc_configs_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_configs);
+    cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
+    cluster_config_file=${cyc_configs_folder}/cyc-cfg.txt.${cluster}-BM;
+
+    echo "export CYC_CONFIG=${cluster_config_file}";
+    ask_user_default_yes "Correct ? "
+    [ $? -eq 0 ] && return; 
+    
+    export CYC_CONFIG=${cluster_config_file};
+    export YONI_CLUSTER=${cluster};
+
+    echo "export CYC_CONFIG=${CYC_CONFIG}" > ${dellclusterruntimeenvbkpfile};
+    echo "export YONI_CLUSTER=${cluster}"  >> ${dellclusterruntimeenvbkpfile};
+}
+
+dellclusterleaseextend () 
+{
+    local cluster=${1};
+    local extend=${2};
+
+    if [[ -z ${cluster} ]] ; then 
+        cluster=${YONI_CLUSTER};
+    fi;
+
+    if [[ -z ${cluster} ]] ; then 
+        echo "no cluster name given";
+        return -1;
+    fi;
+
+    if [[ -z ${extend} ]] ; then 
+        extend=7d;
+    fi;
+
+    echo "/home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend}"
+    /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend};
+
+}
+
+complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease
+
+cyc_configs_folder=;
+dellcdclusterconfigs ()
+{
+    if [[ -z ${cyc_configs_folder} ]] ; then 
+        echo "cluster runtime env not set"
+        return;
+    fi;
+    
+    if [[ -d ${cyc_configs_folder} ]] ; then
+        cd ${cyc_configs_folder}
+    else
+        echo "${cyc_configs_folder} does not exist";
+    fi;
+}
+
+cyc_helpers_folder=;
+dellcdclusterscripts ()
+{
+    if [[ -z ${cyc_helpers_folder} ]] ; then
+        echo "cluster runtime env not set"
+        return -1;
+    fi
+    
+    if [[ -d ${cyc_helpers_folder} ]] ; then
+        cd ${cyc_helpers_folder};
+    else
+        echo "${cyc_helpers_folder} does not exist";
+    fi;
+    
+    return 0;
+}
 
 dellclusterdeploy ()
 {
     local cluster=${1};
-    if [ -z ${cluster} ] ; then 
-        echo "usage dellclusterlease <cluster name>";
-        return;
+
+    if [ -z "${cluster}" ] ; then 
+        if [ -n "${YONI_CLUSTER}" ] ; then
+            ask_user_default_yes "deploy to ${YONI_CLUSTER} ? "
+            if [ $? -eq 1 ] ; then 
+                cluster=${YONI_CLUSTER};
+            else
+                echo "usage dellclusterdeploy <cluster name>"; return;
+            fi;
+        else
+            echo "usage dellclusterdeploy <cluster name>"; return;
+        fi;
     fi
-    echo "export CYC_CONFIG=/home/amite/cyclone/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${1}"
+
+    echo "export CYC_CONFIG=/home/amite/cyclone/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${cluster}-BM";
     ask_user_default_yes "Correct ? "
     [ $? -eq 0 ] && return; 
-    export CYC_CONFIG=/home/amite/cyclone/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${1};
+    export CYC_CONFIG=/home/amite/cyclone/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${cluster}-BM;
     
-    dellcdcyc_helpers;
+    dcdclusterscripts;
 
-    echo "./deploy  --deploytype san ${1}"; 
+    echo -e "\n\n./deploy  --deploytype san ${cluster}"; 
     ask_user_default_yes "Correct ? "
     [ $? -eq 0 ] && return; 
-    ./deploy  --deploytype san ${1}; 
-    (set -x ; sleep 20; set +x);
+    ./deploy  --deploytype san ${cluster}; 
+    if [[ $? -ne 0 ]] ; then 
+        echo "deploy failed";
+        return;
+    fi;
 
-    echo "./reinit_array.sh -F Retail factory";
+    echo -e "\n\n./reinit_array.sh -F Retail factory\n\n";
+    ask_user_default_yes "Correct ? "
+    [ $? -eq 0 ] && return; 
     ./reinit_array.sh -F Retail factory;
+    if [[ $? -ne 0 ]] ; then 
+        echo "reinit failed";
+        return;
+    fi;
 
-    echo "./create_cluster.py -sys ${1} -stdout -y -post"
+    echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
     ask_user_default_yes "Correct ? "
     [ $? -eq 0 ] && return; 
-    ./create_cluster.py -sys ${1} -stdout -y -post
+    ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
 }
 
+dellclusteruserspaceupdate ()
+{
+	dcdclusterscripts;
+	if ! [ -e fast_code_loader.sh ] ; then
+		echo "fast_code_loader.sh not found";
+		return 1;
+	fi
+	if [ -z $CYC_CONFIG ] ; then
+		echo "CYC_CONFIG not defined. use dellclusterenvsetup";
+		return 1;
+	fi
+
+	echo "CYC_CONFIG=$CYC_CONFIG";
+	ask_user_default_yes "continue ?";
+	[ $? -eq 0 ] && return 1;
+	
+	echo "./fast_code_loader.sh 10 -o -w /home/y_cohen/devel/cyclone/source/cyc_core"
+	ask_user_default_yes "continue ?"
+	[ $? -eq 0 ] && return 1;
+	./fast_code_loader.sh 10 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
+	
+	echo "./fast_code_loader.sh 11 -o -w /home/y_cohen/devel/cyclone/source/cyc_core"
+	ask_user_default_yes "continue ?"
+	[ $? -eq 0 ] && return 1;
+	./fast_code_loader.sh 11 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
+
+	return 0;
+}
+
+dellrbatracesetup ()
+{
+    # do this from cyc_helpers
+    if [[ -z {cyc_helpers_folder} ]] ; then
+        echo "runtime env is not set";
+        return;
+    fi;
+    
+    dellcdclusterscripts;
+    
+    # utils/dp_cli_a.sh rba configure -c usher all -c mapper all -c logging all -c namespace all -c cache all -c front_end all -c raid all -c backend all -c ics all --tier_size 16384
+    utils/dp_cli_a.sh rba configure -c front_end all --tier_size 16384
+    utils/dp_cli_a.sh rba enable
+    utils/dp_cli_b.sh rba configure -c front_end all --tier_size 16384
+    utils/dp_cli_b.sh rba enable
+}
+ 
+dellrbatracerun ()
+{
+    node=${1:-a};
+    ./offload_rba_cont.sh -L 1 -n ${node} -O /home/y_cohen/tmp/rba/node-${node} -v
+}
+
+alias dellrbatracerun-a='dellrbatracerun a'
+alias dellrbatracerun-b='dellrbatracerun b'
+
+dellclusterkernelspaceupdate ()
+{
+	dcdclusterscripts;
+	# script is in repo:cyc_core, in branch:dev/grupie/fast_loader_for_nvmet_driver
+	if ! [ -e fast_nvmet_driver_loader.sh ] ; then
+		echo "fast_nvmet_driver_loader.sh not found"
+		return 1;
+	fi
+	if [ -z $CYC_CONFIG ] ; then
+		echo "CYC_CONFIG not defined. use dellclusterenvsetup";
+		return 1;
+	fi
+
+	echo "CYC_CONFIG=$CYC_CONFIG";
+	ask_user_default_yes "continue ?";
+	[ $? -eq 0 ] && return 1;
+
+	./fast_nvmet_driver_loader.sh;
+
+	return 0;
+
+}
+
+dellclusterinfo ()
+{
+    local cluster=${1};
+
+	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		echo "you must be in arwen";
+		return;
+	fi
+	if ! [ -e /home/public/devutils/bin/swarm ] ; then 
+		echo "/home/public/devutils/bin/swarm not found";
+		return;
+	fi;
+
+    if [[ -z ${cluster} ]] ; then 
+        if [ -z ${YONI_CLUSTER} ] ; then
+            echo "run dellclusterenvsetup <cluster name> or dellclusterinfo <cluster name>";
+            return;
+        else
+            cluster=${YONI_CLUSTER};
+        fi;
+	fi;
+
+	print_underline_size "_" 80	 
+	echo "/home/public/devutils/bin/swarm -ping ${cluster}";
+	print_underline_size "_" 80	 
+	/home/public/devutils/bin/swarm -ping ${cluster};
+
+	print_underline_size "_" 80	 
+	echo "/home/public/scripts/xpool_trident/prd/xpool list -f"
+	print_underline_size "_" 80	 
+	/home/public/scripts/xpool_trident/prd/xpool list -f
+
+	return 0;
+}
+
+dellkernelshaget ()
+{
+    local mfile=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    
+    sed -n "/Set.*PNVMET_GIT_TAG.*/p" $mfile;
+}
+
+dellkernelshaupdate ()
+{
+    local sha=${1};
+    local mfile=/home/y_cohen/devel/cyclone/source/third_party/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    
+    
+    if [[ -z ${sha} ]] ; then
+        sha=$(git log -1 | awk '/commit/{print $2}');
+    fi
+
+    sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
+    pushd /home/y_cohen/devel/cyclone/source/cyc_core 2>/dev/null;
+    git diff
+    popd 2>/dev/null;
+}
+
+dellibid2commit ()
+{
+    local ibid=$1;
+    phlibid.pl --ibid ${ibid};
+    echo ===============================================================
+    phlibid.pl --ibid ${ibid} | grep -i commit
+}
+
+# howto
+# journalctl SUBCOMPONENT=nt
+# journalctl -o short-precise --since "2022-07-04 07:56:00"

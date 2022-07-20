@@ -11,6 +11,8 @@ nmap <C-P> :FZF<cr>
 set nowritebackup
 set hlsearch
 set noincsearch
+set cul
+set cuc
 
 " disable * from jumping with the curser to the next occurence
 nnoremap * *N
@@ -21,7 +23,7 @@ set nowrap
 set noswapfile
 
 " replace tabs with spaces.
-au FileType c   set noexpandtab
+au FileType c   set expandtab
 au FileType cpp set noexpandtab
 au FileType vim set expandtab
 au FileType sh set expandtab
@@ -106,7 +108,7 @@ let g:ConqueTerm_ReadUnfocused = 1
 " colorscheme desert
 " colorscheme desertink
 " colorscheme  molokai
-colorscheme  candycode
+" colorscheme  candycode
 " au FileType c,cpp,h colorscheme candycode
 " colorscheme railcasts
 " colorscheme Benokai
@@ -209,8 +211,10 @@ au FileType c,cpp   set grepprg=ag\ --cc\ --cpp
 
 " map <leader>[ :cp<cr>
 " map <leader>] :cn<cr>
-map <F11> :cp<cr>
-map <F12> :cn<cr>
+" execute "set <M-n>=\en"
+" execute "set <M-m>=\em"
+nnoremap n :cn<cr>
+nnoremap m :cp<cr>
 map <S-F9> :colder<cr>
 map <S-F10> :cnewer<cr>
 
@@ -221,6 +225,7 @@ noremap <S-l><S-l> :/kakaka<CR>
 
 " map <S-h> :/ababababababababab<CR>
 map <C-n> :set nu!<CR>
+set nu
 
 
 " surround selected text with quotes.
@@ -252,7 +257,7 @@ vmap <f12> :s/\s\+$//<CR>
 " map <S-t> :%s/\s\+$//<CR>
 
 map <S-y> yiw
-
+imap jk <esc>
 
 " all files should have this tab setting
 " except text files
@@ -711,8 +716,8 @@ endfunction
 command! MKSS call MakeSessionYoniAskUserForName()
 
 " file buffers
-nnoremap <A-down> :bnext<CR>
-nnoremap <A-up> :bprevious<CR>
+nnoremap j :bnext<CR>
+nnoremap k :bprevious<CR>
 nnoremap <S-F8> :Buffers<cr>
 
 " tag browsing
@@ -749,8 +754,9 @@ nmap <script> <silent> <F6> :call ToggleQuickFix()<CR>
 "
 " open a tag under the cursor in a new tab
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-map <S-F11> :tp<cr>
-map <S-F12> :tn<cr>
+"map M :tp<cr>
+"map N :tn<cr>
+ 
 nnoremap <silent> <F8> :TlistToggle<CR>
 let Tlist_GainFocus_On_ToggleOpen = 1
 let Tlist_WinWidth = 50
@@ -1013,7 +1019,7 @@ let g:ctrlp_max_depth=40
 " then use the following commands
 "
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/vim-easy-align'
+" Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 " Plug 'francoiscabrol/ranger.vim'
@@ -1029,14 +1035,16 @@ Plug 'francoiscabrol/ranger.vim'
 "Plug 'https://github.com/yegappan/grep'
 Plug 'tyru/open-browser.vim' " opens url in browser
 "Plug 'cpiger/neoDebug'
-Plug 'dense-analysis/ale'
+"Plug 'dense-analysis/ale'
 "Plug 'valloric/youcompleteme'
 "Plug 'https://github.com/vim-syntastic/syntastic.git'
 "Plug 'szw/vim-tags'
 Plug 'https://github.com/vimwiki/vimwiki'
-Plug 'neoclide/coc.nvim'
+"Plug 'neoclide/coc.nvim'
+Plug 'rafi/awesome-vim-colorschemes'
 call plug#end()
 
+colorscheme  jellybeans
 map <leader>p :PlugInstall<cr>
 map <leader>pc :PlugClean<cr>
 map <leader>ps :PlugStatus<cr>
@@ -1058,8 +1066,9 @@ let NERDTreeShowHidden=1
 let NERDTreeKeepTreeInNewTab=1
 noremap <leader>nt :NERDTreeFind<CR>
 
-map <leader>gw :Gitgrep <cword><cr>
-map <leader>ga :GitgrepAdd <cword><cr>
+map <leader>gw :Ggrep <cword><cr>:copen<cr>
+"map <leader>gw :Gitgrep <cword><cr>
+"map <leader>ga :GitgrepAdd <cword><cr>
 
 map <leader>t :Tig<cr>
 map <leader>tb :TigBlame<cr>
