@@ -115,6 +115,7 @@ dellclusterruntimeenvset ()
     cyc_configs_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_configs);
     cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
     cluster_config_file=${cyc_configs_folder}/cyc-cfg.txt.${cluster}-BM;
+    third_party_folder=$(readlink -f source/cyc_core/cyc_platform/src/third_party/PNVMeT);
 
     echo "export CYC_CONFIG=${cluster_config_file}";
     ask_user_default_yes "Correct ? "
@@ -345,23 +346,60 @@ dellclusterinfo ()
 	return 0;
 }
 
+third_party_folder=
 dellkernelshaget ()
 {
-    local mfile=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    local mfile=${third_party_folder}/source/cyc_core/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
     
-    sed -n "/Set.*PNVMET_GIT_TAG.*/p" $mfile;
+    if [[ -z ${third_party_folder} ]] ; then
+        echo "runtime env not set"
+        return -1;
+    fi;
+    
+    if [[ -f ${mfile} ]] ; then
+        sed -n "/Set.*PNVMET_GIT_TAG.*/p" $mfile;
+    else
+        echo "${mfile} not found";
+        return -1
+    fi;
+    
+    return 0;
 }
 
 dellkernelshaupdate ()
 {
     local sha=${1};
-    local mfile=/home/y_cohen/devel/cyclone/source/third_party/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    local mfile=${third_party_folder}/source/cyc_core/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
     
+    # make sure dest file/folder exist.
+    if [[ -z ${third_party_folder} ]] ; then
+        echo "runtime env not set"
+        return -1;
+    fi;
     
-    if [[ -z ${sha} ]] ; then
-        sha=$(git log -1 | awk '/commit/{print $2}');
-    fi
+    if ! [[ -f ${mfile} ]] ; then
+        echo "${mfile} not found";
+        return -1;
+    fi;
 
+    # if user did not supply sha, we can still use HEAD
+    if [[ -z ${sha} ]] ; then
+        # make sure were in the git repo
+        git remote 2>&1 1>/dev/null;
+        if [[ $? -ne 0 ]] ; then
+            echo "you need to be in the linux folder";
+            return -1;
+        fi;
+
+        if [[ "linux.git" != $(git remote -v |awk '{if (FNR==1) {print $2} }'  | sed 's/.*\///g') ]] ; then
+            echo "you need to be in the linux folder";
+            return -1;
+        fi
+    
+        sha=$(git log -1 | awk '/commit/{print $2}');
+        echo "you did not supply commit sha. using HEAD ${sha}";
+    fi
+    
     sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
     pushd /home/y_cohen/devel/cyclone/source/cyc_core 2>/dev/null;
     git diff
