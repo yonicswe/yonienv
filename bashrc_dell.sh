@@ -152,6 +152,7 @@ dellclusterleaseextend ()
 }
 
 complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease
+complete -W "$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B ; done)" xxssh xxbsc
 
 cyc_configs_folder=;
 dellcdclusterconfigs ()
@@ -207,7 +208,7 @@ dellclusterdeploy ()
     [ $? -eq 0 ] && return; 
     export CYC_CONFIG=/home/amite/cyclone/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${cluster}-BM;
     
-    dcdclusterscripts;
+    dellcdclusterscripts;
 
     echo -e "\n\n./deploy  --deploytype san ${cluster}"; 
     ask_user_default_yes "Correct ? "
@@ -235,7 +236,7 @@ dellclusterdeploy ()
 
 dellclusteruserspaceupdate ()
 {
-	dcdclusterscripts;
+	dellcdclusterscripts;
 	if ! [ -e fast_code_loader.sh ] ; then
 		echo "fast_code_loader.sh not found";
 		return 1;
@@ -262,10 +263,13 @@ dellclusteruserspaceupdate ()
 	return 0;
 }
 
-dellrbatracesetup ()
+# rba training
+# https://confluence.cec.lab.emc.com/display/CYCLONE/Using+RBA+Tracing
+
+dellrbatraceenable ()
 {
     # do this from cyc_helpers
-    if [[ -z {cyc_helpers_folder} ]] ; then
+    if [[ -z ${cyc_helpers_folder} ]] ; then
         echo "runtime env is not set";
         return;
     fi;
@@ -273,20 +277,80 @@ dellrbatracesetup ()
     dellcdclusterscripts;
     
     # utils/dp_cli_a.sh rba configure -c usher all -c mapper all -c logging all -c namespace all -c cache all -c front_end all -c raid all -c backend all -c ics all --tier_size 16384
-    utils/dp_cli_a.sh rba configure -c front_end all --tier_size 16384
-    utils/dp_cli_a.sh rba enable
-    utils/dp_cli_b.sh rba configure -c front_end all --tier_size 16384
-    utils/dp_cli_b.sh rba enable
+    echo "utils/dp_cli_a.sh rba configure -c front_end all --tier_size 16384"
+          utils/dp_cli_a.sh rba configure -c front_end all --tier_size 16384
+    echo "utils/dp_cli_a.sh rba enable";
+          utils/dp_cli_a.sh rba enable
+    echo "utils/dp_cli_b.sh rba configure -c front_end all --tier_size 16384";
+          utils/dp_cli_b.sh rba configure -c front_end all --tier_size 16384
+    echo "utils/dp_cli_b.sh rba enable";
+          utils/dp_cli_b.sh rba enable
+}
+
+dellrbatracedisable ()
+{
+    # do this from cyc_helpers
+    if [[ -z ${cyc_helpers_folder} ]] ; then
+        echo "runtime env is not set";
+        return;
+    fi;
+    
+    dellcdclusterscripts;
+    
+    echo "utils/dp_cli_a.sh rba disable";
+    utils/dp_cli_a.sh rba disable;
+    echo "utils/dp_cli_b.sh rba disable";
+    utils/dp_cli_b.sh rba disable;
 }
  
 dellrbatracerun ()
 {
     node=${1:-a};
+
+    # do this from cyc_helpers
+    if [[ -z ${cyc_helpers_folder} ]] ; then
+        echo "runtime env is not set";
+        return;
+    fi;
+    
+    dellcdclusterscripts;
+    
+    echo "./offload_rba_cont.sh -L 1 -n ${node} -O /home/y_cohen/tmp/rba/node-${node} -v"
     ./offload_rba_cont.sh -L 1 -n ${node} -O /home/y_cohen/tmp/rba/node-${node} -v
 }
 
 alias dellrbatracerun-a='dellrbatracerun a'
 alias dellrbatracerun-b='dellrbatracerun b'
+
+
+dellrbatracedump ()
+{ 
+    # use rba_sort and gunzip
+    rba_zip_file=${1};
+    rba_file=$(basename ${rba_zip_file} .gz);
+
+    if [[ -z ${rba_file} ]] ; then
+        echo "usage : dellrbatracedump <rba zip file>"
+        return -1;
+    fi;
+
+    if ! [[ -e ${rba_zip_file} ]] ; then
+        echo "${rba_zip_file} does not exist";
+        return -1;
+    fi;
+
+    # do this from cyc_helpers
+    if [[ -z ${cyc_helpers_folder} ]] ; then
+        echo "runtime env is not set";
+        return;
+    fi;
+
+    dellcdclusterscripts;
+
+    gunzip -k ${rba_zip_file};
+
+    ./rba_sort -f bin -p ${rba_file} -o ${rba_file}.ktr
+}
 
 dellclusterkernelspaceupdate ()
 {
@@ -349,7 +413,7 @@ dellclusterinfo ()
 third_party_folder=
 dellkernelshaget ()
 {
-    local mfile=${third_party_folder}/source/cyc_core/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    local mfile=${third_party_folder}/CMakeLists.txt
     
     if [[ -z ${third_party_folder} ]] ; then
         echo "runtime env not set"
@@ -369,7 +433,7 @@ dellkernelshaget ()
 dellkernelshaupdate ()
 {
     local sha=${1};
-    local mfile=${third_party_folder}/source/cyc_core/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    local mfile=${third_party_folder}/CMakeLists.txt
     
     # make sure dest file/folder exist.
     if [[ -z ${third_party_folder} ]] ; then
