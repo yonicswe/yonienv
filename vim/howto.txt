@@ -1,0 +1,4 @@
+
+yank till line
+e.g. 81Gy91G
+    goto line 81 then combine yank command with movement till line 91
