@@ -81,12 +81,25 @@ cw	bashrc_fs.sh	/^cw () $/;"	f
 debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
-dellbuilddebug	bashrc_dell.sh	/^dellbuilddebug ()$/;"	f
+dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
+dellcdclusterscripts	bashrc_dell.sh	/^dellcdclusterscripts ()$/;"	f
 dellclusterdeploy	bashrc_dell.sh	/^dellclusterdeploy ()$/;"	f
-dellclusterenvsetup	bashrc_dell.sh	/^dellclusterenvsetup ()$/;"	f
+dellclusterinfo	bashrc_dell.sh	/^dellclusterinfo ()$/;"	f
+dellclusterkernelspaceupdate	bashrc_dell.sh	/^dellclusterkernelspaceupdate ()$/;"	f
+dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
+dellclusterruntimeenvget	bashrc_dell.sh	/^dellclusterruntimeenvget ()  $/;"	f
+dellclusterruntimeenvset	bashrc_dell.sh	/^dellclusterruntimeenvset ()$/;"	f
 dellclusteruserspaceupdate	bashrc_dell.sh	/^dellclusteruserspaceupdate ()$/;"	f
-dellclusteryoni	bashrc_dell.sh	/^dellclusteryoni ()$/;"	f
-dellenvsetup	bashrc_dell.sh	/^dellenvsetup ()$/;"	f
+dellcyclonebuild	bashrc_dell.sh	/^dellcyclonebuild ()$/;"	f
+dellcyclonedevelenvsetup	bashrc_dell.sh	/^dellcyclonedevelenvsetup ()$/;"	f
+dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
+dellkernelshaget	bashrc_dell.sh	/^dellkernelshaget ()$/;"	f
+dellkernelshaupdate	bashrc_dell.sh	/^dellkernelshaupdate ()$/;"	f
+dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
+dellrbatracedump	bashrc_dell.sh	/^dellrbatracedump ()$/;"	f
+dellrbatraceenable	bashrc_dell.sh	/^dellrbatraceenable ()$/;"	f
+dellrbatracerun	bashrc_dell.sh	/^dellrbatracerun ()$/;"	f
+dellsubmodulesdiscard	bashrc_dell.sh	/^dellsubmodulesdiscard ()$/;"	f
 dfa	bashrc_fs.sh	/^dfa () $/;"	f
 dirdiff	bashrc_fs.sh	/^dirdiff () $/;"	f
 dirdiffbrief	bashrc_fs.sh	/^dirdiffbrief () $/;"	f
@@ -252,6 +265,8 @@ mydistro_v1	bashrc_fs.sh	/^mydistro_v1 ()$/;"	f
 myip	bashrc_fs.sh	/^myip ()$/;"	f
 myip_v1	bashrc_fs.sh	/^myip_v1 ()$/;"	f
 namedscreen	bashrc_screen.sh	/^namedscreen () $/;"	f
+nviminstallplug	bashrc_vim.sh	/^function nviminstallplug ()$/;"	f
+nvimsetconfig	bashrc_vim.sh	/^function nvimsetconfig ()$/;"	f
 ofedbackportsapply	bashrc_mlx.sh	/^ofedbackportsapply ()$/;"	f
 ofedbackportsupdate	bashrc_mlx.sh	/^ofedbackportsupdate ()$/;"	f
 ofedbuildandinstallinternalversion	bashrc_mlx.sh	/^ofedbuildandinstallinternalversion ()$/;"	f
