@@ -90,6 +90,7 @@ dellclusterruntimeenvget ()
     fi;
     
     echo -e "YONI_CLUSTER=$YONI_CLUSTER\nCYC_CONFIG=${CYC_CONFIG}"
+    echo -e "cyc_helpers_folder=${cyc_helpers_folder}";
 }
 
 dellclusterruntimeenvset ()
@@ -181,6 +182,7 @@ dellcdclusterscripts ()
         cd ${cyc_helpers_folder};
     else
         echo "${cyc_helpers_folder} does not exist";
+        return -1;
     fi;
     
     return 0;
@@ -354,20 +356,26 @@ dellrbatracedump ()
 
 dellclusterkernelspaceupdate ()
 {
-	dcdclusterscripts;
+	dellcdclusterscripts;
+	[[ $? -ne 0 ]] && return -1;
+	
 	# script is in repo:cyc_core, in branch:dev/grupie/fast_loader_for_nvmet_driver
 	if ! [ -e fast_nvmet_driver_loader.sh ] ; then
-		echo "fast_nvmet_driver_loader.sh not found"
-		return 1;
+	    echo "git checkoutfilefrombranch remotes/origin/dev/grupie/fast_loader_for_nvmet_driver cyc_platform/src/package/cyc_helpers/fast_nvmet_driver_loader.sh";
+	    git checkoutfilefrombranch remotes/origin/dev/grupie/fast_loader_for_nvmet_driver cyc_platform/src/package/cyc_helpers/fast_nvmet_driver_loader.sh
+	    if ! [ -e fast_nvmet_driver_loader.sh ] ; then
+		    echo "fast_nvmet_driver_loader.sh not found"
+		    return -1;
+		fi;
 	fi
 	if [ -z $CYC_CONFIG ] ; then
-		echo "CYC_CONFIG not defined. use dellclusterenvsetup";
-		return 1;
+		echo "CYC_CONFIG not defined. use dellclusterruntimeenvset";
+		return -1;
 	fi
 
 	echo "CYC_CONFIG=$CYC_CONFIG";
 	ask_user_default_yes "continue ?";
-	[ $? -eq 0 ] && return 1;
+	[ $? -eq 0 ] && return -1;
 
 	./fast_nvmet_driver_loader.sh;
 
