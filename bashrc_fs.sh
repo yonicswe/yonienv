@@ -98,11 +98,11 @@ prompt_color ()
     if [ $COLORED_PROMPT == "true" ] ; then 
         export COLORED_PROMPT=false
         # export PS1="(\u) \h:\!=> " 
-        export PS1="(\u) \h:/\W\n\[$(tput sgr0)\]=> " 
+        export PS1="(\u) \h:\w\n\[$(tput sgr0)\]=> " 
     else
         export COLORED_PROMPT=true
         # export PS1="\[\033[1;31m\](\u) \[\033[1;32m\]\h:\!=> \[\033[0m\] "
-        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\]\n\[$(tput sgr0)\]=> "
+        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]\w\[\033[0m\]\n\[$(tput sgr0)\]=> "
         # export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
     fi
 
@@ -118,7 +118,7 @@ prompt_color ()
 } 
 prompt_color;
 alias psc='prompt_sc'
-prompt_sc () 
+prompt_sc ()
 {
     local _CS_PROMPT=
 
