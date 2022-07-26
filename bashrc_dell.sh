@@ -53,15 +53,24 @@ dellcyclonebuild ()
 		echo "you must be in arwen to build";
 		return;
 	fi
-
-    pushd ~/devel/cyclone;
+    
+	dellcdcyclonefolder;
+	[[ $? -ne 0 ]] && return -1;
+	
+    dellclusterruntimeenvget
+    ask_user_default_yes "continue ?"
+    [[ $? -eq 0 ]] && return -1;
 
 	ask_user_default_no "prune before build ?"
-	[[ $? -eq 1 ]] && make prune
-	echo -e "\n========== start build ===================\n"
+	if [[ $? -eq 1 ]] ; then
+	    echo "=============== make prun =========================";
+	    make prune;
+	fi;
+	
+	echo -e "\n========== start build ($(pwd)) ===================\n"
+	echo "make cyc_core flavor=RETAIL force=yes"
+	echo "========================================================"
 	make cyc_core flavor=RETAIL force=yes
-
-    popd;
 }
 
 alias dellclusterlist='/home/public/scripts/xpool_trident/prd/xpool list -f -a'
@@ -91,6 +100,24 @@ dellclusterruntimeenvget ()
     
     echo -e "YONI_CLUSTER=$YONI_CLUSTER\nCYC_CONFIG=${CYC_CONFIG}"
     echo -e "cyc_helpers_folder=${cyc_helpers_folder}";
+    echo -e "cyclone_folder=${cyclone_folder}";
+}
+
+cyclone_folder=;
+dellcdcyclonefolder ()
+{
+    if [[ -z ${cyclone_folder} ]] ; then
+        echo "cyclone_folder not set. use dellclusterruntimeenvset <cluster>"
+        return -1;
+    fi;
+
+    if ! [[ -e ${cyclone_folder} ]] ; then
+        echo "${cyclone_folder} does not exist";
+        return -1;
+    fi;
+
+    cd $cyclone_folder;
+    return 0;
 }
 
 dellclusterruntimeenvset ()
@@ -105,14 +132,22 @@ dellclusterruntimeenvset ()
             echo "usage : dellclusterlease <cluster name>";
             return;
         fi;
+        ask_user_default_yes "you did not specify <cluster> use ? ${YONI_CLUSTER}";
+        [ $? -eq 0 ] && return;
         cluster=${YONI_CLUSTER};
     fi
+
+    if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
+        echo "you should do this from a cyclone pdr repo";
+        return -1;
+    fi;
 
     if ! [[ -d source/cyc_core/cyc_platform/src/package/cyc_configs ]] ; then
         echo "source/cyc_core/cyc_platform/src/package/cyc_configs not found!!"
         return;
     fi;
     
+    cyclone_folder=$(pwd -P);
     cyc_configs_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_configs);
     cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
     cluster_config_file=${cyc_configs_folder}/cyc-cfg.txt.${cluster}-BM;
@@ -120,13 +155,15 @@ dellclusterruntimeenvset ()
 
     echo "export CYC_CONFIG=${cluster_config_file}";
     ask_user_default_yes "Correct ? "
-    [ $? -eq 0 ] && return; 
+    [ $? -eq 0 ] && return;
     
     export CYC_CONFIG=${cluster_config_file};
     export YONI_CLUSTER=${cluster};
 
     echo "export CYC_CONFIG=${CYC_CONFIG}" > ${dellclusterruntimeenvbkpfile};
     echo "export YONI_CLUSTER=${cluster}"  >> ${dellclusterruntimeenvbkpfile};
+
+    dellclusterruntimeenvget;
 }
 
 dellclusterleaseextend () 
@@ -205,14 +242,24 @@ dellclusterdeploy ()
         fi;
     fi
 
-    echo "export CYC_CONFIG=/home/amite/cyclone/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${cluster}-BM";
+    if [[ -z ${CYC_CONFIG} ]] ; then
+        echo "CYC_CONFIG not set. use dellclusterruntimeenvset <cluster>";
+        return -1;
+    fi;
+    
+    if ! [[ -e ${CYC_CONFIG} ]] ; then
+        echo "${CYC_CONFIG} !! not found"
+        return -1;
+    fi;
+    
+    echo "install ${cluster} with ${CYC_CONFIG}"
     ask_user_default_yes "Correct ? "
     [ $? -eq 0 ] && return; 
-    export CYC_CONFIG=/home/amite/cyclone/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${cluster}-BM;
     
     dellcdclusterscripts;
 
-    echo -e "\n\n./deploy  --deploytype san ${cluster}"; 
+    echo "==> $(pwd)";
+    echo -e "\n./deploy  --deploytype san ${cluster}"; 
     ask_user_default_yes "Correct ? "
     [ $? -eq 0 ] && return; 
     ./deploy  --deploytype san ${cluster}; 
