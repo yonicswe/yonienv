@@ -10,7 +10,7 @@ alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
 
-alias yonidellupdate='scp y_cohen@10.55.227.146:~/tasks/yonidell.sh ~/ ; source ~/yonidell.sh'
+alias yonidellupdate='scp y_cohen@10.55.227.146:~/yonienv/scripts/yonidell.sh ~/ ; source ~/yonidell.sh'
 alias yonidellsshkeyset='ssh-copy-id y_cohen@10.55.227.146'
 alias delllistdc='find . -maxdepth 1 -regex ".*service-data\|.*dump-data"' 
 alias d='dmesg --color -HxP'
@@ -44,25 +44,25 @@ delllistports ()
     done | column -t;
 }
 
-delljournalctlnode-a ()
-{
-    local all=${1};
-    if [[ $all == 'a' ]] ; then
-        journalctl                  --utc --no-pager -o short-precise -a -D node_a/var/log/journal |less -N -I
-    else
-        journalctl SUB_COMPONENT=nt --utc --no-pager -o short-precise -a -D node_a/var/log/journal |less -N -I
-    fi
-}
-
-delljournalctl-node-b ()
-{
-    local all=${1};
-    if [[ $all == 'a' ]] ; then
-        journalctl --no-pager -a -D node_b/var/log/journal | less -N -I  
-    else
-        journalctl SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
-    fi
-}
+# delljournalctlnode-a ()
+# {
+#     local all=${1};
+#     if [[ $all == 'a' ]] ; then
+#         journalctl                  --utc --no-pager -o short-precise -a -D node_a/var/log/journal |less -N -I
+#     else
+#         journalctl SUB_COMPONENT=nt --utc --no-pager -o short-precise -a -D node_a/var/log/journal |less -N -I
+#     fi
+# }
+#
+# delljournalctl-node-b ()
+# {
+#     local all=${1};
+#     if [[ $all == 'a' ]] ; then
+#         journalctl --no-pager -a -D node_b/var/log/journal | less -N -I  
+#     else
+#         journalctl SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+#     fi
+# }
 
 delljournalctl-nt-node-a ()
 {
@@ -71,7 +71,40 @@ delljournalctl-nt-node-a ()
     if [[ -n "${since}" ]] ; then
         eval journalctl --since=\"${since}\" SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
     else
-        eval journalctl SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+        eval journalctl                      SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+    fi;
+}
+
+delljournalctl-nt-node-b ()
+{
+    local since="${1}";
+
+    if [[ -n "${since}" ]] ; then
+        eval journalctl --since=\"${since}\" SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+    else
+        eval journalctl                      SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+    fi;
+}
+
+delljournalctl-all-node-a ()
+{
+    local since="${1}";
+
+    if [[ -n "${since}" ]] ; then
+        eval journalctl --since=\"${since}\" --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+    else
+        eval journalctl                      --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+    fi;
+}
+
+delljournalctl-all-node-b ()
+{
+    local since="${1}";
+
+    if [[ -n "${since}" ]] ; then
+        eval journalctl --since=\"${since}\" --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+    else
+        eval journalctl                      --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
     fi;
 }
 
