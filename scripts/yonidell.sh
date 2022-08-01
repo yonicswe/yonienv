@@ -5,12 +5,12 @@ alias l='ls -ltr --color'
 alias c='cd'
 alias ..='cd ..'
 alias p='pwd -P'
-alias v='vim'
+alias v='vim -u ~/yonidellvim.vim'
 alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
 
-alias yonidellupdate='scp y_cohen@10.55.227.146:~/yonienv/scripts/yonidell.sh ~/ ; source ~/yonidell.sh'
+alias yonidellupdate='scp y_cohen@10.55.227.146:~/yonienv/scripts/yonidell* ~/ ; source ~/yonidell.sh'
 alias yonidellsshkeyset='ssh-copy-id y_cohen@10.55.227.146'
 alias delllistdc='find . -maxdepth 1 -regex ".*service-data\|.*dump-data"' 
 alias d='dmesg --color -HxP'
@@ -221,8 +221,8 @@ debuc-qos-configure ()
     dfile_node=${node}/commands/nt;
     
     if [[ -e ${debuc_file} ]] ; then
-        echo -e "echo \"add qos bucket idx=1 bw=100g iops=5000 burst=20% nsid=${nsid}\" > ${debuc_file}"; 
-        echo "add qos bucket idx=1 bw=100g iops=5000 burst=20% nsid=${nsid}" > ${dfile_base}\:${dfile_node};
+        echo -e "echo \"add qos bucket idx=0 bw=100g iops=5000 burst=0% nsid=${nsid}\" > ${debuc_file}"; 
+        echo "add qos bucket idx=0 bw=100g iops=5000 burst=0% nsid=${nsid}" > ${dfile_base}\:${dfile_node};
     else
         echo "${debuc_file} not found";
         return -1;
@@ -233,6 +233,7 @@ debuc-qos-configure ()
 
 alias debuc-qos-configure-node-a='debuc-qos-configure 31010'
 alias debuc-qos-configure-node-b='debuc-qos-configure 31011'
+alias dell-qos-dump='sudo echo 1 > /sys/module/nvmet_power/parameters/qos_dump'
 
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
@@ -243,4 +244,4 @@ alias debuc-qos-configure-node-b='debuc-qos-configure 31011'
 # nvme port and node name
 
 unset PROMPT_COMMAND
-PS1="[\u@\h:\w]\n==> "
+PS1="[\D{%H:%M %d.%m}][\u@\h:\w]\n==> "
