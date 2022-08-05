@@ -35,12 +35,13 @@ lld ()
 }
 
 
-delllistports ()
+dellbsclistports ()
 {
     for i in /sys/kernel/config/nvmet/ports/* ; do 
         echo -n "$i |"
         echo -n "$(cat $i/addr_traddr) |";
-        echo "$(cat  $i/addr_trsvcid) |";
+        echo -n "$(cat $i/addr_trsvcid) |";
+        echo "$(cat  $i/addr_trtype) |";
     done | column -t;
 }
 
@@ -210,6 +211,7 @@ debuc-qos-configure ()
     local nsid=${2};
     local debuc_file=;
     local dfile=;
+    local iops=5k;
 
     if [[ -z ${nsid} ]] ; then
         echo "error : missing nsid";
@@ -221,8 +223,8 @@ debuc-qos-configure ()
     dfile_node=${node}/commands/nt;
     
     if [[ -e ${debuc_file} ]] ; then
-        echo -e "echo \"add qos bucket idx=0 bw=100g iops=5000 burst=0% nsid=${nsid}\" > ${debuc_file}"; 
-        echo "add qos bucket idx=0 bw=100g iops=5000 burst=0% nsid=${nsid}" > ${dfile_base}\:${dfile_node};
+        echo -e "echo \"add qos bucket idx=0 bw=100g iops=${iops} burst=0% nsid=${nsid}\" > ${debuc_file}"; 
+        echo "add qos bucket idx=0 bw=100g iops=${iops} burst=0% nsid=${nsid}" > ${dfile_base}\:${dfile_node};
     else
         echo "${debuc_file} not found";
         return -1;
@@ -230,6 +232,31 @@ debuc-qos-configure ()
     
     return 0;
 }
+
+_debuc-qos-disable ()
+{
+    local node=${1};
+    local debuc_file="/xtremapp/debuc/127.0.0.1:${node}/commands/nt";
+    local dfile_base=/xtremapp/debuc/127.0.0.1;
+    local dfile_node=${node}/commands/nt;
+
+    if [[ -z ${node} ]] ; then
+        return -1;
+    fi;
+    
+    if [[ -e ${debuc_file} ]] ; then
+        echo -e "echo \"del qos bucket idx=0\" > ${debuc_file}";
+        echo "del qos bucket idx=0" > ${dfile_base}\:${dfile_node};
+    else
+        echo "${debuc_file} not found";
+        return -1;
+    fi;
+
+    return 0;
+}
+
+alias debuc-qos-disable-node-a='_debuc-qos-disable 31010'
+alias debuc-qos-disable-node-b='_debuc-qos-disable 31011'
 
 alias debuc-qos-configure-node-a='debuc-qos-configure 31010'
 alias debuc-qos-configure-node-b='debuc-qos-configure 31011'

@@ -73,9 +73,10 @@ dellcyclonebuild ()
 	make cyc_core flavor=RETAIL force=yes
 }
 
-alias dellclusterlist='/home/public/scripts/xpool_trident/prd/xpool list -f -a'
-alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -f -a -g Trident-kernel-IL'
-alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
+alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
+alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL'
+# alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
+alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f'
 alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
 alias dellclusterlease='/home/public/scripts/xpool_trident/prd/xpool lease 7d -c '
 
