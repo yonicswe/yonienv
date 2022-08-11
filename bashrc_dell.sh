@@ -102,6 +102,7 @@ dellclusterruntimeenvget ()
     echo -e "YONI_CLUSTER=$YONI_CLUSTER\nCYC_CONFIG=${CYC_CONFIG}"
     echo -e "cyc_helpers_folder=${cyc_helpers_folder}";
     echo -e "cyclone_folder=${cyclone_folder}";
+    echo -e "third_party_folder=${third_party_folder}";
 }
 
 cyclone_folder=;
@@ -152,7 +153,7 @@ dellclusterruntimeenvset ()
     cyc_configs_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_configs);
     cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
     cluster_config_file=${cyc_configs_folder}/cyc-cfg.txt.${cluster}-BM;
-    third_party_folder=$(readlink -f source/cyc_core/cyc_platform/src/third_party/PNVMeT);
+    third_party_folder=$(readlink -f source/third_party/cyc_platform/src/third_party/PNVMeT);
 
     echo "export CYC_CONFIG=${cluster_config_file}";
     ask_user_default_yes "Correct ? "
@@ -191,7 +192,7 @@ dellclusterleaseextend ()
 }
 
 complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease
-complete -W "$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B ; done)" xxssh xxbsc
+complete -W "$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B ; done)" xxssh xxbsc dellclusterruntimeenvget dellclusterruntimeenvset
 
 cyc_configs_folder=;
 dellcdclusterconfigs ()
@@ -534,6 +535,22 @@ dellibid2commit ()
     phlibid.pl --ibid ${ibid} | grep -i commit
 }
 
+gitcommitdell ()
+{
+    local jira_ticket=${1};
+    local module=${2:-nt};
+    if [ -n "${jira_ticket}" ] ; then 
+        sed -i "s/\[MDT-.*\]/\[MDT-${jira_ticket}\]/g" ${yonienv}/git_templates/git_commit_dell_template;
+    fi
+
+    if [ -n "${module}" ] ; then 
+        sed -i "s/cyc_module/${module}/g" ${yonienv}/git_templates/git_commit_dell_template;
+    fi
+
+    git config commit.template ${yonienv}/git_templates/git_commit_dell_template;
+    git commit -n;
+    git config --unset commit.template;
+}
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
