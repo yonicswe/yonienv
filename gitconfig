@@ -34,7 +34,7 @@
 #   print the alias implementation
 #   git config --get-regexp alias.<alias name>	
 
-    amendsources= commit --amend --no-edit
+    amendsources= commit --amend --no-edit -n
 #     amend = commit --amend --reuse-message=HEAD
     amendcommitlog = commit --amend
     amendauthor = commit --amend --author='Yonatan Cohen <ycohen@habana.ai>'
@@ -304,6 +304,7 @@
 	sm = submodule
 	smupdate = submodule update --init
 	smremove = submodule deinit
+	sm-resetall = submodule foreach --recursive git reset --hard
 #   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
