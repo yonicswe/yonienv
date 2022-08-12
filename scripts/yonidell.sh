@@ -360,6 +360,15 @@ m ()
 # nvme discover
 # nvme connect
 # nvme port and node name
+# nvme dsm /dev/nvme0n1 -b 1 -s 0 -d 1
+# nvme write-zeroes /dev/nvme0n1
+
+# read write with dd
+# sudo dd if=/dev/zero of=/dev/nvme0n1 bs=1M  count=1 
+# sudo dd if=/dev/urandom of=/dev/nvme0n1 bs=1M 
+# sudo dd of=/dev/nvme0n1 bs=512 count=1
+
+
 
 unset PROMPT_COMMAND
 PS1="[\D{%H:%M %d.%m}][\u@\h:\w]\n==> "
