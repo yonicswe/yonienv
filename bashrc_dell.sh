@@ -550,6 +550,7 @@ gitcommitdell ()
     git config commit.template ${yonienv}/git_templates/git_commit_dell_template;
     git commit -n;
     git config --unset commit.template;
+    git checkout ${yonien}/git_templates/git_commit_dell_template;
 }
 # howto
 # journalctl SUBCOMPONENT=nt
