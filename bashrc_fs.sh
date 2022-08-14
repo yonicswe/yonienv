@@ -76,9 +76,11 @@ fi
 
 parse_git_branch() 
 {
-    if [ -d .git ] ; then 
-        git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(git::\1)/';
-    fi;
+    #if [ -d .git ] ; then 
+        # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(git::\1)/';
+        # echo "[$(git branch --show-current 2>/dev/null)]";
+        echo "[$(git rev-parse --abbrev-ref HEAD 2>/dev/null)]";
+    #fi;
 }
 
 parse_svn_branch() {
@@ -95,26 +97,31 @@ parse_svn_repository_root() {
 export COLORED_PROMPT=false;
 prompt_color () 
 {
+    unset PROMPT_COMMAND
     if [ $COLORED_PROMPT == "true" ] ; then 
+        # ==== no color prompt ====
         export COLORED_PROMPT=false
-        # export PS1="(\u) \h:\!=> " 
-        export PS1="(\u) \h:\w\n\[$(tput sgr0)\]=> " 
+        PS1="[\D{%H:%M %d.%m}][\u@\h:\w]\n[$(git branch --show-current)]==> "
     else
+        # ==== colored prompt ====
         export COLORED_PROMPT=true
-        # export PS1="\[\033[1;31m\](\u) \[\033[1;32m\]\h:\!=> \[\033[0m\] "
-        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]\w\[\033[0m\]\n\[$(tput sgr0)\]=> "
-        # export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
+        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\n\$(parse_git_branch)\[\033[00m\]$\[\033[00m\]=> "
     fi
 
-    return;
+    # export PS1="(\u) \h:\w\n\[$(tput sgr0)\]=> " 
+    # export PS1="(\u) \h:\!=> " 
+    # export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]\w\[\033[0m\]\n[$(parse_git_branch)]=> "
+    # export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]\w\[\033[0m\]\n\[$(tput sgr0)\]=> "
+    # export PS1="\[\033[1;31m\](\u) \[\033[1;32m\]\h:\!=> \[\033[0m\] "
+    # export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\$(parse_git_branch)\$(parse_svn_branch)\[\033[00m\]$\[\033[00m\]=> "
 
-    if [ "${CS_PROMPT}" == "true" ] ; then 
-        export CS_PROMPT=false;
-        prompt_sc > /dev/null;
-    else
-        export CS_PROMPT=true;
-        prompt_sc > /dev/null;
-    fi
+    #if [ "${CS_PROMPT}" == "true" ] ; then 
+        #export CS_PROMPT=false;
+        #prompt_sc > /dev/null;
+    #else
+        #export CS_PROMPT=true;
+        #prompt_sc > /dev/null;
+    #fi
 } 
 prompt_color;
 alias psc='prompt_sc'
