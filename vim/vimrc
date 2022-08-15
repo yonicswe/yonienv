@@ -1070,7 +1070,8 @@ map <leader>gw :Ggrep <cword><cr>:copen<cr>
 "map <leader>gw :Gitgrep <cword><cr>
 "map <leader>ga :GitgrepAdd <cword><cr>
 
-map <leader>t :Tig<cr>
+" map <leader>t :Tig<cr>
+map <leader>t :Tags<cr>
 map <leader>tb :TigBlame<cr>
 map <leader>g :Git<cr>
 map <leader>gd :Gdiffsplit<cr>
