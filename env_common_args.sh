@@ -5,5 +5,6 @@ export yonitasks=~/tasks
 export yonidevel=~/devel
 export yonibugs=~/bugs
 export yonishare=~/share
+export yonitmp=~/tmp
 
 
