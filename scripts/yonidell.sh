@@ -301,9 +301,9 @@ _debuc_port_add ()
 {
     local node=${1};
     local type=${2};
-    local id=${3:-20};
-    local address=${4:-127.0.0.1};
-    local svc_id=${5:-1001};
+    local id=${3:-1};
+    local address=${4:-10.219.157.164};
+    local svc_id=${5:-4420};
     local cmd=;
     
     local debuc_file="/xtremapp/debuc/127.0.0.1:${node}/commands/nt";
@@ -352,7 +352,88 @@ m ()
 #     ofedversion;
 }
 
+prdebug-list-methods ()
+{
+    local method=${1:-rdma}
+    cat /sys/kernel/debug/dynamic_debug/control  | sed 's/.*]//g' |awk '{print $1} ' |grep ${method}
+}
 
+prdebug-add-method ()
+{
+    local method=${1};
+    if [[ -z ${method} ]] ; then
+        echo "usage $FUNCNAME <method>"
+        return -1;
+    fi;
+    
+    sudo echo "func ${method} +p" > /sys/kerenl/debug/dynamic_debug/control;
+    
+}
+
+_pr_debug_usage ()
+{
+    echo "pr_debug [-f <func>] [-d ] [-e] [-h]";
+    echo "-f <func> [-d]: enable debug prints in func, -d to remove it";
+    echo "-e            : show functions that with enabled pr_debug";
+    echo "-h            : print this help";
+}
+
+prdebug () 
+{
+    local func="";
+    local delete=0;
+    local show_enabled=0;
+    local usage=0;
+
+    OPTIND=0;
+    while getopts "f:d:eh" opt; do
+        case $opt in 
+        f)
+            func=${OPTARG}
+            ;;
+        d)
+            delete=1;
+            func=${OPTARG}
+            ;;
+        e)
+            show_enabled=1;                
+            ;;
+        h)  
+            usage=1;                
+            ;;
+        esac;
+    done;
+
+    if [ ${usage} -eq 1 ] ; then 
+        _pr_debug_usage;
+        return;
+    fi
+
+    if [ ${show_enabled} -eq 1 ] ; then 
+        sudo cat /sys/kernel/debug/dynamic_debug/control |awk '/.*=pfl/{print $0}';
+        return;
+    fi; 
+
+    if [ -z "${func}" ] ; then 
+        # sudo cat /sys/kernel/debug/dynamic_debug/control;
+        echo "missing func";
+        _pr_debug_usage;
+        return -1;
+    fi;
+
+    if [ ${delete} -eq 1 ] ; then 
+        su - -c "echo \"func ${func} =_\" > /sys/kernel/debug/dynamic_debug/control";
+    else 
+        for f in ${func} ; do 
+            echo "pr_debug : $f";
+            if [ $(id -u) -eq 0 ] ; then 
+                echo "func ${f} +pfl" > /sys/kernel/debug/dynamic_debug/control;
+            else
+                su - -c "echo \"func ${f} +pfl\" > /sys/kernel/debug/dynamic_debug/control";
+            fi
+        done
+    fi;
+}
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 
@@ -368,7 +449,9 @@ m ()
 # sudo dd if=/dev/urandom of=/dev/nvme0n1 bs=1M 
 # sudo dd of=/dev/nvme0n1 bs=512 count=1
 
+# sudo lshw -C network -businfo
 
 
 unset PROMPT_COMMAND
-PS1="[\D{%H:%M %d.%m}][\u@\h:\w]\n==> "
+# PS1="[\D{%H:%M %d.%m}][\u@\h:\w]\n==> "
+PS1="[\D{%H:%M %d.%m}] \[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\w\[\033[0m\] \[\033[01;34m\]\n\[\033[00m\]$\[\033[00m\]=> "
