@@ -208,13 +208,14 @@ pr_debug ()
     local usage=0;
 
     OPTIND=0;
-    while getopts "f:deh" opt; do
+    while getopts "f:d:eh" opt; do
         case $opt in 
         f)
             func=${OPTARG}
             ;;
         d)
             delete=1;
+            func=${OPTARG}
             ;;
         e)
             show_enabled=1;                
@@ -236,8 +237,10 @@ pr_debug ()
     fi; 
 
     if [ -z "${func}" ] ; then 
-        sudo cat /sys/kernel/debug/dynamic_debug/control;
-        return;
+        # sudo cat /sys/kernel/debug/dynamic_debug/control;
+        echo "missing func"
+        pr_debug_usage;
+        return -1;
     fi;
 
     if [ ${delete} -eq 1 ] ; then 
