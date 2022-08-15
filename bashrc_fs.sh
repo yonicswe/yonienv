@@ -105,7 +105,7 @@ prompt_color ()
     else
         # ==== colored prompt ====
         export COLORED_PROMPT=true
-        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\W\[\033[0m\] \[\033[01;34m\]\n\$(parse_git_branch)\[\033[00m\]$\[\033[00m\]=> "
+        export PS1="\[\033[1;31m\]\u\[\033[1;37m\]@\[\033[1;35m\]\h:\[\033[1;33m\]/\w\[\033[0m\] \[\033[01;34m\]\n\$(parse_git_branch)\[\033[00m\]$\[\033[00m\]=> "
     fi
 
     # export PS1="(\u) \h:\w\n\[$(tput sgr0)\]=> " 
