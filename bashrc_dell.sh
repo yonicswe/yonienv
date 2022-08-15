@@ -3,9 +3,9 @@
 alias editbashdell='nvim ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
-alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.23'
+alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 
-trident_cluster_list=(WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023);
+trident_cluster_list=(WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 wx-d0733 wx-g4011 wx-d0896 wx-d1116 wx-d1111 wx-d1126 rt-g0015 rt-g0017 wx-d1132 wx-d1138 wx-d1161 wx-d1140 rt-g0060 rt-g0068 rt-g0069 rt-g0074 rt-g0072 rt-d0196 rt-d0042 rt-d0064 rt-g0037 wx-h7060 wk-d0023);
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
 
@@ -550,7 +550,9 @@ gitcommitdell ()
     git config commit.template ${yonienv}/git_templates/git_commit_dell_template;
     git commit -n;
     git config --unset commit.template;
-    git checkout ${yonien}/git_templates/git_commit_dell_template;
+    pushd ${yonienv} 2>/dev/null;
+    git checkout ${yonienv}/git_templates/git_commit_dell_template;
+    popd 2>/dev/null;
 }
 # howto
 # journalctl SUBCOMPONENT=nt
