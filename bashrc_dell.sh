@@ -468,6 +468,27 @@ dellclusterinfo ()
 }
 
 third_party_folder=
+dellcdthirdparty ()
+{
+    if [[ -z ${cyclone_folder} ]] ; then
+        echo "cyclone_folder not set. use dellclusterruntimeenvset <cluster>"
+        return -1;
+    fi;
+
+    if [[ -z ${third_party_folder} ]] ; then
+        echo "third_party_folder not set. use dellclusterruntimeenvset <cluster>"
+        return -1;
+    fi;
+
+    if ! [[ -e ${third_party_folder} ]] ; then
+        echo "${third_party_folder} does not exist";
+        return -1;
+    fi;
+
+    cd $third_party_folder;
+    return 0;
+}
+
 dellkernelshaget ()
 {
     local mfile=${third_party_folder}/CMakeLists.txt
