@@ -11,7 +11,7 @@ alias f='fg'
 alias j='jobs'
 
 alias yonidellupdate='scp y_cohen@10.55.227.146:~/yonienv/scripts/yonidell* ~/ ; source ~/yonidell.sh'
-alias yonidellsshkeyset='ssh-copy-id y_cohen@10.55.227.146'
+alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.227.146'
 alias delllistdc='find . -maxdepth 1 -regex ".*service-data\|.*dump-data"' 
 alias d='sudo dmesg --color -HxP'
 alias dp='sudo dmesg --color -Hx'
@@ -434,6 +434,26 @@ prdebug ()
         done
     fi;
 }
+
+dellibdev2netdev ()
+{
+    for ibdev in /sys/class/infiniband/* ; do
+	    # echo "ibdev ${ibdev}";
+	    for p in ${ibdev}/ports/* ; do
+		    for d in  $p/gid_attrs/ndevs/* ; do 
+			    # echo "ndev $i";
+			    ndev=$(cat $d 2>/dev/null);
+			    if [[ -n ${ndev} ]] ; then
+				    gid=$(basename $d); 
+				    gtype=$(cat $p/gid_attrs/types/$gid);
+				    guid=$(cat $p/gids/$gid);
+				    echo "$d ndev: ${ndev} gid: $gid $guid $gtype"; 
+			    fi;
+		    done 
+	    done 
+    done  | column -t;
+}
+
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 
