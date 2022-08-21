@@ -35,7 +35,8 @@ dellcyclonedevelenvsetup ()
 	git reset --hard origin/int/foothills-prime/main-pl
 }
 
-alias gitclone-dell-cyclone='git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git'
+alias dell-clone-cyclone='git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git'
+alias dell-clone-pnvmet='git clone git@eos2git.cec.lab.emc.com:cyclone/linux.git'
 
 dellsubmodulesdiscard ()
 {
@@ -555,6 +556,21 @@ dellibid2commit ()
     echo ===============================================================
     phlibid.pl --ibid ${ibid} | grep -i commit
 }
+
+_dellrebootnode ()
+{
+    node=${1:-a};
+    dellcdclusterscripts;
+    if [[ -e run_ipmi_${node}.sh ]] ; then
+        ask_user_default_no "reboot node ${node}";
+        [[ $? -eq 0 ]] && return;
+        echo "./run_ipmi_${node}.sh chassis power cycle";
+       ./run_ipmi_${node}.sh chassis power cycle;
+    fi;
+}
+
+alias dellrebootnode-a="_dellrebootnode a";
+alias dellrebootnode-b="_dellrebootnode b";
 
 gitcommitdell ()
 {
