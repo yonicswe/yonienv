@@ -108,7 +108,7 @@ vt () {
         return;
     fi
 
-    ${v_or_g};
+    ${v_or_g} -t "/$1";
 }
 # alias gt="g -t"
 
