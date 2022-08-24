@@ -100,10 +100,12 @@ dellclusterruntimeenvget ()
         return;
     fi;
     
-    echo -e "YONI_CLUSTER=$YONI_CLUSTER\nCYC_CONFIG=${CYC_CONFIG}"
-    echo -e "cyc_helpers_folder=${cyc_helpers_folder}";
-    echo -e "cyclone_folder=${cyclone_folder}";
-    echo -e "third_party_folder=${third_party_folder}";
+    echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
+    echo -e "\033[1;31mCYC_CONFIG\033[0m\t\t${CYC_CONFIG}"
+    echo -e "\033[1;31mcyc_helpers_folder\033[0m\t${cyc_helpers_folder}";
+    echo -e "\033[1;31mcyclone_folder\033[0m\t\t${cyclone_folder}";
+    echo -e "\033[1;31mthird_party_folder\033[0m\t${third_party_folder}";
+    echo;
 }
 
 cyclone_folder=;
@@ -263,21 +265,23 @@ dellclusterdeploy ()
 
     echo "==> $(pwd)";
     echo -e "\n./deploy  --deploytype san ${cluster}"; 
-    ask_user_default_yes "Correct ? "
-    [ $? -eq 0 ] && return; 
-    ./deploy  --deploytype san ${cluster}; 
-    if [[ $? -ne 0 ]] ; then 
-        echo "deploy failed";
-        return;
+    ask_user_default_yes "Continue ? "
+    if [[ $? -eq 1 ]] ; then
+        ./deploy  --deploytype san ${cluster}; 
+        if [[ $? -ne 0 ]] ; then 
+            echo "deploy failed";
+            return;
+        fi;
     fi;
 
     echo -e "\n\n./reinit_array.sh -F Retail factory\n\n";
-    ask_user_default_yes "Correct ? "
-    [ $? -eq 0 ] && return; 
-    ./reinit_array.sh -F Retail factory;
-    if [[ $? -ne 0 ]] ; then 
-        echo "reinit failed";
-        return;
+    ask_user_default_yes "Continue ? "
+    if [[ $? -eq 1 ]] ; then
+        ./reinit_array.sh -F Retail factory;
+        if [[ $? -ne 0 ]] ; then 
+            echo "reinit failed";
+            return;
+        fi;
     fi;
 
     echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
@@ -288,6 +292,11 @@ dellclusterdeploy ()
 
 dellclusteruserspaceupdate ()
 {
+	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		echo "you must be in arwen";
+		return -1;
+	fi;
+
 	dellcdclusterscripts;
 	if ! [ -e fast_code_loader.sh ] ; then
 		echo "fast_code_loader.sh not found";
@@ -406,6 +415,11 @@ dellrbatracedump ()
 
 dellclusterkernelspaceupdate ()
 {
+	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		echo "you must be in arwen";
+		return -1;
+	fi;
+
 	dellcdclusterscripts;
 	[[ $? -ne 0 ]] && return -1;
 	
@@ -440,7 +454,8 @@ dellclusterinfo ()
 	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
 		echo "you must be in arwen";
 		return;
-	fi
+	fi;
+
 	if ! [ -e /home/public/devutils/bin/swarm ] ; then 
 		echo "/home/public/devutils/bin/swarm not found";
 		return;
@@ -576,6 +591,12 @@ gitcommitdell ()
 {
     local jira_ticket=${1};
     local module=${2:-nt};
+     
+    if [[ $# -ne 2 ]] ; then
+        echo "usage: $FUNCNAME <jira ticket> <module>"
+        return -1;
+    fi;
+ 
     if [ -n "${jira_ticket}" ] ; then 
         sed -i "s/\[MDT-.*\]/\[MDT-${jira_ticket}\]/g" ${yonienv}/git_templates/git_commit_dell_template;
     fi
