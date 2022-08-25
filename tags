@@ -9,6 +9,8 @@ __kernel_version_in_given_path	bashrc_mlx.sh	/^__kernel_version_in_given_path ()
 _bugs	folder_name_complete.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
 _code	folder_name_complete.sh	/^_code ()$/;"	f
+_dellcyclonebuild	bashrc_dell.sh	/^_dellcyclonebuild ()$/;"	f
+_dellrebootnode	bashrc_dell.sh	/^_dellrebootnode ()$/;"	f
 _devel	folder_name_complete.sh	/^_devel ()$/;"	f
 _docs	folder_name_complete.sh	/^_docs ()$/;"	f
 _downloads	folder_name_complete.sh	/^_downloads ()$/;"	f
@@ -83,6 +85,8 @@ define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
 dellcdclusterscripts	bashrc_dell.sh	/^dellcdclusterscripts ()$/;"	f
+dellcdcyclonefolder	bashrc_dell.sh	/^dellcdcyclonefolder ()$/;"	f
+dellcdthirdparty	bashrc_dell.sh	/^dellcdthirdparty ()$/;"	f
 dellclusterdeploy	bashrc_dell.sh	/^dellclusterdeploy ()$/;"	f
 dellclusterinfo	bashrc_dell.sh	/^dellclusterinfo ()$/;"	f
 dellclusterkernelspaceupdate	bashrc_dell.sh	/^dellclusterkernelspaceupdate ()$/;"	f
@@ -90,7 +94,6 @@ dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
 dellclusterruntimeenvget	bashrc_dell.sh	/^dellclusterruntimeenvget ()  $/;"	f
 dellclusterruntimeenvset	bashrc_dell.sh	/^dellclusterruntimeenvset ()$/;"	f
 dellclusteruserspaceupdate	bashrc_dell.sh	/^dellclusteruserspaceupdate ()$/;"	f
-dellcyclonebuild	bashrc_dell.sh	/^dellcyclonebuild ()$/;"	f
 dellcyclonedevelenvsetup	bashrc_dell.sh	/^dellcyclonedevelenvsetup ()$/;"	f
 dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
 dellkernelshaget	bashrc_dell.sh	/^dellkernelshaget ()$/;"	f
@@ -144,6 +147,7 @@ gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
 gitcheckouttag	bashrc_git.sh	/^gitcheckouttag ()$/;"	f
 gitclearcache	bashrc_git.sh	/^gitclearcache ()$/;"	f
+gitcommitdell	bashrc_dell.sh	/^gitcommitdell ()$/;"	f
 gitcommitfixup	bashrc_git.sh	/^gitcommitfixup ()$/;"	f
 gitcommithabana	bashrc_habana.sh	/^gitcommithabana ()$/;"	f
 gitcommitmetadata	bashrc_git.sh	/^gitcommitmetadata ()$/;"	f
@@ -315,7 +319,7 @@ print_underline_size	bashrc_common.sh	/^print_underline_size () $/;"	f
 printlinefromfile	bashrc_misc.sh	/^printlinefromfile ()$/;"	f
 probe_topology	bashrc_fs.sh	/^probe_topology () $/;"	f
 prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
-prompt_sc	bashrc_fs.sh	/^prompt_sc () $/;"	f
+prompt_sc	bashrc_fs.sh	/^prompt_sc ()$/;"	f
 psmine	bashrc_fs.sh	/^psmine ()$/;"	f
 pu	bashrc_bookmarks.sh	/^pu ()$/;"	f
 pyverbs_install	bashrc_mlx.sh	/^pyverbs_install ()$/;"	f
