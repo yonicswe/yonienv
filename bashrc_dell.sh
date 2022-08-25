@@ -48,7 +48,7 @@ dellsubmodulesdiscard ()
     git submodule update --checkout source/nt-nvmeof-frontend
 }
 
-dellcyclonebuild ()
+_dellcyclonebuild ()
 {
 	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
 		echo "you must be in arwen to build";
@@ -73,6 +73,8 @@ dellcyclonebuild ()
 	echo "========================================================"
 	make cyc_core flavor=RETAIL force=yes
 }
+
+alias dellcyclonebuild='time _dellcyclonebuild'
 
 alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
 alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL'
@@ -101,10 +103,12 @@ dellclusterruntimeenvget ()
     fi;
     
     echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
+	print_underline_size "_" 80	 
     echo -e "\033[1;31mCYC_CONFIG\033[0m\t\t${CYC_CONFIG}"
     echo -e "\033[1;31mcyc_helpers_folder\033[0m\t${cyc_helpers_folder}";
     echo -e "\033[1;31mcyclone_folder\033[0m\t\t${cyclone_folder}";
     echo -e "\033[1;31mthird_party_folder\033[0m\t${third_party_folder}";
+	print_underline_size "_" 80	 
     echo;
 }
 
@@ -267,7 +271,7 @@ dellclusterdeploy ()
     echo -e "\n./deploy  --deploytype san ${cluster}"; 
     ask_user_default_yes "Continue ? "
     if [[ $? -eq 1 ]] ; then
-        ./deploy  --deploytype san ${cluster}; 
+        time ./deploy  --deploytype san ${cluster}; 
         if [[ $? -ne 0 ]] ; then 
             echo "deploy failed";
             return;
@@ -277,7 +281,7 @@ dellclusterdeploy ()
     echo -e "\n\n./reinit_array.sh -F Retail factory\n\n";
     ask_user_default_yes "Continue ? "
     if [[ $? -eq 1 ]] ; then
-        ./reinit_array.sh -F Retail factory;
+        time ./reinit_array.sh -F Retail factory;
         if [[ $? -ne 0 ]] ; then 
             echo "reinit failed";
             return;
@@ -287,7 +291,7 @@ dellclusterdeploy ()
     echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
     ask_user_default_yes "Correct ? "
     [ $? -eq 0 ] && return; 
-    ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
+    time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
 }
 
 dellclusteruserspaceupdate ()
@@ -314,12 +318,12 @@ dellclusteruserspaceupdate ()
 	echo "./fast_code_loader.sh 10 -o -w /home/y_cohen/devel/cyclone/source/cyc_core"
 	ask_user_default_yes "continue ?"
 	[ $? -eq 0 ] && return 1;
-	./fast_code_loader.sh 10 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
+	time ./fast_code_loader.sh 10 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
 	
 	echo "./fast_code_loader.sh 11 -o -w /home/y_cohen/devel/cyclone/source/cyc_core"
 	ask_user_default_yes "continue ?"
 	[ $? -eq 0 ] && return 1;
-	./fast_code_loader.sh 11 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
+	time ./fast_code_loader.sh 11 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
 
 	return 0;
 }
@@ -441,7 +445,7 @@ dellclusterkernelspaceupdate ()
 	ask_user_default_yes "continue ?";
 	[ $? -eq 0 ] && return -1;
 
-	./fast_nvmet_driver_loader.sh;
+	time ./fast_nvmet_driver_loader.sh;
 
 	return 0;
 
@@ -555,13 +559,13 @@ dellkernelshaupdate ()
         fi
     
         sha=$(git log -1 | awk '/commit/{print $2}');
-        echo "you did not supply commit sha. using HEAD ${sha}";
+        echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
     fi
     
     sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
-    pushd /home/y_cohen/devel/cyclone/source/cyc_core 2>/dev/null;
-    git diff
-    popd 2>/dev/null;
+    dellcdthirdparty;
+    git diff;
+    cd -;
 }
 
 dellibid2commit ()
