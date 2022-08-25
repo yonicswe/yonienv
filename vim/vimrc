@@ -360,6 +360,7 @@ autocmd FileType xml vmap <leader>a s/<\(.*\)>$/<!--\1-->/
 " search for code references
 map <leader>g  yiw:grep <C-R>" .<cr>
 map <leader>r  :Rg<cr>
+map <leader>w  :W<cr>
 " map <leader>r  yiw:grep -w <C-R>" drivers/infiniband/sw/rxe/<cr>
 " map <leader>rr  yiw:grep -w <C-R>" include drivers/infiniband/ drivers/net/ethernet/mellanox<cr>
 " map <leader>r  yiw:grep -w <C-R>" .<cr>
