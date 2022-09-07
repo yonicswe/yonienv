@@ -109,6 +109,7 @@
 		   echo tracking ; git t; }; f"
     tb = trackbranch
 
+    untrack = branch --unset-upstream
     unstage = reset HEAD
     # uncommit = reset HEAD^
 
@@ -282,6 +283,7 @@
 
     rlog = log --show-notes=review
     rebaseto = "!f() { git rebase -i $1^; }; f"
+    rebaseback = "!f() { [[ $# -eq 0 ]] && return ; git rebase -i HEAD~$1; }; f"
 
     commitfilelist = show --stat --oneline
 
@@ -305,6 +307,7 @@
 	smupdate = submodule update --init
 	smremove = submodule deinit
 	sm-resetall = submodule foreach --recursive git reset --hard
+	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 #   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
