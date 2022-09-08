@@ -4,6 +4,7 @@ alias editbashdell='nvim ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
 alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
+export YONI_CLUSTER=;
 
 trident_cluster_list=(WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 wx-d0733 wx-g4011 wx-d0896 wx-d1116 wx-d1111 wx-d1126 rt-g0015 rt-g0017 wx-d1132 wx-d1138 wx-d1161 wx-d1140 rt-g0060 rt-g0068 rt-g0069 rt-g0074 rt-g0072 rt-d0196 rt-d0042 rt-d0064 rt-g0037 wx-h7060 wk-d0023);
 
@@ -91,7 +92,7 @@ dellclusterruntimeenvget ()
     
     if [[ -z ${YONI_CLUSTER} ]] ; then
         if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
-            last_used_cluster=$(grep YONI_CLUSTER ${dellclusterruntimeenvbkpfile});
+            last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
         fi;
         
         echo "CYC_CONFIG not set";
@@ -104,9 +105,9 @@ dellclusterruntimeenvget ()
     
     echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
 	print_underline_size "_" 80	 
+    echo -e "\033[1;31mcyclone_folder\033[0m\t\t${cyclone_folder}";
     echo -e "\033[1;31mCYC_CONFIG\033[0m\t\t${CYC_CONFIG}"
     echo -e "\033[1;31mcyc_helpers_folder\033[0m\t${cyc_helpers_folder}";
-    echo -e "\033[1;31mcyclone_folder\033[0m\t\t${cyclone_folder}";
     echo -e "\033[1;31mthird_party_folder\033[0m\t${third_party_folder}";
 	print_underline_size "_" 80	 
     echo;
@@ -137,14 +138,16 @@ dellclusterruntimeenvset ()
     # user should give cluster parameter. in case he did not
     # use the default from YONI_CLUSTER
     if [[ -z ${cluster} ]] ; then 
-        if [[ -z ${YONI_CLUSTER} ]] ; then
-            echo "usage : dellclusterlease <cluster name>";
-            return;
+        if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
+            last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
+            ask_user_default_yes "you did not specify <cluster> use ? ${last_used_cluster}";
+            if [[ $? -eq 0 ]] ; then
+                echo "usage : dellclusterruntimeenvset <cluster name>";
+                return -1;
+            fi;
+            cluster=${last_used_cluster};
         fi;
-        ask_user_default_yes "you did not specify <cluster> use ? ${YONI_CLUSTER}";
-        [ $? -eq 0 ] && return;
-        cluster=${YONI_CLUSTER};
-    fi
+    fi;
 
     if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
         echo "you should do this from a cyclone pdr repo";
@@ -161,6 +164,7 @@ dellclusterruntimeenvset ()
     cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
     cluster_config_file=${cyc_configs_folder}/cyc-cfg.txt.${cluster}-BM;
     third_party_folder=$(readlink -f source/third_party/cyc_platform/src/third_party/PNVMeT);
+    dell_kernel_objects=$(readlink -f source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT)
 
     echo "export CYC_CONFIG=${cluster_config_file}";
     ask_user_default_yes "Correct ? "
@@ -198,8 +202,8 @@ dellclusterleaseextend ()
 
 }
 
-complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease
-complete -W "$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B ; done)" xxssh xxbsc dellclusterruntimeenvget dellclusterruntimeenvset
+complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease dellclusterdeploy
+complete -W "$(echo ${trident_cluster_list[@]} ; for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B ; done)" xxssh xxbsc dellclusterruntimeenvget dellclusterruntimeenvset
 
 cyc_configs_folder=;
 dellcdclusterconfigs ()
@@ -237,15 +241,18 @@ dellcdclusterscripts ()
 dellclusterdeploy ()
 {
     local cluster=${1};
+    local asked_user=0;
 
     if [ -z "${cluster}" ] ; then 
         if [ -n "${YONI_CLUSTER}" ] ; then
+            echo -e "\033[1;31mYou did not specify <cluster>\033[0m";
             ask_user_default_yes "deploy to ${YONI_CLUSTER} ? "
             if [ $? -eq 1 ] ; then 
                 cluster=${YONI_CLUSTER};
             else
                 echo "usage dellclusterdeploy <cluster name>"; return;
             fi;
+            asked_user=1;
         else
             echo "usage dellclusterdeploy <cluster name>"; return;
         fi;
@@ -261,9 +268,11 @@ dellclusterdeploy ()
         return -1;
     fi;
     
-    echo "install ${cluster} with ${CYC_CONFIG}"
-    ask_user_default_yes "Correct ? "
-    [ $? -eq 0 ] && return; 
+    if [[ ${asked_user} -eq 0 ]] ; then
+        echo "install ${cluster} with ${CYC_CONFIG}"
+        ask_user_default_yes "Correct ? "
+        [ $? -eq 0 ] && return; 
+    fi;
     
     dellcdclusterscripts;
 
@@ -509,7 +518,33 @@ dellcdthirdparty ()
     return 0;
 }
 
-dellkernelshaget ()
+dell_kernel_objects=
+dellcdkernelobjects ()
+{
+    if [[ -z ${cyclone_folder} ]] ; then
+        echo "cyclone_folder not set. use dellclusterruntimeenvset <cluster>"
+        return -1;
+    fi;
+
+    if [[ -z ${dell_kernel_objects} ]] ; then
+        echo "dell_kernel_objects not set. use dellclusterruntimeenvset <cluster>"
+        return -1;
+    fi;
+
+    if ! [[ -e ${dell_kernel_objects} ]] ; then
+        echo "${dell_kernel_objects} does not exist";
+        return -1;
+    fi;
+
+    cd $dell_kernel_objects;
+    return 0;
+    
+
+    /devel/cyclone/source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT
+    /devel/cyclone/source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT
+}
+
+dellcyclonekernelshaget ()
 {
     local mfile=${third_party_folder}/CMakeLists.txt
     
@@ -528,7 +563,7 @@ dellkernelshaget ()
     return 0;
 }
 
-dellkernelshaupdate ()
+dellcyclonekernelshaupdate ()
 {
     local sha=${1};
     local mfile=${third_party_folder}/CMakeLists.txt
@@ -544,6 +579,11 @@ dellkernelshaupdate ()
         return -1;
     fi;
 
+    if [[ 0 -eq $(git s | grep "up to date" | wc -l) ]] ; then
+        echo "your branch is out of sync consider git pushthisbranchtoremote"
+	    ask_user_default_no "continue ?";
+	    [ $? -eq 0 ] && return -1;
+    fi;
     # if user did not supply sha, we can still use HEAD
     if [[ -z ${sha} ]] ; then
         # make sure were in the git repo
@@ -558,13 +598,15 @@ dellkernelshaupdate ()
             return -1;
         fi
     
+        print_underline_size "_" 80;
         sha=$(git log -1 | awk '/commit/{print $2}');
         echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
     fi
     
     sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
     dellcdthirdparty;
-    git diff;
+    print_underline_size "_" 80;
+    git diff -U1;
     cd -;
 }
 
@@ -616,6 +658,9 @@ gitcommitdell ()
     git checkout ${yonienv}/git_templates/git_commit_dell_template;
     popd 2>/dev/null;
 }
+
+complete -W "67933 rdma" gitcommitdell
+
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
