@@ -5,7 +5,7 @@
 # \ V /| || '  \ 
 #  \_/ |_||_|_|_| 
 
-alias editbashvim="nvim ${yonienv}/bashrc_vim.sh"
+alias editbashvim="n ${yonienv}/bashrc_vim.sh"
 alias cdnvimconfig="cd ~/.config/nvim/"
 # alias vim='vim -u NONE'
 
@@ -261,3 +261,17 @@ function nviminstallplug ()
 alias nv=${yonienv}/bin/nvim.appimage
 alias vimdiff='nv -d'
 alias n=nvim
+# alias n=/home/y_cohen/.local/bin/nvim
+# alias n=/home/y_cohen/.local/bin/lvim
+# alias nvim=/home/y_cohen/.local/bin/nvim
+
+# install lunarvim
+#   bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
+# get latest release
+#  LV_BRANCH=rolling bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh)
+# get latest nvim
+#   bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/rolling/utils/installer/install-neovim-from-release)
+# uninstall
+#  bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/uninstall.sh)
+
+
