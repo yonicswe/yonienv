@@ -11,12 +11,15 @@ alias f='fg'
 alias j='jobs'
 
 alias yonidellupdate='scp y_cohen@10.55.227.146:~/yonienv/scripts/* ~/ ; source ~/yonidell.sh'
+alias yonidellcptobsc='docker cp yonidell.sh  cyc_bsc_docker:/home/cyc/ ; docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/'
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.227.146'
 alias delllistdc='find . -maxdepth 1 -regex ".*service-data\|.*dump-data"' 
 alias d='sudo dmesg --color -HxP'
 alias dp='sudo dmesg --color -Hx'
 alias dw='sudo dmesg --color -Hxw'
 alias dcc='sudo dmesg -C'
+
+alias dellcdcoredumps='cd /cyc_var/cyc_dumps/processed/cyc_dumps/'
 
 # return 0:no 1:yes
 ask_user_default_no ()
