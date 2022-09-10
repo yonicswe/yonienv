@@ -7,6 +7,7 @@ alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
 
 trident_cluster_list=(WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 wx-d0733 wx-g4011 wx-d0896 wx-d1116 wx-d1111 wx-d1126 rt-g0015 rt-g0017 wx-d1132 wx-d1138 wx-d1161 wx-d1140 rt-g0060 rt-g0068 rt-g0069 rt-g0074 rt-g0072 rt-d0196 rt-d0042 rt-d0064 rt-g0037 wx-h7060 wk-d0023);
+trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B $c-a $c-b ; done)
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
 
@@ -142,10 +143,14 @@ dellclusterruntimeenvset ()
             last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
             ask_user_default_yes "you did not specify <cluster> use ? ${last_used_cluster}";
             if [[ $? -eq 0 ]] ; then
-                echo "usage : dellclusterruntimeenvset <cluster name>";
-                return -1;
+                cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+                if [ -z ${cluster} ] ; then
+                    echo "usage : dellclusterruntimeenvset <cluster name>";
+                    return -1;
+                fi;
+            else
+                cluster=${last_used_cluster};
             fi;
-            cluster=${last_used_cluster};
         fi;
     fi;
 
@@ -203,7 +208,35 @@ dellclusterleaseextend ()
 }
 
 complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease dellclusterdeploy
-complete -W "$(echo ${trident_cluster_list[@]} ; for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B ; done)" xxssh xxbsc dellclusterruntimeenvget dellclusterruntimeenvset
+complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc
+
+ssh2core ()
+{
+    local cluster=;
+    
+    cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    if [[ -z ${cluster} ]] ; then
+        echo "you must specify a cluster";
+        return -1;
+    fi;
+
+    echo "xxssh ${cluster}";
+    xxssh ${cluster};
+}
+
+ssh2bsc ()
+{
+    local cluster=;
+
+    cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    if [[ -z ${cluster} ]] ; then
+        echo "you must specify a cluster";
+        return -1;
+    fi;
+
+    echo "xxbsc ${cluster}";
+    xxbsc ${cluster};
+}
 
 cyc_configs_folder=;
 dellcdclusterconfigs ()
@@ -426,7 +459,7 @@ dellrbatracedump ()
     ./rba_sort -f bin -p ${rba_file} -o ${rba_file}.ktr
 }
 
-dellclusterkernelspaceupdate ()
+__dellclusterkernelspaceupdate ()
 {
 	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
 		echo "you must be in arwen";
@@ -457,7 +490,20 @@ dellclusterkernelspaceupdate ()
 	time ./fast_nvmet_driver_loader.sh;
 
 	return 0;
+}
 
+dellclusterkernelspaceupdate ()
+{
+    local cluster=;
+    cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    echo ${trident_cluster_list[@]}
+    echo "cluster : ${cluster}";
+    if [ -z ${cluster} ] ; then
+        echo "you must specify a cluster";
+        return -1;
+    fi;
+
+    __dellclusterkernelspaceupdate ${cluster};
 }
 
 dellclusterinfo ()
