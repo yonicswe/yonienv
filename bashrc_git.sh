@@ -205,13 +205,39 @@ gitcommitmetadata ()
     git config --unset commit.template;
 }
 
-gitcheckouttag ()
-{
-    local tag=$1;
-    new_branch_name=$2;
+# gitcheckoutbranchfromtag ()
+# {
+    # local tag=$1;
+    # new_branch_name=$2;
 
-    git checkout -b ${new_branch_name} tags/${tag};
+    # git checkout -b ${new_branch_name} tags/${tag};
+# }
+
+gitcheckoutbranch ()
+{
+    branch="$(git b | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+
+    if [ -n "${branch}" ] ; then
+        echo "git checkout branch : ${branch}";
+        git checkout ${branch};
+    fi;
 }
+
+gitcheckoutremotebranch ()
+{
+    local branch=;
+    branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+
+    if [[ -z ${branch} ]] ; then
+        echo "you must specify a valid branch";
+        return -1;
+    fi;
+
+    echo "git checkout ${branch}";
+    git checkout ${branch};
+    return 0;
+}
+
 
 gitcommitfixup ()
 {
