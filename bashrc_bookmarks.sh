@@ -17,7 +17,7 @@ pdc ()
         popd +$c 2>/dev/null 1>/dev/null
     fi
 
-    pd
+    __pd
 
     pdf_complete
     pd_complete 
@@ -31,13 +31,13 @@ pu ()
       cd "$p"
    fi 
    pushd $(pwd) 1>/dev/null
-   pd
+   __pd
    pdf_complete
    pd_complete
 }
 
 
-pd () 
+__pd () 
 {
     p=$1
 
@@ -56,8 +56,18 @@ pd ()
         fi
     fi
 
-    echo -e "-->\033[1;34m$(pwd -P)\033[0m"
+    # echo -e "-->\033[1;34m$(pwd -P)\033[0m"
 }
+pd ()
+{
+    local bm=;
+    
+    if [[ 0 -eq $* ]] ; then
+        bm=$(__pd|fzf -0 -1 --border=rounded --height='10' );
+    fi;
+    __pd ${bm};
+}
+
 
 pdp ()
 { 
