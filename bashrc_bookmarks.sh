@@ -62,9 +62,12 @@ pd ()
 {
     local bm=;
     
-    if [[ 0 -eq $* ]] ; then
+    if [[ 0 -eq $# ]] ; then
         bm=$(__pd|fzf -0 -1 --border=rounded --height='10' );
+    else
+        bm=${1};
     fi;
+
     __pd ${bm};
 }
 
@@ -239,27 +242,37 @@ rebash ()
 {
     unalias -a
 
+    echo "enter $FUNCNAME";
     [ -e ~/.inview ] && rm -f ~/.inview 1>/dev/null;
     if [ -e ${BM} ] ; then 
        \mv ${BM} ${BM}.tmp ; 
     fi
 
+    echo "$FUNCNAME 238";
 #  delete all bookmarks they will be re-created by sourcing the bookmarks file
    pdc 1>/dev/null ; 
 
+    echo "$FUNCNAME 242";
 #    source ~/.bashrc ;
+if [[ -e ${yonienv} ]] ; then echo found ${yonienv} ; fi;
+if [[ -e ${yonienv}/bashrc_main.sh ]] ; then echo found ${yonienv}/bashrc_main.sh ; fi;
     source ${yonienv}/bashrc_main.sh;
+
+    echo "$FUNCNAME 246";
     if [ -e ${BM}.tmp ] ; then 
        \mv ${BM}.tmp ${BM} ; 
     fi
 
+    echo "$FUNCNAME 249";
 #  create the bookmarks by sourcing the bookmarks file
     if [ -e ${BM} ] ; then 
         source ${BM} 1>/dev/null
     fi            
 
+    echo "$FUNCNAME 255";
    pdf_complete 1>/dev/null
    pd_complete 1>/dev/null
+   echo "exit $FUNCNAME";
 }   
 
 if [ -e ${BM} ] ; then 
