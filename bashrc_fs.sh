@@ -57,9 +57,9 @@ fi
 #  │\e           │ [ │ 1                 │ ; │ 4              │ ; │ 31│ m           │   │
 #  ├─────────────┼───┼───────────────────┼───┼────────────────┼───┼───┼─────────────┼───┤
 #  │start color  │   │ 0 - normal        │   │ 4 - underline  │   │   │ end color   │   │
-#  │sequence     │   │ 1 - bold          │   │                │   │   │ sequence    │   │
-#  │             │   │ 2 - underline     │   │                │   │   │             │   │
-#  │             │   │                   │   │                │   │   │             │   │
+#  │sequence     │   │ 1 - bold          │   │ 5 - blinking   │   │   │ sequence    │   │
+#  │             │   │ 2 - underline     │   │ 3 - italic     │   │   │             │   │
+#  │             │   │                   │   │ 7 - reverse    │   │   │             │   │
 #  │             │   │                   │   │                │   │   │             │   │
 #  │             │   │                   │   │                │   │   │             │   │
 #  │             │   │                   │   │                │   │   │             │   │
@@ -73,6 +73,18 @@ fi
 # command prompt colors
 # 
 # export PS1="\[\033[1;31m\](\u) \[\033[1;36m\]\h:\[\033[0m\]/\W=> "
+
+RED="\033[1;31m"
+REDBLINK="\033[1;5;31m"
+REDITALIC="\033[1;3;31m"
+REDREVERSE="\033[1;7;31m"
+BLUE="\033[0;34m"
+GREEN="\033[0;32m"
+CYAN="\033[0;36m"
+PURPLE="\033[0;35m"
+BROWN="\033[0;33m"
+YELLOW="\033[1;33m"
+NC="\033[0m"
 
 parse_git_branch() 
 {
