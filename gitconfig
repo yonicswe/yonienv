@@ -205,7 +205,8 @@
 
 #                                   SHA          date                   name             msg
     lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
-    ll = log --pretty=format:'%C(yellow)%h %Cred%cd %C(magenta)[author %ad] %Cblue%an%Cgreen%d %Creset%s' --date=short
+#   ll = log --pretty=format:'%C(yellow)%h %Cred%cd %C(magenta)[author %ad] %Cblue%an%Cgreen%d %Creset%s' --date=short
+    ll = l 10
     l = "!f() { n=${1:-200}; git log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short ${count} -$n; }; f"
     lyoni = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author='yonatan.cohen'
     l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
