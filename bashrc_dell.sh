@@ -1,10 +1,11 @@
 #!/bin/bash
 
-alias editbashdell='nvim ${yonienv}/bashrc_dell.sh'
+alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
 alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
+export CYC_CONFIG=;
 
 trident_cluster_list=(WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 wx-d0733 wx-g4011 wx-d0896 wx-d1116 wx-d1111 wx-d1126 rt-g0015 rt-g0017 wx-d1132 wx-d1138 wx-d1161 wx-d1140 rt-g0060 rt-g0068 rt-g0069 rt-g0074 rt-g0072 rt-d0196 rt-d0042 rt-d0064 rt-g0037 wx-h7060 wk-d0023);
 trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B $c-a $c-b ; done)
@@ -80,6 +81,7 @@ alias dellcyclonebuild='time _dellcyclonebuild'
 
 alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
 alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL'
+alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE'
 # alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
 alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f'
 alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
@@ -96,12 +98,14 @@ dellclusterruntimeenvget ()
             last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
         fi;
         
-        echo "CYC_CONFIG not set";
+        echo -e "\033[1;31mYONI_CLUSTER not set\033[0m";
         if [[ -n ${last_used_cluster} ]] ; then
-            echo "last used cluster : ${last_used_cluster}"
+            echo -e "last used cluster : \033[1;32m${last_used_cluster}\033[0m";
         fi;
-        
-        return;
+    fi;
+     
+    if [[ -z ${CYC_CONFIG} ]] ; then
+        echo -e "\033[1;31mCYC_CONFIG not set\033[0m";
     fi;
     
     echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
@@ -315,25 +319,37 @@ dellclusterdeploy ()
     if [[ $? -eq 1 ]] ; then
         time ./deploy  --deploytype san ${cluster}; 
         if [[ $? -ne 0 ]] ; then 
-            echo "deploy failed";
+            echo "";
+            echo -e "\033[0;31m\t\tdeploy failed ! ! !\033[0m";
             return;
         fi;
     fi;
+
+    echo -e "\033[0;32mdeploy succeeded\033[0m";
 
     echo -e "\n\n./reinit_array.sh -F Retail factory\n\n";
     ask_user_default_yes "Continue ? "
     if [[ $? -eq 1 ]] ; then
         time ./reinit_array.sh -F Retail factory;
         if [[ $? -ne 0 ]] ; then 
-            echo "reinit failed";
+            echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
             return;
         fi;
     fi;
+
+    echo -e "\033[0;32m\t\treinit succeeded\033[0m";
 
     echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
     ask_user_default_yes "Correct ? "
     [ $? -eq 0 ] && return; 
     time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
+
+    if [[ $? -ne 0 ]] ; then 
+        echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
+        return -1;
+    fi;
+
+    echo -e "\033[0;32m\t\tGreat success\033[0m";
 }
 
 dellclusteruserspaceupdate ()
@@ -459,52 +475,63 @@ dellrbatracedump ()
     ./rba_sort -f bin -p ${rba_file} -o ${rba_file}.ktr
 }
 
-__dellclusterkernelspaceupdate ()
+dellclusterkernelspaceupdate ()
 {
-	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		echo "you must be in arwen";
-		return -1;
-	fi;
+	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		# echo "you must be in arwen";
+		# return -1;
+	# fi;
 
-	dellcdclusterscripts;
-	[[ $? -ne 0 ]] && return -1;
-	
-	# script is in repo:cyc_core, in branch:dev/grupie/fast_loader_for_nvmet_driver
-	if ! [ -e fast_nvmet_driver_loader.sh ] ; then
-	    echo "git checkoutfilefrombranch remotes/origin/dev/grupie/fast_loader_for_nvmet_driver cyc_platform/src/package/cyc_helpers/fast_nvmet_driver_loader.sh";
-	    git checkoutfilefrombranch remotes/origin/dev/grupie/fast_loader_for_nvmet_driver cyc_platform/src/package/cyc_helpers/fast_nvmet_driver_loader.sh
-	    if ! [ -e fast_nvmet_driver_loader.sh ] ; then
-		    echo "fast_nvmet_driver_loader.sh not found"
-		    return -1;
-		fi;
-	fi
 	if [ -z $CYC_CONFIG ] ; then
 		echo "CYC_CONFIG not defined. use dellclusterruntimeenvset";
 		return -1;
 	fi
 
-	echo "CYC_CONFIG=$CYC_CONFIG";
-	ask_user_default_yes "continue ?";
+	ask_user_default_yes "update ${YONI_CLUSTER} ?";
 	[ $? -eq 0 ] && return -1;
 
-	time ./fast_nvmet_driver_loader.sh;
+	dellcdclusterscripts;
+	
+	# script is in repo:cyc_core, in branch:dev/grupie/fast_loader_for_nvmet_driver
+	# if ! [ -e fast_nvmet_driver_loader.sh ] ; then
+		# echo "git checkoutfilefrombranch remotes/origin/dev/grupie/fast_loader_for_nvmet_driver cyc_platform/src/package/cyc_helpers/fast_nvmet_driver_loader.sh";
+		# git checkoutfilefrombranch remotes/origin/dev/grupie/fast_loader_for_nvmet_driver cyc_platform/src/package/cyc_helpers/fast_nvmet_driver_loader.sh
+		# if ! [ -e fast_nvmet_driver_loader.sh ] ; then
+			# echo "fast_nvmet_driver_loader.sh not found"
+			# return -1;
+		# fi;
+	# fi
+
+    /bin/cp ${yonienv}/scripts/fast_nvmet_driver_loader.sh .;
+    time ./fast_nvmet_driver_loader.sh;
 
 	return 0;
 }
 
-dellclusterkernelspaceupdate ()
-{
-    local cluster=;
-    cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-    echo ${trident_cluster_list[@]}
-    echo "cluster : ${cluster}";
-    if [ -z ${cluster} ] ; then
-        echo "you must specify a cluster";
-        return -1;
-    fi;
+# dellclusterkernelspaceupdate-fzf ()
+# {
+#     local cluster=${1};
 
-    __dellclusterkernelspaceupdate ${cluster};
-}
+#     if [ -z ${cluster} ] ; then
+#         if [ -n ${YONI_CLUSTER} ] ; then
+#             ask_user_default_yes "use ${YONI_CLUSTER} ? ";
+#             if [[ $? -eq 0 ]] ; then
+#                 cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+#             else
+#                 cluster=${YONI_CLUSTER};
+#             fi;
+#         fi;
+#     fi;
+
+#     # echo ${trident_cluster_list[@]}
+#     echo "cluster : ${cluster}";
+#     if [ -z ${cluster} ] ; then
+#         echo "you must specify a cluster";
+#         return -1;
+#     fi;
+
+#     dellclusterkernelspaceupdate ${cluster};
+# }
 
 dellclusterinfo ()
 {
