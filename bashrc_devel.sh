@@ -715,3 +715,8 @@ docker-attach-1st-container ()
 {
     docker container attach $(docket container ls -q)
 }
+
+mann ()
+{
+    man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man
+}
