@@ -471,8 +471,13 @@ dellibdev2netdev ()
 # sudo dd if=/dev/zero of=/dev/nvme0n1 bs=1M  count=1 
 # sudo dd if=/dev/urandom of=/dev/nvme0n1 bs=1M 
 # sudo dd of=/dev/nvme0n1 bs=512 count=1
+# from/to file
+#   sudo dd if=text-file of=/dev/nvme0n1
+#   dd if=/dev/nvme0n1 count=$(stat --printf="%s" text-file )
 
+# see which devices are connected on the lg
 # sudo lshw -C network -businfo
+# ibdev2netdev
 
 
 unset PROMPT_COMMAND
