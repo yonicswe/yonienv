@@ -43,17 +43,17 @@ files=`find $new_driver/drivers/nvme/target/nvmet*.ko`
 
 for i in ${files} ; do
     filename=`echo $i | rev | cut -f1 -d '/' | rev`;
-    echo -e "\033[0;30m./scp_core_to_a.sh $i\033[0m";
+    echo -e "\033[0;34m./scp_core_to_a.sh $i\033[0m";
     ./scp_core_to_a.sh $i;
     for drv in $drivers_a ; do
-        echo -e "\033[1;30m./run_core_a.sh sudo cp $filename $drv/\033[0m";
+        echo -e "\033[0;34m./run_core_a.sh sudo cp $filename $drv/\033[0m";
         ./run_core_a.sh sudo cp $filename $drv/;
     done;
     if [[ "${ans}" == "y" ]] ; then
-        echo -e "\033[1;30m./scp_core_to_b.sh $i\033[0m";
+        echo -e "\033[0;34m./scp_core_to_b.sh $i\033[0m";
         ./scp_core_to_b.sh $i;
         for drv in ${drivers_b} ; do
-            echo -e "\033[1;30m./run_core_b.sh sudo cp $filename $drv/\033[0m";
+            echo -e "\033[0;34m./run_core_b.sh sudo cp $filename $drv/\033[0m";
             ./run_core_b.sh sudo cp $filename $drv/;
         done;
     fi;

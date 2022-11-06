@@ -1,5 +1,14 @@
 export HISTTIMEFORMAT="%D %T " 
 
+# LESS or MAN with color
+export LESS_TERMCAP_mb=$'\e[1;32m'      # begin blinking
+export LESS_TERMCAP_md=$'\e[1;32m'      # being bold
+export LESS_TERMCAP_me=$'\e[0m'         # end mode
+export LESS_TERMCAP_se=$'\e[0m'         # end stand-out mode
+export LESS_TERMCAP_so=$'\e[30;2;43m'      # being stand-out mode (e.g higlight search results on man page)
+export LESS_TERMCAP_ue=$'\e[0m'         # end underline
+export LESS_TERMCAP_us=$'\e[1;4;31m'    # begin underline
+
 alias y='source ~/yonidell.sh'
 alias l='ls -ltr --color'
 alias c='cd'
@@ -9,10 +18,11 @@ alias v='vim -u ~/vimrcyoni.vim'
 alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
+alias lessin='less -IN'
 
-alias yonidellupdate='scp y_cohen@10.55.227.146:~/yonienv/scripts/* ~/ ; source ~/yonidell.sh'
+alias yonidellupdate='scp y_cohen@10.55.226.121:~/yonienv/scripts/* ~/ ; source ~/yonidell.sh'
 alias yonidellcptobsc='docker cp yonidell.sh  cyc_bsc_docker:/home/cyc/ ; docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/'
-alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.227.146'
+alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
 alias delllistdc='find . -maxdepth 1 -regex ".*service-data\|.*dump-data"' 
 alias d='sudo dmesg --color -HxP'
 alias dp='sudo dmesg --color -Hx'
@@ -20,6 +30,7 @@ alias dw='sudo dmesg --color -Hxw'
 alias dcc='sudo dmesg -C'
 
 alias dellcdcoredumps='cd /cyc_var/cyc_dumps/processed/cyc_dumps/'
+alias dellcddatacollectlogs='cd /disks/jiraproduction2'
 
 # return 0:no 1:yes
 ask_user_default_no ()
@@ -68,7 +79,7 @@ lld ()
 }
 
 
-dellbsclistports ()
+bsclistports ()
 {
     for i in /sys/kernel/config/nvmet/ports/* ; do 
         echo -n "$(cat $i/user_port_idx) |";
@@ -99,47 +110,51 @@ dellbsclistports ()
 #     fi
 # }
 
-delljournalctl-nt-node-a ()
+delljournalctl-nt-logs-node-a ()
 {
     local since="${1}";
+    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal";
 
     if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+      (set -x ; eval journalctl --since=\"${since}\" ${options} | less -N -I);
     else
-        eval journalctl                      SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+      (set -x ; eval journalctl ${options}  | less -N -I); 
     fi;
 }
 
-delljournalctl-nt-node-b ()
+delljournalctl-nt-logs-node-b ()
 {
     local since="${1}";
+    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal";
 
     if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+        eval journalctl --since=\"${since}\" ${options} | less -N -I
     else
-        eval journalctl                      SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+        eval journalctl ${options} | less -N -I
     fi;
 }
 
-delljournalctl-all-node-a ()
+delljournalctl-all-logs-node-a ()
 {
     local since="${1}";
+    local options="--utc --no-pager -o short-precise -a -D node_a/var/log/journal";
 
     if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+      (set -x ; eval journalctl --since=\"${since}\" ${options} | less -N -I);
     else
-        eval journalctl                      --no-pager -o short-precise -a -D node_a/var/log/journal | less -N -I
+      (set -x ; eval journalctl ${options} | less -N -I);
     fi;
 }
 
-delljournalctl-all-node-b ()
+delljournalctl-all-logs-node-b ()
 {
     local since="${1}";
+    local options="--utc --no-pager -o short-precise -a -D node_b/var/log/journal";
 
     if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+        eval journalctl --since=\"${since}\" ${options} | less -N -I
     else
-        eval journalctl                      --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
+        eval journalctl ${options} | less -N -I
     fi;
 }
 
@@ -147,8 +162,10 @@ alias jnt3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 alias jnt='sudo journalctl SUB_COMPONENT=nt'
 alias jn='sudo journalctl'
 
-alias delltriage-node-a="./cyc_triage.pl -b . -n a -j"
-alias delltriage-node-b="./cyc_triage.pl -b . -n b -j"
+alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j"
+alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j"
+alias delltriage-nt-logs-node-a="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt"
+alias delltriage-nt-logs-node-b="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt"
 
 dyoni () 
 { 
@@ -478,6 +495,17 @@ dellibdev2netdev ()
 # see which devices are connected on the lg
 # sudo lshw -C network -businfo
 # ibdev2netdev
+
+# vlan tag
+# ip link add link p2p1 name p2p1.1713 type vlan id 1713
+# ip addr add 10.219.157.167/20 dev p2p1.1713
+# sudo ip link set p2p1.1713 up
+
+# triage 
+# search for these
+# allocate.*ctrl|allocate.*cont|alloc_target_queu|kernel|nvmet|pnvmet
+
+
 
 
 unset PROMPT_COMMAND
