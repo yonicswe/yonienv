@@ -79,13 +79,15 @@ _dellcyclonebuild ()
 
 alias dellcyclonebuild='time _dellcyclonebuild'
 
-alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
-alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL'
-alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE'
+# alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
+alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -x -f'
+alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL | tee ~/docs/dell-cluster-list-trident.txt'
+alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE | tee ~/docs/dell-cluster-list-trident-roce.txt'
 # alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
 alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f'
 alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
 alias dellclusterlease='/home/public/scripts/xpool_trident/prd/xpool lease 7d -c '
+alias dellclusterleasewithforce='/home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen '
 
 dellclusterruntimeenvbkpfile=~/.dellclusterruntimeenvbkpfile
 
@@ -159,7 +161,7 @@ dellclusterruntimeenvset ()
     fi;
 
     if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
-        echo "you should do this from a cyclone pdr repo";
+        echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
         return -1;
     fi;
 
@@ -211,7 +213,7 @@ dellclusterleaseextend ()
 
 }
 
-complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease dellclusterdeploy
+complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
 complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc
 
 ssh2core ()
@@ -313,43 +315,85 @@ dellclusterdeploy ()
     
     dellcdclusterscripts;
 
+    #############################################
+    #            deploy
+    #############################################
     echo "==> $(pwd)";
     echo -e "\n./deploy  --deploytype san ${cluster}"; 
-    ask_user_default_yes "Continue ? "
-    if [[ $? -eq 1 ]] ; then
+    ask_user_default_no "Skip  deploy ? "
+    if [[ $? -eq 0 ]] ; then
         time ./deploy  --deploytype san ${cluster}; 
         if [[ $? -ne 0 ]] ; then 
-            echo "";
-            echo -e "\033[0;31m\t\tdeploy failed ! ! !\033[0m";
-            return;
+            while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
+                time ./deploy  --deploytype san ${cluster}; 
+                ret=$?
+                [ ${ret} -ne 0 ] && continue;
+            done;
+
+            if [[ ${ret} -ne 0 ]] ; then
+                echo "";
+                echo -e "\033[0;31m\t\tdeploy failed ! ! !\033[0m";
+                return;
+            fi;
         fi;
+        echo -e "\033[0;32mdeploy succeeded\033[0m";
     fi;
 
-    echo -e "\033[0;32mdeploy succeeded\033[0m";
-
+    #############################################
+    #            reinit
+    #############################################
     echo -e "\n\n./reinit_array.sh -F Retail factory\n\n";
-    ask_user_default_yes "Continue ? "
-    if [[ $? -eq 1 ]] ; then
+    ask_user_default_no "Skip reinit ? "
+    if [[ $? -eq 0 ]] ; then
         time ./reinit_array.sh -F Retail factory;
         if [[ $? -ne 0 ]] ; then 
             echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
-            return;
+            while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
+                time ./reinit_array.sh -F Retail factory;
+                ret=$?
+                if [ ${ret} -ne 0 ] ; then
+                    echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
+                    continue;
+                fi;
+            done;
+
+            if [[ ${ret} -ne 0 ]] ; then 
+                echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
+                return -1;
+            fi;
         fi;
+        echo -e "\033[0;32m\t\treinit succeeded\033[0m";
     fi;
 
-    echo -e "\033[0;32m\t\treinit succeeded\033[0m";
-
+    #############################################
+    #            create_cluster
+    #############################################
     echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
-    ask_user_default_yes "Correct ? "
-    [ $? -eq 0 ] && return; 
+    ask_user_default_no "Skip create_cluster ? "
+    [ $? -eq 1 ] && return;
     time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
 
     if [[ $? -ne 0 ]] ; then 
+
         echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
-        return -1;
+        while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
+            echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
+            time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
+            ret=$?
+            if [[ ${ret} -ne 0 ]] ; then
+                echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
+                continue;
+            fi;
+        done;
+
+        if [[ ${ret} -ne 0 ]] ; then
+            echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
+            return -1;
+        fi;
     fi;
 
     echo -e "\033[0;32m\t\tGreat success\033[0m";
+    return 0;
 }
 
 dellclusteruserspaceupdate ()
@@ -652,11 +696,6 @@ dellcyclonekernelshaupdate ()
         return -1;
     fi;
 
-    if [[ 0 -eq $(git s | grep "up to date" | wc -l) ]] ; then
-        echo "your branch is out of sync consider git pushthisbranchtoremote"
-	    ask_user_default_no "continue ?";
-	    [ $? -eq 0 ] && return -1;
-    fi;
     # if user did not supply sha, we can still use HEAD
     if [[ -z ${sha} ]] ; then
         # make sure were in the git repo
@@ -676,6 +715,12 @@ dellcyclonekernelshaupdate ()
         echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
     fi
     
+    if [[ 0 -eq $(git s | grep "up to date" | wc -l) ]] ; then
+        echo "your branch is out of sync or not tracking upstream"
+	    ask_user_default_no "continue ?";
+	    [ $? -eq 0 ] && return -1;
+    fi;
+
     sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
     dellcdthirdparty;
     print_underline_size "_" 80;
@@ -688,7 +733,7 @@ dellibid2commit ()
     local ibid=$1;
     phlibid.pl --ibid ${ibid};
     echo ===============================================================
-    phlibid.pl --ibid ${ibid} | grep -i commit
+    phlibid.pl --ibid ${ibid} | grep --color -i commit
 }
 
 _dellrebootnode ()
@@ -734,6 +779,54 @@ gitcommitdell ()
 
 complete -W "67933 rdma" gitcommitdell
 
+
+delljournalctl-nt-logs-node-a ()
+{
+    local since="${1}";
+    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal";
+
+    if [[ -n "${since}" ]] ; then
+        eval journalctl --since=\"${since}\" ${options} | less -N -I
+    else
+        eval journalctl ${options}  | less -N -I
+    fi;
+}
+
+delljournalctl-nt-logs-node-b ()
+{
+    local since="${1}";
+    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal";
+
+    if [[ -n "${since}" ]] ; then
+        eval journalctl --since=\"${since}\" ${options} | less -N -I
+    else
+        eval journalctl ${options} | less -N -I
+    fi;
+}
+
+delljournalctl-all-logs-node-a ()
+{
+    local since="${1}";
+    local options="--utc --no-pager -o short-precise -a -D node_a/var/log/journal";
+
+    if [[ -n "${since}" ]] ; then
+        eval journalctl --since=\"${since}\" ${options} | less -N -I
+    else
+        eval journalctl ${options} | less -N -I
+    fi;
+}
+
+delljournalctl-all-logs-node-b ()
+{
+    local since="${1}";
+    local options="--utc --no-pager -o short-precise -a -D node_b/var/log/journal";
+
+    if [[ -n "${since}" ]] ; then
+        eval journalctl --since=\"${since}\" ${options} | less -N -I
+    else
+        eval journalctl ${options} | less -N -I
+    fi;
+}
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
