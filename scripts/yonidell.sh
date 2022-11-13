@@ -78,6 +78,10 @@ lld ()
     ls -ltrd --color $(ls -l | awk '/^d/{print $9}')
 }
 
+coregetversion ()
+{
+   cat /working/cyc_host/.version | grep source-reference;
+}
 
 bsclistports ()
 {
@@ -378,6 +382,11 @@ prdebug-list-methods ()
     cat /sys/kernel/debug/dynamic_debug/control  | sed 's/.*]//g' |awk '{print $1} ' |grep ${method}
 }
 
+prdebug-list-all ()
+{
+	cat /sys/kernel/debug/dynamic_debug/control
+}
+
 prdebug-add-method ()
 {
     local method=${1};
@@ -386,7 +395,7 @@ prdebug-add-method ()
         return -1;
     fi;
     
-    sudo echo "func ${method} +p" > /sys/kerenl/debug/dynamic_debug/control;
+    sudo echo "func ${method} +pfl" > /sys/kerenl/debug/dynamic_debug/control;
     
 }
 
@@ -478,8 +487,8 @@ dellibdev2netdev ()
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 
 # multipath -ll
-# nvme discover
-# nvme connect
+# sudo nvme discover -t rdma  --traddr=10.219.157.164 -w 10.219.157.167
+# nvme connect -t tcp -a 10.219.157.164  -n nqn.1988-11.com.dell:powerstore:00:b4fea1b05549F7A1A429 -s 4420 -D
 # nvme port and node name
 # nvme dsm /dev/nvme0n1 -b 1 -s 0 -d 1
 # nvme write-zeroes /dev/nvme0n1
