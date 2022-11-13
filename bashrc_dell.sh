@@ -7,7 +7,7 @@ alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
-trident_cluster_list=(WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 wx-d0733 wx-g4011 wx-d0896 wx-d1116 wx-d1111 wx-d1126 rt-g0015 rt-g0017 wx-d1132 wx-d1138 wx-d1161 wx-d1140 rt-g0060 rt-g0068 rt-g0069 rt-g0074 rt-g0072 rt-d0196 rt-d0042 rt-d0064 rt-g0037 wx-h7060 wk-d0023);
+trident_cluster_list=(WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 wx-d0733 wx-g4011 wx-d0896 wx-d1116 wx-d1111 wx-d1126 rt-g0015 rt-g0017 wx-d1132 wx-d1138 wx-d1161 wx-d1140 rt-g0060 rt-g0068 rt-g0069 rt-g0074 rt-g0072 rt-d0196 rt-d0042 rt-d0064 rt-g0037 wx-h7060 wk-d0023);
 trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B $c-a $c-b ; done)
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
@@ -81,7 +81,7 @@ alias dellcyclonebuild='time _dellcyclonebuild'
 
 # alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
 alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -x -f'
-alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL | tee ~/docs/dell-cluster-list-trident.txt'
+alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL | tee ~/docs/dell-cluster-list-trident.txt|less'
 alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE | tee ~/docs/dell-cluster-list-trident-roce.txt'
 # alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
 alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f'
@@ -218,9 +218,21 @@ complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc
 
 ssh2core ()
 {
-    local cluster=;
+    local cluster=${1};
+
+    if [[ -z ${cluster} ]] ; then
+        if [[ -n "${YONI_CLUSTER}" ]] ; then
+            ask_user_default_yes "cluster not specified. would you like to use ${YONI_CLUSTER} ? "
+            if [[ 1 == $? ]] ; then
+                cluster=${YONI_CLUSTER};
+            fi;
+        fi;
+    fi;
     
-    cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    if [[ -z ${cluster} ]] ; then
+        cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    fi;
+
     if [[ -z ${cluster} ]] ; then
         echo "you must specify a cluster";
         return -1;
@@ -232,9 +244,21 @@ ssh2core ()
 
 ssh2bsc ()
 {
-    local cluster=;
+    local cluster=${1};
 
-    cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    if [[ -z ${cluster} ]] ; then
+        if [[ -n "${YONI_CLUSTER}" ]] ; then
+            ask_user_default_yes "cluster not specified. would you like to use ${YONI_CLUSTER} ? ";
+            if [[ 1 == $? ]] ; then
+                cluster=${YONI_CLUSTER};
+            fi;
+        fi;
+    fi;
+
+    if [[ -z ${cluster} ]] ; then
+        cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    fi;
+
     if [[ -z ${cluster} ]] ; then
         echo "you must specify a cluster";
         return -1;
@@ -281,6 +305,7 @@ dellclusterdeploy ()
 {
     local cluster=${1};
     local asked_user=0;
+    local ret=;
 
     if [ -z "${cluster}" ] ; then 
         if [ -n "${YONI_CLUSTER}" ] ; then
@@ -374,25 +399,26 @@ dellclusterdeploy ()
     time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
 
     if [[ $? -ne 0 ]] ; then 
-
+        ret=-1;
         echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
         while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
             echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
             time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
             ret=$?
+            echo "ret=${ret}";
             if [[ ${ret} -ne 0 ]] ; then
-                echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
+                echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m ret=${ret}";
                 continue;
             fi;
         done;
 
         if [[ ${ret} -ne 0 ]] ; then
-            echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
+            echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m ret=${ret}";
             return -1;
         fi;
     fi;
 
-    echo -e "\033[0;32m\t\tGreat success\033[0m";
+    echo -e "\033[0;32m\t\tGreat success\033[0m (ret=${ret})";
     return 0;
 }
 
@@ -598,12 +624,16 @@ dellclusterinfo ()
         else
             cluster=${YONI_CLUSTER};
         fi;
+    else
+        print_underline_size "_" 80	 
+        echo "/home/public/devutils/bin/swarm -ping ${cluster}";
+        print_underline_size "_" 80	 
+        /home/public/devutils/bin/swarm -ping ${cluster};
+        print_underline_size "_" 80	 
+        echo "/home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster}";
+        /home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster};
+        return 0;
 	fi;
-
-	print_underline_size "_" 80	 
-	echo "/home/public/devutils/bin/swarm -ping ${cluster}";
-	print_underline_size "_" 80	 
-	/home/public/devutils/bin/swarm -ping ${cluster};
 
 	print_underline_size "_" 80	 
 	echo "/home/public/scripts/xpool_trident/prd/xpool list -f"
@@ -733,7 +763,9 @@ dellibid2commit ()
     local ibid=$1;
     phlibid.pl --ibid ${ibid};
     echo ===============================================================
-    phlibid.pl --ibid ${ibid} | grep --color -i commit
+    # phlibid.pl --ibid ${ibid} | grep --color -i commit
+    phlibid --getCommit --ibid 1848617|grep "Commit ID\|nt-nvmeof"
+
 }
 
 _dellrebootnode ()
