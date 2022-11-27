@@ -83,6 +83,12 @@ coregetversion ()
    cat /working/cyc_host/.version | grep source-reference;
 }
 
+coregetkernelversion ()
+{
+   echo -e "modinfo  /cyc_software_0/cyc_host/cyc_common/modules/nvmet-power.ko\n\n";
+   modinfo  /cyc_software_0/cyc_host/cyc_common/modules/nvmet-power.ko;
+}
+
 bsclistports ()
 {
     for i in /sys/kernel/config/nvmet/ports/* ; do 
