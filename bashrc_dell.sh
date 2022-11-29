@@ -7,8 +7,8 @@ alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
-trident_cluster_list=(WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 wx-d0733 wx-g4011 wx-d0896 wx-d1116 wx-d1111 wx-d1126 rt-g0015 rt-g0017 wx-d1132 wx-d1138 wx-d1161 wx-d1140 rt-g0060 rt-g0068 rt-g0069 rt-g0074 rt-g0072 rt-d0196 rt-d0042 rt-d0064 rt-g0037 wx-h7060 wk-d0023);
-trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $c-A $c-B $c-a $c-b ; done)
+trident_cluster_list=(WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
+trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
 
@@ -214,7 +214,7 @@ dellclusterleaseextend ()
 }
 
 complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
-complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc
+complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget
 
 ssh2core ()
 {
@@ -602,6 +602,31 @@ dellclusterkernelspaceupdate ()
 
 #     dellclusterkernelspaceupdate ${cluster};
 # }
+
+dellclusterguiipget ()
+{
+    local cluster=${1};
+    local config_file_folder=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs;
+    local config_file_prefix="cyc-cfg.txt.";
+    local config_file_postfix="-BM";
+    local config_file=;
+
+    if [[ -z ${cluster} ]] ; then
+        echo "missing cluster";
+        return -1;
+    fi
+     
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+
+    config_file=${config_file_folder}/${config_file_prefix}${cluster}${config_file_postfix};
+
+    if [[ -e ${config_file} ]] ; then
+        echo "grep cluster_ip ${config_file}";
+        grep cluster_ip ${config_file};
+    else
+        echo "not found : ${config_file}";
+    fi
+}
 
 dellclusterinfo ()
 {
