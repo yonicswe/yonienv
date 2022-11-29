@@ -80,13 +80,21 @@ lld ()
 
 coregetversion ()
 {
-   cat /working/cyc_host/.version | grep source-reference;
+    local version_file=/working/cyc_host/.version
+    grep -A 2 pnvmet /working/cyc
+    grep source-reference ${version_file};
 }
 
 coregetkernelversion ()
 {
    echo -e "modinfo  /cyc_software_0/cyc_host/cyc_common/modules/nvmet-power.ko\n\n";
-   modinfo  /cyc_software_0/cyc_host/cyc_common/modules/nvmet-power.ko;
+   modinfo  /cyc_software_0/cyc_host/cyc_common/modules/nvmet-power.ko | grep githash;
+}
+
+corelistkernelmodules ()
+{
+    local kernel_modules_folder=/cyc_software_0/cyc_host/cyc_common/modules/;
+    ls -ltr ${kernel_modules_folder};
 }
 
 bsclistports ()
@@ -270,22 +278,76 @@ alias debuc-set-inactive-node-b='echo "set inactive" > /xtremapp/debuc/127.0.0.1
 alias debuc-set-active-node-a='echo "set active" > /xtremapp/debuc/127.0.0.1\:31010/commands/nt'
 alias debuc-set-active-node-b='echo "set active" > /xtremapp/debuc/127.0.0.1\:31011/commands/nt'
 
-debuc-qos-configure ()
+get_node_id ()
 {
-    local node=${1};
-    local nsid=${2};
+    local node=$(hostname |sed 's/.*-//g');
+
+    if [[ ${node} == 'A' ]] ; then
+        echo "31010";
+    elif [[ ${node} == 'B' ]] ; then
+        echo "31011"
+    else
+        echo 0;
+    fi;
+}
+
+export debuc_node="$(get_node_id)";
+if [[ ${debuc_node} == 0 ]] ; then
+    echo "could not resolve node A or B";
+else
+    echo "debuc_node: $debuc_node";
+fi;
+
+debuc-command ()
+{
+    local command="${1}";
     local debuc_file=;
     local dfile=;
-    local iops=5k;
+ 
+    if [[ ${debuc_node} == 0 ]] ; then
+        echo "did not resolve node";
+        return -1;
+    fi;
+ 
+    debuc_file="/xtremapp/debuc/127.0.0.1:${debuc_node}/commands/nt";
+    dfile_base=/xtremapp/debuc/127.0.0.1;
+    dfile_node=${debuc_node}/commands/nt;
+
+    if [[ -e ${debuc_file} ]] ; then
+        echo -e "echo \"${command}\" > ${debuc_file}"; 
+        echo "${command}" > ${dfile_base}\:${dfile_node};
+    else
+        echo "${debuc_file} not found";
+        return -1;
+    fi;
+    
+    return 0;
+}
+
+alias debuc-qos-get-incoming-stats='debuc-command "get qos incoming stats"';
+alias debuc-log-devices='debuc-command "log devices"';
+alias debuc-log-qos-enable='debuc-command "log qos enable"';
+
+debuc-qos-configure ()
+{
+    local nsid=${1};
+    local iops=${2-:500k};
+    local debuc_file=;
+    local dfile=;
 
     if [[ -z ${nsid} ]] ; then
         echo "error : missing nsid";
         return -1;
     fi;
+
+    if [[ ${debuc_node} == 0 ]] ; then
+        echo "did not resolve node (debuc_node=${debuc_node})";
+        return -1;
+    fi;
     
-    debuc_file="/xtremapp/debuc/127.0.0.1:${node}/commands/nt";
+    debuc_file="/xtremapp/debuc/127.0.0.1:${debuc_node}/commands/nt";
     dfile_base=/xtremapp/debuc/127.0.0.1;
-    dfile_node=${node}/commands/nt;
+    dfile_node=${debuc_node}/commands/nt;
     
     if [[ -e ${debuc_file} ]] ; then
         echo -e "echo \"add qos bucket idx=0 bw=100g iops=${iops} burst=0% nsid=${nsid}\" > ${debuc_file}"; 
@@ -296,6 +358,20 @@ debuc-qos-configure ()
     fi;
     
     return 0;
+}
+
+debuc-qos-configure-5k-vols-1-to-100 ()
+{
+    for (( i=1; i<100; i++)) ; do
+        debuc-qos-configure ${i} 5k;
+    done;
+}
+
+debuc-qos-configure-500k-vols-1-to-100 ()
+{
+    for (( i=1; i<100; i++)) ; do
+        debuc-qos-configure ${i} 500k;
+    done;
 }
 
 _debuc-qos-disable ()
@@ -323,8 +399,6 @@ _debuc-qos-disable ()
 alias debuc-qos-disable-node-a='_debuc-qos-disable 31010'
 alias debuc-qos-disable-node-b='_debuc-qos-disable 31011'
 
-alias debuc-qos-configure-node-a='debuc-qos-configure 31010'
-alias debuc-qos-configure-node-b='debuc-qos-configure 31011'
 alias dell-qos-dump='sudo echo 1 > /sys/module/nvmet_power/parameters/qos_dump'
 
 _debuc_port_add ()
