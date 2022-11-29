@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # afaik this is only good ranger
-export VISUAL=/home/y_cohen/yonienv/bin/nvim.appimage
+# export VISUAL=/home/y_cohen/yonienv/bin/nvim.appimage
+export VISUAL=vim
 export EDITOR=$VISUAL
 
 alias connect2remoteDesktop='source $(yonienv)/bin/connectToRemoteDesk.sh'
