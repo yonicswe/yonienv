@@ -81,7 +81,7 @@ lld ()
 coregetversion ()
 {
     local version_file=/working/cyc_host/.version
-    grep -A 2 pnvmet /working/cyc
+    grep -A 2 pnvmet ${version_file};
     grep source-reference ${version_file};
 }
 
@@ -594,6 +594,8 @@ dellibdev2netdev ()
 # search for these
 # allocate.*ctrl|allocate.*cont|alloc_target_queu|kernel|nvmet|pnvmet
 
+# copy files between nodes 
+# scp <file> peer:~/
 
 
 
