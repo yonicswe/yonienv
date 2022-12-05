@@ -7,7 +7,7 @@ alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
-trident_cluster_list=(WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
+trident_cluster_list=(WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
@@ -32,6 +32,7 @@ dellcyclonedevelenvsetup ()
 	git submodule update --init source/stack
 	git submodule update --init source/cyclone-controlpath
 	git submodule update --init source/nt-nvmeof-frontend
+	git submodule update --init source/third-party
 	git c int/foothills-prime/main-pl
 	git submodule update
 	git fetch origin
@@ -84,7 +85,7 @@ alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -
 alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL | tee ~/docs/dell-cluster-list-trident.txt|less'
 alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE | tee ~/docs/dell-cluster-list-trident-roce.txt'
 # alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
-alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f'
+alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f | tee ~/docs/dell-cluster-list-yoni.txt | less'
 alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
 alias dellclusterlease='/home/public/scripts/xpool_trident/prd/xpool lease 7d -c '
 alias dellclusterleasewithforce='/home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen '
@@ -214,7 +215,7 @@ dellclusterleaseextend ()
 }
 
 complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
-complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget
+complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo
 
 ssh2core ()
 {
@@ -301,7 +302,32 @@ dellcdclusterscripts ()
     return 0;
 }
 
-dellclusterdeploy ()
+_usage_dellclusterinstallibid ()
+{
+    echo "usage: dellclusterinstallibid <ibid> <cluster>";
+}
+
+dellclusterinstallibid ()
+{
+    local ibid=;
+    local cluster=;
+    local xpool_cmd=/home/public/scripts/xpool_trident/prd/xpool
+   
+    if [[ -z ${ibid} ]] ; then
+        _usage_dellclusterinstallibid;
+        return -1;
+    fi;
+   
+    if [[ -z ${cluster} ]] ; then
+        _usage_dellclusterinstallibid;
+        return -1;
+    fi;
+
+    eval ${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen --deploy --deploy_type san -t 1 --deployflags="-setupMgmtPostFailure -syncFirmware -mode block " --ibid ${ibid} ;
+    return 0;
+}
+
+dellclusterinstall ()
 {
     local cluster=${1};
     local asked_user=0;
@@ -371,7 +397,8 @@ dellclusterdeploy ()
     ask_user_default_no "Skip reinit ? "
     if [[ $? -eq 0 ]] ; then
         time ./reinit_array.sh -F Retail factory;
-        if [[ $? -ne 0 ]] ; then 
+        ret=$?;
+        if [[ ${ret} -ne 0 ]] ; then 
             echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
             while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
                 time ./reinit_array.sh -F Retail factory;
@@ -626,6 +653,22 @@ dellclusterguiipget ()
     else
         echo "not found : ${config_file}";
     fi
+
+	if ! [ -e /home/public/devutils/bin/swarm ] ; then 
+		echo "/home/public/devutils/bin/swarm not found";
+		return;
+	fi;
+
+    ask_user_default_no "See all IPs ?";
+    if [[ $? -eq 0 ]] ; then
+        return;
+    fi;
+
+    print_underline_size "_" 80	 
+    echo "/home/public/devutils/bin/swarm -ping -showall ${cluster}";
+    print_underline_size "_" 80	 
+    /home/public/devutils/bin/swarm -ping -showall ${cluster};
+
 }
 
 dellclusterinfo ()
@@ -884,6 +927,12 @@ delljournalctl-all-logs-node-b ()
         eval journalctl ${options} | less -N -I
     fi;
 }
+
+alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j"
+alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j"
+alias delltriage-nt-logs-node-a="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt"
+alias delltriage-nt-logs-node-b="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt"
+
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
