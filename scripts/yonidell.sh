@@ -32,6 +32,11 @@ alias dcc='sudo dmesg -C'
 alias dellcdcoredumps='cd /cyc_var/cyc_dumps/processed/cyc_dumps/'
 alias dellcddatacollectlogs='cd /disks/jiraproduction2'
 
+yonidellcptopeer ()
+{
+    scp yonidell.sh vimrcyoni.vim peer:~/;
+}
+
 # return 0:no 1:yes
 ask_user_default_no ()
 {
@@ -178,7 +183,9 @@ delljournalctl-all-logs-node-b ()
 
 alias jnt3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 alias jnt='sudo journalctl SUB_COMPONENT=nt'
+alias jntf='sudo journalctl -f SUB_COMPONENT=nt'
 alias jn='sudo journalctl'
+alias jnf='sudo journalctl -f'
 
 alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j"
 alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j"
@@ -360,17 +367,20 @@ debuc-qos-configure ()
     return 0;
 }
 
-debuc-qos-configure-5k-vols-1-to-100 ()
-{
-    for (( i=1; i<100; i++)) ; do
-        debuc-qos-configure ${i} 5k;
-    done;
-}
+alias debuc-qos-configure-5k-vols-1-to-100="debuc-qos-configure-kiops-vols-1-to-100 5k"
+alias debuc-qos-configure-500k-vols-1-to-100="debuc-qos-configure-kiops-vols-1-to-100 500k"
+alias debuc-qos-configure-1000k-vols-1-to-100="debuc-qos-configure-kiops-vols-1-to-100 1000k"
 
-debuc-qos-configure-500k-vols-1-to-100 ()
+debuc-qos-configure-kiops-vols-1-to-100 ()
 {
+    local kiosp=${1:-500};
+
+    if [[ -z ${kiops} ]] ; then
+        echo "missing iops using default ${kiops}";
+    fi;
+
     for (( i=1; i<100; i++)) ; do
-        debuc-qos-configure ${i} 500k;
+        debuc-qos-configure ${i} ${kiops};
     done;
 }
 
@@ -562,6 +572,22 @@ dellibdev2netdev ()
 	    done 
     done  | column -t;
 }
+
+scpcommandforfile ()
+{
+    local file=${1};
+    local host=$(hostname -i|cut -f 1 -d ' ');
+    local user=$(id -un);
+
+    if [[ -z ${file} ]] ; then
+        echo -e "${RED}missing file name${NC}";
+        return -1;
+    fi;
+
+    file=$(readlink -f ${file});
+    echo "scp ${user}@${host}:${file} .";
+}
+
 
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
