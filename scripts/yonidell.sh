@@ -338,12 +338,17 @@ alias debuc-log-qos-enable='debuc-command "log qos enable"';
 debuc-qos-configure ()
 {
     local nsid=${1};
-    local iops=${2-:500k};
+    local iops=${2};
     local debuc_file=;
     local dfile=;
 
     if [[ -z ${nsid} ]] ; then
         echo "error : missing nsid";
+        return -1;
+    fi;
+
+    if [[ -z ${iops} ]] ; then
+        echo "error : missing iops";
         return -1;
     fi;
 
@@ -373,13 +378,14 @@ alias debuc-qos-configure-1000k-vols-1-to-100="debuc-qos-configure-kiops-vols-1-
 
 debuc-qos-configure-kiops-vols-1-to-100 ()
 {
-    local kiosp=${1:-500};
+    local kiops=${1:-500};
 
     if [[ -z ${kiops} ]] ; then
         echo "missing iops using default ${kiops} kiops";
     fi;
 
     for (( i=1; i<100; i++)) ; do
+        echo "debuc-qos-configure ${i} ${kiops}";
         debuc-qos-configure ${i} ${kiops};
     done;
 }
@@ -409,7 +415,7 @@ _debuc-qos-disable ()
 alias debuc-qos-disable-node-a='_debuc-qos-disable 31010'
 alias debuc-qos-disable-node-b='_debuc-qos-disable 31011'
 
-alias dell-qos-dump='sudo echo 1 > /sys/module/nvmet_power/parameters/qos_dump'
+alias dell-qos-dump='cat /sys/module/nvmet_power/parameters/qos_dump'
 
 _debuc_port_add ()
 {
