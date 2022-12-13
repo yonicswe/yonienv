@@ -7,7 +7,7 @@ alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
-trident_cluster_list=(WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
+trident_cluster_list=(WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
@@ -85,7 +85,7 @@ alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -
 alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL | tee ~/docs/dell-cluster-list-trident.txt|less'
 alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE | tee ~/docs/dell-cluster-list-trident-roce.txt'
 # alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
-alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f | tee ~/docs/dell-cluster-list-yoni.txt | less'
+alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f | tee ~/docs/dell-cluster-list-yoni.txt ; less ~/docs/dell-cluster-list-yoni.txt'
 alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
 alias dellclusterlease='/home/public/scripts/xpool_trident/prd/xpool lease 7d -c '
 alias dellclusterleasewithforce='/home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen '
@@ -194,7 +194,7 @@ dellclusterruntimeenvset ()
 dellclusterleaseextend () 
 {
     local cluster=${1};
-    local extend=${2};
+    local extend=${2:-14d};
 
     if [[ -z ${cluster} ]] ; then 
         cluster=${YONI_CLUSTER};
@@ -205,17 +205,13 @@ dellclusterleaseextend ()
         return -1;
     fi;
 
-    if [[ -z ${extend} ]] ; then 
-        extend=7d;
-    fi;
-
     echo "/home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend}"
     /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend};
 
 }
 
-complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterlease dellclusterleaseextend dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
-complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo
+complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
+complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
 
 ssh2core ()
 {
@@ -358,11 +354,16 @@ dellclusterinstall ()
         return -1;
     fi;
     
-    if [[ ${asked_user} -eq 0 ]] ; then
-        echo "install ${cluster} with ${CYC_CONFIG}"
-        ask_user_default_yes "Correct ? "
-        [ $? -eq 0 ] && return; 
-    fi;
+    # if [[ ${asked_user} -eq 0 ]] ; then
+        # echo "install ${cluster} with ${CYC_CONFIG}"
+        # ask_user_default_yes "Continue ? ";
+        # [ $? -eq 0 ] && return; 
+    # fi;
+
+    echo -e "\nAbout to install cluster ${cluster}\n";
+    dellclusterruntimeenvget;
+    ask_user_default_yes "Continue ? ";
+    [ $? -eq 0 ] && return; 
     
     dellcdclusterscripts;
 

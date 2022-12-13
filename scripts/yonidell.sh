@@ -376,7 +376,7 @@ debuc-qos-configure-kiops-vols-1-to-100 ()
     local kiosp=${1:-500};
 
     if [[ -z ${kiops} ]] ; then
-        echo "missing iops using default ${kiops}";
+        echo "missing iops using default ${kiops} kiops";
     fi;
 
     for (( i=1; i<100; i++)) ; do
