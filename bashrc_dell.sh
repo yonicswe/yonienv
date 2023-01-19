@@ -326,6 +326,12 @@ dellclusterleaseextend ()
 complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
 complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
 
+ssh2arwen ()
+{
+    /bin/ssh -t arwen3 "cd $(pwd) ; exec \$SHELL -l";
+    # /bin/ssh -t arwen3 "cd $(pwd) ; bash --login";
+}
+
 ssh2core ()
 {
     local cluster=${1};
