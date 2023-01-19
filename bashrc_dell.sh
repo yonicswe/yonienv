@@ -7,7 +7,7 @@ alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
-trident_cluster_list=(WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WX-D1132 WX-D1138 WX-D1161 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
+trident_cluster_list=(RT-D3082 WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
@@ -20,6 +20,22 @@ create_alias_for_host ()
     user_pass=${4};
     alias ${alias_name}="sshpass -p ${user_pass} ssh ${user_name}@${host_name}"
     alias ${alias_name}ping="ping ${host_name}"
+}
+
+alias dellclonepnvmet='git clone --branch pnvmet/v3.5-medusa --single-branch git@eos2git.cec.lab.emc.com:cyclone/linux.git pnvmet'
+dellcyclonedevelreset ()
+{
+    # are you in cyclone folder ? 
+    git fetch;
+    git sm update;
+    # git submodule update source/cyc_core
+    # git submodule update source/devops-scripts
+    # git submodule update source/bedrock
+    # git submodule update source/stack
+    # git submodule update source/cyclone-controlpath
+    # git submodule update source/nt-nvmeof-frontend
+    # git submodule update source/third-party
+    git c . 
 }
 
 dellcyclonedevelenvsetup ()
@@ -54,6 +70,8 @@ dellsubmodulesdiscard ()
 
 _dellcyclonebuild ()
 {
+    local flavor;
+
 	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
 		echo "you must be in arwen to build";
 		return;
@@ -66,19 +84,93 @@ _dellcyclonebuild ()
     ask_user_default_yes "continue ?"
     [[ $? -eq 0 ]] && return -1;
 
+    # dellcyclonebuildhistorylog;
+
+    ask_user_default_no "flavor DEBUG ? ";
+    if [[ $? -eq 0 ]] ; then
+        flavor=RETAIL;
+    else
+        flavor=DEBUG;
+    fi;
+
 	ask_user_default_no "prune before build ?"
 	if [[ $? -eq 1 ]] ; then
 	    echo "=============== make prun =========================";
 	    make prune;
 	fi;
-	
+
 	echo -e "\n========== start build ($(pwd)) ===================\n"
-	echo "make cyc_core flavor=RETAIL force=yes"
+	echo "make cyc_core flavor=${flavor} force=yes"
 	echo "========================================================"
-	make cyc_core flavor=RETAIL force=yes
+	make cyc_core flavor=${flavor} force=yes
 }
 
 alias dellcyclonebuild='time _dellcyclonebuild'
+
+builds_journal_db="build-history";
+builds_journal_db_path=~/devel;
+
+dellcyclonebuildhistorylog () 
+{
+    local pnvmet_folder=${1};
+    local pnvmet_branch=${2};
+    local pnvmet_sha=${3};
+
+    local cyclone_folder_sqlite_param=;
+    local pnvmet_folder_sqlite_param=;
+    local pnvmet_branch_sqlite_param=;
+    local pnvmet_sha_sqlite_param=;
+
+    [[ -z ${pnvmet_folder} ]] && return -1;
+    [[ -z ${pnvmet_branch} ]] && return -1;
+    [[ -z ${pnvmet_sha} ]] && return -1;
+
+    cyclone_folder_sqlite_param=$(echo -n \' ; echo ${cyclone_folder} ; echo \');
+    pnvmet_folder_sqlite_param=$(echo -n \'  ; echo ${pnvmet_folder}  ; echo \')
+    pnvmet_branch_sqlite_param=$(echo -n \'  ; echo ${pnvmet_branch}  ; echo \');
+    pnvmet_sha_sqlite_param=$(echo -n \'     ; echo ${pnvmet_sha}     ; echo \');
+
+    pushd ${builds_journal_db_path} 1>/dev/null;
+
+    sqlite3 -line ${builds_journal_db} "insert into cyclone_builds \
+        values(${cyclone_folder_sqlite_param}, datetime('now', 'localtime'), ${pnvmet_folder_sqlite_param}, \
+        ${pnvmet_branch_sqlite_param}, ${pnvmet_sha_sqlite_param})";
+
+    popd 1>/dev/null;
+}
+
+dellcyclonebuildhistoryshow ()
+{
+    pushd ${builds_journal_db_path} 1>/dev/null;
+
+    sqlite3 ${builds_journal_db} "select * from cyclone_builds";
+
+    popd 1>/dev/null;
+}
+
+# dellcyclonebuildhistoryreset ()
+# {
+    # pushd ${builds_journal_db_path} 1>/dev/null;
+
+    # sqlite3 -line ${builds_journal_db} "delete from cyclone_builds";
+
+    # popd 1>/dev/null;
+# }
+
+dellcyclonebuildhistoryreset ()
+{
+    pushd ${builds_journal_db_path} 1>/dev/null;
+
+    sqlite3 -line ${builds_journal_db} "drop table cyclone_builds";
+
+    sqlite3 -line ${builds_journal_db} "create table cyclone_builds(cyc_folder text)";
+    sqlite3 -line ${builds_journal_db} "alter table cyclone_builds add date text";
+    sqlite3 -line ${builds_journal_db} "alter table cyclone_builds add pnvmet_folder text";
+    sqlite3 -line ${builds_journal_db} "alter table cyclone_builds add pnvmet_branch text";
+    sqlite3 -line ${builds_journal_db} "alter table cyclone_builds add pnvmet_sha text";
+
+    popd 1>/dev/null;
+}
 
 # alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
 alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -x -f'
@@ -110,6 +202,11 @@ dellclusterruntimeenvget ()
     if [[ -z ${CYC_CONFIG} ]] ; then
         echo -e "\033[1;31mCYC_CONFIG not set\033[0m";
     fi;
+
+    if ! [ -e ${CYC_CONFIG} ] ; then
+        echo -e "\033[1;31m ${CYC_CONFIG} does not exist\033[0m";
+        echo -e "use dellclustergeneratecfg ${YONI_CLUSTER} in yonivm";
+    fi;
     
     echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
 	print_underline_size "_" 80	 
@@ -117,9 +214,25 @@ dellclusterruntimeenvget ()
     echo -e "\033[1;31mCYC_CONFIG\033[0m\t\t${CYC_CONFIG}"
     echo -e "\033[1;31mcyc_helpers_folder\033[0m\t${cyc_helpers_folder}";
     echo -e "\033[1;31mthird_party_folder\033[0m\t${third_party_folder}";
+    echo -e "\033[1;31mpnvmet_folder\033[0m\t\t${pnvmet_folder}";
 	print_underline_size "_" 80	 
     echo;
 }
+
+dellenvrebash ()
+{
+    local cluster=;
+
+	dellcdcyclonefolder;
+	[[ $? -ne 0 ]] && return -1;
+    dellclusterruntimeenvget | tee cluster_runtime_env.txt;
+    r;
+
+    cluster=$(awk '/YONI_CLUSTER/{print $2}' cluster_runtime_env.txt);
+    dellclusterruntimeenvset ${cluster};
+    cd - ;
+}
+alias rd='dellenvrebash'
 
 cyclone_folder=;
 dellcdcyclonefolder ()
@@ -305,8 +418,8 @@ _usage_dellclusterinstallibid ()
 
 dellclusterinstallibid ()
 {
-    local ibid=;
-    local cluster=;
+    local ibid=${1};
+    local cluster=${2};
     local xpool_cmd=/home/public/scripts/xpool_trident/prd/xpool
    
     if [[ -z ${ibid} ]] ; then
@@ -319,7 +432,19 @@ dellclusterinstallibid ()
         return -1;
     fi;
 
-    eval ${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen --deploy --deploy_type san -t 1 --deployflags="-setupMgmtPostFailure -syncFirmware -mode block " --ibid ${ibid} ;
+    xpool_cmd=$(echo -e "${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen --deploy --deploy_type san -t 1 --deployflags=\"-setupMgmtPostFailure -syncFirmware -mode block \" --ibid ${ibid}");
+    
+    echo ${xpool_cmd};
+
+    ask_user_default_yes "continue ?";
+    if [ $? -eq 0 ] ; then
+        echo "Bye..";
+        return -1;
+    fi;
+
+    eval ${xpool_cmd};
+    
+    # eval ${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen --deploy --deploy_type san -t 1 --deployflags="-setupMgmtPostFailure -syncFirmware -mode block " --ibid ${ibid} ;
     return 0;
 }
 
@@ -394,15 +519,15 @@ dellclusterinstall ()
     #############################################
     #            reinit
     #############################################
-    echo -e "\n\n./reinit_array.sh -F Retail factory\n\n";
+    echo -e "\n\n./reinit_array.sh -F Retail factory sys_mode=block\n\n";
     ask_user_default_no "Skip reinit ? "
     if [[ $? -eq 0 ]] ; then
-        time ./reinit_array.sh -F Retail factory;
+        time ./reinit_array.sh -F Retail factory sys_mode=block;
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
             echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
             while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
-                time ./reinit_array.sh -F Retail factory;
+                time ./reinit_array.sh -F Retail factory sys_mode=block;
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
                     echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
@@ -575,11 +700,6 @@ dellrbatracedump ()
 
 dellclusterkernelspaceupdate ()
 {
-	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		# echo "you must be in arwen";
-		# return -1;
-	# fi;
-
 	if [ -z $CYC_CONFIG ] ; then
 		echo "CYC_CONFIG not defined. use dellclusterruntimeenvset";
 		return -1;
@@ -606,6 +726,51 @@ dellclusterkernelspaceupdate ()
 	return 0;
 }
 
+dellclusteryonienvupdate ()
+{
+	if [ -z $CYC_CONFIG ] ; then
+		echo "CYC_CONFIG not defined. use dellclusterruntimeenvset";
+		return -1;
+	fi
+
+	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		echo "you must be in arwen";
+		return;
+	fi;
+
+	ask_user_default_yes "update ${YONI_CLUSTER} ?";
+	[ $? -eq 0 ] && return -1;
+
+	dellcdclusterscripts;
+
+    sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${YONI_CLUSTER}/" ~/yonienv/scripts/yonidell.sh;
+
+    echo "copy yonidell.sh -> core-a@${YONI_CLUSTER}";
+    ./scp_core_to_a.sh ~/yonienv/scripts/yonidell.sh
+    echo "copy vimrcyoni.sh -> core-a@${YONI_CLUSTER}";
+    ./scp_core_to_a.sh ~/yonienv/scripts/vimrcyoni.vim
+    echo "copy yonidell.sh -> core-b@${YONI_CLUSTER}";
+    ./scp_core_to_b.sh ~/yonienv/scripts/yonidell.sh
+    echo "copy vimrcyoni.vim -> core-b@${YONI_CLUSTER}";
+    ./scp_core_to_b.sh ~/yonienv/scripts/vimrcyoni.vim
+
+    echo "copy yonidell.sh -> bsc-a@${YONI_CLUSTER}";
+    ./scp_cyc_to_a.sh ~/yonienv/scripts/yonidell.sh;
+    # ./run_core_a.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
+    echo "copy vimrcyoni.vim -> bsc-a@${YONI_CLUSTER}";
+    ./scp_cyc_to_a.sh ~/yonienv/scripts/vimrcyoni.vim;
+    # ./run_core_a.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
+    echo "copy yonidell.sh -> bsc-b@${YONI_CLUSTER}";
+    ./scp_cyc_to_b.sh ~/yonienv/scripts/yonidell.sh;
+    # ./run_core_b.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
+    echo "copy vimrcyoni.vim -> bsc-b@${YONI_CLUSTER}";
+    ./scp_cyc_to_b.sh ~/yonienv/scripts/vimrcyoni.vim;
+    # ./run_core_b.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
+
+    sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=/" ~/yonienv/scripts/yonidell.sh;
+    cd -
+}
+
 # dellclusterkernelspaceupdate-fzf ()
 # {
 #     local cluster=${1};
@@ -630,6 +795,23 @@ dellclusterkernelspaceupdate ()
 
 #     dellclusterkernelspaceupdate ${cluster};
 # }
+
+ssh2lg ()
+{
+    local lg_name=${1};
+
+    if [[ -z ${lg_name} ]]; then 
+        echo "missing LG_NAME param" 
+    else
+        sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
+    fi;
+}
+
+dellclusterlgipget ()
+{
+    local cluster=${1};
+    xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]'
+}
 
 dellclusterguiipget ()
 {
@@ -778,6 +960,16 @@ dellcyclonekernelshaget ()
     
     return 0;
 }
+export pnvmet_folder=;
+dellcdpnvmetfolder ()
+{
+    if [[ -z ${pnvmet_folder} ]] ; then
+        echo "pnvmet_folder not set, (use dellcyclonekernelshaupdate)";
+        return -1;
+    fi;
+
+    cd ${pnvmet_folder};
+}
 
 dellcyclonekernelshaupdate ()
 {
@@ -809,22 +1001,28 @@ dellcyclonekernelshaupdate ()
             return -1;
         fi
     
+        if [[ 0 -eq $(git s | grep "up to date" | wc -l) ]] ; then
+            echo "your branch is out of sync or not tracking upstream. you probably forgot to push upstream";
+            ask_user_default_no "continue ?";
+            [ $? -eq 0 ] && return -1;
+        fi;
+
         print_underline_size "_" 80;
         sha=$(git log -1 | awk '/commit/{print $2}');
         echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
+        dellcyclonebuildhistorylog $(pwd) $(git bb) $(git h);
+        export pnvmet_folder=$(pwd);
     fi
     
-    if [[ 0 -eq $(git s | grep "up to date" | wc -l) ]] ; then
-        echo "your branch is out of sync or not tracking upstream"
-	    ask_user_default_no "continue ?";
-	    [ $? -eq 0 ] && return -1;
-    fi;
-
     sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
     dellcdthirdparty;
     print_underline_size "_" 80;
     git diff -U1;
     cd -;
+    
+    # depict the kernel that was used.
+    # the folder from which it was built the branch name and the index
+    # print these when user invokes dellclusterruntimeenvget
 }
 
 dellibid2commit ()
@@ -833,7 +1031,7 @@ dellibid2commit ()
     phlibid.pl --ibid ${ibid};
     echo ===============================================================
     # phlibid.pl --ibid ${ibid} | grep --color -i commit
-    phlibid --getCommit --ibid 1848617|grep "Commit ID\|nt-nvmeof"
+    phlibid --getCommit --ibid ${ibid} | grep "Commit ID\|nt-nvmeof"
 
 }
 
