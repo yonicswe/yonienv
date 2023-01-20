@@ -175,6 +175,7 @@ dellcyclonebuildhistoryreset ()
 # alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
 alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -x -f'
 alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL | tee ~/docs/dell-cluster-list-trident.txt|less'
+alias dellclusterlistxblock='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Xblock-NDU         | tee ~/docs/dell-cluster-list-xblock.txt|less'
 alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE | tee ~/docs/dell-cluster-list-trident-roce.txt'
 # alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
 alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f | tee ~/docs/dell-cluster-list-yoni.txt ; less ~/docs/dell-cluster-list-yoni.txt'
