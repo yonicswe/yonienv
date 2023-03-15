@@ -5,7 +5,7 @@
 # \ V /| || '  \ 
 #  \_/ |_||_|_|_| 
 
-alias editbashvim="n ${yonienv}/bashrc_vim.sh"
+alias editbashvim="vim ${yonienv}/bashrc_vim.sh"
 alias cdnvimconfig="cd ~/.config/nvim/"
 # alias vim='vim -u NONE'
 
@@ -14,7 +14,10 @@ if ! [ -e ${vimorgvimbackupfile} ] ; then
     echo vim > ${vimorgvimbackupfile};
 fi
 
-export v_or_g="$(cat ${vimorgvimbackupfile})";
+# export v_or_g="$(cat ${vimorgvimbackupfile})";
+export VIMRUNTIME=/home/y_cohen/tmp/vim/runtime
+export v_or_g=~/tmp/vim/src/vim
+export _vd=vimdiff
 
 # if [ "${v_or_g}" == "gvim" ] ; then 
     # export _vd="gvimdiff"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-alias editbashfs='nvim ${yonienv}/bashrc_fs.sh'
+alias editbashfs='vim ${yonienv}/bashrc_fs.sh'
 
 if [[ ${USE_SYNTH_SHELL} == yes ]] ; then 
     if [ -f /home/y_cohen/.config/synth-shell/synth-shell-prompt.sh ] && [ -n "$( echo $- | grep i )" ]; then
@@ -201,6 +201,7 @@ k () {
 alias l='/usr/bin/ls --group-directories-first -l --color -F'
 alias lt='/usr/bin/ls --group-directories-first -lt --color -F'
 alias ltr='/usr/bin/ls --group-directories-first -ltr --color -F'
+alias lessin='/usr/bin/less -IN'
 
 alias c='cd'
 alias ..='cd ../ ; pwd -P'
@@ -236,6 +237,20 @@ alias ag='ag --noheading'
 alias ssh='ssh -X -o ConnectTimeout=3'
 alias pstree='pstree -Uphacl'
 alias mkp='mkdir -p'
+scpcommandforfile ()
+{
+    local file=${1};
+    local host=$(hostname -i|cut -f 1 -d ' ');
+    local user=$(id -un);
+
+    if [[ -z ${file} ]] ; then
+        echo -e "${RED}missing file name${NC}";
+        return -1;
+    fi;
+
+    file=$(readlink -f ${file});
+    echo "scp ${user}@${host}:${file} .";
+}
 
 # list only directories 
 lld ()
@@ -820,6 +835,7 @@ delete_executables ()
 findexecutable ()
 {
     find -executable | while read f ; do if [ $(file $f | grep ELF.*executable | wc -l ) -ne 0 ] ; then echo $f ; fi ; done
+    # find -executable -type f -ls
 }
 
 define() { 
@@ -867,6 +883,13 @@ redpill ()
     local ret=0;
 
     ################################################# 
+    # maybe this is a docker
+    if [[ -e /.dockerenv ]] ; then
+        echo "this is a docker (found /.dockerenv)";
+        return 0;
+    fi;
+
+    ################################################# 
     # try dmidecode
     which dmidecode 2>/dev/null;
     ret=$?;
@@ -876,10 +899,14 @@ redpill ()
 
         if [ $( sudo dmidecode | grep -i product | grep -i "qemu\|kvm" | wc -l ) -gt 0 ] ; then 
             echo "I am a virtual machine (dmidecode)";
-            return 0;
+            ask_user_default_no "try other methods ?";
+            [ $? -eq 0 ] && return 0;
+        else
+            echo "I am a hypervisor (dmidecode)";
+            ask_user_default_no "try other methods ?";
+            [ $? -eq 0 ] && return 0;
+            return 1;
         fi
-        echo "I am a hypervisor (dmidecode)";
-        return 1;
     fi
 
     ################################################# 

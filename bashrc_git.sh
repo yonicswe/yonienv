@@ -141,7 +141,7 @@ gitapplyPatchList ()
 #     for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do echo "git am $( ls ${patch_path}/$i*patch)" ; done
 }
 
-alias gitconfig="nvim ~/.gitconfig";
+alias gitconfig="vim ~/.gitconfig";
 # {
 #     if [ -e /usr/bin/gvim ] ; then
 #         g ~/.gitconfig
@@ -235,6 +235,40 @@ gitcheckoutremotebranch ()
 
     echo "git checkout ${branch}";
     git checkout ${branch};
+    return 0;
+}
+
+gitdeleteremotebranchfromorigin ()
+{
+    local branch=;
+
+    if [[ -z ${branch} ]] ; then
+        branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    fi;
+
+    if [[ -z ${branch} ]] ; then
+        echo "you must specify a valid branch";
+        return -1;
+    fi;
+
+    echo "git push -d origin ${branch}";
+    ask_user_default_no "are you sure ? ";
+    if [[ $? -eq 1 ]] ; then
+        git push -d origin ${branch};
+
+        if [[ 1 == $(git b |grep ${branch} | wc -l ) ]] ; then
+            ask_user_default_yes "also delete local branch ?";
+            if [[ $? -eq 1 ]] ; then
+                git bdelete ${branch};
+            fi;
+        fi;
+
+        ask_user_default_no "git fetch -p ? ";
+        if [[ $? -eq 1 ]] ; then
+            git fetch -p;
+        fi;
+    fi;
+
     return 0;
 }
 

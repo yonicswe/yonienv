@@ -1926,7 +1926,8 @@ mkcoverletter ()
 
     if ! [ -d coverletter ] ; then mkdir coverletter ; fi;
     echo "~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b ${subject} -v ${version} -- HEAD~${index_range};";
-    ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b ${subject} -v ${version} -- HEAD~${index_range};
+    # ~/devel/upstream/tools/scripts/git-upstream format-patch -p coverletter -b ${subject} -v ${version} -- HEAD~${index_range};
+    git format-patch -p coverletter -b ${subject} -v ${version} -- HEAD~${index_range};
 }
 
 mkcoverletterrdmacore ()

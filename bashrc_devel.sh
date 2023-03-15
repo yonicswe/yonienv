@@ -1,6 +1,6 @@
 #!/bin/bash
 
-alias editbashdevel='nvim ${yonienv}/bashrc_devel.sh'
+alias editbashdevel='v ${yonienv}/bashrc_devel.sh'
 
 #   ___  ___   ___ 
 #  / __||   \ | _ )
@@ -21,7 +21,7 @@ setup_gdbinit_dir_search_path ()
             done
 }
 
-alias debug='/usr/local/bin/cgdb --args '
+alias debug='/bin/cgdb --args '
 debuglibs ()
 {
     if [ -z $1 ] ; then
@@ -583,6 +583,39 @@ alias d='dmesg --color -HxP'
 alias dp='dmesg --color -Hx'
 alias dw='dmesg --color -Hxw'
 alias dcc='sudo dmesg -C'
+dmesg-level-get () 
+{
+    echo "current|default|minimum|boot-time-default";
+    sudo cat /proc/sys/kernel/printk;
+    ask_user_default_no "see legend ?";
+    [ $? -eq 0 ] && return;
+
+    echo -e "KERN_EMERG    \"0\" pr_emerg()"
+    echo -e "KERN_ALERT    \"1\" pr_alert()"
+    echo -e "KERN_CRIT     \"2\" pr_crit()"
+    echo -e "KERN_ERR      \"3\" pr_err()"
+    echo -e "KERN_WARNING  \"4\" pr_warn() "
+    echo -e "KERN_NOTICE   \"5\" pr_notice() "
+    echo -e "KERN_INFO     \"6\" pr_info()"
+    echo -e "KERN_DEBUG    \"7\" pr_debug() and pr_devel() if DEBUG is defined"
+    echo -e "KERN_DEFAULT  \"”\""
+    echo -e "KERN_CONT     \"c\" pr_cont()"
+}
+
+dmesg-level-set ()
+{
+    local level=${1};
+    if [ -z ${level} ] ; then
+        echo "missing level";
+        ask_user_default_yes "set to debug level ?";
+        [ $? -eq 0 ] && return;
+        # echo 8 | sudo tee /proc/sys/kernel/printk;
+        echo 8 | sudo tee /proc/sys/kernel/printk;
+    fi;
+
+    sudo dmesg -n ${level};
+}
+
 dyoni ()
 {
 # echo -n "root ";
@@ -719,4 +752,10 @@ docker-attach-1st-container ()
 mann ()
 {
     man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man
+}
+
+installfzf ()
+{
+    git clone https://github.com/junegunn/fzf.git ~/.fzf/
+    ~/.fzf/install
 }

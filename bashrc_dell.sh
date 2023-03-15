@@ -3,14 +3,89 @@
 alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
-alias ssh2yonivm='echo cycpass; ssh cyc@10.244.196.235'
+alias ssh2yonivm='sshpass -p cycpass ssh cyc@10.244.196.235'
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
-trident_cluster_list=(RT-D3082 WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
-trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
+dell_clusters_file=${yonienv}/bashrc_dell_clusters.sh;
+dell_cluster_list_file=${yonienv}/bashrc_dell_cluster_list_file.sh;
+# trident_cluster_list=(RT-G0082 RT-D3082 WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
+trident_cluster_list=( $(cat ${dell_clusters_file}) );
+# trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
+# trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print toupper($0)}' ) $c $c-A $c-B ; done)
+
+# declare -A dell_cluster_list;
+# export dell_cluster_list;
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
+
+_trident_cluster_list_nodes_init ()
+{
+    trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print toupper($0)}' ) $c $c-A $c-B ; done) 
+    complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
+    complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
+}
+_trident_cluster_list_nodes_init;
+
+_dellclusterlistinit ()
+{
+    local cluster;
+    local node_a;
+    local node_b;
+    declare -A dell_cluster_list;
+
+    if ! [ -e ${dell_cluster_list_file} ] ; then
+        touch ${dell_cluster_list_file};
+    fi;
+
+    for c in $(cat ${dell_cluster_list_file}) ; do
+        echo "$FUNCNAME $cluster";
+        cluster=$(echo $c | awk '{print toupper($0)}' )
+        node_a=$(echo ${cluster}-A);
+        node_b=$(echo ${cluster}-B);
+        set -x;
+        dell_cluster_list[$c]=1;
+        dell_cluster_list[$node_a]=1;
+        dell_cluster_list[$node_b]=1;
+        set +x;
+    done;
+
+    echo "$FUNCNAME dell_cluster_list : ${!dell_cluster_list[@]}"
+}
+
+# _dellclusterlistinit;
+
+# 
+# return 1 if cluster in list
+# return 0 if clutster not in list
+#
+_dellclusterlistfindcluster ()
+{
+    local cluster=${1};
+
+    cluster=$(echo $cluster | awk '{toupper($0)}');
+
+    # if [ ${dell_cluster_list[${cluster}]+_} ] ; then 
+    if [[ " $( echo ${trident_cluster_list[@]}) " =~ " $cluster " ]] ; then 
+        return 1 ; 
+    else 
+        return 0; 
+    fi;
+}
+
+dellclusterlistaddcluster ()
+{
+    local cluster=${1};
+
+    _dellclusterlistfindcluster ${cluster};
+
+    if [[ 0 -eq $? ]] ; then
+        # dell_cluster_list[${cluster}]=1;
+        trident_cluster_list+=${cluster};
+        echo "${cluster} " >> ${dell_clusters_file}; 
+        _trident_cluster_list_nodes_init;
+    fi;
+}
 
 create_alias_for_host ()
 {
@@ -172,18 +247,144 @@ dellcyclonebuildhistoryreset ()
     popd 1>/dev/null;
 }
 
+_dellclusterlist ()
+{
+    local list_file=${1};
+    local dell_group=${2};
+    local dell_group_label=${3};
+
+    echo "$FUNCNAME: list_file=${list_file} dell_group=${dell_group} dell_group_label=${dell_group_label}";
+
+    if [ -e ${list_file} ] ; then
+        ask_user_default_yes "re-generate ${list_file}";
+        if [ $? -eq 0 ] ; then
+            v ${list_file}
+            return;
+        fi;
+    fi;
+     
+    if ! [ -z ${dell_group_label} ] ;then
+        dell_group_label="-l ${dell_group_label}";
+    fi;
+
+    if [[ -z "${dell_group}" ]] ; then
+        dell_group="-f";
+    else
+        dell_group="-a -f -g ${dell_group}";
+    fi;
+
+    echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label}";
+    # /home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} --sort lessee | tee ${list_file}; 
+    echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt"
+    /home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt
+
+    # if [ 0 -eq $(grep -i "no clusters are leased" | wc -l) ] ; then
+        # echo "no clusters were found";
+        # return;
+    # fi;
+
+    (set -x ; mv /tmp/cluster-list-file.txt ${list_file});
+    ask_user_default_yes "open with vim ${list_file} ?";
+    [ $? -eq 0 ] && return;
+    v ${list_file};
+}
+
+_dellclusterlistuser ()
+{
+    local user=${1};
+    [ -z ${user} ] && return;
+    /home/public/scripts/xpool_trident/prd/xpool list -u ${user};
+}
+
 # alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
-alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -x -f'
-alias dellclusterlisttrident='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL | tee ~/docs/dell-cluster-list-trident.txt|less'
-alias dellclusterlistxblock='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Xblock-NDU         | tee ~/docs/dell-cluster-list-xblock.txt|less'
-alias dellclusterlisttridentroce='/home/public/scripts/xpool_trident/prd/xpool list -a -f -g Trident-kernel-IL -l NVMeOF-RoCE | tee ~/docs/dell-cluster-list-trident-roce.txt'
-# alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f -u y_cohen'
-alias dellclusterlistyoni='/home/public/scripts/xpool_trident/prd/xpool list -f | tee ~/docs/dell-cluster-list-yoni.txt ; less ~/docs/dell-cluster-list-yoni.txt'
+dellclusterlist-all ()
+{
+    ask_user_default_no "are you sure ? it might take a while..."
+    [ $? -eq 0 ] && return;
+    /home/public/scripts/xpool_trident/prd/xpool list -a -x -f;
+}
+
+alias dellclusterlist-yoni='          _dellclusterlist ~/docs/dell-cluster-list-yoni.txt'
+alias dellclusterlist-user='          _dellclusterlistuser'
+alias dellclusterlist-trident='       _dellclusterlist ~/docs/dell-cluster-list-trident.txt         Trident-kernel-IL'
+alias dellclusterlist-pm-il='         _dellclusterlist ~/docs/dell-cluster-list-platformmanager.txt PM-IL'
+alias dellclusterlist-xblock='        _dellclusterlist ~/docs/dell-cluster-list-xblock.txt          Xblock-NDU'
+alias dellclusterlist-shared='        _dellclusterlist ~/docs/dell-cluster-list-shared.txt          Core-Dev-Shared'
+alias dellclusterlist-shared-nvmeofc='_dellclusterlist ~/docs/dell-cluster-list-shared-nvmeofc.txt  Core-Dev-Shared NVMeOF-FC'
+alias dellclusterlist-shared-indus='  _dellclusterlist ~/docs/dell-cluster-list-shared-indus.txt    Core-Dev-Shared-Indus'
+alias dellclusterlist-qa-app-lab='    _dellclusterlist ~/docs/dell-cluster-list-qa-app-lab.txt      QA-AppLab'
+alias dellclusterlist-trident-roce='  _dellclusterlist ~/docs/dell-cluster-list-trident-roce.txt    Trident-kernel-IL NVMeOF-RoCE'
+alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt    Trident-kernel-IL indus'
+
+xpool_users=(y_cohen grupie engela eldadz levyi2);
+complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterlease-update-user;
+
 alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
-alias dellclusterlease='/home/public/scripts/xpool_trident/prd/xpool lease 7d -c '
+_dellclusterlease ()
+{
+    local lease_time=${1:-7d};
+    local cluster=${2};
+
+    if [ -z ${cluster} ] ; then
+        echo "usage $FUNCNAME <lease time> <cluster>";
+        return;
+    fi;
+
+    /home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster};
+}
+
+dellclusterlease-update-user ()
+{
+    local cluster=${1};
+    local user=${1:-labmaintenance};
+
+    if [[ -z ${cluster} ]] ; then
+        echo "you must specify a cluster";
+        return -1;
+    fi;
+
+    echo "/home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster}";
+    ask_user_default_yes "continue ?";
+    [ $? -eq 0 ] && return;
+
+    /home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster};
+}
+
 alias dellclusterleasewithforce='/home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen '
+alias dellclusterlease='_dellclusterlease 3d';
+alias dellclusterleaseshared='_dellclusterlease 72h'
 
 dellclusterruntimeenvbkpfile=~/.dellclusterruntimeenvbkpfile
+# _dellclusterleaseshared ()
+# {
+    # local cluster=${1};
+    # if [ -z ${cluster} ] ; then
+        # echo -e "you did not specify cluster, leasing free one from shared group";
+        # /home/public/scripts/xpool_trident/prd/xpool lease 72 -g Core-Dev-Shared;
+        # return;
+    # fi;
+
+    # /home/public/scripts/xpool_trident/prd/xpool lease 72 -c ${cluster};
+# }
+
+#
+# 0 - runtimeenv faulty
+# 1 - runtimeenv ok
+_dellclusterruntimeenvvalidate ()
+{
+    if [[ -z ${CYC_CONFIG} ]] ; then
+        echo -e "\033[1;31mCYC_CONFIG not set\033[0m";
+        return 0;
+    fi;
+
+    if ! [ -e ${CYC_CONFIG} ] ; then
+        echo -e "\033[1;31m ${CYC_CONFIG} does not exist\033[0m";
+        echo -e "use dellclustergeneratecfg ${YONI_CLUSTER} in yonivm";
+        return 0;
+    fi;
+
+    return 1;
+}
 
 dellclusterruntimeenvget ()  
 { 
@@ -200,15 +401,8 @@ dellclusterruntimeenvget ()
         fi;
     fi;
      
-    if [[ -z ${CYC_CONFIG} ]] ; then
-        echo -e "\033[1;31mCYC_CONFIG not set\033[0m";
-    fi;
+    _dellclusterruntimeenvvalidate ;
 
-    if ! [ -e ${CYC_CONFIG} ] ; then
-        echo -e "\033[1;31m ${CYC_CONFIG} does not exist\033[0m";
-        echo -e "use dellclustergeneratecfg ${YONI_CLUSTER} in yonivm";
-    fi;
-    
     echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
 	print_underline_size "_" 80	 
     echo -e "\033[1;31mcyclone_folder\033[0m\t\t${cyclone_folder}";
@@ -224,14 +418,30 @@ dellenvrebash ()
 {
     local cluster=;
 
-	dellcdcyclonefolder;
-	[[ $? -ne 0 ]] && return -1;
-    dellclusterruntimeenvget | tee cluster_runtime_env.txt;
-    r;
+    if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
+        echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
+        return -1;
+    fi;
 
-    cluster=$(awk '/YONI_CLUSTER/{print $2}' cluster_runtime_env.txt);
+    # this block assumes that you can run this from any folder 
+    # and that cluster runtime env is set.
+    # 
+	# dellcdcyclonefolder;
+	# [[ $? -ne 0 ]] && return -1;
+
+    # dellclusterruntimeenvget | tee cluster_runtime_env.txt;
+    # r;
+    # cluster=$(awk '/YONI_CLUSTER/{print $2}' cluster_runtime_env.txt);
+    # cd - ;
+
+    if ! [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
+        echo "${dellclusterruntimeenvbkpfile} not found! bailing out";
+        return -1;
+    fi;
+
+    cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
     dellclusterruntimeenvset ${cluster};
-    cd - ;
+
 }
 alias rd='dellenvrebash'
 
@@ -257,6 +467,19 @@ dellclusterruntimeenvset ()
     local cluster=${1};
     local cluster_config_file=;
 
+    if ! [ -z ${cluster} ] ;then
+        if ! [[ " ${cluster} " =~ " ${trident_cluster_list[@]} " ]] ; then
+            echo "new ${cluster} ?"
+            # ask_user_default_no "add ${cluster} to list";
+            # if [[ $? -eq 0 ]] ; then
+            # echo "finished here";
+            # return 0;
+            # else
+            # echo "!!tbd!! : add cluster to list"
+            # fi;
+        fi;
+    fi;
+
     # user should give cluster parameter. in case he did not
     # use the default from YONI_CLUSTER
     if [[ -z ${cluster} ]] ; then 
@@ -265,6 +488,7 @@ dellclusterruntimeenvset ()
             ask_user_default_yes "you did not specify <cluster> use ? ${last_used_cluster}";
             if [[ $? -eq 0 ]] ; then
                 cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+                # cluster="$(printf "%s\n" ${!dell_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
                 if [ -z ${cluster} ] ; then
                     echo "usage : dellclusterruntimeenvset <cluster name>";
                     return -1;
@@ -284,7 +508,9 @@ dellclusterruntimeenvset ()
         echo "source/cyc_core/cyc_platform/src/package/cyc_configs not found!!"
         return;
     fi;
-    
+
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+
     cyclone_folder=$(pwd -P);
     cyc_configs_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_configs);
     cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
@@ -299,9 +525,16 @@ dellclusterruntimeenvset ()
     export CYC_CONFIG=${cluster_config_file};
     export YONI_CLUSTER=${cluster};
 
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -eq 0 ]] ; then
+        echo "!!! failed to set runtimeenv !!!";
+        return 1;
+    fi;
+
     echo "export CYC_CONFIG=${CYC_CONFIG}" > ${dellclusterruntimeenvbkpfile};
     echo "export YONI_CLUSTER=${cluster}"  >> ${dellclusterruntimeenvbkpfile};
 
+    # dellclusterlistaddcluster ${YONI_CLUSTER};
     dellclusterruntimeenvget;
 }
 
@@ -324,8 +557,10 @@ dellclusterleaseextend ()
 
 }
 
-complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
-complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
+# complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
+# complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
+
+# complete -W "$(echo ${!dell_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
 
 ssh2arwen ()
 {
@@ -423,6 +658,11 @@ _usage_dellclusterinstallibid ()
     echo "usage: dellclusterinstallibid <ibid> <cluster>";
 }
 
+# there are 2 optional commands to install ibid 
+# using xpool : /home/public/scripts/xpool_trident/prd/xpool
+# using /home/public/devutils/bin/autoInstall.pl
+# e.g. 
+#   /home/public/devutils/bin/autoInstall.pl -swarm WX-G4067 -type san -ibid 1916979 -flavor retail -dare -syncFirmware -provisionSRS -fetchSRS -skipFwCheck --verbose
 dellclusterinstallibid ()
 {
     local ibid=${1};
@@ -459,7 +699,7 @@ dellclusterinstall ()
 {
     local cluster=${1};
     local asked_user=0;
-    local ret=;
+    local ret=1;
 
     if [ -z "${cluster}" ] ; then 
         if [ -n "${YONI_CLUSTER}" ] ; then
@@ -504,11 +744,11 @@ dellclusterinstall ()
     #############################################
     echo "==> $(pwd)";
     echo -e "\n./deploy  --deploytype san ${cluster}"; 
-    ask_user_default_no "Skip  deploy ? "
+    ask_user_default_yes "Skip  deploy ? "
     if [[ $? -eq 0 ]] ; then
         time ./deploy  --deploytype san ${cluster}; 
         if [[ $? -ne 0 ]] ; then 
-            while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
+            while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
                 time ./deploy  --deploytype san ${cluster}; 
                 ret=$?
                 [ ${ret} -ne 0 ] && continue;
@@ -533,7 +773,7 @@ dellclusterinstall ()
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
             echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
-            while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
+            while (( 1 == $(ask_user_default_yes "retry reinit ? " ; echo $?) )) ; do
                 time ./reinit_array.sh -F Retail factory sys_mode=block;
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
@@ -561,7 +801,7 @@ dellclusterinstall ()
     if [[ $? -ne 0 ]] ; then 
         ret=-1;
         echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
-        while (( 1 == $(ask_user_default_yes "retry ? " ; echo $?) )) ; do
+        while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
             echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
             time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
             ret=$?
@@ -582,36 +822,61 @@ dellclusterinstall ()
     return 0;
 }
 
+logged_to_arwen ()
+{
+    if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+        echo "you must be in arwen";
+        return 0;
+    fi;
+    return 1
+}
+
 dellclusteruserspaceupdate ()
 {
-	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		echo "you must be in arwen";
-		return -1;
-	fi;
+    local cyc_core_folder=;
 
-	dellcdclusterscripts;
-	if ! [ -e fast_code_loader.sh ] ; then
-		echo "fast_code_loader.sh not found";
-		return 1;
-	fi
+    logged_to_arwen;
+    [[ $? -eq 0 ]] && retrun -1;
+
 	if [ -z $CYC_CONFIG ] ; then
 		echo "CYC_CONFIG not defined. use dellclusterenvsetup";
-		return 1;
+		return -1;
 	fi
+
+    cyc_core_folder=${cyclone_folder}/source/cyc_core;
+    if ! [[ -e ${cyc_core_folder} ]] ; then
+        echo "${cyc_core_folder} !! does not exist";
+        return -1;
+    fi;
 
 	echo "CYC_CONFIG=$CYC_CONFIG";
 	ask_user_default_yes "continue ?";
 	[ $? -eq 0 ] && return 1;
 	
-	echo "./fast_code_loader.sh 10 -o -w /home/y_cohen/devel/cyclone/source/cyc_core"
+    echo "about to copy nt-nvmeof-frontend to node-a";
+	echo "./fast_code_loader.sh 10 -o -w ${cyc_core_folder}";
 	ask_user_default_yes "continue ?"
 	[ $? -eq 0 ] && return 1;
-	time ./fast_code_loader.sh 10 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
+
+	dellcdclusterscripts;
+	if ! [ -e fast_code_loader.sh ] ; then
+		echo "fast_code_loader.sh !!! script not found";
+        dellcdcyclonefolder;
+		return -1;
+	fi
+
+	time ./fast_code_loader.sh 10 -o -w ${cyc_core_folder};
 	
-	echo "./fast_code_loader.sh 11 -o -w /home/y_cohen/devel/cyclone/source/cyc_core"
+    echo "about to copy nt-nvmeof-frontend to node-b";
+	echo "./fast_code_loader.sh 11 -o -w ${cyc_core_folder}";
 	ask_user_default_yes "continue ?"
-	[ $? -eq 0 ] && return 1;
-	time ./fast_code_loader.sh 11 -o -w /home/y_cohen/devel/cyclone/source/cyc_core
+	if [ $? -eq 0 ] ; then
+        dellcdcyclonefolder;
+        return 0;
+    fi;
+
+	time ./fast_code_loader.sh 11 -o -w ${cyc_core_folder};
+    dellcdcyclonefolder;
 
 	return 0;
 }
@@ -808,11 +1073,22 @@ ssh2lg ()
     local lg_name=${1};
 
     if [[ -z ${lg_name} ]]; then 
-        echo "missing LG_NAME param" 
-    else
-        sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
+        lg_name="$(printf "%s\n" ${lg_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
     fi;
+
+    if [[ -z ${lg_name} ]]; then 
+        echo "missing LG_NAME param" 
+        return -1;
+    fi;
+
+    ask_user_default_yes "ssh2lg ${lg_name} ? ";
+    if [[ $? -eq 0 ]] ; then return 0 ; fi;
+
+    sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
 }
+
+lg_list=(nc9121236 nc9121238 nc9122231 host-g0359 host-g0360 nc5135221 nc5135223 host-g0199 nc5199007 nc5199009 nc5203051 nc9127122 nc9123070 nc9144126 nc9127152 hop240085038);
+complete -W "$(echo ${lg_list[@]})" ssh2lg;
 
 dellclusterlgipget ()
 {
@@ -823,7 +1099,8 @@ dellclusterlgipget ()
 dellclusterguiipget ()
 {
     local cluster=${1};
-    local config_file_folder=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs;
+    # local config_file_folder=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs;
+    local config_file_folder=${cyc_configs_folder};
     local config_file_prefix="cyc-cfg.txt.";
     local config_file_postfix="-BM";
     local config_file=;
@@ -849,7 +1126,7 @@ dellclusterguiipget ()
 		return;
 	fi;
 
-    ask_user_default_no "See all IPs ?";
+    ask_user_default_no "user swarm to list all IPs ?";
     if [[ $? -eq 0 ]] ; then
         return;
     fi;

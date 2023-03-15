@@ -11,8 +11,6 @@ nmap <C-P> :FZF<cr>
 set nowritebackup
 set hlsearch
 set noincsearch
-set cul
-set cuc
 
 " disable * from jumping with the curser to the next occurence
 nnoremap * *N
@@ -23,7 +21,7 @@ set nowrap
 set noswapfile
 
 " replace tabs with spaces.
-au FileType c   set expandtab
+au FileType c   set noexpandtab
 au FileType cpp set noexpandtab
 au FileType vim set expandtab
 au FileType sh set expandtab
@@ -115,7 +113,7 @@ let g:ConqueTerm_ReadUnfocused = 1
 " au FileType c,cpp,sh,perl colorscheme desert
 " au FileType vim colorscheme peaksea
 " au FileType sh colorscheme peaksea
-au FileType txt colorscheme darkbone
+" au FileType txt colorscheme darkbone
 " au FileType txt colorscheme darkzen
 " au FileType make colorscheme peaksea
 " au FileType awk colorscheme peaksea
@@ -219,7 +217,7 @@ map <S-F9> :colder<cr>
 map <S-F10> :cnewer<cr>
 
 map <S-s> :w<CR>
-noremap <S-l> :set nohlsearch!<CR>
+noremap <S-l> :let @/ = ""<CR>
 noremap <S-l><S-l> :/kakaka<CR>
 "noremap lll :set nohlsearch!<CR>
 
@@ -1057,6 +1055,7 @@ filetype plugin on
 syntax on
 
 " my fzf mappings
+" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 map <leader>b :Buffers<cr>
 
 " my nerdtree mappings.

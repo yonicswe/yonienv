@@ -24,10 +24,16 @@ alias v='vim -u ~/vimrcyoni.vim'
 alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
+k () {
+    job=$1 ; 
+    kill_str="kill -9 %${job}" ; 
+    eval ${kill_str} ; 
+}
+
 alias lessin='less -IN'
 alias r='source ~/yonidell.sh'
 
-alias yonidellcptobsc='docker cp yonidell.sh  cyc_bsc_docker:/home/cyc/ ; docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/'
+alias yonidellcptobsc='docker cp ~/yonidell.sh  cyc_bsc_docker:/home/cyc/ ; docker cp ~/vimrcyoni.vim cyc_bsc_docker:/home/cyc/'
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
 alias delllistdc='find . -maxdepth 1 -regex ".*service-data\|.*dump-data"'
 alias d='sudo dmesg --color -HxP'
@@ -52,25 +58,30 @@ dmesg-level-get ()
     echo -e "KERN_DEBUG    \"7\" pr_debug() and pr_devel() if DEBUG is defined"
     echo -e "KERN_DEFAULT  \"”\""
     echo -e "KERN_CONT     \"c\" pr_cont()"
-
-    echo ""
 }
 
 dmesg-level-set ()
 {
     local level=${1};
     if [ -z ${level} ] ; then
-        echo "missing level";
-        ask_user_default_yes "set to debug level ?";
+        ask_user_default_yes "missing level!! would you list to set to debug level ?";
         [ $? -eq 0 ] && return;
-        echo 8 | sudo tee /proc/sys/kernel/printk;
+        # echo 8 | sudo tee /proc/sys/kernel/printk;
+        sudo dmesg -n 8;
+        return;
     fi;
 
     sudo dmesg -n ${level};
 }
 
-alias dellcdcoredumps='cd /cyc_var/cyc_dumps/processed/cyc_dumps/'
-alias dellcddatacollectlogs='cd /disks/jiraproduction2'
+alias dellcdcore-dumps='cd /cyc_var/cyc_dumps/processed/cyc_dumps/'
+alias dellcdcore-kernelmodules='cd /cyc_software_0/cyc_host/cyc_common/modules'
+alias dellcdbsc-kernelmodules='cd /cyc_host/cyc_common/modules'
+alias dellcdcore-scripts='cd /cyc_software_0/cyc_host/cyc_bsc/scripts'
+alias dellcdbsc-scripts='cd /cyc_host/cyc_bsc/scripts'
+alias dellcdcore-bin='cd /cyc_software_0/cyc_host/cyc_bin'
+alias dellcdbsc-bin='cd /cyc_host/cyc_bin'
+alias dellcd-datacollectlogs='cd /disks/jiraproduction2'
 
 yonidellupdate ()
 {
@@ -145,8 +156,14 @@ lld ()
 coregetversion ()
 {
     local version_file=/working/cyc_host/.version
+    grep core-version ${version_file};
     grep -A 2 pnvmet ${version_file};
     grep source-reference ${version_file};
+    grep git-hash ${version_file};
+    grep program_name ${version_file};
+    ask_user_default_no "would you like to open : ${version_file} ? ";
+    if [ $? -eq 0 ] ; then return ; fi;
+    less ${version_file};
 }
 
 coregetkernelversion ()
@@ -160,10 +177,20 @@ coregetkernelversion ()
    cat /sys/module/nvmet_power/parameters/githash;
 }
 
+bsclistkernelmodules ()
+{
+    local kernel_modules_folder=/cyc_host/cyc_common/modules/;
+    (set -x ; ls -ltr ${kernel_modules_folder};);
+}
+
 corelistkernelmodules ()
 {
     local kernel_modules_folder=/cyc_software_0/cyc_host/cyc_common/modules/;
-    ls -ltr ${kernel_modules_folder};
+    if [ -d ${kernel_modules_folder} ] ; then
+        (set -x ; ls -ltr ${kernel_modules_folder};);
+        return;
+    fi;
+    bsclistkernelmodules;
 }
 
 bsclistports ()
@@ -177,83 +204,81 @@ bsclistports ()
     done | column -t;
 }
 
-# delljournalctlnode-a ()
-# {
-#     local all=${1};
-#     if [[ $all == 'a' ]] ; then
-#         journalctl                  --utc --no-pager -o short-precise -a -D node_a/var/log/journal |less -N -I
-#     else
-#         journalctl SUB_COMPONENT=nt --utc --no-pager -o short-precise -a -D node_a/var/log/journal |less -N -I
-#     fi
-# }
-#
-# delljournalctl-node-b ()
-# {
-#     local all=${1};
-#     if [[ $all == 'a' ]] ; then
-#         journalctl --no-pager -a -D node_b/var/log/journal | less -N -I
-#     else
-#         journalctl SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal | less -N -I
-#     fi
-# }
-
-delljournalctl-nt-logs-node-a ()
+bsclistindusdevices ()
 {
-    local since="${1}";
-    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal";
+    /cyc_bsc/datapath/bin/cli.py raid get_dev_info;
+}
+
+_delljournalctl ()
+{
+    local node=${1};
+    local component=${2};
+    local since="${3}";
+    local pager=0;
+    local options;
+
+    if [[ -z ${node} ]] ; then
+        echo "missing node";
+        return -1;
+    fi;
+
+    if [[ ${node}  == "a" ]] ; then
+        options="--utc -o short-precise -a -D node_a/var/log/journal";
+    elif [[ ${node} == "b" ]] ; then
+        options="--utc -o short-precise -a -D node_b/var/log/journal";
+    else
+        echo "node can be a or b only";
+    fi;
+
+    if [[ -z ${component} ]] ; then
+        echo "missing component";
+        return -1;
+    fi;
+    
+    ask_user_default_no "use pager ?";
+    if [ $? -eq 1 ] ; then
+        options+=" --no-pager | less -N -I" 
+    fi;
+
+    case ${component} in
+        "all") 
+            ;;
+        "nt") 
+            options+=" SUB_COMPONENT=nt";
+            ;;
+        "kernel") options+=" -k";
+            ;;
+        *)
+            echo "no such componenet ${componenet}";
+            return 1;
+            ;;
+    esac;
 
     if [[ -n "${since}" ]] ; then
-      (set -x ; eval journalctl --since=\"${since}\" ${options} | less -N -I);
+        (set -x ; eval journalctl --since=\"${since}\" ${options});
     else
-      (set -x ; eval journalctl ${options}  | less -N -I);
+        (set -x ; eval journalctl ${options});
     fi;
 }
 
-delljournalctl-nt-logs-node-b ()
-{
-    local since="${1}";
-    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal";
-
-    if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" ${options} | less -N -I
-    else
-        eval journalctl ${options} | less -N -I
-    fi;
-}
-
-delljournalctl-all-logs-node-a ()
-{
-    local since="${1}";
-    local options="--utc --no-pager -o short-precise -a -D node_a/var/log/journal";
-
-    if [[ -n "${since}" ]] ; then
-      (set -x ; eval journalctl --since=\"${since}\" ${options} | less -N -I);
-    else
-      (set -x ; eval journalctl ${options} | less -N -I);
-    fi;
-}
-
-delljournalctl-all-logs-node-b ()
-{
-    local since="${1}";
-    local options="--utc --no-pager -o short-precise -a -D node_b/var/log/journal";
-
-    if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" ${options} | less -N -I
-    else
-        eval journalctl ${options} | less -N -I
-    fi;
-}
+alias delljournalctl-all-logs-node-a='_delljournalctl a all'
+alias delljournalctl-all-logs-node-b='_delljournalctl b all'
+alias delljournalctl-kernel-logs-node-a='_delljournalctl a kernel'
+alias delljournalctl-kernel-logs-node-b='_delljournalctl b kernel'
+alias delljournalctl-nt-logs-node-a='_delljournalctl a nt'
+alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 
 alias journalall='sudo journalctl'
+alias journalalllast3minutes='sudo journalctl --since="3 minutes ago"'
 alias journalallf='sudo journalctl -f'
 
 alias journalnt='sudo journalctl SUB_COMPONENT=nt'
 alias journalntf='sudo journalctl -f SUB_COMPONENT=nt'
-alias journalnt3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
+alias journalntlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
 alias journalkernel='sudo journalctl -k'
 alias journalkernelf='sudo journalctl -k -f'
+alias journalkernellast3minutes='sudo journalctl -k --since="3 minutes ago"'
 
 alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j -- -a"
 alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j -- -a"
@@ -263,6 +288,33 @@ alias delltriage-kernel-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t kernel"
 alias delltriage-kernel-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
 alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
+
+delldc-node-x ()
+{
+    local node_dir=${1};
+    local jorunalctl_flags=${2};
+
+    if ! [ -d ${node_dir} ] ; then
+        echo "directory ${node_dir} does not exist";
+        return -1;
+    fi;
+
+    if ! [ -d ${node_dir}/journalctl ] ; then
+        echo "directory ${node_dir}/journalctl does not exist";
+        return -1;
+    fi;
+
+    cd ${node_dir};
+    ./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags};
+    cd -;
+}
+
+alias delldc-all-node-a='delldc-node-x node_a'
+alias delldc-all-node-b='delldc-node-x node_b'
+alias delldc-kernel-node-a='delldc-node-x node_a -k'
+alias delldc-kernel-node-b='delldc-node-x node_b -k'
+alias delldc-nt-node-a='delldc-node-x node_a SUB_COMPONENT=nt'
+alias delldc-nt-node-b='delldc-node-x node_b SUB_COMPONENT=nt'
 
 dyoni ()
 {
@@ -397,6 +449,7 @@ debuc-command ()
     if [[ -e ${debuc_file} ]] ; then
         echo -e "echo \"${command}\" > ${debuc_file}";
         echo "${command}" > ${dfile_base}\:${dfile_node};
+        echo "debug log in: journalctl SUB_COMPONENT=nt";
     else
         echo "${debuc_file} not found";
         return -1;
@@ -464,8 +517,8 @@ debuc-qos-configure-kiops-vols-1-to-100 ()
     fi;
 
     for (( i=1; i<100; i++)) ; do
-        echo "debuc-qos-configure ${i} ${kiops}";
-        debuc-qos-configure ${i} ${kiops};
+        echo "debuc-qos-configure ${i} ${kiops}k";
+        debuc-qos-configure ${i} ${kiops}k;
     done;
 }
 
@@ -473,7 +526,18 @@ alias debuc-qos-configure-5k-vols-1-to-100="debuc-qos-configure-kiops-vols-1-to-
 alias debuc-qos-configure-500k-vols-1-to-100="debuc-qos-configure-kiops-vols-1-to-100 500k"
 alias debuc-qos-configure-1000k-vols-1-to-100="debuc-qos-configure-kiops-vols-1-to-100 1000k"
 alias bsc-qos-dump='cat /sys/module/nvmet_power/parameters/qos_dump'
-alias bsc-tcp-log-objects='echo 1 | sudo tee /sys/module/nvmet_tcp/parameters/nr_tcp_queues'
+bsc-tcp-log-queues ()
+{
+    echo "nr_queues: $(cat /sys/module/nvmet_tcp/parameters/nr_tcp_queues)";
+    echo 1 | sudo tee /sys/module/nvmet_tcp/parameters/nr_tcp_queues
+}
+
+bsc-fc-log-queues ()
+{
+    echo "nr_queues: $(cat /sys/module/nvmet_fc/parameters/nr_associations)";
+    echo 1 | sudo tee /sys/module/nvmet_fc/parameters/nr_associations;
+}
+
 alias bsc-count-controllers='cat /sys/module/nvmet/parameters/nr_ctrls'
 
 _debuc_port_add ()
@@ -541,6 +605,19 @@ mydistro ()
 redpill () 
 {
     local ret=0;
+
+    ################################################# 
+    # maybe this is a docker
+    if [[ -e /.dockerenv ]] ; then
+        echo "this is a docker (found /.dockerenv)";
+        ask_user_default_no "try another method ? ";
+        [ $? -eq 0 ] && return 0;
+    fi;
+     
+    if [[ $(cat /proc/1/cgroup | grep docker | wc -l ) -gt 0 ]] ; then
+        echo "this is a docker (/proc/1/cgroup)"
+        return 0;
+    fi;
 
     ################################################# 
     # try dmidecode
@@ -747,16 +824,22 @@ dellibdev2netdev ()
 scpcommandforfile ()
 {
     local file=${1};
+    local password=${2};
     local host=$(hostname -i|cut -f 1 -d ' ');
     local user=$(id -un);
 
     if [[ -z ${file} ]] ; then
         echo -e "${RED}missing file name${NC}";
+        echo -e "${RED}usage scpcommandforfile <file> [password]${NC}";
         return -1;
     fi;
 
     file=$(readlink -f ${file});
-    echo "scp ${user}@${host}:${file} .";
+    if [ -z ${password} ] ; then
+        echo "scp ${user}@${host}:${file} .";
+    else
+        echo -e "sshpass -p \"${password}\" scp ${user}@${host}:${file} .";
+    fi;
 }
 
 dellclustergeneratecfg ()
@@ -795,14 +878,42 @@ dellclustergeneratecfg ()
     return 0;
 }
 
-dellnvme-nodename-portname ()
+dellnvme-fc-host-nodename-portname ()
 {
     for h in /sys/class/fc_host/* ; do echo "$(basename $h) : nn-$(cat $h/node_name):pn-$(cat $h/port_name)" ; done
 }
 
+alias dellnvme-tcp-host-nqn='cat /etc/nvme/hostnqn'
+ 
+dellnvme-fc-connect ()
+{
+    local cluster_nn_pn=${1};
+    local host_nn_pn=;
+    local cluster_subnqn=;
+
+    if [ -z ${cluster_nn_pn} ] ; then
+        echo "$FUNCNAME <cluster nn:pn>";
+        return -1;
+    fi;
+
+    # there could more than one host nn:pn
+    host_nn_pn=$(dellnvme-fc-host-nodename-portname|head -1|cut -d ' ' -f 3  );
+
+    # assuming that all logs in the discovery log would have the same subnqn
+    # so I use uniq here.
+    cluster_subnqn=( $(nvme discover -t fc -a ${cluster_nn_pn} -w ${host_nn_pn} | awk '/subnqn/{print $2}' | uniq) );
+    if (( ${#cluster_subnqn[@]} > 1 )) ; then
+        echo "found more than one subnqn : ${cluster_subnqn[@]}";
+        return -1;
+    fi;
+
+    echo "nvme connect -t fc -a ${cluster_nn_pn} -w ${host_nn_pn} -n ${cluster_subnqn[0]}";
+    # nvme connect -t fc -a ${cluster_subnqn} -w ${host_nn_pn} -n ${cluster_sub_nqn}";
+}
+
 # nvme discover|connect example
 # nvme discover -t tcp -a <take from bsclistports>
-# nvme discover -t fc -a <take from bsclistports> -w <take from dellnvme-nodename-portname>
+# nvme discover -t fc -a <take from bsclistports> -w <take from dellnvme-fc-nodename-portname>
 # nvme discover -t rdma --traddr=10.219.146.182 -w 10.219.146.186
 # nvme connect -t rdma -a 10.219.146.182 -n nqn.1988-11.com.dell:powerstore:00:60148e5c7660A3D9C763 -s 4420 -w 10.219.146.186 -D 
 

@@ -84,7 +84,7 @@ tagme_base ()
 #       source_files=($( find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; ) )
 
 #       echo "find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files" 
-        find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files &
+        find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files;
 
 #=================================================================================================
 #       echo "Building ctags file...";
@@ -102,7 +102,7 @@ tagme_base ()
 #       source_files=($( find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h"))
 
 #       echo "find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h" > cscope.files;"
-        find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h" > cscope.files & 
+        find ${includeTagdir[@]} \( $(echo $prune) \) -prune -o -type f -regex ".*\.c\|.*\.h" > cscope.files;
 
 #=================================================================================================
 #         echo "Building ctags file...";
@@ -115,25 +115,24 @@ tagme_base ()
 
     file=cscope.files;
 
-    while true ; do 
-        sleep 0.2
-        if [ ! -f ${file} ] ; then 
-            continue;
-        fi;
-        break;
-    done;
+    # while true ; do 
+        # sleep 0.2
+        # if [ ! -f ${file} ] ; then 
+            # continue;
+        # fi;
+        # break;
+    # done;
 
     size=$(ls -s $file | cut -f 1 -d ' ');
-    while true ; do 
+    # while true ; do 
+        # if [ "$(ls -s $file | cut -f 1 -d ' ')" -eq "$size" ] ; then 
+            # break;
+        # fi 
 
-        if [ "$(ls -s $file | cut -f 1 -d ' ')" -eq "$size" ] ; then 
-            break;
-        fi 
-
-        echo -ne "$(tail -1 $file)                                ";
-        echo -ne "\r"
-        size=$(ls -s $file | cut -f 1 -d ' ');
-    done
+        # echo -ne "$(tail -1 $file)                                ";
+        # echo -ne "\r"
+        # size=$(ls -s $file | cut -f 1 -d ' ');
+    # done
 
     echo -e "\ncscope.files has $(wc -l cscope.files|cut -f 1 -d ' ') files (size: $(ls -sh cscope.files|cut -f 1 -d ' '))"
     echo -e "\033[0;31mTagging ctags...\033[0m";
