@@ -623,21 +623,31 @@ dyoni ()
 }
 # dmesg -w will continuously print to screen (like tail -f)
 
-alias findreject='find -name "*rej"'
-alias findorig='find -name "*orig"'
-alias findmergetoolfiles='find -regex ".*_BASE_.*\|.*_BACKUP_.*\|.*_REMOTE_.*\|.*_LOCAL_.*"'
+findreject ()
+{
+    # local -a reject_file_list=( $(find -name "*rej") );
+    local -a reject_file_list=( $(fd -e rej) );
+
+    printf "%s\n" ${reject_file_list[@]};
+    complete -W "$(echo ${reject_file_list[@]})" vorej;
+}
+
+alias findorig='fd -e orig'
+# alias findmergetoolfiles='find -regex ".*_BASE_.*\|.*_BACKUP_.*\|.*_REMOTE_.*\|.*_LOCAL_.*"'
+alias findmergetoolfiles='fd _BASE_\|_BACKUP_\|_REMOTE_\|_LOCAL_'
+
 findconflictfiles ()
 {
     local delete=
 
     if [ "$1" == "-d" ] ; then 
-        delete="-delete -print";
+        # delete="-delete -print";
+        delete="-X /bin/rm";
     fi
 
     findreject ${delete};
     findorig ${delete};
     findmergetoolfiles ${delete};
-    complete -W "$(findreject)" vorej
 }
 
 vorej ()
@@ -651,6 +661,8 @@ vorej ()
     local orig_file=$(echo $rej_file | sed 's/.rej$//g');
     echo "${v_or_g} -O ${orig_file} ${rej_file}"; 
     ${v_or_g} -O ${orig_file} ${rej_file}; 
+
+    rm ${rej_file};
 }
 
 listerrnovalues ()
