@@ -44,6 +44,7 @@
 
     b = branch
     ba = branch -a
+    br = branch -r
     bdelete = branch -D 
     brename = branch -M
     byoni = ba --list "*ycohen*"
@@ -81,6 +82,15 @@
     dc = diff --cached
     dtc = difftool  --cached
     ds = diff --stat
+
+    edit = "!f() {                  \
+  	   if [ $# -eq 0 ] ; then   \
+              git commit --amend ;  \
+	   else                     \
+	      GIT_EDITOR=~/yonienv/bin/gitedit.sh git rebase -i $1^; \
+           fi                       \
+    }; f"
+    e = edit
 
     g = grep --color -n
     gi = grep --color -n --ignore-case
@@ -207,8 +217,6 @@
 
     diffnameonly = "!f() { git show $1 |diffstat -p1 -l; }; f"
 
-    logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
-#   also can track  changes to file with tig -- <file>
 
     # diffcommit = "!f() { git difftool $1^..$1 --tool=gvimdiff; }; f"
     diffcommit =  "!f() {                                   \
@@ -252,14 +260,8 @@
         fi;                                  \
     }; f"
 
-    edit = "!f() {                  \
-  	   if [ $# -eq 0 ] ; then   \
-              git commit --amend ;  \
-	   else                     \
-	      GIT_EDITOR=~/yonienv/bin/gitedit.sh git rebase -i $1^; \
-           fi                       \
-    }; f"
-    e = edit
+
+    info = logstat -1 
 
 #                                   SHA          date                   name             msg
     lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
@@ -272,10 +274,14 @@
     l30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n30
     lf = log --pretty=short
 
+    logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
+#   also can track  changes to file with tig -- <file>
+
     gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
     gls = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s --simplify-by-decoration
 
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+    logstat = log --stat
 
     # list only untracked files
     lu = ls-files --others
@@ -314,10 +320,14 @@
 
 	sm = submodule
 	smdiff = diff --submodule
+	smgrep = grep --recurse-submodules
+	smupdate = submodule update
 	smupdateinit = submodule update --init
 	smstatus = sm foreach 'ls|wc -l'
 	smremove = submodule deinit
 	sm-resetall = submodule foreach --recursive git reset --hard
+	sm-update-all = submodule update --recursive
+	sm-updateinit-all = submodule update --init --recursive
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 #   cleanuntracked = clean -df	
 
@@ -447,3 +457,9 @@
 [pull]
     recurseSubmodules = false
 
+# tips
+# find out if a commit is part of this cherkcout.
+# git log | grep <commit id>
+#
+# find out on which branches a commit id is on
+# git branch --contains <commit id>
