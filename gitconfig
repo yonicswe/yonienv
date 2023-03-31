@@ -262,6 +262,14 @@
 
 
     info = logstat -1 
+    reside-commit-in-branch = "!f() {     \
+	c=$1;                         \
+	if [ -z $c ] ; then           \
+		echo "missing commit" \
+		return;               \
+	fi;                           \
+	git log |grep $c;             \
+	}; f"
 
 #                                   SHA          date                   name             msg
     lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
