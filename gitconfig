@@ -308,6 +308,7 @@
     rebaseto = "!f() { git rebase -i $1^; }; f"
     rebaseback = "!f() { [[ $# -eq 0 ]] && return ; git rebase -i HEAD~$1; }; f"
 
+    gc=gc --auto --aggressive
     commitfilelist = show --stat --oneline
 
 	sl = stash list
