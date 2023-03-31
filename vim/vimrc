@@ -225,6 +225,8 @@ noremap <S-l><S-l> :/kakaka<CR>
 map <C-n> :set nu!<CR>
 set nu
 
+map <C-w> :set wrap!<CR>
+
 
 " surround selected text with quotes.
 " map <F2> c"<C-R>""<ESC>xx
