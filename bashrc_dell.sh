@@ -145,7 +145,7 @@ dellsubmodulesdiscard ()
 
 _dellcyclonebuild ()
 {
-    local flavor;
+    local build_cmd='make cyc_core'
 
 	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
 		echo "you must be in arwen to build";
@@ -163,21 +163,32 @@ _dellcyclonebuild ()
 
     ask_user_default_no "flavor DEBUG ? ";
     if [[ $? -eq 0 ]] ; then
-        flavor=RETAIL;
+        build_cmd+=" flavor=RETAIL";
     else
-        flavor=DEBUG;
+        build_cmd+=" flavor=DEBUG";
+    fi;
+
+    ask_user_default_yes "disable caching ? ";
+    if [ $? -eq 0 ] ; then
+        build_cmd+=" acache=no mcache=no dcache=no";
+    fi;
+
+    ask_user_default_yes "verbose ? ";
+    if [ $? -eq 1 ] ; then
+        build_cmd+=" verbose=3";
     fi;
 
 	ask_user_default_no "prune before build ?"
 	if [[ $? -eq 1 ]] ; then
-	    echo "=============== make prun =========================";
+	    echo "=============== make prune =========================";
 	    make prune;
 	fi;
 
-	echo -e "\n========== start build ($(pwd)) ===================\n"
-	echo "make cyc_core flavor=${flavor} force=yes"
-	echo "========================================================"
-	make cyc_core flavor=${flavor} force=yes
+	echo -e "\n========== start build ($(pwd)) ===================\n";
+	echo "${build_cmd}";
+	echo "========================================================";
+    eval ${build_cmd};
+	echo -e "\n${build_cmd}\n";
 }
 
 alias dellcyclonebuild='time _dellcyclonebuild'
@@ -500,6 +511,7 @@ dellcdcyclonefolder ()
     cd $cyclone_folder;
     return 0;
 }
+alias ddd='dellcdcyclonefolder'
 
 dellclusterruntimeenvset ()
 {
@@ -554,7 +566,12 @@ dellclusterruntimeenvset ()
     cyc_configs_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_configs);
     cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
     cluster_config_file=${cyc_configs_folder}/cyc-cfg.txt.${cluster}-BM;
-    third_party_folder=$(readlink -f source/third_party/cyc_platform/src/third_party/PNVMeT);
+    if ! [ -e source/third_party/cyc_platform/src/third_party/PNVMeT ] ; then
+        echo -e "\n!! warning !! : no such folder : source/third_party/cyc_platform/src/third_party/PNVMeT\n";
+    else
+        third_party_folder=$(readlink -f source/third_party/cyc_platform/src/third_party/PNVMeT);
+    fi;
+
     dell_kernel_objects=$(readlink -f source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT)
 
     echo "export CYC_CONFIG=${cluster_config_file}";
@@ -603,9 +620,18 @@ dellclusterleaseextend ()
 
 ssh2arwen ()
 {
-    /bin/ssh -t arwen3 "cd $(pwd) ; exec \$SHELL -l";
+    local arwen=${1:-arwen3};
+    /bin/ssh -t ${arwen} "cd $(pwd) ; exec \$SHELL -l";
     # /bin/ssh -t arwen3 "cd $(pwd) ; bash --login";
 }
+
+alias ssh2arwen1='ssh2arwen arwen1'
+alias ssh2arwen2='ssh2arwen arwen2'
+alias ssh2arwen3='ssh2arwen arwen3'
+alias ssh2arwen4='ssh2arwen arwen4'
+alias ssh2arwen5='ssh2arwen arwen5'
+alias ssh2arwen6='ssh2arwen arwen6'
+alias ssh2arwen7='ssh2arwen arwen7'
 
 ssh2core ()
 {
@@ -701,7 +727,10 @@ _usage_dellclusterinstallibid ()
 # using xpool : /home/public/scripts/xpool_trident/prd/xpool
 # using /home/public/devutils/bin/autoInstall.pl
 # e.g. 
-#   /home/public/devutils/bin/autoInstall.pl -swarm WX-G4067 -type san -ibid 1916979 -flavor retail -dare -syncFirmware -provisionSRS -fetchSRS -skipFwCheck --verbose
+# 1. with ibid
+#    /home/public/devutils/bin/autoInstall.pl -swarm WX-G4067 -type san -ibid 1916979 -flavor retail -dare -syncFirmware -provisionSRS -fetchSRS -skipFwCheck --verbose
+# 2. with feature flag and ibid
+#    /home/public/devutils/bin/autoInstall.pl -swarm WK-D0677 -type san -ibid 1994402 -flavor retail -dare -syncFirmware -provisionSRS -fetchSRS -skipFwCheck --verbose -feature=REFLAG_TRIF1721
 dellclusterinstallibid ()
 {
     local ibid=${1};
@@ -734,6 +763,57 @@ dellclusterinstallibid ()
     return 0;
 }
 
+dellclusterinstallfeatureflag ()
+{
+    local feature=${1};
+
+    echo -e "./reinit_array.sh -F Retail factory sys_mode=block feature=\"REFLAG_TRIF1721\"";
+}
+
+dellclusterfeatureflaglist ()
+{
+    local feature_list_file=~/docs/cluster-feature-flag-list.sh; 
+
+    cat ${feature_list_file};
+}
+
+_dellclusterget ()
+{
+    local cluster=${1};
+
+    if ! [ -z ${cluster} ] ;then
+        if ! [[ " ${cluster} " =~ " ${trident_cluster_list[@]} " ]] ; then
+            echo "new ${cluster} ?"
+            # ask_user_default_no "add ${cluster} to list";
+            # if [[ $? -eq 0 ]] ; then
+            # echo "finished here";
+            # return 0;
+            # else
+            # echo "!!tbd!! : add cluster to list"
+            # fi;
+        fi;
+    fi;
+
+    # help user get a cluster
+    if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
+        last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
+        ask_user_default_yes "you did not specify <cluster> use ? ${last_used_cluster}";
+        if [[ $? -eq 0 ]] ; then
+            cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+            # cluster="$(printf "%s\n" ${!dell_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+            if [ -z ${cluster} ] ; then
+                echo "usage : dellclusterruntimeenvset <cluster name>";
+                return -1;
+            fi;
+        else
+            cluster=${last_used_cluster};
+        fi;
+    fi;
+
+    echo ${cluster};
+    return 0;
+}
+
 dellclusterinstall ()
 {
     local cluster=${1};
@@ -741,19 +821,12 @@ dellclusterinstall ()
     local ret=1;
 
     if [ -z "${cluster}" ] ; then 
-        if [ -n "${YONI_CLUSTER}" ] ; then
-            echo -e "\033[1;31mYou did not specify <cluster>\033[0m";
-            ask_user_default_yes "deploy to ${YONI_CLUSTER} ? "
-            if [ $? -eq 1 ] ; then 
-                cluster=${YONI_CLUSTER};
-            else
-                echo "usage dellclusterdeploy <cluster name>"; return;
-            fi;
-            asked_user=1;
-        else
-            echo "usage dellclusterdeploy <cluster name>"; return;
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
         fi;
-    fi
+    fi;
 
     if [[ -z ${CYC_CONFIG} ]] ; then
         echo "CYC_CONFIG not set. use dellclusterruntimeenvset <cluster>";
@@ -765,18 +838,19 @@ dellclusterinstall ()
         return -1;
     fi;
     
-    # if [[ ${asked_user} -eq 0 ]] ; then
-        # echo "install ${cluster} with ${CYC_CONFIG}"
-        # ask_user_default_yes "Continue ? ";
-        # [ $? -eq 0 ] && return; 
-    # fi;
-
     echo -e "\nAbout to install cluster ${cluster}\n";
     dellclusterruntimeenvget;
     ask_user_default_yes "Continue ? ";
     [ $? -eq 0 ] && return; 
     
     dellcdclusterscripts;
+
+    # offer user to skip everything and just do this 
+    echo -n "./deploy  --deploytype san ${cluster}"; 
+    echo -n " && ./reinit_array.sh -F Retail factory sys_mode=block"; 
+    echo " && ./create_cluster.py -sys ${cluster}-BM -stdout -y -po"; 
+    ask_user_default_yes "continue ? ";
+    if [ $? -eq 0 ] ; then return 0 ; fi;
 
     #############################################
     #            deploy
@@ -1145,9 +1219,10 @@ dellclusterguiipget ()
     local config_file=;
 
     if [[ -z ${cluster} ]] ; then
-        echo "missing cluster";
-        return -1;
+        cluster=$(_dellclusterget);
     fi
+
+    echo "${FUNCNAME} : cluster : ${cluster}";
      
     cluster=$(echo ${cluster} | awk '{print toupper($0)}');
 
@@ -1165,7 +1240,7 @@ dellclusterguiipget ()
 		return;
 	fi;
 
-    ask_user_default_no "user swarm to list all IPs ?";
+    ask_user_default_no "use swarm to list all IPs ?";
     if [[ $? -eq 0 ]] ; then
         return;
     fi;
@@ -1175,6 +1250,15 @@ dellclusterguiipget ()
     print_underline_size "_" 80	 
     /home/public/devutils/bin/swarm -ping -showall ${cluster};
 
+}
+ 
+dellclusterconfigupdate ()
+{
+    local cluster_config_source_folder=~/docs/cluster_config_files;
+
+    dellcdclusterconfigs;
+    /bin/cp -v ${cluster_config_source_folder}/* .
+    c - ;
 }
 
 dellclusterinfo ()
@@ -1449,6 +1533,17 @@ delljournalctl-all-logs-node-b ()
         eval journalctl ${options} | less -N -I
     fi;
 }
+
+dell_mount_jiraproduction ()
+{
+    sudo mount cecaunity01-nas.corp.emc.com:/jiraproduction /disks/jiraproduction;
+    sudo mount cecaunity01-nas.corp.emc.com:/jiraproduction2 /disks/jiraproduction2
+}
+ 
+if ! [ -d /disks/jiraproduction ]  || ! [ -d /disks/jiraproduction2 ] ; then
+    echo "/disks/jiraproduction not mounted";
+    echo "use dell_mount_jiraproduction";
+fi
 
 alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j"
 alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j"
