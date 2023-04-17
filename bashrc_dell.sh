@@ -3,7 +3,9 @@
 alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
-alias ssh2yonivm='sshpass -p cycpass ssh cyc@10.244.196.235'
+# alias ssh2yonivm='sshpass -p cycpass ssh cyc@10.244.196.235'
+yonivmipaddress="10.227.212.155"
+alias ssh2yonivm="sshpass -p cycpass ssh cyc@${yonivmipaddress}"
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
@@ -18,6 +20,14 @@ trident_cluster_list=( $(cat ${dell_clusters_file}) );
 # export dell_cluster_list;
 
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
+
+
+yonivm-update-yonienv ()
+{
+    cd;
+    rsync -av --progress -R -e ssh yonienv/ cyc@${yonivmipaddress}:/home/cyc
+    cd -
+}
 
 _trident_cluster_list_nodes_init ()
 {
@@ -115,8 +125,10 @@ dellcyclonedevelreset ()
 
 dellcyclonedevelenvsetup ()
 {
-	git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git
-	cd cyclone
+    local pdr_folder_name=${1:-cyclone};
+
+	git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git ${pdr_folder_name};
+	cd ${pdr_folder_name};
 	git submodule update --init source/cyc_core
 	git submodule update --init source/devops-scripts
 	git submodule update --init source/bedrock
@@ -143,14 +155,14 @@ dellsubmodulesdiscard ()
     git submodule update --checkout source/nt-nvmeof-frontend
 }
 
-_dellcyclonebuild ()
+dellcyclonebuild ()
 {
     local build_cmd='make cyc_core'
 
-	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		echo "you must be in arwen to build";
-		return;
-	fi
+	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		# echo "you must be in arwen to build";
+		# return;
+	# fi
     
 	dellcdcyclonefolder;
 	[[ $? -ne 0 ]] && return -1;
@@ -168,7 +180,7 @@ _dellcyclonebuild ()
         build_cmd+=" flavor=DEBUG";
     fi;
 
-    ask_user_default_yes "disable caching ? ";
+    ask_user_default_yes "use cached repos ? ";
     if [ $? -eq 0 ] ; then
         build_cmd+=" acache=no mcache=no dcache=no";
     fi;
@@ -180,18 +192,19 @@ _dellcyclonebuild ()
 
 	ask_user_default_no "prune before build ?"
 	if [[ $? -eq 1 ]] ; then
-	    echo "=============== make prune =========================";
-	    make prune;
+	    build_cmd="make prune && ${build_cmd}";
 	fi;
 
 	echo -e "\n========== start build ($(pwd)) ===================\n";
 	echo "${build_cmd}";
 	echo "========================================================";
-    eval ${build_cmd};
+    ask_user_default_yes "continue ?";
+    [ $? -eq 0 ] && return 0;
+
+    build_cmd="time ${build_cmd}";
+    eval ${build_cmd} | tee dellcyclonebuild.log
 	echo -e "\n${build_cmd}\n";
 }
-
-alias dellcyclonebuild='time _dellcyclonebuild'
 
 builds_journal_db="build-history";
 builds_journal_db_path=~/devel;
@@ -289,14 +302,9 @@ _dellclusterlist ()
     echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt"
     /home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt
 
-    # if [ 0 -eq $(grep -i "no clusters are leased" | wc -l) ] ; then
-        # echo "no clusters were found";
-        # return;
-    # fi;
-
-    (set -x ; mv /tmp/cluster-list-file.txt ${list_file});
     ask_user_default_yes "open with vim ${list_file} ?";
     [ $? -eq 0 ] && return;
+    (set -x ; mv /tmp/cluster-list-file.txt ${list_file});
     v ${list_file};
 }
 
@@ -393,22 +401,22 @@ dellclustergeneratecfg ()
         return -1;
     fi;
 
-    if [[ -z ${cluster} ]] ; then
-        echo "to which cluster ?";
+    if ! [[ -e cyc_platform/src/package/cyc_helpers/swarm-to-cfg-centos8.sh ]] ; then
+        echo "missing cyc_platform/src/package/cyc_helpers/swarm-to-cfg-centos8.sh";
         return -1;
     fi;
 
-    if ! [[ -e cyc_platform/src/package/cyc_helpers ]] ; then
-        echo "missing cyc_platform/src/package/cyc_helpers (forget to checkout ?)";
-        return -1;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
     fi;
+
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}' )
 
     pushd cyc_platform/src/package/cyc_helpers > /dev/null;
-
-    if ! [[ -e swarm-to-cfg-centos8.sh ]] ; then
-        echo "missing script file swarm-to-cfg-centos8.sh";
-        return -1;
-    fi;
 
     echo "./swarm-to-cfg-centos8.sh ${cluster}";
     ./swarm-to-cfg-centos8.sh ${cluster};
@@ -770,11 +778,22 @@ dellclusterinstallfeatureflag ()
     echo -e "./reinit_array.sh -F Retail factory sys_mode=block feature=\"REFLAG_TRIF1721\"";
 }
 
-dellclusterfeatureflaglist ()
+dellcyclonefeatureflaglist ()
 {
-    local feature_list_file=~/docs/cluster-feature-flag-list.sh; 
+    # local feature_list_file=~/docs/cluster-feature-flag-list.sh; 
+    # cat ${feature_list_file};
 
-    cat ${feature_list_file};
+    local feature_list_file=configs/feature_flags_default.json
+
+    if [[ -z ${CYC_CONFIG} ]] ; then
+        echo "CYC_CONFIG not set. use dellclusterruntimeenvset <cluster>";
+        return -1;
+    fi;
+
+    ddd; 
+
+    less ${feature_list_file};
+    
 }
 
 _dellclusterget ()
@@ -1265,40 +1284,57 @@ dellclusterinfo ()
 {
     local cluster=${1};
 
-	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		echo "you must be in arwen";
-		return;
-	fi;
+	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		# echo "you must be in arwen";
+		# return;
+	# fi;
 
 	if ! [ -e /home/public/devutils/bin/swarm ] ; then 
 		echo "/home/public/devutils/bin/swarm not found";
 		return;
 	fi;
 
-    if [[ -z ${cluster} ]] ; then 
-        if [ -z ${YONI_CLUSTER} ] ; then
-            echo "run dellclusterenvsetup <cluster name> or dellclusterinfo <cluster name>";
-            return;
-        else
-            cluster=${YONI_CLUSTER};
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
         fi;
-    else
-        print_underline_size "_" 80	 
-        echo "/home/public/devutils/bin/swarm -ping ${cluster}";
-        print_underline_size "_" 80	 
-        /home/public/devutils/bin/swarm -ping ${cluster};
-        print_underline_size "_" 80	 
-        echo "/home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster}";
-        /home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster};
-        return 0;
-	fi;
+    fi;
 
-	print_underline_size "_" 80	 
-	echo "/home/public/scripts/xpool_trident/prd/xpool list -f"
-	print_underline_size "_" 80	 
-	/home/public/scripts/xpool_trident/prd/xpool list -f
+    print_underline_size "_" 80	 
+    echo "/home/public/devutils/bin/swarm -ping ${cluster}";
+    print_underline_size "_" 80	 
+    /home/public/devutils/bin/swarm -ping ${cluster};
+    print_underline_size "_" 80	 
+    echo "/home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster}";
+    /home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster};
+    return 0;
 
-	return 0;
+    # if [[ -z ${cluster} ]] ; then 
+        # if [ -z ${YONI_CLUSTER} ] ; then
+            # echo "run dellclusterenvsetup <cluster name> or dellclusterinfo <cluster name>";
+            # return;
+        # else
+            # cluster=${YONI_CLUSTER};
+        # fi;
+    # else
+        # print_underline_size "_" 80	 
+        # echo "/home/public/devutils/bin/swarm -ping ${cluster}";
+        # print_underline_size "_" 80	 
+        # /home/public/devutils/bin/swarm -ping ${cluster};
+        # print_underline_size "_" 80	 
+        # echo "/home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster}";
+        # /home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster};
+        # return 0;
+	# fi;
+
+	# print_underline_size "_" 80	 
+	# echo "/home/public/scripts/xpool_trident/prd/xpool list -f"
+	# print_underline_size "_" 80	 
+	# /home/public/scripts/xpool_trident/prd/xpool list -f
+
+	# return 0;
 }
 
 third_party_folder=
@@ -1431,6 +1467,26 @@ dellcyclonekernelshaupdate ()
     # the folder from which it was built the branch name and the index
     # print these when user invokes dellclusterruntimeenvget
 }
+
+dellcyclonebackup ()
+{
+    local src_folder=${1};
+    local dst_folder=;
+
+    if [ -z ${src_folder} ] ; then
+        echo "${FUNCNAME} <cyclone folder>"
+        return -1;
+    fi;
+
+    dst_folder=${src_folder};
+
+    echo "rsync -av --progress ${src_folder} cyc@${yonivmipaddress}:/home/cyc/${dst_folder}";
+    ask_user_default_yes "continue ?";
+    [ $? -eq 0 ] && return 0;
+          rsync -av --progress ${src_folder} cyc@${yonivmipaddress}:/home/cyc/${dst_folder};
+    return 0;
+}
+
 
 dellibid2commit ()
 {
