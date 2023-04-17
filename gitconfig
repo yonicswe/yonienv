@@ -145,12 +145,16 @@
 #   if branch name is posixed with v<number> 
 #   increment the version v<number++>
     branchincversion = "!f() { \
-        v=$(git bb |grep -E -o "v[0-9]+$"); \
-	if [ -z $v ] ; then return ; fi ; \
-	v=$(echo $v | grep -E -o "[0-9]"); \
-	bnewname=$(git bb | sed 's/v[0-9]//'); \
-	v=$((v + 1)) ;\
-	git brename ${bnewname}v$v; \
+       v=$(git bb |grep -E -o "v[0-9]+$"); \
+       if [ -z $v ] ; then \
+          bnewname=$(git bb)-v1; \
+          git cb ${bnewname}; \
+       else \
+          v=$(echo $v | grep -E -o "[0-9]"); \
+          bnewname=$(git bb | sed 's/v[0-9]//'); \
+          v=$((v + 1)) ;\
+          git cb ${bnewname}v$v; \
+       fi; \
     };f "
 
 
@@ -332,7 +336,7 @@
 	smgrep = grep --recurse-submodules
 	smupdate = submodule update
 	smupdateinit = submodule update --init
-	smstatus = sm foreach 'ls|wc -l'
+	smstatus = sm foreach
 	smremove = submodule deinit
 	sm-resetall = submodule foreach --recursive git reset --hard
 	sm-update-all = submodule update --recursive
