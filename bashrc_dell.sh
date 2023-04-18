@@ -390,44 +390,6 @@ dellclusterruntimeenvbkpfile=~/.dellclusterruntimeenvbkpfile
 # 0 - runtimeenv faulty
 # 1 - runtimeenv ok
 
-complete -W "$(echo ${trident_cluster_list_nodes[@]})" dellclustergeneratecfg
-
-dellclustergeneratecfg ()
-{
-    local cluster=${1};
-
-    if [ 0 -eq $(git remote -v | grep "cyclone\/cyc_core.git" | wc -l) ] ; then
-        echo "you must be in a cyc_core repo https://y_cohen@eos2git.cec.lab.emc.com/cyclone/cyc_core.git";
-        return -1;
-    fi;
-
-    if ! [[ -e cyc_platform/src/package/cyc_helpers/swarm-to-cfg-centos8.sh ]] ; then
-        echo "missing cyc_platform/src/package/cyc_helpers/swarm-to-cfg-centos8.sh";
-        return -1;
-    fi;
-
-    if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
-            return -1;
-        fi;
-    fi;
-
-    cluster=$(echo ${cluster} | awk '{print toupper($0)}' )
-
-    pushd cyc_platform/src/package/cyc_helpers > /dev/null;
-
-    echo "./swarm-to-cfg-centos8.sh ${cluster}";
-    ./swarm-to-cfg-centos8.sh ${cluster};
-     
-    ls ../cyc_configs/*${cluster}* | while read c ; do readlink -f $c ; done;
-
-    popd > /dev/null;
-
-    return 0;
-}
-
 _dellclusterruntimeenvvalidate ()
 {
     if [[ -z ${CYC_CONFIG} ]] ; then
@@ -475,11 +437,13 @@ dellclusterruntimeenvget ()
 dellenvrebash ()
 {
     local cluster=;
+    local pdr_folder=;
 
-    if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
-        echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
-        return -1;
-    fi;
+    # make sure were on a cyclone pdr folder
+    # if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
+        # echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
+        # return -1;
+    # fi;
 
     # this block assumes that you can run this from any folder 
     # and that cluster runtime env is set.
@@ -497,7 +461,20 @@ dellenvrebash ()
         return -1;
     fi;
 
+    pdr_folder=$(awk -F '='  '/YONI_PDR/{print $2}' ${dellclusterruntimeenvbkpfile});
+    if [[ -z ${pdr_folder} ]] ; then
+        echo -e "${RED}last used pdr folder not saved${NC}";
+        echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
+        return -1;
+    fi;
+
     cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
+    if [[ -z ${cluster} ]] ; then
+        echo -e "${RED}last used cluster not saved${NC}";
+        return -1;
+    fi;
+
+    cd ${pdr_folder};
     dellclusterruntimeenvset ${cluster};
 
 }
@@ -597,10 +574,67 @@ dellclusterruntimeenvset ()
 
     echo "export CYC_CONFIG=${CYC_CONFIG}" > ${dellclusterruntimeenvbkpfile};
     echo "export YONI_CLUSTER=${cluster}"  >> ${dellclusterruntimeenvbkpfile};
+    echo "export YONI_PDR=${cyclone_folder}"  >> ${dellclusterruntimeenvbkpfile};
 
     # _dellclusterlistaddcluster ${YONI_CLUSTER};
     dellclusterruntimeenvget;
 }
+
+complete -W "$(echo ${trident_cluster_list_nodes[@]})" dellclustergeneratecfg
+dellclustergeneratecfg ()
+{
+    local cluster=${1};
+
+    # if [ 0 -eq $(git remote -v | grep "cyclone\/cyc_core.git" | wc -l) ] ; then
+        # echo "you must be in a cyc_core repo https://y_cohen@eos2git.cec.lab.emc.com/cyclone/cyc_core.git";
+        # return -1;
+    # fi;
+
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -eq 0 ]] ; then
+        echo -e "${RED}"
+        return -1;
+    fi;
+
+    # runtime is set, lets use it.
+    ddd;
+
+    if ! [ -d source/cyc_core ] ; then 
+        echo -e "${RED}missing source/cyc_core folder${NC}";
+        return -1;
+    fi;
+
+    cd source/cyc_core;
+ 
+    if ! [[ -e cyc_platform/src/package/cyc_helpers/swarm-to-cfg-centos8.sh ]] ; then
+        echo "missing cyc_platform/src/package/cyc_helpers/swarm-to-cfg-centos8.sh";
+        return -1;
+    fi;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}' )
+
+    pushd cyc_platform/src/package/cyc_helpers > /dev/null;
+
+    echo "./swarm-to-cfg-centos8.sh ${cluster}";
+    ask_user_default_yes "continue ?"
+    if [[ $? -eq 0 ]] ; then return ; fi;
+    ./swarm-to-cfg-centos8.sh ${cluster};
+     
+    ls ../cyc_configs/*${cluster}* | while read c ; do readlink -f $c ; done;
+
+    popd > /dev/null;
+
+    return 0;
+}
+
 
 dellclusterleaseextend () 
 {
