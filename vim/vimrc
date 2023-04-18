@@ -225,7 +225,7 @@ noremap <S-l><S-l> :/kakaka<CR>
 map <C-n> :set nu!<CR>
 set nu
 
-map <C-w> :set wrap!<CR>
+" map <C-w> :set wrap!<CR>
 
 
 " surround selected text with quotes.
@@ -360,7 +360,7 @@ autocmd FileType xml vmap <leader>a s/<\(.*\)>$/<!--\1-->/
 " search for code references
 map <leader>g  yiw:grep <C-R>" .<cr>
 map <leader>r  :Rg<cr>
-map <leader>w  :W<cr>
+" map <leader>w  :W<cr>
 " map <leader>r  yiw:grep -w <C-R>" drivers/infiniband/sw/rxe/<cr>
 " map <leader>rr  yiw:grep -w <C-R>" include drivers/infiniband/ drivers/net/ethernet/mellanox<cr>
 " map <leader>r  yiw:grep -w <C-R>" .<cr>
@@ -810,7 +810,7 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 " lcd %:h will change only for current file
 " !git log -p %:p // for current opened file
 " there are more under filename-modifiers in vim docs.
-map cdf :cd %:h<cr>
+map cdf :cd %:h<cr>:pwd<cr>
 map <leader>a <esc>ggVG<CR>
 map <leader>x :!chmod a+x %<cr>
 
