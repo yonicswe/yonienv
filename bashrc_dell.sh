@@ -3,7 +3,7 @@
 alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
-# alias ssh2yonivm='sshpass -p cycpass ssh cyc@10.244.196.235'
+# yonivmipaddress="10.244.196.235"
 yonivmipaddress="10.227.212.155"
 alias ssh2yonivm="sshpass -p cycpass ssh cyc@${yonivmipaddress}"
 export YONI_CLUSTER=;
@@ -155,6 +155,76 @@ dellsubmodulesdiscard ()
     git submodule update --checkout source/nt-nvmeof-frontend
 }
 
+dellcyclonegitsmup ()
+{
+    # git sm update source/bedrock
+    # git sm update source/cdre
+    # git sm update source/centos
+    # git sm update source/controlpath_ui
+    git sm update source/cyc_core
+    # git sm update source/cyc_coreos
+    # git sm update source/cyc_crypto
+    # git sm update source/cyc_dp_protobuf
+    # git sm update source/cyc_install_tools
+    # git sm update source/cyclone-controlpath
+    # git sm update source/cyclone-features
+    # git sm update source/cyclone-image
+    # git sm update source/cyc_net_protobuf
+    # git sm update source/devops-scripts
+    # git sm update source/docker-images
+    # git sm update source/event-generator
+    # git sm update source/feature-framework
+    # git sm update source/indus
+    # git sm update source/integration-testing
+    git sm update source/linux
+    git sm update source/nt-nvmeof-frontend
+    # git sm update source/ntrdma
+    # git sm update source/pycyc-test-framework-docker
+    # git sm update source/rpm_infra
+    # git sm update source/sdnas-int-tests
+    # git sm update source/serviceability-tools
+    # git sm update source/stack
+    git sm update source/third_party
+    # git sm update source/trident-glider
+    # git sm update source/trident-sdnas
+    # git sm update source/xblock
+}
+
+dellcyclonegitdeinit ()
+{
+    git sm deinit -f source/bedrock
+    git sm deinit -f source/cdre
+    git sm deinit -f source/centos
+    git sm deinit -f source/controlpath_ui
+    # git sm deinit -f source/cyc_core
+    git sm deinit -f source/cyc_coreos
+    git sm deinit -f source/cyc_crypto
+    git sm deinit -f source/cyc_dp_protobuf
+    git sm deinit -f source/cyc_install_tools
+    git sm deinit -f source/cyclone-controlpath
+    git sm deinit -f source/cyclone-features
+    git sm deinit -f source/cyclone-image
+    git sm deinit -f source/cyc_net_protobuf
+    git sm deinit -f source/devops-scripts
+    git sm deinit -f source/docker-images
+    git sm deinit -f source/event-generator
+    git sm deinit -f source/feature-framework
+    git sm deinit -f source/indus
+    git sm deinit -f source/integration-testing
+    # git sm deinit -f source/linux
+    # git sm deinit -f source/nt-nvmeof-frontend
+    git sm deinit -f source/ntrdma
+    git sm deinit -f source/pycyc-test-framework-docker
+    git sm deinit -f source/rpm_infra
+    git sm deinit -f source/sdnas-int-tests
+    git sm deinit -f source/serviceability-tools
+    git sm deinit -f source/stack
+    # git sm deinit -f source/third_party
+    git sm deinit -f source/trident-glider
+    git sm deinit -f source/trident-sdnas
+    git sm deinit -f source/xblock
+}
+
 dellcyclonebuild ()
 {
     local build_cmd='make cyc_core'
@@ -185,7 +255,7 @@ dellcyclonebuild ()
         build_cmd+=" acache=no mcache=no dcache=no";
     fi;
 
-    ask_user_default_yes "verbose ? ";
+    ask_user_default_no "verbose=3 ? ";
     if [ $? -eq 1 ] ; then
         build_cmd+=" verbose=3";
     fi;
@@ -433,6 +503,7 @@ dellclusterruntimeenvget ()
 	print_underline_size "_" 80	 
     echo;
 }
+alias gd='dellclusterruntimeenvget'
 
 dellenvrebash ()
 {
@@ -497,7 +568,7 @@ dellcdcyclonefolder ()
     return 0;
 }
 alias ddd='dellcdcyclonefolder'
-
+export _dellclusterruntimeenvset=0
 dellclusterruntimeenvset ()
 {
     local cluster=${1};
@@ -578,6 +649,7 @@ dellclusterruntimeenvset ()
 
     # _dellclusterlistaddcluster ${YONI_CLUSTER};
     dellclusterruntimeenvget;
+    _dellclusterruntimeenvset=1;
 }
 
 complete -W "$(echo ${trident_cluster_list_nodes[@]})" dellclustergeneratecfg
@@ -590,9 +662,8 @@ dellclustergeneratecfg ()
         # return -1;
     # fi;
 
-    _dellclusterruntimeenvvalidate;
-    if [[ $? -eq 0 ]] ; then
-        echo -e "${RED}"
+    if [[ ${_dellclusterruntimeenvset} -eq 0 ]] ; then
+        echo -e "${RED}runtimeenv is not set${NC}}"
         return -1;
     fi;
 
@@ -628,7 +699,9 @@ dellclustergeneratecfg ()
     if [[ $? -eq 0 ]] ; then return ; fi;
     ./swarm-to-cfg-centos8.sh ${cluster};
      
-    ls ../cyc_configs/*${cluster}* | while read c ; do readlink -f $c ; done;
+    dellcdclusterconfigs;
+    find -name "*${cluster}*" -exec readlink -f {} \;
+    # ls *${cluster}* | while read c ; do readlink -f $c ; done;
 
     popd > /dev/null;
 
@@ -1171,10 +1244,10 @@ dellclusteryonienvupdate ()
 		return -1;
 	fi
 
-	if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		echo "you must be in arwen";
-		return;
-	fi;
+	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+		# echo "you must be in arwen";
+		# return;
+	# fi;
 
 	ask_user_default_yes "update ${YONI_CLUSTER} ?";
 	[ $? -eq 0 ] && return -1;
@@ -1253,7 +1326,8 @@ ssh2lg ()
     sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
 }
 
-lg_list=(nc9121236 nc9121238 nc9122231 host-g0359 host-g0360 nc5135221 nc5135223 host-g0199 nc5199007 nc5199009 nc5203051 nc9127122 nc9123070 nc9144126 nc9127152 hop240085038);
+lg_list_file=~/yonienv/bashrc_dell_lg_list_file
+lg_list=( $(cat ${lg_list_file} ));
 complete -W "$(echo ${lg_list[@]})" ssh2lg;
 
 dellclusterlgipget ()
@@ -1318,15 +1392,15 @@ dellclusterinfo ()
 {
     local cluster=${1};
 
-	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		# echo "you must be in arwen";
-		# return;
-	# fi;
+    # if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+    # echo "you must be in arwen";
+    # return;
+    # fi;
 
-	if ! [ -e /home/public/devutils/bin/swarm ] ; then 
-		echo "/home/public/devutils/bin/swarm not found";
-		return;
-	fi;
+    if ! [ -e /home/public/devutils/bin/swarm ] ; then 
+        echo "/home/public/devutils/bin/swarm not found";
+        return;
+    fi;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
