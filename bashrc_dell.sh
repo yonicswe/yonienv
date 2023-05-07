@@ -227,7 +227,7 @@ dellcyclonegitdeinit ()
 
 dellcyclonebuild ()
 {
-    local build_cmd='make cyc_core'
+    local build_cmd='make cyc_core force=yes'
 
 	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
 		# echo "you must be in arwen to build";
@@ -723,7 +723,7 @@ dellclusterleaseextend ()
         return -1;
     fi;
 
-    echo "/home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend}"
+    echo -e "\t\t-> /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend}"
     /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend};
 
 }
@@ -1075,7 +1075,7 @@ dellclusteruserspaceupdate ()
     local cyc_core_folder=;
 
     logged_to_arwen;
-    [[ $? -eq 0 ]] && retrun -1;
+    [[ $? -eq 0 ]] && return -1;
 
 	if [ -z $CYC_CONFIG ] ; then
 		echo "CYC_CONFIG not defined. use dellclusterenvsetup";
