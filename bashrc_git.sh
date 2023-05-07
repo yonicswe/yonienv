@@ -316,6 +316,12 @@ gitclearcache ()
     rm -rf .git/rr-cache
 }
 
+
+gitsmstatus ()
+{ 
+    git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; 
+}
+
 # howtos and trouble shooting
 # delete .git/index.lock 
 #   - when this happens "another git process seems to be running in this repository
