@@ -613,7 +613,7 @@ dellclusterruntimeenvset ()
 
     if ! [[ -d source/cyc_core/cyc_platform/src/package/cyc_configs ]] ; then
         echo "source/cyc_core/cyc_platform/src/package/cyc_configs not found!!"
-        return;
+        return 1;
     fi;
 
     cluster=$(echo ${cluster} | awk '{print toupper($0)}');
@@ -639,8 +639,11 @@ dellclusterruntimeenvset ()
 
     _dellclusterruntimeenvvalidate;
     if [[ $? -eq 0 ]] ; then
-        echo "!!! failed to set runtimeenv !!!";
-        return 1;
+        ask_user_default_no "set it anyways ? ";
+        if [ $? -eq 0 ] ; then
+            echo "!!! failed to set runtimeenv !!!";
+            return 1;
+        fi;
     fi;
 
     echo "export CYC_CONFIG=${CYC_CONFIG}" > ${dellclusterruntimeenvbkpfile};
@@ -694,6 +697,7 @@ dellclustergeneratecfg ()
 
     pushd cyc_platform/src/package/cyc_helpers > /dev/null;
 
+    p;
     echo "./swarm-to-cfg-centos8.sh ${cluster}";
     ask_user_default_yes "continue ?"
     if [[ $? -eq 0 ]] ; then return ; fi;
@@ -845,8 +849,8 @@ _usage_dellclusterinstallibid ()
 # 1. with ibid
 #    /home/public/devutils/bin/autoInstall.pl -swarm WX-G4067 -type san -ibid 1916979 -flavor retail -dare -syncFirmware -provisionSRS -fetchSRS -skipFwCheck --verbose
 # 2. with feature flag and ibid
-#    /home/public/devutils/bin/autoInstall.pl -swarm WK-D0677 -type san -ibid 1994402 -flavor retail -dare -syncFirmware -provisionSRS -fetchSRS -skipFwCheck --verbose -feature=REFLAG_TRIF1721
-dellclusterinstallibid ()
+#    /home/public/devutils/bin/autoInstall.pl -swarm WK-D0677 -type san -ibid 1994402 -flavor retail -dare -syncFirmware -provisionSRS -fetchSRS -skipFwCheck --verbose -feature REFLAG_TRIF1721
+dellclusterinstallibid-with-xpool ()
 {
     local ibid=${1};
     local cluster=${2};
@@ -857,12 +861,25 @@ dellclusterinstallibid ()
         return -1;
     fi;
    
-    if [[ -z ${cluster} ]] ; then
-        _usage_dellclusterinstallibid;
-        return -1;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
     fi;
 
-    xpool_cmd=$(echo -e "${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen --deploy --deploy_type san -t 1 --deployflags=\"-setupMgmtPostFailure -syncFirmware -mode block \" --ibid ${ibid}");
+    ask_user_default_no "would you like to also deploy ${cluster} ?";
+    if [ $? -eq 1 ] ; then
+        ask_user_default_no "are you sure ? (it could take a while) ";
+        if [ $? -eq 1 ] ; then
+            echo "about to (deploy + reinit_array + create_cluster) ${cluster}, with ibid ${ibid}";
+            xpool_cmd=$(echo -e "${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen --deploy --deploy_type san -t 1 --deployflags=\"-setupMgmtPostFailure -syncFirmware -mode block \" --ibid ${ibid}");
+        fi;
+    else
+        echo "about to (reinit_array + create_cluster) ${cluster}, with ibid ${ibid}";
+        xpool_cmd=$(echo -e "${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen -t 2 --ibid ${ibid}");
+    fi;
     
     echo ${xpool_cmd};
 
@@ -874,7 +891,53 @@ dellclusterinstallibid ()
 
     eval ${xpool_cmd};
     
-    # eval ${xpool_cmd} install ${cluster} --flavor RETAIL -u y_cohen --deploy --deploy_type san -t 1 --deployflags="-setupMgmtPostFailure -syncFirmware -mode block " --ibid ${ibid} ;
+    return 0;
+}
+
+_usage_dellclusterinstallibid_with_autoinstall ()
+{
+    echo "dellclusterinstallibid-with-autoinstall <ibid> <cluster> [feature-flag]";
+}
+
+dellclusterinstallibid-with-autoinstall ()
+{
+    local ibid=${1};
+    local cluster=${2};
+    local feature_flag=;
+    local autoinstall_cmd=/home/public/devutils/bin/autoinstall.pl
+   
+    if [[ -z ${ibid} ]] ; then
+        echo "missing ibid !!"
+        _usage_dellclusterinstallibid_with_autoinstall;
+        return -1;
+    fi;
+   
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    ask_user_default_no "would you like a feature flag ? ";
+    if [ $? -eq 0 ] ; then
+        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor retail -ibid ${ibid} ");
+    else
+        read -p "enter feature : " feature_flag;
+        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor retail -ibid ${ibid} -feature ${feature_flag}");
+    fi;
+    
+    echo ${autoinstall_cmd};
+
+    ask_user_default_yes "continue ?";
+    if [ $? -eq 0 ] ; then
+        echo "Bye..";
+        return -1;
+    fi;
+
+    eval ${autoinstall_cmd};
+    
     return 0;
 }
 
@@ -1384,6 +1447,13 @@ dellclusterconfigupdate ()
     local cluster_config_source_folder=~/docs/cluster_config_files;
 
     dellcdclusterconfigs;
+    echo "about to copy cluster config files to $(p)";
+    ask_user_default_yes "continue ?";
+    if [ $? -eq 0 ] ; then
+        c - ;
+        return;
+    fi;
+
     /bin/cp -v ${cluster_config_source_folder}/* .
     c - ;
 }
