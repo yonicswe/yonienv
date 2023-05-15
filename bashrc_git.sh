@@ -317,6 +317,11 @@ gitclearcache ()
 }
 
 
+gitsmtop ()
+{
+    cd $(git rev-parse --show-superproject-working-tree);
+}
+
 gitsmstatus ()
 { 
     git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; 
