@@ -209,6 +209,13 @@ bsclistindusdevices ()
     /cyc_bsc/datapath/bin/cli.py raid get_dev_info;
 }
 
+bsclistfeatureflags ()
+{
+    local feature_flags_file=/cyc_var/feature_flags.json;
+    awk '/\"name\"/{printf $0; getline; print $0 }' ${feature_flags_file}  | sed -e 's/\"\|\,\|\://g' -e 's/default_state\|name//g' | column -t;
+}
+alias corelistfeatureflags='bsclistfeatureflags';
+
 _delljournalctl ()
 {
     local node=${1};
@@ -407,11 +414,6 @@ dellnvmetargetlist ()
     ls -ltr /sys/kernel/config/nvmet/subsystems
 }
 
-alias debuc-set-inactive-node-a='echo "set inactive" > /xtremapp/debuc/127.0.0.1\:31010/commands/nt'
-alias debuc-set-inactive-node-b='echo "set inactive" > /xtremapp/debuc/127.0.0.1\:31011/commands/nt'
-alias debuc-set-active-node-a='echo "set active" > /xtremapp/debuc/127.0.0.1\:31010/commands/nt'
-alias debuc-set-active-node-b='echo "set active" > /xtremapp/debuc/127.0.0.1\:31011/commands/nt'
-
 get_node_id ()
 {
     local node=$(hostname |sed 's/.*-//g');
@@ -458,11 +460,25 @@ debuc-command ()
     return 0;
 }
 
-alias debuc-log-devices='debuc-command "log devices"';
+alias debuc-data-collect='debuc-command "log data collect"';
+
+alias debuc-auth-log-enable='debuc-command "log auth enable"';
+alias debuc-auth-log-disable='debuc-command "log auth disable"';
+
+alias debuc-host-add='debuc-command "add hostgroup"';
+alias debuc-host-add-secret='debuc-command "add hostgroup grp_idx=1 host_name=nqn.2014-08.org.nvmexpress:uuid:4c4c4544-005a-3710-8051-b1c04f445732 host_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: subsys_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: "'
+
 alias debuc-qos-get-incoming-stats='debuc-command "get qos incoming stats"';
 alias debuc-qos-log-enable='debuc-command "log qos enable"';
 alias debuc-qos-log-disable='debuc-command "log qos disable"';
 alias debuc-qos-delete-bucket-0='debuc-command "del qos bucket idx=0"'
+
+alias debuc-list-hosts='debuc-command "log hosts"'
+alias debuc-list-host-groups='debuc-command "log host groups"'
+alias debuc-list-devices='debuc-command "log devices"';
+
+alias debuc-set-inactive='debuc-command "set inactive"';
+alias debuc-set-active='debuc-command "set active"';
 
 _debuc-qos-configure-usage ()
 {
