@@ -31,6 +31,8 @@
 
 [alias]
 
+
+# ───────a──────────────────────────────────────────────────────────────────────
 #   print the alias implementation
 #   git config --get-regexp alias.<alias name>	
 
@@ -41,6 +43,16 @@
     amenddatenow = git commit --amend --no-edit --date "$(date)"
     amrej = am --reject
 
+    a = "!f() {                \
+ 	   if [ -z $1 ] ; then \
+	      git add -u ;     \
+           else                \
+	      git add $1 ;     \
+           fi;                 \
+	   }; f"	   
+
+
+# ───────b──────────────────────────────────────────────────────────────────────
 
     b = branch
     ba = branch -a
@@ -48,28 +60,25 @@
     bdelete = branch -D 
     brename = branch -M
     byoni = ba --list "*ycohen*"
-    deleteremotebranch = "!f()  {             \
-	  echo delete branch on the remote;   \
-	  echo :      git push -d remote branch;     \
-	  echo : e.g. git push -d origin $(git bb);     \
-                                              \
-	  echo other checkedout repo from this remote need to run; \
-	  echo :   git fetch -p ;\
-	  }; f" 
 
-    pushthisbranchtoremote = "!f() {                               \
-		remote=${1:-origin};                               \
-		git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
-	  }; f"
-    pushthisbranchtoremotewithforce = "!f() {                                 \
-		  remote=${1:-origin};                               \
-		  git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
-	  }; f"
-
-    syncbranches = fetch -p
+#   if branch name is posixed with v<number> 
+#   increment the version v<number++>
+    branchincversion = "!f() { \
+       v=$(git bb |grep -E -o "v[0-9]+$"); \
+       if [ -z $v ] ; then \
+          bnewname=$(git bb)-v1; \
+          git cb ${bnewname}; \
+       else \
+          v=$(echo $v | grep -E -o "[0-9]"); \
+          bnewname=$(git bb | sed 's/v[0-9]//'); \
+          v=$((v + 1)) ;\
+          git cb ${bnewname}v$v; \
+       fi; \
+    };f "
 
 #   print the name of the currently checked branch
     bb = rev-parse --abbrev-ref HEAD
+
 
     commitempty = commit --allow-empty
     c = checkout
@@ -96,7 +105,8 @@
     gi = grep --color -n --ignore-case
 
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-    h = log -n1 --pretty=oneline
+#   h = log -n1 --pretty=oneline
+    h = logstat -1
 
     listmodified = diff --name-only
     listcached = diff --cached --name-only
@@ -107,57 +117,10 @@
     mt = mergetool
     mtv = mergetool --tool=vimdiff
 
-    r = remote -vv
-
-    s = "!f() { git track ;  git status -uno; }; f"
-    
-    su = status -u
-    ss = show --stat
-    track = status -uno -sb
-    t = track
-    trackmaster = branch --set-upstream-to=origin/master
-    trackmasternext = branch --set-upstream-to=origin/master_next
-    tm = trackmaster
-    tmn = trackmasternext
-    trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
-		   echo tracking ; git t; }; f"
-    tb = trackbranch
-
-    untrack = branch --unset-upstream
-    unstage = reset HEAD
-    # uncommit = reset HEAD^
-
-    saveheadindex = "!f() { \
-		   git log -n1 --pretty=oneline | cut -d ' ' -f1 > reuse_commit.txt; \
-		   echo "saved head index $(cat reuse_commit.txt) to reuse_commit.txt" ; \
-    		}; f"
-
-    reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
-
-    uncommit = "!f() { git saveheadindex ; git reset HEAD^ ; }; f"
-
-    untrackfile = rm --cached 
-
-    savework = "!f() { \
-	    git commit -a -m 'save work'; \
-    }; f"
-
-#   if branch name is posixed with v<number> 
-#   increment the version v<number++>
-    branchincversion = "!f() { \
-       v=$(git bb |grep -E -o "v[0-9]+$"); \
-       if [ -z $v ] ; then \
-          bnewname=$(git bb)-v1; \
-          git cb ${bnewname}; \
-       else \
-          v=$(echo $v | grep -E -o "[0-9]"); \
-          bnewname=$(git bb | sed 's/v[0-9]//'); \
-          v=$((v + 1)) ;\
-          git cb ${bnewname}v$v; \
-       fi; \
-    };f "
 
 
+# ───────c──────────────────────────────────────────────────────────────────────
+    commitfilelist = show --stat --oneline
     checkoutmaster = "!f() { \
 	git fetch origin master; \
 	git checkout -b master FETCH_HEAD; \
@@ -183,6 +146,16 @@
     	git checkout ${branch} -- ${file};                          \
     }; f"
 
+
+    cherry-pick-commit = "!f() {              \
+	if [ $# -gt 0 ] ; then                 \
+	   git cherry-pick $1^..$1 ;          \
+        fi;                                  \
+    }; f"
+
+    cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
+
+# ───────d──────────────────────────────────────────────────────────────────────
     dg = "!f() {					     \
 	  if [ -z $1 ] ; then				     \
 		git difftool --tool=gvimdiff;		     \
@@ -191,14 +164,14 @@
 	  fi;                                                \
 	}; f"
 
-    a = "!f() {                \
- 	   if [ -z $1 ] ; then \
-	      git add -u ;     \
-           else                \
-	      git add $1 ;     \
-           fi;                 \
-	   }; f"	   
-
+    deleteremotebranch = "!f()  {             \
+	  echo delete branch on the remote;   \
+	  echo :      git push -d remote branch;     \
+	  echo : e.g. git push -d origin $(git bb);     \
+                                              \
+	  echo other checkedout repo from this remote need to run; \
+	  echo :   git fetch -p ;\
+	  }; f" 
     push-commit = "!f() {                 \
  	   if [ -z $1 ] ; then            \
 	      git push origin HEAD:master;\
@@ -250,6 +223,7 @@
 	git dt $branchA $branchB -- $file; \
     }; f"
 
+# ───────f──────────────────────────────────────────────────────────────────────
     format-patch-commit = "!f() {              \
 	if [ $# -eq 0 ] ; then                 \
 	   git format-patch HEAD^..HEAD ;      \
@@ -257,13 +231,6 @@
 	   git format-patch $1^..$1 ;          \
         fi;                                  \
     }; f"
-
-    cherry-pick-commit = "!f() {              \
-	if [ $# -gt 0 ] ; then                 \
-	   git cherry-pick $1^..$1 ;          \
-        fi;                                  \
-    }; f"
-
 
     info = logstat -1 
     reside-commit-in-branch = "!f() {     \
@@ -308,40 +275,105 @@
 
     lauthor = "!f() { git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author="$1"; }; f"
 
-    rlog = log --show-notes=review
-    rebaseto = "!f() { git rebase -i $1^; }; f"
-    rebaseback = "!f() { [[ $# -eq 0 ]] && return ; git rebase -i HEAD~$1; }; f"
+    pushthisbranchtoremote = "!f() {                               \
+		remote=${1:-origin};                               \
+		git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
+	  }; f"
+    pushthisbranchtoremotewithforce = "!f() {                                 \
+		  remote=${1:-origin};                               \
+		  git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
+	  }; f"
+
 
     gc=gc --auto --aggressive
-    commitfilelist = show --stat --oneline
 
-	sl = stash list
 
-	pushlist = "!f() { \
-		if [ $# -gt 0 ] ; then  \
-			echo git diff --stat --cached $1/$2 ; \
-			git diff --stat --cached $1/$2 ; \
-		else \
-			echo git diff --stat --cached origin/master ; \
-			git diff --stat --cached origin/master ; \
-		fi; \
-		}; f"
 
-	cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
+
+# ───────r──────────────────────────────────────────────────────────────────────
+    r = remote -vv
+
+    rebaseback = "!f() { if [[ $# -eq 0 ]] ; then  \
+                            echo 'git rebasebackto <number of commits>' ;\
+                            return ; \
+                         fi; \
+                         git rebase -i HEAD~$1; }; f"
+
+    rlog = log --show-notes=review
+    rebaseto = "!f() { if [[ $# -eq 0 ]] ; then  \
+                          echo 'git rebaseto <commit id>' ;\
+                          return ; \
+                       fi; \
+                       git rebase -i $1^; }; f"
+
+
+
+# ───────s──────────────────────────────────────────────────────────────────────
+    s = "!f() { git track ;  git status -uno; }; f"
+    
+    su = status -u
+    ss = show --stat
+
+    saveheadindex = "!f() { \
+		   git log -n1 --pretty=oneline | cut -d ' ' -f1 > reuse_commit.txt; \
+		   echo "saved head index $(cat reuse_commit.txt) to reuse_commit.txt" ; \
+    		}; f"
+
+    syncbranches = fetch -p
+
+# ───────t──────────────────────────────────────────────────────────────────────
+    t = track
+    tb = trackbranch
+    track = status -uno -sb
+#   trackmaster = branch --set-upstream-to=origin/master
+#   trackmasternext = branch --set-upstream-to=origin/master_next
+#   tm = trackmaster
+#   tmn = trackmasternext
+    trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
+		   echo tracking ; git t; }; f"
+
+# ───────u──────────────────────────────────────────────────────────────────────
+
+    untrack = branch --unset-upstream
+    unstage = reset HEAD
+    # uncommit = reset HEAD^
+
+    reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
+
+    uncommit = "!f() { git saveheadindex ; git reset HEAD^ ; }; f"
+
+    untrackfile = rm --cached 
+
+    savework = "!f() { \
+	    git commit -a -m 'save work'; \
+    }; f"
+    sl = stash list
+
+    pushlist = "!f() { \
+            if [ $# -gt 0 ] ; then  \
+            echo git diff --stat --cached $1/$2 ; \
+            git diff --stat --cached $1/$2 ; \
+            else \
+            echo git diff --stat --cached origin/master ; \
+            git diff --stat --cached origin/master ; \
+            fi; \
+            }; f"
+
     # showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | sed 's/alias\.//g' | grep -w --color $me;}; f"
     showuser = "!f() { me=${1-:*} ; git config --get-regex alias.$me | grep --color $me;}; f"
 
-	sm = submodule
-	smdiff = diff --submodule
-	smgrep = grep --recurse-submodules
-	smupdate = submodule update
-	smupdateinit = submodule update --init
-	smstatus = sm foreach
-	smremove = submodule deinit
-	sm-resetall = submodule foreach --recursive git reset --hard
-	sm-update-all = submodule update --recursive
-	sm-updateinit-all = submodule update --init --recursive
-	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+    sm = submodule
+    smdiff = diff --submodule
+    smgrep = grep --recurse-submodules
+    smupdate = submodule update
+    smupdateinit = submodule update --init
+    smstatus = sm foreach
+#   smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
+    smremove = submodule deinit
+    sm-resetall = submodule foreach --recursive git reset --hard
+    sm-update-all = submodule update --recursive
+    sm-updateinit-all = submodule update --init --recursive
+    alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 #   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
@@ -468,6 +500,8 @@
 [fetch]
     recurseSubmodules = false
 [pull]
+    recurseSubmodules = false
+[update]
     recurseSubmodules = false
 
 # tips
