@@ -274,6 +274,7 @@ dellcyclonebuild ()
     build_cmd="time ${build_cmd}";
     eval ${build_cmd} | tee dellcyclonebuild.log
 	echo -e "\n${build_cmd}\n";
+    $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
 }
 
 builds_journal_db="build-history";
@@ -414,12 +415,17 @@ _dellclusterlease ()
     local lease_time=${1:-7d};
     local cluster=${2};
 
-    if [ -z ${cluster} ] ; then
-        echo "usage $FUNCNAME <lease time> <cluster>";
-        return;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
     fi;
 
+    echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
     /home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster};
+    echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
 }
 
 dellclusterlease-update-user ()
@@ -715,22 +721,23 @@ dellclustergeneratecfg ()
 
 dellclusterleaseextend () 
 {
-    local cluster=${1};
-    local extend=${2:-14d};
+    local extend=${1:-14d};
+    local cluster=${2};
 
-    if [[ -z ${cluster} ]] ; then 
-        cluster=${YONI_CLUSTER};
-    fi;
-
-    if [[ -z ${cluster} ]] ; then 
-        echo "no cluster name given";
-        return -1;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
     fi;
 
     echo -e "\t\t-> /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend}"
     /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend};
 
 }
+
+alias dellclusterleaseextendshared='dellclusterleaseextend 72h';
 
 # complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
 # complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
@@ -904,7 +911,7 @@ dellclusterinstallibid-with-autoinstall ()
     local ibid=${1};
     local cluster=${2};
     local feature_flag=;
-    local autoinstall_cmd=/home/public/devutils/bin/autoinstall.pl
+    local autoinstall_cmd=/home/public/devutils/bin/autoInstall.pl
    
     if [[ -z ${ibid} ]] ; then
         echo "missing ibid !!"
@@ -944,16 +951,19 @@ dellclusterinstallibid-with-autoinstall ()
 dellclusterinstallfeatureflag ()
 {
     local feature=${1};
+    if [ -z ${feature} ] ; then
+        feature=$(dellcyclonefeatureflaglist);
+    fi;
 
-    echo -e "./reinit_array.sh -F Retail factory sys_mode=block feature=\"REFLAG_TRIF1721\"";
+    # echo -e "./reinit_array.sh -F Retail factory sys_mode=block feature=\"REFLAG_TRIF1721\"";
+    echo -e "./reinit_array.sh -F Retail factory sys_mode=block feature=\"${feature}\"";
 }
 
 dellcyclonefeatureflaglist ()
 {
-    # local feature_list_file=~/docs/cluster-feature-flag-list.sh; 
-    # cat ${feature_list_file};
-
     local feature_list_file=configs/feature_flags_default.json
+    local -a feature_flags=;
+    local feature;
 
     if [[ -z ${CYC_CONFIG} ]] ; then
         echo "CYC_CONFIG not set. use dellclusterruntimeenvset <cluster>";
@@ -962,8 +972,10 @@ dellcyclonefeatureflaglist ()
 
     ddd; 
 
-    less ${feature_list_file};
-    
+    # less ${feature_list_file};
+    feature_flags=( $(awk '/name.*REFLAG_/{print $2}' ${feature_list_file}  | sed 's/\"//g' | sed 's/,//g') );
+    feature="$(printf "%s\n" ${feature_flags[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    echo ${feature};
 }
 
 _dellclusterget ()
@@ -1008,6 +1020,8 @@ dellclusterinstall ()
     local cluster=${1};
     local asked_user=0;
     local ret=1;
+    local reinit_cmd=;
+    local feature=;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1068,15 +1082,25 @@ dellclusterinstall ()
     #############################################
     #            reinit
     #############################################
-    echo -e "\n\n./reinit_array.sh -F Retail factory sys_mode=block\n\n";
+    reinit_cmd="./reinit_array.sh -F Retail factory sys_mode=block";
+    ask_user_default_no "would you like to enable a feature flag ? ";
+    if [ $? -eq 1 ] ; then
+        feature=$(dellcyclonefeatureflaglist);
+        reinit_cmd+=" feature=\"${feature}\"";
+    fi;
+    # echo -e "\n\n./reinit_array.sh -F Retail factory sys_mode=block\n\n";
+    echo -e "\n\n${reinit_cmd}\n\n";
     ask_user_default_no "Skip reinit ? "
     if [[ $? -eq 0 ]] ; then
-        time ./reinit_array.sh -F Retail factory sys_mode=block;
+        # time ./reinit_array.sh -F Retail factory sys_mode=block;
+        eval ${reinit_cmd};
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
             echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
             while (( 1 == $(ask_user_default_yes "retry reinit ? " ; echo $?) )) ; do
-                time ./reinit_array.sh -F Retail factory sys_mode=block;
+                # time ./reinit_array.sh -F Retail factory sys_mode=block;
+                echo ${reinit_cmd};
+                eval ${reinit_cmd};
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
                     echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
@@ -1302,10 +1326,13 @@ dellclusterkernelspaceupdate ()
 
 dellclusteryonienvupdate ()
 {
-	if [ -z $CYC_CONFIG ] ; then
-		echo "CYC_CONFIG not defined. use dellclusterruntimeenvset";
-		return -1;
-	fi
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
 
 	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
 		# echo "you must be in arwen";
