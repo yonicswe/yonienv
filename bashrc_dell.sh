@@ -225,14 +225,31 @@ dellcyclonegitdeinit ()
     git sm deinit -f source/xblock
 }
 
+_dellcyclonebuild_validate_build_machine ()
+{
+    # ok to build in arwen machine
+    if (( 0 !=  $(hostname|grep arwen|wc -l) )) ; then
+        return 0;
+    fi;
+
+    # ok to build in dev-vm
+    if (( 0 !=  $(hostname -i | grep ${yonivmipaddress}  | wc -l ) )) ; then
+        return 0;
+    fi;
+
+    # cannot build on other manchines.
+    return -1;
+}
+
 dellcyclonebuild ()
 {
     local build_cmd='make cyc_core force=yes'
 
-	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		# echo "you must be in arwen to build";
-		# return;
-	# fi
+    _dellcyclonebuild_validate_build_machine
+    if [[ $? -ne 0 ]] ; then
+        echo "you must do this from arwen or dev-vm. bailing out!!!";
+        return -1
+    fi;
     
 	dellcdcyclonefolder;
 	[[ $? -ne 0 ]] && return -1;
