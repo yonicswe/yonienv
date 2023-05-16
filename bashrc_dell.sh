@@ -1136,33 +1136,31 @@ dellclusterinstall ()
     #############################################
     #            create_cluster
     #############################################
-    echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
+    create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
+    echo -e "\n\n${create_cluster_cmd}\n\n";
     ask_user_default_no "Skip create_cluster ? "
     [ $? -eq 1 ] && return;
-    time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
 
+    eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
-        ret=-1;
-        echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m";
+        echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
         while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
-            echo -e "\n\n./create_cluster.py -sys ${cluster}-BM -stdout -y -post\n\n";
-            time ./create_cluster.py -sys ${cluster}-BM -stdout -y -post
-            ret=$?
-            echo "ret=${ret}";
-            if [[ ${ret} -ne 0 ]] ; then
-                echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m ret=${ret}";
+
+            echo -e "\n\n${create_cluster_cmd}\n\n";
+            eval ${create_cluster_cmd};
+
+            if [[ $? -ne 0 ]] ; then
+                echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
                 continue;
+            else
+                echo -e "${GREEN}\t\tGreat success${NC}";
+                break;
             fi;
+
         done;
-
-        if [[ ${ret} -ne 0 ]] ; then
-            echo -e "\033[0;31m\t\tcreate_cluster failed ! ! !\033[0m ret=${ret}";
-            return -1;
-        fi;
+    else
+        echo -e "${GREEN}\t\tGreat success${NC}";
     fi;
-
-    echo -e "\033[0;32m\t\tGreat success\033[0m (ret=${ret})";
-    return 0;
 }
 
 logged_to_arwen ()
