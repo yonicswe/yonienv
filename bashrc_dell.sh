@@ -487,16 +487,16 @@ _dellclusterruntimeenvvalidate ()
 {
     if [[ -z ${CYC_CONFIG} ]] ; then
         echo -e "\033[1;31mCYC_CONFIG not set\033[0m";
-        return 0;
+        return -1;
     fi;
 
     if ! [ -e ${CYC_CONFIG} ] ; then
         echo -e "\033[1;31m ${CYC_CONFIG} does not exist\033[0m";
         echo -e "use dellclustergeneratecfg ${YONI_CLUSTER} in yonivm";
-        return 0;
+        return -1;
     fi;
 
-    return 1;
+    return 0;
 }
 
 dellclusterruntimeenvget ()  
@@ -661,7 +661,7 @@ dellclusterruntimeenvset ()
     export YONI_CLUSTER=${cluster};
 
     _dellclusterruntimeenvvalidate;
-    if [[ $? -eq 0 ]] ; then
+    if [[ $? -ne 0 ]] ; then
         ask_user_default_no "set it anyways ? ";
         if [ $? -eq 0 ] ; then
             echo "!!! failed to set runtimeenv !!!";
@@ -1037,7 +1037,9 @@ dellclusterinstall ()
     local cluster=${1};
     local asked_user=0;
     local ret=1;
+    local deploy_cmd=;
     local reinit_cmd=;
+    local create_cluster_cmd=;
     local feature=;
 
     if [ -z "${cluster}" ] ; then 
@@ -1048,13 +1050,8 @@ dellclusterinstall ()
         fi;
     fi;
 
-    if [[ -z ${CYC_CONFIG} ]] ; then
-        echo "CYC_CONFIG not set. use dellclusterruntimeenvset <cluster>";
-        return -1;
-    fi;
-    
-    if ! [[ -e ${CYC_CONFIG} ]] ; then
-        echo "${CYC_CONFIG} !! not found"
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -ne 0 ]] ; then
         return -1;
     fi;
     
@@ -1065,9 +1062,13 @@ dellclusterinstall ()
     
     dellcdclusterscripts;
 
+    deploy_cmd= "./deploy  --deploytype san ${cluster}";
+    reinit_cmd="./reinit_array.sh -F Retail factory sys_mode=block";
+    create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
+
     # offer user to skip everything and just do this 
-    echo -n "./deploy  --deploytype san ${cluster}"; 
-    echo -n " && ./reinit_array.sh -F Retail factory sys_mode=block"; 
+    echo -n "${deploy_cmd}";
+    echo -n " && ${reinit_cmd}"; 
     echo " && ./create_cluster.py -sys ${cluster}-BM -stdout -y -po"; 
     ask_user_default_yes "continue ? ";
     if [ $? -eq 0 ] ; then return 0 ; fi;
@@ -1076,13 +1077,14 @@ dellclusterinstall ()
     #            deploy
     #############################################
     echo "==> $(pwd)";
-    echo -e "\n./deploy  --deploytype san ${cluster}"; 
+    echo -e "\n${deploy_cmd}"; 
     ask_user_default_yes "Skip  deploy ? "
     if [[ $? -eq 0 ]] ; then
         time ./deploy  --deploytype san ${cluster}; 
         if [[ $? -ne 0 ]] ; then 
             while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
                 time ./deploy  --deploytype san ${cluster}; 
+                eval ${deploy_cmd};
                 ret=$?
                 [ ${ret} -ne 0 ] && continue;
             done;
@@ -1099,7 +1101,6 @@ dellclusterinstall ()
     #############################################
     #            reinit
     #############################################
-    reinit_cmd="./reinit_array.sh -F Retail factory sys_mode=block";
     ask_user_default_no "would you like to enable a feature flag ? ";
     if [ $? -eq 1 ] ; then
         feature=$(dellcyclonefeatureflaglist);
@@ -1136,7 +1137,6 @@ dellclusterinstall ()
     #############################################
     #            create_cluster
     #############################################
-    create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
     echo -e "\n\n${create_cluster_cmd}\n\n";
     ask_user_default_no "Skip create_cluster ? "
     [ $? -eq 1 ] && return;
