@@ -426,7 +426,25 @@ alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-
 xpool_users=(y_cohen grupie engela eldadz levyi2);
 complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterlease-update-user;
 
-alias dellclusterleaserelease='/home/public/scripts/xpool_trident/prd/xpool release '
+dellclusterleaserelease ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    echo "/home/public/scripts/xpool_trident/prd/xpool release ${cluster}";
+    ask_user_default_no "are you sure ? ";
+    [[ $? -eq 0 ]] && return;
+
+    /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
+}
+
 _dellclusterlease ()
 {
     local lease_time=${1:-7d};
