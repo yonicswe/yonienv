@@ -161,7 +161,12 @@ dellcyclonegitsmup ()
     # git sm update source/cdre
     # git sm update source/centos
     # git sm update source/controlpath_ui
-    git sm update source/cyc_core
+
+    ask_user_default_yes "update source/cyc_core ?";
+    if [[ $? -eq 1 ]] ; then
+        git sm update source/cyc_core
+    fi;
+
     # git sm update source/cyc_coreos
     # git sm update source/cyc_crypto
     # git sm update source/cyc_dp_protobuf
@@ -176,15 +181,29 @@ dellcyclonegitsmup ()
     # git sm update source/feature-framework
     # git sm update source/indus
     # git sm update source/integration-testing
-    git sm update source/linux
-    git sm update source/nt-nvmeof-frontend
+
+    ask_user_default_yes "update source/nt-nvmeof-front_end ?";
+    if [[ $? -eq 1 ]] ; then
+        git sm update source/nt-nvmeof-frontend
+    fi;
+
+    ask_user_default_yes "update source/linux ?";
+    if [[ $? -eq 1 ]] ; then
+        git sm update source/linux
+    fi;
+
     # git sm update source/ntrdma
     # git sm update source/pycyc-test-framework-docker
     # git sm update source/rpm_infra
     # git sm update source/sdnas-int-tests
     # git sm update source/serviceability-tools
     # git sm update source/stack
-    git sm update source/third_party
+
+    ask_user_default_yes "update source/third_party ?";
+    if [[ $? -eq 1 ]] ; then
+        git sm update source/third_party
+    fi;
+
     # git sm update source/trident-glider
     # git sm update source/trident-sdnas
     # git sm update source/xblock
@@ -595,17 +614,28 @@ alias rd='dellenvrebash'
 cyclone_folder=;
 dellcdcyclonefolder ()
 {
+    local faults=0;
+
     if [[ -z ${cyclone_folder} ]] ; then
-        echo "cyclone_folder not set. use dellclusterruntimeenvset <cluster>"
-        return -1;
+        echo "cyclone_folder is not set"
+        ((faults++));
     fi;
 
     if ! [[ -e ${cyclone_folder} ]] ; then
-        echo "${cyclone_folder} does not exist";
+        echo "cyclone_folder does not exist";
+        ((faults++));
+    fi;
+     
+    if [[ ${faults} -gt 0 ]] ; then
+        if [[ $(file .git | grep "ASCII text" | wc -l) -gt 0 ]] ; then 
+            echo "going up from submodule to pdr";
+            gitsmtop;
+            return 0;
+        fi;
         return -1;
     fi;
 
-    cd $cyclone_folder;
+    cd ${cyclone_folder};
     return 0;
 }
 alias ddd='dellcdcyclonefolder'
