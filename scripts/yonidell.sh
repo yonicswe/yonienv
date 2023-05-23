@@ -296,7 +296,7 @@ alias delltriage-kernel-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
 alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 
-delldc-node-x ()
+_delldc-node-x ()
 {
     local node_dir=${1};
     local jorunalctl_flags=${2};
@@ -316,16 +316,16 @@ delldc-node-x ()
     cd -;
 }
 
-alias delldc-all-node-a='delldc-node-x node_a'
-alias delldc-all-node-b='delldc-node-x node_b'
-alias delldc-all-node-a-r='delldc-node-x node_a -r'
-alias delldc-all-node-b-r='delldc-node-x node_b -r'
-alias delldc-kernel-node-a='delldc-node-x node_a -k'
-alias delldc-kernel-node-b='delldc-node-x node_b -k'
-alias delldc-nt-node-a='delldc-node-x node_a SUB_COMPONENT=nt'
-alias delldc-nt-node-b='delldc-node-x node_b SUB_COMPONENT=nt'
-alias delldc-nt-node-a-r='delldc-node-x node_a "SUB_COMPONENT=nt -r"'
-alias delldc-nt-node-b-r='delldc-node-x node_b "SUB_COMPONENT=nt -r"'
+alias delldc-all-node-a='_delldc-node-x node_a'
+alias delldc-all-node-b='_delldc-node-x node_b'
+alias delldc-all-node-a-r='_delldc-node-x node_a -r'
+alias delldc-all-node-b-r='_delldc-node-x node_b -r'
+alias delldc-kernel-node-a='_delldc-node-x node_a -k'
+alias delldc-kernel-node-b='_delldc-node-x node_b -k'
+alias delldc-nt-node-a='_delldc-node-x node_a SUB_COMPONENT=nt'
+alias delldc-nt-node-b='_delldc-node-x node_b SUB_COMPONENT=nt'
+alias delldc-nt-node-a-r='_delldc-node-x node_a "SUB_COMPONENT=nt -r"'
+alias delldc-nt-node-b-r='_delldc-node-x node_b "SUB_COMPONENT=nt -r"'
 
 dyoni ()
 {
