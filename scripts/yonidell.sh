@@ -318,10 +318,14 @@ delldc-node-x ()
 
 alias delldc-all-node-a='delldc-node-x node_a'
 alias delldc-all-node-b='delldc-node-x node_b'
+alias delldc-all-node-a-r='delldc-node-x node_a -r'
+alias delldc-all-node-b-r='delldc-node-x node_b -r'
 alias delldc-kernel-node-a='delldc-node-x node_a -k'
 alias delldc-kernel-node-b='delldc-node-x node_b -k'
 alias delldc-nt-node-a='delldc-node-x node_a SUB_COMPONENT=nt'
 alias delldc-nt-node-b='delldc-node-x node_b SUB_COMPONENT=nt'
+alias delldc-nt-node-a-r='delldc-node-x node_a "SUB_COMPONENT=nt -r"'
+alias delldc-nt-node-b-r='delldc-node-x node_b "SUB_COMPONENT=nt -r"'
 
 dyoni ()
 {
