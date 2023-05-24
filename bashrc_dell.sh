@@ -155,18 +155,67 @@ dellsubmodulesdiscard ()
     git submodule update --checkout source/nt-nvmeof-frontend
 }
 
-dellcyclonegitsmup ()
+dellpdr-reset ()
+{ 
+    echo "git fetch"; git fetch;
+    echo "git reset HEAD"; git reset HEAD;
+    echo "git c ."; git c .;
+}
+
+dellpdr-gitsmup ()
 {
+    local cyc_core=0;
+    local nt_nvmeof_frontend=0;
+    local linux=0;
+    local third_party=0;
+
+    ask_user_default_no "are you in a pdr ? ";
+    if [ $? -eq 0 ] ; then
+        echo "bailing out";
+        return;
+    fi;
+
+    ask_user_default_no "reset the pdr before we start ? ";
+    [ $? -eq 1 ] && dellpdr-reset;
+
+    #--------------------------------------
+    #            ask user
+    #--------------------------------------
+    ask_user_default_yes "update source/cyc_core ?";
+    [ $? -eq 1 ] && cyc_core=1;
+
+    ask_user_default_yes "update source/nt-nvmeof-frontend ?";
+    [ $? -eq 1 ] && nt_nvmeof_frontend=1;
+
+    ask_user_default_yes "update source/linux ?";
+    [ $? -eq 1 ] && linux=1;
+
+    ask_user_default_yes "update source/third_party ?";
+    [ $? -eq 1 ] && third_party=1;
+
+    #--------------------------------------
+    #            do it
+    #--------------------------------------
+    if (( ${cyc_core} == 1           )) ; then echo "cyc_core";           git smupdate source/cyc_core           ; fi;
+    if (( ${nt_nvmeof_frontend} == 1 )) ; then echo "nt-nvmeof-frontend"; git smupdate source/nt-nvmeof-frontend ; fi;
+    if (( ${linux} == 1              )) ; then echo "linux";              git smupdate source/linux              ; fi;
+    if (( ${third_party} == 1        )) ; then echo "third_party";        git smupdate source/third_party        ; fi;
+
+    #--------------------------------------
+    #            verify
+    #--------------------------------------
+    echo "git status";
+    git s;
+    # if (( ${cyc_core} == 1           )) ; then git sm status source/cyc_core           ; fi;
+    # if (( ${nt_nvmeof_frontend} == 1 )) ; then git sm status source/nt-nvmeof-frontend ; fi;
+    # if (( ${linux} == 1              )) ; then git sm status source/linux              ; fi;
+    # if (( ${third_party} == 1        )) ; then git sm status source/third_party        ; fi;
+
+
     # git sm update source/bedrock
     # git sm update source/cdre
     # git sm update source/centos
     # git sm update source/controlpath_ui
-
-    ask_user_default_yes "update source/cyc_core ?";
-    if [[ $? -eq 1 ]] ; then
-        git sm update source/cyc_core
-    fi;
-
     # git sm update source/cyc_coreos
     # git sm update source/cyc_crypto
     # git sm update source/cyc_dp_protobuf
@@ -181,29 +230,12 @@ dellcyclonegitsmup ()
     # git sm update source/feature-framework
     # git sm update source/indus
     # git sm update source/integration-testing
-
-    ask_user_default_yes "update source/nt-nvmeof-front_end ?";
-    if [[ $? -eq 1 ]] ; then
-        git sm update source/nt-nvmeof-frontend
-    fi;
-
-    ask_user_default_yes "update source/linux ?";
-    if [[ $? -eq 1 ]] ; then
-        git sm update source/linux
-    fi;
-
     # git sm update source/ntrdma
     # git sm update source/pycyc-test-framework-docker
     # git sm update source/rpm_infra
     # git sm update source/sdnas-int-tests
     # git sm update source/serviceability-tools
     # git sm update source/stack
-
-    ask_user_default_yes "update source/third_party ?";
-    if [[ $? -eq 1 ]] ; then
-        git sm update source/third_party
-    fi;
-
     # git sm update source/trident-glider
     # git sm update source/trident-sdnas
     # git sm update source/xblock
@@ -617,18 +649,18 @@ dellcdcyclonefolder ()
     local faults=0;
 
     if [[ -z ${cyclone_folder} ]] ; then
-        echo "cyclone_folder is not set"
+        # echo "cyclone_folder is not set"
         ((faults++));
     fi;
 
     if ! [[ -e ${cyclone_folder} ]] ; then
-        echo "cyclone_folder does not exist";
+        # echo "cyclone_folder does not exist";
         ((faults++));
     fi;
      
     if [[ ${faults} -gt 0 ]] ; then
         if [[ $(file .git | grep "ASCII text" | wc -l) -gt 0 ]] ; then 
-            echo "going up from submodule to pdr";
+            # echo "going up from submodule to pdr";
             gitsmtop;
             return 0;
         fi;
