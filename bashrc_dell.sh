@@ -196,10 +196,10 @@ dellpdr-gitsmup ()
     #--------------------------------------
     #            do it
     #--------------------------------------
-    if (( ${cyc_core} == 1           )) ; then echo "cyc_core";           git smupdate source/cyc_core           ; fi;
-    if (( ${nt_nvmeof_frontend} == 1 )) ; then echo "nt-nvmeof-frontend"; git smupdate source/nt-nvmeof-frontend ; fi;
-    if (( ${linux} == 1              )) ; then echo "linux";              git smupdate source/linux              ; fi;
-    if (( ${third_party} == 1        )) ; then echo "third_party";        git smupdate source/third_party        ; fi;
+    if (( ${cyc_core} == 1           )) ; then echo "-->update cyc_core";           git smupdate source/cyc_core           ; fi;
+    if (( ${nt_nvmeof_frontend} == 1 )) ; then echo "-->update nt-nvmeof-frontend"; git smupdate source/nt-nvmeof-frontend ; fi;
+    if (( ${linux} == 1              )) ; then echo "-->update linux";              git smupdate source/linux              ; fi;
+    if (( ${third_party} == 1        )) ; then echo "-->update third_party";        git smupdate source/third_party        ; fi;
 
     #--------------------------------------
     #            verify
@@ -1120,6 +1120,9 @@ dellclusterinstall ()
     local deploy_cmd=;
     local reinit_cmd=;
     local create_cluster_cmd=;
+    local deploy_choice=0;
+    local reinit_choice=0;
+    local create_cluster_choice=0;
     local feature=;
 
     if [ -z "${cluster}" ] ; then 
@@ -1142,24 +1145,78 @@ dellclusterinstall ()
     
     dellcdclusterscripts;
 
-    deploy_cmd= "./deploy  --deploytype san ${cluster}";
+    deploy_cmd="./deploy  --deploytype san ${cluster}";
     reinit_cmd="./reinit_array.sh -F Retail factory sys_mode=block";
     create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
 
-    # offer user to skip everything and just do this 
-    echo -n "${deploy_cmd}";
-    echo -n " && ${reinit_cmd}"; 
-    echo " && ./create_cluster.py -sys ${cluster}-BM -stdout -y -po"; 
-    ask_user_default_yes "continue ? ";
-    if [ $? -eq 0 ] ; then return 0 ; fi;
+    #
+    # ask user to define commands and offer to do it all without stopping.
+    #
+    # echo -e "\n${deploy_cmd}";
+    ask_user_default_yes "Skip  deploy ? "
+    if [[ $? -eq 0 ]] ; then
+        deploy_choice=1;
+    else
+        deploy_cmd="";
+    fi;
+
+    # echo -e "\n\n${reinit_cmd}\n\n";
+    ask_user_default_no "Skip reinit ? "
+    if [[ $? -eq 0 ]] ; then
+        reinit_choice=1;
+
+        ask_user_default_no "would you like to enable a feature flag ? ";
+        if [ $? -eq 1 ] ; then
+            feature=$(dellcyclonefeatureflaglist);
+            reinit_cmd+=" feature=\"${feature}\"";
+            echo -e "\n\n${reinit_cmd}\n\n";
+        fi;
+    else
+        reinit_cmd="";
+    fi;
+
+    # echo -e "\n\n${create_cluster_cmd}\n\n";
+    ask_user_default_no "Skip create_cluster ? "
+    if [[ $? -eq 0 ]] ; then
+        create_cluster_choice=1;
+    else
+        create_cluster_cmd="";
+    fi;
+
+    echo "$FUNCNAME +1186";
+    # print the entire triplet commands and let the user decide to decide how to proceed.
+    one_sweep_cmd=""
+    if [ -n "${deploy_cmd}" ] ; then
+        one_sweep_cmd+="${deploy_cmd}";
+    fi;
+
+    if [ -n "${reinit_cmd}" ] ; then
+        [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
+        one_sweep_cmd+="${reinit_cmd}";
+    fi;
+
+    if [ -n "${create_cluster_cmd}" ] ; then
+        [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
+        one_sweep_cmd+="${create_cluster_cmd}";
+    fi;
+
+    if [ -z "${deploy_cmd}" ] && [ -z "${reinit_cmd}" ] && [ -z "${create_cluster_cmd}" ] ; then
+        echo "nothing to do. bailing out!";
+        return 0;
+    fi;
+
+    ask_user_default_yes "do it in one sweep ? ";
+    if [ $? -eq 1 ] ; then
+        echo ${one_sweep_cmd};
+        return 0 ;
+    fi;
+
+    echo "==> $(pwd)";
 
     #############################################
     #            deploy
     #############################################
-    echo "==> $(pwd)";
-    echo -e "\n${deploy_cmd}"; 
-    ask_user_default_yes "Skip  deploy ? "
-    if [[ $? -eq 0 ]] ; then
+    if [[ ${deploy_choice} -eq 1 ]] ; then
         time ./deploy  --deploytype san ${cluster}; 
         if [[ $? -ne 0 ]] ; then 
             while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
@@ -1181,15 +1238,7 @@ dellclusterinstall ()
     #############################################
     #            reinit
     #############################################
-    ask_user_default_no "would you like to enable a feature flag ? ";
-    if [ $? -eq 1 ] ; then
-        feature=$(dellcyclonefeatureflaglist);
-        reinit_cmd+=" feature=\"${feature}\"";
-    fi;
-    # echo -e "\n\n./reinit_array.sh -F Retail factory sys_mode=block\n\n";
-    echo -e "\n\n${reinit_cmd}\n\n";
-    ask_user_default_no "Skip reinit ? "
-    if [[ $? -eq 0 ]] ; then
+    if [[ ${reinit_choice} -eq 1 ]] ; then
         # time ./reinit_array.sh -F Retail factory sys_mode=block;
         eval ${reinit_cmd};
         ret=$?;
@@ -1217,9 +1266,7 @@ dellclusterinstall ()
     #############################################
     #            create_cluster
     #############################################
-    echo -e "\n\n${create_cluster_cmd}\n\n";
-    ask_user_default_no "Skip create_cluster ? "
-    [ $? -eq 1 ] && return;
+    [ ${create_cluster_choice} -eq 0 ] && return;
 
     eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
