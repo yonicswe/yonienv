@@ -1205,7 +1205,7 @@ dellclusterinstall ()
         return 0;
     fi;
 
-    ask_user_default_yes "do it in one sweep ? ";
+    ask_user_default_no "do it with one-liner ? ";
     if [ $? -eq 1 ] ; then
         echo ${one_sweep_cmd};
         return 0 ;
