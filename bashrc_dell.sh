@@ -1183,7 +1183,6 @@ dellclusterinstall ()
         create_cluster_cmd="";
     fi;
 
-    echo "$FUNCNAME +1186";
     # print the entire triplet commands and let the user decide to decide how to proceed.
     one_sweep_cmd=""
     if [ -n "${deploy_cmd}" ] ; then
@@ -1217,11 +1216,11 @@ dellclusterinstall ()
     #            deploy
     #############################################
     if [[ ${deploy_choice} -eq 1 ]] ; then
-        echo -e "${BLUE}$ {deploy_cmd} ${NC}";
+        echo -e "${BLUE}$ ${deploy_cmd} ${NC}";
         eval ${deploy_cmd};
         if [[ $? -ne 0 ]] ; then 
             while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
-                echo -e "${BLUE}$ {deploy_cmd} ${NC}";
+                echo -e "${BLUE}$ ${deploy_cmd} ${NC}";
                 eval ${deploy_cmd};
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
@@ -1245,13 +1244,13 @@ dellclusterinstall ()
     #            reinit
     #############################################
     if [[ ${reinit_choice} -eq 1 ]] ; then
-        echo -e "${BLUE}$ {reinit_cmd} ${NC}";
+        echo -e "${BLUE}$ ${reinit_cmd} ${NC}";
         eval ${reinit_cmd};
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
             echo -e"${RED}$ \t\t reinit failed ! ! ! ${NC}";
             while (( 1 == $(ask_user_default_yes "retry reinit ? " ; echo $?) )) ; do
-                echo -e "${BLUE}$ {reinit_cmd} ${NC}";
+                echo -e "${BLUE}$ ${reinit_cmd} ${NC}";
                 eval ${reinit_cmd};
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
@@ -1277,13 +1276,13 @@ dellclusterinstall ()
     #############################################
     [ ${create_cluster_choice} -eq 0 ] && return 0;
 
-    echo -e "${BLUE}$ {create_cluster_cmd} ${NC}";
+    echo -e "${BLUE}$ ${create_cluster_cmd} ${NC}";
     eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
         echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
         while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
 
-            echo -e "${BLUE}$ {create_cluster_cmd} ${NC}";
+            echo -e "${BLUE}$ ${create_cluster_cmd} ${NC}";
             eval ${create_cluster_cmd};
 
             if [[ $? -ne 0 ]] ; then
