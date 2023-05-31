@@ -1217,63 +1217,73 @@ dellclusterinstall ()
     #            deploy
     #############################################
     if [[ ${deploy_choice} -eq 1 ]] ; then
-        time ./deploy  --deploytype san ${cluster}; 
+        echo -e "${BLUE}$ {deploy_cmd} ${NC}";
+        eval ${deploy_cmd};
         if [[ $? -ne 0 ]] ; then 
             while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
-                time ./deploy  --deploytype san ${cluster}; 
+                echo -e "${BLUE}$ {deploy_cmd} ${NC}";
                 eval ${deploy_cmd};
                 ret=$?
-                [ ${ret} -ne 0 ] && continue;
+                if [ ${ret} -ne 0 ] ; then
+                    echo -e "${RED}\t\tdeploy failed ! ! !${NC}";
+                    continue;
+                else
+                    break;
+                fi;
             done;
 
             if [[ ${ret} -ne 0 ]] ; then
                 echo "";
-                echo -e "\033[0;31m\t\tdeploy failed ! ! !\033[0m";
-                return;
+                echo -e "${RED}\t\tdeploy failed ! ! !${NC}";
+                return -1;
             fi;
         fi;
-        echo -e "\033[0;32mdeploy succeeded\033[0m";
+        echo -e "${GREEN}\t\tdeploy succeeded${NC}";
     fi;
 
     #############################################
     #            reinit
     #############################################
     if [[ ${reinit_choice} -eq 1 ]] ; then
-        # time ./reinit_array.sh -F Retail factory sys_mode=block;
+        echo -e "${BLUE}$ {reinit_cmd} ${NC}";
         eval ${reinit_cmd};
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
-            echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
+            echo -e"${RED}$ \t\t reinit failed ! ! ! ${NC}";
             while (( 1 == $(ask_user_default_yes "retry reinit ? " ; echo $?) )) ; do
-                # time ./reinit_array.sh -F Retail factory sys_mode=block;
-                echo ${reinit_cmd};
+                echo -e "${BLUE}$ {reinit_cmd} ${NC}";
                 eval ${reinit_cmd};
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
-                    echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
+                    echo -e"${RED}$ \t\t reinit failed ! ! ! ${NC}";
                     continue;
+                else
+                    break;
                 fi;
             done;
 
             if [[ ${ret} -ne 0 ]] ; then 
-                echo -e "\033[0;31m\t\treinit failed ! ! !\033[0m";
+                echo -e"${RED}$ \t\t reinit failed ! ! ! ${NC}";
                 return -1;
             fi;
         fi;
-        echo -e "\033[0;32m\t\treinit succeeded\033[0m";
+
+        echo -e"${GREEN}$ \t\t reinit succeeded ! ! ! ${NC}";
     fi;
+
 
     #############################################
     #            create_cluster
     #############################################
-    [ ${create_cluster_choice} -eq 0 ] && return;
+    [ ${create_cluster_choice} -eq 0 ] && return 0;
 
+    echo -e "${BLUE}$ {create_cluster_cmd} ${NC}";
     eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
         echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
         while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
 
-            echo -e "\n\n${create_cluster_cmd}\n\n";
+            echo -e "${BLUE}$ {create_cluster_cmd} ${NC}";
             eval ${create_cluster_cmd};
 
             if [[ $? -ne 0 ]] ; then
