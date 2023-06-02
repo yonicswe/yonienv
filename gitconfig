@@ -39,7 +39,7 @@
     amendsources= commit --amend --no-edit -n
 #     amend = commit --amend --reuse-message=HEAD
     amendcommitlog = commit -n --amend
-    amendauthor = commit --amend --author='Yonatan Cohen <ycohen@habana.ai>'
+    amendauthor = commit --amend --author='yonatan cohen <yonatan.cohen@dell.com>'
     amenddatenow = git commit --amend --no-edit --date "$(date)"
     amrej = am --reject
 
@@ -125,7 +125,17 @@
 	git fetch origin master; \
 	git checkout -b master FETCH_HEAD; \
     }; f"
-    cm = checkout master
+
+    checkoutremotefilefromremotebranch = "!f() { \
+        file=$1; \
+        branch=$2; \
+        if [ -z $file ] || [ -z $branch ] ; then \
+             echo 'gitcheckoutremotebranch <branch> <path-to-file/file>'; \
+             return; \
+        fi; \
+        git checkout origin/$branch -- $file; \
+        git s; \
+       }; f"
 
 #   checkoutbranchfrommasternext = "!f() {                       \
 #     if [ -n $1 ] ; then		                         \
@@ -135,16 +145,6 @@
 #   	git pull --rebase;                               \
 #     fi;                                                    \
 #   }; f"
-
-    checkoutfilefrombranch = "!f() {                                \
-			branch=$1;                                                  \
-			file=$2;                                                    \
-			if [ $# -ne 2 ] ; then                                      \
-				echo 'usage checkoutfilefrombranch <branch> <file>' \
-			return;                                             \
-			fi;                                                         \
-    	git checkout ${branch} -- ${file};                          \
-    }; f"
 
 
     cherry-pick-commit = "!f() {              \
@@ -232,8 +232,7 @@
         fi;                                  \
     }; f"
 
-    info = logstat -1 
-    reside-commit-in-branch = "!f() {     \
+    find-commit-in-branch = "!f() {     \
 	c=$1;                         \
 	if [ -z $c ] ; then           \
 		echo "missing commit" \
@@ -242,16 +241,20 @@
 	git log |grep $c;             \
 	}; f"
 
+# ───────i──────────────────────────────────────────────────────────────────────
+    info = logstat -1 
+
+# ───────l──────────────────────────────────────────────────────────────────────
 #                                   SHA          date                   name             msg
     lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
+#   lf = log --pretty=short
 #   ll = log --pretty=format:'%C(yellow)%h %Cred%cd %C(magenta)[author %ad] %Cblue%an%Cgreen%d %Creset%s' --date=short
-    ll = l 10
     l = "!f() { n=${1:-200}; git log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short ${count} -$n; }; f"
+    ll = l 10
     lyoni = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author='yonatan.cohen'
     l10 = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short -n10
     l20 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n20
     l30 = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s ' --date=short -n30
-    lf = log --pretty=short
 
     logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 #   also can track  changes to file with tig -- <file>
@@ -273,7 +276,7 @@
     lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
     lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset)%n'' %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
 
-    lauthor = "!f() { git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author="$1"; }; f"
+    list-author = "!f() { git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author="$1"; }; f"
 
     pushthisbranchtoremote = "!f() {                               \
 		remote=${1:-origin};                               \
@@ -345,7 +348,7 @@
     untrackfile = rm --cached 
 
     savework = "!f() { \
-	    git commit -a -m 'save work'; \
+	    git commit -a -n -m 'save work'; \
     }; f"
     sl = stash list
 
@@ -510,3 +513,9 @@
 #
 # find out on which branches a commit id is on
 # git branch --contains <commit id>
+#
+# how to git pull only one file ? 
+#    git fetch
+#    git checkout <remote>/<branch -- <path-to-file/filename>
+#    now that file will appear as staged.
+#    you can commit it here but its original  commit will not show in the logs.
