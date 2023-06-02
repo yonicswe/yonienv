@@ -1216,11 +1216,11 @@ dellclusterinstall ()
     #            deploy
     #############################################
     if [[ ${deploy_choice} -eq 1 ]] ; then
-        echo -e "\n${BLUE}$ ${deploy_cmd} ${NC}\n";
+        echo -e "\n${BLUE}\t\t\t${deploy_cmd} ${NC}\n";
         eval ${deploy_cmd};
         if [[ $? -ne 0 ]] ; then 
             while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
-                echo -e "${BLUE}$ ${deploy_cmd} ${NC}";
+                echo -e "\n${BLUE}\t\t\t${deploy_cmd} ${NC}\n";
                 eval ${deploy_cmd};
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
@@ -1237,24 +1237,24 @@ dellclusterinstall ()
                 return -1;
             fi;
         fi;
-        echo -e "\n${GREEN}\t\tdeploy succeeded${NC}";
+        echo -e "\n${GREEN}\t\t\tdeploy succeeded${NC}";
     fi;
 
     #############################################
     #            reinit
     #############################################
     if [[ ${reinit_choice} -eq 1 ]] ; then
-        echo -e "\n${BLUE}$ ${reinit_cmd} ${NC}\n";
+        echo -e "\n${BLUE}\t\t\t${reinit_cmd} ${NC}\n";
         eval ${reinit_cmd};
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
-            echo -e"${RED}$ \t\t reinit failed ! ! ! ${NC}";
+            echo -e"${RED}\t\t\t reinit failed ! ! ! ${NC}";
             while (( 1 == $(ask_user_default_yes "retry reinit ? " ; echo $?) )) ; do
-                echo -e "${BLUE}$ ${reinit_cmd} ${NC}";
+                echo -e "\n${BLUE}\t\t\t${reinit_cmd} ${NC}\n";
                 eval ${reinit_cmd};
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
-                    echo -e"${RED}$ \t\t reinit failed ! ! ! ${NC}";
+                    echo -e"${RED}\t\t reinit failed ! ! ! ${NC}";
                     continue;
                 else
                     break;
@@ -1262,12 +1262,12 @@ dellclusterinstall ()
             done;
 
             if [[ ${ret} -ne 0 ]] ; then 
-                echo -e"${RED}$ \t\t reinit failed ! ! ! ${NC}";
+                echo -e"${RED}\t\t reinit failed ! ! ! ${NC}";
                 return -1;
             fi;
         fi;
 
-        echo -e "\n${GREEN}$ \t\t reinit succeeded ! ! ! ${NC}\n";
+        echo -e "\n${GREEN}\t\t\t reinit succeeded ! ! ! ${NC}\n";
     fi;
 
 
@@ -1276,26 +1276,26 @@ dellclusterinstall ()
     #############################################
     [ ${create_cluster_choice} -eq 0 ] && return 0;
 
-    echo -e "\n${BLUE}$ ${create_cluster_cmd} ${NC}\n";
+    echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
     eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
         echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
         while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
 
-            echo -e "${BLUE}$ ${create_cluster_cmd} ${NC}";
+            echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
             eval ${create_cluster_cmd};
 
             if [[ $? -ne 0 ]] ; then
-                echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
+                echo -e "\n${RED}\t\tcreate_cluster failed ! ! !${NC}";
                 continue;
             else
-                echo -e "${GREEN}\t\tGreat success${NC}";
+                echo -e "${GREEN}\t\t\tGreat success${NC}";
                 break;
             fi;
 
         done;
     else
-        echo -e "${GREEN}\t\tGreat success${NC}";
+        echo -e "\n\n${GREEN}\t\t\tGreat success${NC}";
     fi;
 }
 
