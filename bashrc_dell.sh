@@ -1237,7 +1237,7 @@ dellclusterinstall ()
                 return -1;
             fi;
         fi;
-        echo -e "${GREEN}\t\tdeploy succeeded${NC}";
+        echo -e "\n${GREEN}\t\tdeploy succeeded${NC}";
     fi;
 
     #############################################
@@ -1267,7 +1267,7 @@ dellclusterinstall ()
             fi;
         fi;
 
-        echo -e"${GREEN}$ \t\t reinit succeeded ! ! ! ${NC}";
+        echo -e "\n${GREEN}$ \t\t reinit succeeded ! ! ! ${NC}\n";
     fi;
 
 
