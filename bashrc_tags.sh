@@ -158,3 +158,4 @@ tagme ()
 }
 alias ttt='./tagme.sh'
 alias tttt='./tagme.sh 1'
+alias tttg='git listtrackedfiles | grep "\.[c,h]$" > cscope.files; l cscope.files'
