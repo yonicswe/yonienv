@@ -1216,7 +1216,7 @@ dellclusterinstall ()
     #            deploy
     #############################################
     if [[ ${deploy_choice} -eq 1 ]] ; then
-        echo -e "${BLUE}$ ${deploy_cmd} ${NC}";
+        echo -e "\n${BLUE}$ ${deploy_cmd} ${NC}\n";
         eval ${deploy_cmd};
         if [[ $? -ne 0 ]] ; then 
             while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
@@ -1244,7 +1244,7 @@ dellclusterinstall ()
     #            reinit
     #############################################
     if [[ ${reinit_choice} -eq 1 ]] ; then
-        echo -e "${BLUE}$ ${reinit_cmd} ${NC}";
+        echo -e "\n${BLUE}$ ${reinit_cmd} ${NC}\n";
         eval ${reinit_cmd};
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
@@ -1276,7 +1276,7 @@ dellclusterinstall ()
     #############################################
     [ ${create_cluster_choice} -eq 0 ] && return 0;
 
-    echo -e "${BLUE}$ ${create_cluster_cmd} ${NC}";
+    echo -e "\n${BLUE}$ ${create_cluster_cmd} ${NC}\n";
     eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
         echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
