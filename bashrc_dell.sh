@@ -342,7 +342,13 @@ dellcyclonebuild ()
     build_cmd="time ${build_cmd}";
     eval ${build_cmd} | tee dellcyclonebuild.log
 	echo -e "\n${build_cmd}\n";
-    $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
+    # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
+
+    p;
+    fd -I -t f ".*xtremapp$"
+    # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
+    # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
+
 }
 
 builds_journal_db="build-history";
