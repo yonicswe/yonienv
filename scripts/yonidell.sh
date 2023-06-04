@@ -283,6 +283,10 @@ alias journalnt='sudo journalctl SUB_COMPONENT=nt'
 alias journalntf='sudo journalctl -f SUB_COMPONENT=nt'
 alias journalntlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
+alias journalmbe-r='sudo journalctl SUB_COMPONENT=mbe_r'
+alias journalmbe-rf='sudo journalctl -f SUB_COMPONENT=mbe_r'
+alias journalmbe-rlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=mbe_r'
+
 alias journalkernel='sudo journalctl -k'
 alias journalkernelf='sudo journalctl -k -f'
 alias journalkernellast3minutes='sudo journalctl -k --since="3 minutes ago"'
