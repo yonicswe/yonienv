@@ -480,7 +480,7 @@ alias dellclusterlist-qa-app-lab='    _dellclusterlist ~/docs/dell-cluster-list-
 alias dellclusterlist-trident-roce='  _dellclusterlist ~/docs/dell-cluster-list-trident-roce.txt    Trident-kernel-IL NVMeOF-RoCE'
 alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt    Trident-kernel-IL indus'
 
-xpool_users=(y_cohen grupie engela eldadz levyi2);
+xpool_users=(y_cohen grupie amite eldadz levyi2);
 complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterlease-update-user;
 
 dellclusterleaserelease ()
@@ -1083,35 +1083,30 @@ dellcyclonefeatureflaglist ()
 
 _dellclusterget ()
 {
-    local cluster=${1};
+    local cluster=;
 
-    if ! [ -z ${cluster} ] ;then
-        if ! [[ " ${cluster} " =~ " ${trident_cluster_list[@]} " ]] ; then
-            echo "new ${cluster} ?"
-            # ask_user_default_no "add ${cluster} to list";
-            # if [[ $? -eq 0 ]] ; then
-            # echo "finished here";
-            # return 0;
-            # else
-            # echo "!!tbd!! : add cluster to list"
-            # fi;
+    if ! [ -z ${YONI_CLUSTER} ] ; then
+        ask_user_default_yes "you did not specify <cluster> use ? ${YONI_CLUSTER}";
+        if [[ $? -eq 1 ]] ; then
+            echo ${YONI_CLUSTER};
+            return 0;
         fi;
     fi;
 
-    # help user get a cluster
     if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
         ask_user_default_yes "you did not specify <cluster> use ? ${last_used_cluster}";
-        if [[ $? -eq 0 ]] ; then
-            cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-            # cluster="$(printf "%s\n" ${!dell_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-            if [ -z ${cluster} ] ; then
-                echo "usage : dellclusterruntimeenvset <cluster name>";
-                return -1;
-            fi;
-        else
-            cluster=${last_used_cluster};
+        if [[ $? -eq 1 ]] ; then
+            echo ${last_used_cluster};
+            return 0;
         fi;
+    fi;
+
+    cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    # cluster="$(printf "%s\n" ${!dell_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    if [ -z ${cluster} ] ; then
+        echo "usage : dellclusterruntimeenvset <cluster name>";
+        return -1;
     fi;
 
     echo ${cluster};
@@ -1348,6 +1343,9 @@ dellclusteruserspaceupdate ()
 		return -1;
 	fi
 
+    # for cyc_core changes add "sym"
+	# time ./fast_code_loader.sh sym -r 10 -o -w ${cyc_core_folder};
+    #
 	time ./fast_code_loader.sh 10 -o -w ${cyc_core_folder};
 	
     echo "about to copy nt-nvmeof-frontend to node-b";
@@ -1357,6 +1355,10 @@ dellclusteruserspaceupdate ()
         dellcdcyclonefolder;
         return 0;
     fi;
+
+    # for cyc_core changes add "sym"
+	# time ./fast_code_loader.sh sym -r 11 -o -w ${cyc_core_folder};
+    #
 
 	time ./fast_code_loader.sh 11 -o -w ${cyc_core_folder};
     dellcdcyclonefolder;
