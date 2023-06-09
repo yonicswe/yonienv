@@ -940,11 +940,17 @@ dellnvme-fc-connect ()
 # nvme discover -t fc -a <take from bsclistports> -w <take from dellnvme-fc-nodename-portname>
 # nvme discover -t rdma --traddr=10.219.146.182 -w 10.219.146.186
 # nvme connect -t rdma -a 10.219.146.182 -n nqn.1988-11.com.dell:powerstore:00:60148e5c7660A3D9C763 -s 4420 -w 10.219.146.186 -D 
+#
+# connect with tcp with secrets genereated with 'nvme gen-dhchap-key -m 1'
+# nvme connect -t tcp -a 10.181.193.11 -n nqn.1988-11.com.dell:powerstore:00:133a0e05d77e9473A5F6 -s 4420  -S DHHC-1:01:C7XNT6VDFTFfbGtrSimOlLFg7BAdH+UwUgkLTuSA5gcd+7/H: -C DHHC-1:01:97vgjyw8YRnwFPn0LYjeGW5/ClRhS5YuVnwTNIwUNHUWmp6v:
+
+
 
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 
 # multipath -ll
+# nvme discovre -t tcp -a <port from bsclistports>
 # sudo nvme discover -t rdma  --traddr=10.219.157.164 -w 10.219.157.167
 # nvme connect -t tcp -a 10.219.157.164  -n nqn.1988-11.com.dell:powerstore:00:b4fea1b05549F7A1A429 -s 4420 -D
 # nvme port and node name
