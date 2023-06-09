@@ -1158,7 +1158,7 @@ dellclusterinstall ()
     # ask user to define commands and offer to do it all without stopping.
     #
     # echo -e "\n${deploy_cmd}";
-    ask_user_default_yes "Skip  deploy ? "
+    ask_user_default_no "Skip  deploy ? "
     if [[ $? -eq 0 ]] ; then
         deploy_choice=1;
     else
