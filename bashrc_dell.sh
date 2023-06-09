@@ -525,9 +525,12 @@ dellclusterlease-update-user ()
     local cluster=${1};
     local user=${1:-labmaintenance};
 
-    if [[ -z ${cluster} ]] ; then
-        echo "you must specify a cluster";
-        return -1;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
     fi;
 
     echo "/home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster}";
@@ -1125,6 +1128,7 @@ dellclusterinstall ()
     local reinit_choice=0;
     local create_cluster_choice=0;
     local feature=;
+    local cmd_start_time=;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1218,6 +1222,7 @@ dellclusterinstall ()
     #############################################
     if [[ ${deploy_choice} -eq 1 ]] ; then
         echo -e "\n${BLUE}\t\t\t${deploy_cmd} ${NC}\n";
+        cmd_start_time=${SECONDS};
         eval ${deploy_cmd};
         if [[ $? -ne 0 ]] ; then 
             while (( 1 == $(ask_user_default_yes "retry deploy ? " ; echo $?) )) ; do
@@ -1238,7 +1243,7 @@ dellclusterinstall ()
                 return -1;
             fi;
         fi;
-        echo -e "\n${GREEN}\t\t\tdeploy succeeded${NC}";
+        echo -e "\n${GREEN}\t\t\t deploy succeeded ( after $(( (${SECONDS} - ${cmd_start_time})/60 )) minutes)${NC}";
     fi;
 
     #############################################
@@ -1246,6 +1251,7 @@ dellclusterinstall ()
     #############################################
     if [[ ${reinit_choice} -eq 1 ]] ; then
         echo -e "\n${BLUE}\t\t\t${reinit_cmd} ${NC}\n";
+        cmd_start_time=${SECONDS};
         eval ${reinit_cmd};
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
@@ -1268,7 +1274,7 @@ dellclusterinstall ()
             fi;
         fi;
 
-        echo -e "\n${GREEN}\t\t\t reinit succeeded ! ! ! ${NC}\n";
+        echo -e "\n${GREEN}\t\t\t reinit succeeded ( after $(( (${SECONDS} - ${cmd_start_time})/60 )) minutes)${NC}\n";
     fi;
 
 
@@ -1278,6 +1284,7 @@ dellclusterinstall ()
     [ ${create_cluster_choice} -eq 0 ] && return 0;
 
     echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
+    cmd_start_time=${SECONDS};
     eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
         echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
@@ -1296,6 +1303,7 @@ dellclusterinstall ()
 
         done;
     else
+        echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after $(( (${SECONDS} - ${cmd_start_time})/60 )) minutes)${NC}";
         echo -e "\n\n${GREEN}\t\t\tGreat success${NC}";
     fi;
 }
