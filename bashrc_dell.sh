@@ -1129,6 +1129,9 @@ dellclusterinstall ()
     local create_cluster_choice=0;
     local feature=;
     local cmd_start_time=;
+    local deploy_time=;
+    local reinit_time=;
+    local create_cluster_time=;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1243,7 +1246,8 @@ dellclusterinstall ()
                 return -1;
             fi;
         fi;
-        echo -e "\n${GREEN}\t\t\t deploy succeeded ( after $(( (${SECONDS} - ${cmd_start_time})/60 )) minutes)${NC}";
+        deploy_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
+        echo -e "\n${GREEN}\t\t\t deploy succeeded ( after ${deploy_time} minutes)${NC}";
     fi;
 
     #############################################
@@ -1274,7 +1278,8 @@ dellclusterinstall ()
             fi;
         fi;
 
-        echo -e "\n${GREEN}\t\t\t reinit succeeded ( after $(( (${SECONDS} - ${cmd_start_time})/60 )) minutes)${NC}\n";
+        reinit_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
+        echo -e "\n${GREEN}\t\t\t reinit succeeded ( after ${reinit_time} minutes)${NC}\n";
     fi;
 
 
@@ -1303,8 +1308,12 @@ dellclusterinstall ()
 
         done;
     else
-        echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after $(( (${SECONDS} - ${cmd_start_time})/60 )) minutes)${NC}";
+        create_cluster_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
+        echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} minutes)${NC}";
         echo -e "\n\n${GREEN}\t\t\tGreat success${NC}";
+        echo -e "\t${CYAN}deploy         : ${deploy_time}${NC}";
+        echo -e "\t${CYAN}reinit         : ${reinit_time}${NC}";
+        echo -e "\t${CYAN}create_cluster : ${create_cluster_time}${NC}";
     fi;
 }
 
