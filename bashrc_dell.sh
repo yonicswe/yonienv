@@ -1312,7 +1312,7 @@ dellclusterinstall ()
         echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} minutes)${NC}";
     fi;
 
-    echo -e "\n\n${GREEN}\t\t\tGreat success${NC}";
+    echo -e "\n\n${GREEN}\t\t\tGreat success ! ${cluster} is installed${NC}";
     if [ ${deploy_choice} -eq 1 ] ; then
         echo -e "\t${CYAN}deploy         : ${deploy_time} minutes${NC}";
     fi;
