@@ -1310,10 +1310,17 @@ dellclusterinstall ()
     else
         create_cluster_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
         echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} minutes)${NC}";
-        echo -e "\n\n${GREEN}\t\t\tGreat success${NC}";
-        echo -e "\t${CYAN}deploy         : ${deploy_time}${NC}";
-        echo -e "\t${CYAN}reinit         : ${reinit_time}${NC}";
-        echo -e "\t${CYAN}create_cluster : ${create_cluster_time}${NC}";
+    fi;
+
+    echo -e "\n\n${GREEN}\t\t\tGreat success${NC}";
+    if [ ${deploy_choice} -eq 1 ] ; then
+        echo -e "\t${CYAN}deploy         : ${deploy_time} minutes${NC}";
+    fi;
+    if [ ${reinit_choice} -eq 1 ] ; then
+        echo -e "\t${CYAN}reinit         : ${reinit_time} minutes${NC}";
+    fi;
+    if [ ${create_cluster_choice} -eq 1 ] ; then
+        echo -e "\t${CYAN}create_cluster : ${create_cluster_time} minutes${NC}";
     fi;
 }
 
