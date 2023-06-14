@@ -247,7 +247,8 @@
 # ───────l──────────────────────────────────────────────────────────────────────
 #                                   SHA          date                   name             msg
     ll = lll -10
-    lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
+#   lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
+    lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short
 #   lf = log --pretty=short
 #   ll = log --pretty=format:'%C(yellow)%h %Cred%cd %C(magenta)[author %ad] %Cblue%an%Cgreen%d %Creset%s' --date=short
     l = "!f() { n=${1:-200}; git log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short ${count} -$n; }; f"
