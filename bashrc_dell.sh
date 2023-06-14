@@ -1212,6 +1212,10 @@ dellclusterinstall ()
         return 0;
     fi;
 
+    echo -e "${YELLOW} ${deploy_cmd} ${NC}";
+    echo -e "${YELLOW} ${reinit_cmd} ${NC}";
+    echo -e "${YELLOW} ${create_cluster_cmd} ${NC}";
+
     ask_user_default_no "do it with one-liner ? ";
     if [ $? -eq 1 ] ; then
         echo ${one_sweep_cmd};
