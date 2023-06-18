@@ -686,16 +686,11 @@ dellclusterruntimeenvset ()
     local cluster=${1};
     local cluster_config_file=;
 
-    if ! [ -z ${cluster} ] ;then
-        if ! [[ " ${cluster} " =~ " ${trident_cluster_list[@]} " ]] ; then
-            echo "new ${cluster} ?"
-            # ask_user_default_no "add ${cluster} to list";
-            # if [[ $? -eq 0 ]] ; then
-            # echo "finished here";
-            # return 0;
-            # else
-            # echo "!!tbd!! : add cluster to list"
-            # fi;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
         fi;
     fi;
 
