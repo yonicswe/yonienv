@@ -21,8 +21,8 @@ set nowrap
 set noswapfile
 
 " replace tabs with spaces.
-au FileType c   set noexpandtab
-au FileType cpp set noexpandtab
+au FileType c   set expandtab
+au FileType cpp set expandtab
 au FileType vim set expandtab
 au FileType sh set expandtab
 au FileType txt set expandtab
@@ -774,7 +774,12 @@ set tags=tags
 set complete+=t
 let g:ctags_statusline=1
 
-map <C-w>[ :vertical stag <cword><CR>
+" ctrl-w,[ to open tag in split window
+" if window is not vertical then do ctrl-w,shift-h to rearrange the windows
+" vertically
+map <C-w>[ :vertical stag <cword>
+
+map <S-t> g]
 " [ctrl]wH - change horizontal split to vertical
 " [ctrl]wK - change vertical split to horizontal
 
@@ -864,15 +869,15 @@ source ~/.vim/cscope.vim
 
 function! SourceTags ()
    let tagsfile='tags.vim'
+   cs k -1
    if filereadable(tagsfile)
-      cs k -1
       source tags.vim
    else
       cscope add cscope.out
    endif
 endfunc
 com! Css call SourceTags()<CR>
-map <S-M> :call SourceTags()<CR>
+map <S-M> :call SourceTags()<CR>:cs s<cr>
 " com! Css :cscope add cscope.out
 " shortcut for cscope search where method under cursor is being called.
 " map <leader>fc :cs f c <cword><CR>
@@ -909,7 +914,7 @@ endfunction
 let @p = '      dev_dbg(hdev->dev, " ");' . "\n"
 " call setreg('p', 'printk("--->%s()%d:\n", __func__, __LINE__);`[j')
 let @l =  "─────────────────────────────────────────────────────────────────────────────\n"
-let @y = "Signed-off-by: Yonatan Cohen <yonatanc@mellanox.com>\n"
+let @y = "Co-authored-by: yonatan.cohen <yonatan.cohen@dell.com>\nReviewed-by: yonatan.cohen <yonatan.cohen@dell.com>"
 let @h = "◀──────"
 let @b = "┌─────┐\n│     │\n│     │\n│     │\n└─────┘"
 " let @b = " ┌─────┐^J│     │^J│     │^J│     │^J└─────┘"
@@ -936,17 +941,23 @@ function! AdjustFontSize(amount)
   endif
 endfunction
 
-function! LargerFont()
-  call AdjustFontSize(1)
-endfunction
-command! LargerFont call LargerFont()
-map <C-l> :call LargerFont()<cr>
+" function! LargerFont()
+  " call AdjustFontSize(1)
+" endfunction
+" command! LargerFont call LargerFont()
+" map <C-l> :call LargerFont()<cr>
 
-function! SmallerFont()
-  call AdjustFontSize(-1)
-endfunction
-command! SmallerFont call SmallerFont()
-map <C-k> :call SmallerFont()<cr>
+" function! SmallerFont()
+  " call AdjustFontSize(-1)
+" endfunction
+" command! SmallerFont call SmallerFont()
+" map <C-k> :call SmallerFont()<cr>
+
+" jump to the previous function
+nnoremap <silent> [f :call search('\(\(if\\|for\\|while\\|switch\\|catch\)\_s*\)\@64<!(\_[^)]*)\_[^;{}()]*\zs{', "bw")<cr>
+
+" jump to the next function
+nnoremap <silent> ]f :call search('\(\(if\\|for\\|while\\|switch\\|catch\)\_s*\)\@64<!(\_[^)]*)\_[^;{}()]*\zs{', "w")<cr>
 
 
 fun! ShowFuncName()

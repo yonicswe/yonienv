@@ -638,16 +638,21 @@ alias findmergetoolfiles='fd _BASE_\|_BACKUP_\|_REMOTE_\|_LOCAL_'
 
 findconflictfiles ()
 {
-    local delete=
+    local delete=0;
 
     if [ "$1" == "-d" ] ; then 
-        # delete="-delete -print";
-        delete="-X /bin/rm";
+        delete=1;
     fi
 
-    findreject ${delete};
-    findorig ${delete};
-    findmergetoolfiles ${delete};
+    if [[ ${delete}  -eq 0 ]] ; then
+        findreject
+        findorig
+        findmergetoolfiles
+    else
+        findreject         | xargs rm -f;
+        findorig           | xargs rm -f;
+        findmergetoolfiles | xargs rm -f;
+    fi;
 }
 
 vorej ()

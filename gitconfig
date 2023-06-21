@@ -55,6 +55,7 @@
 # ───────b──────────────────────────────────────────────────────────────────────
 
     b = branch
+    bt = branch -vv
     ba = branch -a
     br = branch -r
     bdelete = branch -D 

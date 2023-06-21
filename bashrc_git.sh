@@ -213,7 +213,25 @@ gitcommitmetadata ()
     # git checkout -b ${new_branch_name} tags/${tag};
 # }
 
-gitcheckoutbranch ()
+git-rebase-remote-branch ()
+{
+    git fetch origin;
+    branch="$(git br | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+
+    if [ -z "${branch}" ] ; then
+        return;
+    fi;
+
+    ask_user_default_no  "git rebase over : ${branch}";
+    if [ $? -eq 0 ] ; then
+        return;
+    fi;
+
+    git fetch origin ${branch};
+    git rebase FETCH_HEAD;
+}
+
+git-checkoutbranch ()
 {
     branch="$(git b | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
 
@@ -223,7 +241,7 @@ gitcheckoutbranch ()
     fi;
 }
 
-gitcheckoutremotebranch ()
+git-checkoutremotebranch ()
 {
     local branch=;
     branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
@@ -231,6 +249,11 @@ gitcheckoutremotebranch ()
     if [[ -z ${branch} ]] ; then
         echo "you must specify a valid branch";
         return -1;
+    fi;
+
+    if [ $( git b | grep ${branch} | wc -l ) -gt 0 ] ; then
+        echo "${branch} already checked out !! remove it and try again";
+        return;
     fi;
 
     echo "git checkout ${branch}";

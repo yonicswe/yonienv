@@ -833,6 +833,13 @@ dellclusterleaseextend ()
         fi;
     fi;
 
+    read -p "extend 14 days ? : " extend;
+    if [ -z ${extend} ] ; then
+        extend=14d;
+    else
+        extend="${extend}d";
+    fi;
+
     echo -e "\t\t-> /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend}"
     /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend};
 
