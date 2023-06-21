@@ -668,6 +668,10 @@ dellcdcyclonefolder ()
     fi;
      
     if [[ ${faults} -gt 0 ]] ; then
+        if [[ $( file .git | grep directory | wc -l ) -gt 0 ]] ; then
+            return 0;
+        fi;
+
         if [[ $(file .git | grep "ASCII text" | wc -l) -gt 0 ]] ; then 
             # echo "going up from submodule to pdr";
             gitsmtop;
