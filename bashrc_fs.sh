@@ -199,6 +199,7 @@ k () {
 
 
 alias l='/usr/bin/ls --group-directories-first -l --color -F'
+alias ls='/usr/bin/ls --group-directories-first --color -F'
 alias lt='/usr/bin/ls --group-directories-first -lt --color -F'
 alias ltr='/usr/bin/ls --group-directories-first -ltr --color -F'
 alias lessin='/usr/bin/less -IN'
@@ -255,7 +256,7 @@ scpcommandforfile ()
 # list only directories 
 lld ()
 {
-   ls -ltrd --color $(ls -l | awk '/^d/{print $9}')
+   /usr/bin/ls -lp | awk '/^d/{print "\033[0;34m" $9 "\033[0m"}';
 }
 
 # list hidden files
