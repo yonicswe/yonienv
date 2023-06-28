@@ -261,7 +261,27 @@ git-checkoutremotebranch ()
     return 0;
 }
 
-gitdeleteremotebranchfromorigin ()
+git-deletebranch ()
+{
+    local branch=;
+
+    if [[ -z ${branch} ]] ; then
+        branch="$(git b |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    fi;
+
+    if [[ -z ${branch} ]] ; then
+        echo "you must specify a valid branch";
+        return -1;
+    fi;
+
+    echo "git branch -D ${branch}";
+    ask_user_default_no "are you sure ? ";
+    if [[ $? -eq 1 ]] ; then
+        git branch -D ${branch};
+    fi;
+}
+
+git-deleteremotebranch ()
 {
     local branch=;
 
