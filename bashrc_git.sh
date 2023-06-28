@@ -215,12 +215,18 @@ gitcommitmetadata ()
 
 git-rebase-remote-branch ()
 {
-    git fetch origin;
+    ask_user_default_no "git fetch before we start ? ";
+    if [ $? -eq 1 ] ; then
+        git fetch origin;
+    fi;
+
     branch="$(git br | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
 
     if [ -z "${branch}" ] ; then
         return;
     fi;
+
+    branch=$(echo ${branch} | sed 's/origin\///g');
 
     ask_user_default_no  "git rebase over : ${branch}";
     if [ $? -eq 0 ] ; then
