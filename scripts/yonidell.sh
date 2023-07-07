@@ -1,5 +1,21 @@
 export YONI_CLUSTER=
  
+######################################
+# colors
+# echo -e "${RED} text ${NC}"
+RED="\033[1;31m"
+REDBLINK="\033[1;5;31m"
+REDITALIC="\033[1;3;31m"
+REDREVERSE="\033[1;7;31m"
+BLUE="\033[0;34m"
+GREEN="\033[0;32m"
+CYAN="\033[0;36m"
+PURPLE="\033[0;35m"
+BROWN="\033[0;33m"
+YELLOW="\033[1;33m"
+NC="\033[0m"
+######################################
+
 trident_cluster_list=(WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
 
@@ -904,6 +920,12 @@ dellclustergeneratecfg ()
 
 dellnvme-fc-host-nodename-portname ()
 {
+    if [ 0 -eq $(lsmod | grep qla2xxx | wc -l) ] ; then
+        echo "qla module not loaded";
+        echo "modprobe qla2xxx and try again";
+        return;
+    fi;
+
     for h in /sys/class/fc_host/* ; do echo "$(basename $h) : nn-$(cat $h/node_name):pn-$(cat $h/port_name)" ; done
 }
 
@@ -917,6 +939,7 @@ dellnvme-fc-connect ()
 
     if [ -z ${cluster_nn_pn} ] ; then
         echo "$FUNCNAME <cluster nn:pn>";
+        echo -e "${PURPLE}use bsclistports to get one${NC}";
         return -1;
     fi;
 
