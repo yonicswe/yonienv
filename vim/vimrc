@@ -671,6 +671,8 @@ endfunc
 map mmm :call TagmeInBackground_func()<cr>
 map mm :cs reset<cr>
 
+map tt 
+
 function! TagmeAgain_func ()
    execute "!./tagme.sh 1"
    execute "silent cs reset"

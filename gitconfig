@@ -128,8 +128,8 @@
     }; f"
 
     checkoutremotefilefromremotebranch = "!f() { \
-        file=$1; \
-        branch=$2; \
+        branch=$1; \
+        file=$2; \
         if [ -z $file ] || [ -z $branch ] ; then \
              echo 'gitcheckoutremotebranch <branch> <path-to-file/file>'; \
              return; \
@@ -241,6 +241,8 @@
 	fi;                           \
 	git log |grep $c;             \
 	}; f"
+
+	find-file = "!f() { c=$1; if [ -z $c ] ; then return ; fi ;  git ls-files | grep --color $c; }; f"
 
 # ───────i──────────────────────────────────────────────────────────────────────
     info = logstat -1 

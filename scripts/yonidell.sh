@@ -239,6 +239,7 @@ _delljournalctl ()
     local since="${3}";
     local pager=0;
     local options;
+    local journal_cmd=;
 
     if [[ -z ${node} ]] ; then
         echo "missing node";
@@ -246,9 +247,11 @@ _delljournalctl ()
     fi;
 
     if [[ ${node}  == "a" ]] ; then
-        options="--utc -o short-precise -a -D node_a/var/log/journal";
+        # options="--utc -o short-precise -a -D node_a/var/log/journal";
+        options="-a -D node_a/var/log/journal";
     elif [[ ${node} == "b" ]] ; then
-        options="--utc -o short-precise -a -D node_b/var/log/journal";
+        # options="--utc -o short-precise -a -D node_b/var/log/journal";
+        options="-a -D node_b/var/log/journal";
     else
         echo "node can be a or b only";
     fi;
@@ -277,6 +280,7 @@ _delljournalctl ()
             ;;
     esac;
 
+    journal_cmd=
     if [[ -n "${since}" ]] ; then
         (set -x ; eval journalctl --since=\"${since}\" ${options});
     else
@@ -308,18 +312,27 @@ alias journalkernelf='sudo journalctl -k -f'
 alias journalkernellast3minutes='sudo journalctl -k --since="3 minutes ago"'
 
 alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j -- -a"
+alias delltriage-all-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -a -r"
 alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j -- -a"
+alias delltriage-all-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -a -r"
+
 alias delltriage-nt-logs-node-a="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt"
 alias delltriage-nt-logs-node-b="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt"
+alias delltriage-nt-logs-node-a-r="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt -r"
+alias delltriage-nt-logs-node-b-r="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt -r"
+
 alias delltriage-kernel-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t kernel"
+alias delltriage-kernel-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -t kernel -r"
 alias delltriage-kernel-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
+alias delltriage-kernel-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -t kernel-r"
 alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 
 _delldc-node-x ()
 {
     local node_dir=${1};
-    local jorunalctl_flags=${2};
+    local flags="${2}";
+    local journalctl_cmd=;
 
     if ! [ -d ${node_dir} ] ; then
         echo "directory ${node_dir} does not exist";
@@ -332,7 +345,14 @@ _delldc-node-x ()
     fi;
 
     cd ${node_dir};
-    ./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags};
+
+    journalctl_cmd="./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags}";
+    echo "${journalctl_cmd}";
+    ask_user_default_yes "continue ";
+    if [ $? -eq 1 ] ; then
+        eval ${journalctl_cmd};
+    fi;
+    
     cd -;
 }
 
@@ -340,8 +360,12 @@ alias delldc-all-node-a='_delldc-node-x node_a'
 alias delldc-all-node-b='_delldc-node-x node_b'
 alias delldc-all-node-a-r='_delldc-node-x node_a -r'
 alias delldc-all-node-b-r='_delldc-node-x node_b -r'
+
 alias delldc-kernel-node-a='_delldc-node-x node_a -k'
+alias delldc-kernel-node-a-r='_delldc-node-x node_a -k -r'
 alias delldc-kernel-node-b='_delldc-node-x node_b -k'
+alias delldc-kernel-node-b-r='_delldc-node-x node_b "-k -r"'
+
 alias delldc-nt-node-a='_delldc-node-x node_a SUB_COMPONENT=nt'
 alias delldc-nt-node-b='_delldc-node-x node_b SUB_COMPONENT=nt'
 alias delldc-nt-node-a-r='_delldc-node-x node_a "SUB_COMPONENT=nt -r"'
@@ -783,6 +807,14 @@ _pr_debug_usage ()
     echo "-f <func> [-d]: enable debug prints in func, -d to remove it";
     echo "-e            : show functions that with enabled pr_debug";
     echo "-h            : print this help";
+
+    echo "examples";
+    echo "-------------";
+    echo "echo 'module nvmet_fc +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
+    echo "echo 'module nvmet +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
+    echo "echo 'module nvmet_power +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
+    echo "echo 'module nvme_qla2xxx +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
+    echo "echo 'module qla2xxx +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
 }
 
 prdebug () 
