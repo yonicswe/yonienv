@@ -233,7 +233,9 @@ git-rebase-remote-branch ()
         return;
     fi;
 
+    echo "git fetch origin ${branch};";
     git fetch origin ${branch};
+    echo "git rebase FETCH_HEAD;";
     git rebase FETCH_HEAD;
 }
 
