@@ -255,7 +255,7 @@ git-checkoutremotebranch ()
 
     ask_user_default_no "git fetch before we start ? ";
     if [ $? -eq 1 ] ; then
-        git fetch origin;
+        git fetch -p;
     fi;
 
     branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
