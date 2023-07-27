@@ -5,7 +5,9 @@ alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
 # yonivmipaddress="10.244.196.235"
 yonivmipaddress="10.227.212.155"
+yonivm2ipaddress="10.227.212.133"
 alias ssh2yonivm="sshpass -p cycpass ssh cyc@${yonivmipaddress}"
+alias ssh2yonivm2="sshpass -p cycpass ssh cyc@${yonivm2ipaddress}"
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
@@ -330,7 +332,7 @@ dellcyclonebuild ()
 
 	ask_user_default_no "prune before build ?"
 	if [[ $? -eq 1 ]] ; then
-	    build_cmd="make prune && ${build_cmd}";
+	    build_cmd="time make prune && time ${build_cmd}";
 	fi;
 
 	echo -e "\n========== start build ($(pwd)) ===================\n";
@@ -339,7 +341,7 @@ dellcyclonebuild ()
     ask_user_default_yes "continue ?";
     [ $? -eq 0 ] && return 0;
 
-    build_cmd="time ${build_cmd}";
+    # build_cmd="time ${build_cmd}";
     eval ${build_cmd} | tee dellcyclonebuild.log
 	echo -e "\n${build_cmd}\n";
     # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
