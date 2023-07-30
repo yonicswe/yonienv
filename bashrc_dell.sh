@@ -3,6 +3,7 @@
 alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
+alias ssh2iritvm='echo cycpass; ssh cyc@10.227.212.132'
 # yonivmipaddress="10.244.196.235"
 yonivmipaddress="10.227.212.155"
 yonivm2ipaddress="10.227.212.133"
@@ -828,17 +829,23 @@ dellclustergeneratecfg ()
 
 dellclusterleaseextend () 
 {
-    local extend=${1:-14d};
-    local cluster=${2};
+    local cluster=${1};
+    local extend=${2:-14d};
+
+    if [ "${cluster}" == "ask" ] ; then
+        cluster=;
+    fi;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
+        # if [ -z "${cluster}" ] ; then
+        if [ $? -eq 1 ] ; then
+            echo "usage : ${FUNCNAME} <cluster>"; 
             return -1;
         fi;
     fi;
 
+    echo -n "extend ${cluster} ";
     read -p "extend 14 days ? : " extend;
     if [ -z ${extend} ] ; then
         extend=14d;
@@ -851,7 +858,7 @@ dellclusterleaseextend ()
 
 }
 
-alias dellclusterleaseextendshared='dellclusterleaseextend 72h';
+alias dellclusterleaseextendshared='dellclusterleaseextend ask 72h';
 
 # complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
 # complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
@@ -1117,7 +1124,7 @@ _dellclusterget ()
     # cluster="$(printf "%s\n" ${!dell_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
     if [ -z ${cluster} ] ; then
         echo "usage : dellclusterruntimeenvset <cluster name>";
-        return -1;
+        return 1;
     fi;
 
     echo ${cluster};
