@@ -65,15 +65,33 @@
 #   if branch name is posixed with v<number> 
 #   increment the version v<number++>
     branchincversion = "!f() { \
+       newversion=$1;\
        v=$(git bb |grep -E -o "v[0-9]+$"); \
+       b=$(git bb | sed 's/-v.*//g'); \
+       if [ $# -eq 1 ] ; then \
+          git cb $(git bb)-v${newversion}; \
+          return;\
+       fi;\
+          \
        if [ -z $v ] ; then \
           bnewname=$(git bb)-v1; \
-          git cb ${bnewname}; \
+          if [ $(git b |grep ${bnewname} | wc -l) -eq 0 ] ; then \
+             git cb ${bnewname}; \
+          else \
+             echo 'branch already exists'; \
+             git c ${bnewname}; \
+          fi;\
        else \
           v=$(echo $v | grep -E -o "[0-9]"); \
           bnewname=$(git bb | sed 's/v[0-9]//'); \
           v=$((v + 1)) ;\
-          git cb ${bnewname}v$v; \
+          bnewname=${bnewname}v$v; \
+          if [ $(git b |grep ${bnewname} | wc -l) -eq 0 ] ; then \
+             git cb ${bnewname}; \
+          else \
+             echo 'branch already exists.'; \
+             git b | grep ${b}; \
+          fi;\
        fi; \
     };f "
 
@@ -148,11 +166,11 @@
 #   }; f"
 
 
-    cherry-pick-commit = "!f() {              \
-	if [ $# -gt 0 ] ; then                 \
-	   git cherry-pick $1^..$1 ;          \
-        fi;                                  \
-    }; f"
+#   cherry-pick-commit = "!f() {              \
+#       if [ $# -gt 0 ] ; then                 \
+#          git cherry-pick $1^..$1 ;          \
+#       fi;                                  \
+#   }; f"
 
     cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
 
