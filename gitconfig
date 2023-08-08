@@ -36,6 +36,8 @@
 #   print the alias implementation
 #   git config --get-regexp alias.<alias name>	
 
+    alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+
     amendsources= commit --amend --no-edit -n
 #     amend = commit --amend --reuse-message=HEAD
     amendcommitlog = commit -n --amend
@@ -43,14 +45,17 @@
     amenddatenow = git commit --amend --no-edit --date "$(date)"
     amrej = am --reject
 
-    a = "!f() {                \
- 	   if [ -z $1 ] ; then \
-	      git add -u ;     \
-           else                \
-	      git add $1 ;     \
-           fi;                 \
-	   }; f"	   
-
+    a = add
+    au = add -u
+    ae = add -e
+    ap = add -p
+#   a = "!f() {                \
+#	   if [ -z $1 ] ; then \
+#             git add -u ;     \
+#          else                \
+#             git add $1 ;     \
+#          fi;                 \
+#          }; f"	   
 
 # ───────b──────────────────────────────────────────────────────────────────────
 
@@ -79,7 +84,7 @@
              git cb ${bnewname}; \
           else \
              echo 'branch already exists'; \
-             git c ${bnewname}; \
+             git b | grep ${b}; \
           fi;\
        else \
           v=$(echo $v | grep -E -o "[0-9]"); \
@@ -99,17 +104,6 @@
     bb = rev-parse --abbrev-ref HEAD
 
 
-    commitempty = commit --allow-empty
-    c = checkout
-    cb = checkout -b
-#   cmn = checkout master_next
-    d = diff
-    dw = diff --ws-error-highlight=all
-    dfile = difftool --no-prompt
-    dt = difftool
-    dc = diff --cached
-    dtc = difftool  --cached
-    ds = diff --stat
 
     edit = "!f() {                  \
   	   if [ $# -eq 0 ] ; then   \
@@ -120,10 +114,6 @@
     }; f"
     e = edit
 
-    g = grep --color -n
-    gi = grep --color -n --ignore-case
-
-    gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 #   h = log -n1 --pretty=oneline
     h = logstat -1
 
@@ -139,6 +129,10 @@
 
 
 # ───────c──────────────────────────────────────────────────────────────────────
+    commitempty = commit --allow-empty
+    c = checkout
+    cb = checkout -b
+#   cmn = checkout master_next
     commitfilelist = show --stat --oneline
     checkoutmaster = "!f() { \
 	git fetch origin master; \
@@ -191,14 +185,14 @@
 	  echo other checkedout repo from this remote need to run; \
 	  echo :   git fetch -p ;\
 	  }; f" 
-    push-commit = "!f() {                 \
- 	   if [ -z $1 ] ; then            \
-	      git push origin HEAD:master;\
-           else                           \
-	      git push orign $1:master;   \
-           fi;                            \
-	   }; f"	   
 
+    d = diff
+    dw = diff --ws-error-highlight=all
+    dfile = difftool --no-prompt
+    dt = difftool
+    dc = diff --cached
+    dtc = difftool  --cached
+    ds = diff --stat
 
 
     # discardall = checkout HEAD -- .
@@ -262,12 +256,21 @@
 
 	find-file = "!f() { c=$1; if [ -z $c ] ; then return ; fi ;  git ls-files | grep --color $c; }; f"
 
+# ───────g──────────────────────────────────────────────────────────────────────
+    gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
+    gls = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s --simplify-by-decoration
+    g = grep --color -n
+    gi = grep --color -n --ignore-case
+
+    gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
 # ───────i──────────────────────────────────────────────────────────────────────
-    info = logstat -1 
+    info = logstat -1
 
 # ───────l──────────────────────────────────────────────────────────────────────
 #                                   SHA          date                   name             msg
-    ll = lll -10
+    ls = log --pretty=format:'%C(yellow) %h %Cred%<(9,trunc)%aN %Cgreen%s %Creset' 
+    ll = ls -10
 #   lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
     lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short
 #   lf = log --pretty=short
@@ -280,9 +283,6 @@
 
     logfilehistory = whatchanged --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short
 #   also can track  changes to file with tig -- <file>
-
-    gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
-    gls = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s --simplify-by-decoration
 
     lnameonly = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
     logstat = log --stat
@@ -300,18 +300,39 @@
 
     list-author = "!f() { git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author="$1"; }; f"
 
+# ───────p──────────────────────────────────────────────────────────────────────
+#   push-commit = "!f() {                 \
+#	   if [ -z $1 ] ; then            \
+#             git push origin HEAD:master;\
+#          else                           \
+#             git push orign $1:master;   \
+#          fi;                            \
+#          }; f"
+#
+
     pushthisbranchtoremote = "!f() {                               \
-		remote=${1:-origin};                               \
-		git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
-	  }; f"
+                remote=${1:-origin};                               \
+                git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
+                }; f"
+
     pushthisbranchtoremotewithforce = "!f() {                                 \
-		  remote=${1:-origin};                               \
-		  git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
-	  }; f"
+                remote=${1:-origin};                               \
+                git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
+                }; f"
 
 
     gc=gc --auto --aggressive
 
+
+    pushlist = "!f() { \
+            if [ $# -gt 0 ] ; then  \
+            echo git diff --stat --cached $1/$2 ; \
+            git diff --stat --cached $1/$2 ; \
+            else \
+            echo git diff --stat --cached origin/master ; \
+            git diff --stat --cached origin/master ; \
+            fi; \
+            }; f"
 
 
 
@@ -342,6 +363,7 @@
     saveheadindex = "!f() { \
 		   git log -n1 --pretty=oneline | cut -d ' ' -f1 > reuse_commit.txt; \
 		   echo "saved head index $(cat reuse_commit.txt) to reuse_commit.txt" ; \
+		   echo "git reusecommit to get it back" ; \
     		}; f"
 
     syncbranches = fetch -p
@@ -363,8 +385,6 @@
     unstage = reset HEAD
     # uncommit = reset HEAD^
 
-    reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
-
     uncommit = "!f() { git saveheadindex ; git reset HEAD^ ; }; f"
 
     untrackfile = rm --cached 
@@ -374,15 +394,8 @@
     }; f"
     sl = stash list
 
-    pushlist = "!f() { \
-            if [ $# -gt 0 ] ; then  \
-            echo git diff --stat --cached $1/$2 ; \
-            git diff --stat --cached $1/$2 ; \
-            else \
-            echo git diff --stat --cached origin/master ; \
-            git diff --stat --cached origin/master ; \
-            fi; \
-            }; f"
+# ───────r──────────────────────────────────────────────────────────────────────
+    reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
 
     # showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | sed 's/alias\.//g' | grep -w --color $me;}; f"
     showuser = "!f() { me=${1-:*} ; git config --get-regex alias.$me | grep --color $me;}; f"
@@ -398,7 +411,6 @@
     sm-resetall = submodule foreach --recursive git reset --hard
     sm-update-all = submodule update --recursive
     sm-updateinit-all = submodule update --init --recursive
-    alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 #   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
