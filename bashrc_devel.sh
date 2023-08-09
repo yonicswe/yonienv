@@ -660,6 +660,7 @@ vorej ()
     local rej_file=${1};    
 
     if [ -z ${rej_file} ] ; then 
+        findreject;
         complete -W "$(findreject)" vorej;
         return;
     fi
@@ -668,6 +669,9 @@ vorej ()
     ${v_or_g} -O ${orig_file} ${rej_file}; 
 
     rm ${rej_file};
+    echo "-----------------------";
+    findreject;
+    complete -W "$(findreject)" vorej;
 }
 
 listerrnovalues ()
