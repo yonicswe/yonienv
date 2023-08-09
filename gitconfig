@@ -114,8 +114,6 @@
     }; f"
     e = edit
 
-#   h = log -n1 --pretty=oneline
-    h = logstat -1
 
     listmodified = diff --name-only
     listcached = diff --cached --name-only
@@ -263,6 +261,11 @@
     gi = grep --color -n --ignore-case
 
     gog = log  --abbrev-commit --name-status --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
+# ───────h──────────────────────────────────────────────────────────────────────
+#   h = log -n1 --pretty=oneline
+	h = "!f() { git lll -1 ; echo '------------------------------------'; \
+	git logstat -1;}; f"
 
 # ───────i──────────────────────────────────────────────────────────────────────
     info = logstat -1
