@@ -232,6 +232,7 @@ bsclistfeatureflags ()
 }
 alias corelistfeatureflags='bsclistfeatureflags';
 
+alias bsclist-xtremapp='pgrep xtremapp -a'
 _delljournalctl ()
 {
     local node=${1};
@@ -1005,7 +1006,7 @@ dellnvme-fc-connect ()
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 
 # multipath -ll
-# nvme discovre -t tcp -a <port from bsclistports>
+# nvme discover -t tcp -a <port from bsclistports>
 # sudo nvme discover -t rdma  --traddr=10.219.157.164 -w 10.219.157.167
 # nvme connect -t tcp -a 10.219.157.164  -n nqn.1988-11.com.dell:powerstore:00:b4fea1b05549F7A1A429 -s 4420 -D
 # nvme port and node name
