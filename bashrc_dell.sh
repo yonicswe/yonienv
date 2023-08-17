@@ -14,6 +14,7 @@ export CYC_CONFIG=;
 
 dell_clusters_file=${yonienv}/bashrc_dell_clusters.sh;
 dell_cluster_list_file=${yonienv}/bashrc_dell_cluster_list_file.sh;
+alias delleditclusterlist="v ${dell_clusters_file}";
 # trident_cluster_list=(RT-G0082 RT-D3082 WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list=( $(cat ${dell_clusters_file}) );
 # trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
@@ -35,7 +36,7 @@ yonivm-update-yonienv ()
 _trident_cluster_list_nodes_init ()
 {
     trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print toupper($0)}' ) $c $c-A $c-B ; done) 
-    complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
+    complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce dellclusteryonienvupdate
     complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
 }
 _trident_cluster_list_nodes_init;
@@ -1528,6 +1529,8 @@ dellclusterkernelspaceupdate ()
 
 dellclusteryonienvupdate ()
 {
+    local cluster=${1};
+
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
         if [ -z ${cluster} ] ; then
@@ -1819,6 +1822,18 @@ dellcdpnvmetfolder ()
     fi;
 
     cd ${pnvmet_folder};
+}
+
+complete -W "$(find -maxdepth 1 -type f -name "*mdt-*")" dellcdmdt;
+dellcdmdt ()
+{
+    local mdt_file=${1};
+    if [ -z "${mdt_file}" ] ; then
+        complete -W "$(find -maxdepth 1 -type f -name "*mdt-*")" dellcdmdt;
+        find  -maxdepth 1 -type f -name "*mdt-*";
+        return;
+    fi;
+    cd $(cat ${mdt_file} | grep jiraproduction);
 }
 
 dellcyclonekernelshaupdate ()
