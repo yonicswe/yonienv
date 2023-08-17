@@ -270,7 +270,9 @@ git-checkoutremotebranch ()
         return;
     fi;
 
-    echo "git checkout ${branch}";
+    echo -n "git checkout ${branch}";
+    ask_user_default_no;
+    if [ $? -eq 0 ] ; then return -1; fi;
     git checkout ${branch};
     return 0;
 }
