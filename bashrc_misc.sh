@@ -322,7 +322,7 @@ tabcomplete_video_file_name ()
 
 findvideofiles ()
 {
-    local video_file_types="matroska\|mp4"; 
+    local video_file_types="matroska\|mp4\|mkv"; 
     find -type f |
         xargs file | grep -i "${video_file_types}" | 
         cut -f 1 -d ' ' | 
@@ -334,4 +334,76 @@ findvideofiles ()
 install-zsh-zap ()
 {
     zsh <(curl -s https://raw.githubusercontent.com/zap-zsh/zap/master/install.zsh) --branch release-v1
+}
+
+_find_zip_files_of_chapter ()
+{
+    local chapter=${1};
+
+    if [[ -z ${chapter} ]] ; then
+        return -1;
+    fi;
+    
+    find -name "*E${chapter}*zip"
+
+}
+
+subtitle-series-sort-directories ()
+{
+    local nr_episodes=${1};
+    local episode_index=;
+
+    #episode_index_E=( $(seq -f "E%02g" 1 ${nr_episodes}) );
+
+    if [[ -z ${nr_episodes} ]] ; then
+        echo "num of episodes is 0"
+        return -1;
+    fi;
+
+    for e in $(seq 1 ${nr_episodes}) ; do
+        f=$(find -regex ".*e$e.*\|.*e0$e.*\|.*E$e.*\|.*E0$e.*")
+        if [ -z "$f" ] ; then
+            echo "no files were found";
+            break;
+        fi;
+        e=$(printf "%02d" $e)
+        echo "mkdir e$e";
+        mkdir e$e;
+        echo "cp $f e$e";
+        mv $f e$e;
+        pushd e$e;
+        subtitlenamesync *mkv
+        popd
+    done;
+
+
+}
+
+
+#_subtitleseriesnamesync_usage ()
+#{
+
+#}
+
+subtitleseriesnamesync ()
+{
+    local nr_episodes=${1};
+    local prefix_name=${2};
+
+    if [[ -z ${nr_episodes} ]] ; then
+        _subtitleseriesnamesync_usage;
+        return -1;
+    fi;
+
+    if [[ -z ${prefix_name} ]] ; then
+        return -1;
+    fi;
+
+    # create directories
+    seq -w 1 ${nr_episodes} | while read e ; do 
+        mkdir E$e;
+        m=$(basename $(ls ${prefix_name}$e*) ) ; 
+        echo "ln -snf ../../$m E$e/$m"; 
+        ln -snf ../../$m E$e/$m; 
+    done;
 }
