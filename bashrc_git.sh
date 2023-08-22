@@ -398,6 +398,22 @@ gitsmstatus ()
     git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; 
 }
 
+gitsmlist ()
+{
+    local b=;
+
+   \ls .git/modules/source/ |while read s ; do
+       b=$(cat .git/modules/source/$s/HEAD);
+       b=$(echo $b | awk '/^ref/{print $2}');
+       if [ -z ${b} ] ; then
+           echo -n $(cat .git/modules/source/$s/HEAD) ;
+           echo " $s";
+       else  
+           echo -n $(cat .git/modules/source/$s/$b);
+           echo -e " $s (${GREEN}$b${NC})";
+       fi;
+   done
+}
 # howtos and trouble shooting
 # delete .git/index.lock 
 #   - when this happens "another git process seems to be running in this repository
