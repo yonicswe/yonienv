@@ -1076,18 +1076,24 @@ dellcyclonefeatureflaglist ()
 
 _dellclusterget ()
 {
+    local last_used_cluster=;
     local cluster=;
 
     if ! [ -z ${YONI_CLUSTER} ] ; then
-        ask_user_default_yes "you did not specify <cluster> use ? ${YONI_CLUSTER}";
+        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
         if [[ $? -eq 1 ]] ; then
             echo ${YONI_CLUSTER};
             return 0;
         fi;
     fi;
 
-    if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
+    if [ -e ./.dellclusterruntimeenvbkpfile ] ; then
+        last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ./.dellclusterruntimeenvbkpfile);
+    elif [ -e ${dellclusterruntimeenvbkpfile} ] ; then
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
+    fi;
+
+    if ! [ -z ${last_used_cluster} ] ; then
         ask_user_default_yes "use ${last_used_cluster} again ?";
         if [[ $? -eq 1 ]] ; then
             echo ${last_used_cluster};
