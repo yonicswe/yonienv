@@ -568,13 +568,13 @@ dellclusterruntimeenvbkpfile=~/.dellclusterruntimeenvbkpfile
 _dellclusterruntimeenvvalidate ()
 {
     if [[ -z ${CYC_CONFIG} ]] ; then
-        echo -e "\033[1;31mCYC_CONFIG not set\033[0m";
+        echo -e "${RED} CYC_CONFIG not set ${NC}";
         return -1;
     fi;
 
     if ! [ -e ${CYC_CONFIG} ] ; then
-        echo -e "\033[1;31m ${CYC_CONFIG} does not exist\033[0m";
-        echo -e "use dellclustergeneratecfg ${YONI_CLUSTER} in yonivm";
+        echo -e "${RED} ${CYC_CONFIG} does not exist ${NC}";
+        echo -e "${YELLOW} use dellclustergeneratecfg ${YONI_CLUSTER} in yonivm ${NC}";
         return -1;
     fi;
 
@@ -585,16 +585,16 @@ dellclusterruntimeenvget ()
 { 
     local last_used_cluster=;
     
-    if [[ -z ${YONI_CLUSTER} ]] ; then
-        if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
-            last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
-        fi;
-        
-        echo -e "\033[1;31mYONI_CLUSTER not set\033[0m";
-        if [[ -n ${last_used_cluster} ]] ; then
-            echo -e "last used cluster : \033[1;32m${last_used_cluster}\033[0m";
-        fi;
-    fi;
+#   if [[ -z ${YONI_CLUSTER} ]] ; then
+#       if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
+#           last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
+#       fi;
+#       
+#       echo -e "\033[1;31mYONI_CLUSTER not set\033[0m";
+#       if [[ -n ${last_used_cluster} ]] ; then
+#           echo -e "last used cluster : \033[1;32m${last_used_cluster}\033[0m";
+#       fi;
+#   fi;
      
     _dellclusterruntimeenvvalidate ;
 
@@ -614,6 +614,7 @@ dellenvrebash ()
 {
     local cluster=;
     local pdr_folder=;
+    local bkp_file=;
 
     # make sure were on a cyclone pdr folder
     # if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
@@ -632,19 +633,27 @@ dellenvrebash ()
     # cluster=$(awk '/YONI_CLUSTER/{print $2}' cluster_runtime_env.txt);
     # cd - ;
 
-    if ! [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
-        echo "${dellclusterruntimeenvbkpfile} not found! bailing out";
-        return -1;
+    if ! [[ -e ./.dellclusterruntimeenvbkpfile ]] ; then
+        # echo -e "${RED}./.dellclusterruntimeenvbkpfile not found!${NC}";
+
+        if ! [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
+            echo "${dellclusterruntimeenvbkpfile} not found! bailing out";
+            return -1;
+        else
+            bkp_file=${dellclusterruntimeenvbkpfile};
+        fi;
+    else
+        bkp_file=./.dellclusterruntimeenvbkpfile;
     fi;
 
-    pdr_folder=$(awk -F '='  '/YONI_PDR/{print $2}' ${dellclusterruntimeenvbkpfile});
+    pdr_folder=$(awk -F '='  '/YONI_PDR/{print $2}' ${bkp_file});
     if [[ -z ${pdr_folder} ]] ; then
         echo -e "${RED}last used pdr folder not saved${NC}";
         echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
         return -1;
     fi;
 
-    cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
+    cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${bkp_file});
     if [[ -z ${cluster} ]] ; then
         echo -e "${RED}last used cluster not saved${NC}";
         return -1;
@@ -694,6 +703,11 @@ dellclusterruntimeenvset ()
     local cluster=${1};
     local cluster_config_file=;
 
+    if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
+        echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
+        return -1;
+    fi;
+
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
         if [ -z ${cluster} ] ; then
@@ -702,68 +716,47 @@ dellclusterruntimeenvset ()
         fi;
     fi;
 
-    # user should give cluster parameter. in case he did not
-    # use the default from YONI_CLUSTER
-    if [[ -z ${cluster} ]] ; then 
-        if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
-            last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
-            ask_user_default_yes "you did not specify <cluster> use ? ${last_used_cluster}";
-            if [[ $? -eq 0 ]] ; then
-                cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-                # cluster="$(printf "%s\n" ${!dell_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-                if [ -z ${cluster} ] ; then
-                    echo "usage : dellclusterruntimeenvset <cluster name>";
-                    return -1;
-                fi;
-            else
-                cluster=${last_used_cluster};
-            fi;
-        fi;
-    fi;
-
-    if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
-        echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
-        return -1;
-    fi;
-
-    if ! [[ -d source/cyc_core/cyc_platform/src/package/cyc_configs ]] ; then
-        echo "source/cyc_core/cyc_platform/src/package/cyc_configs not found!!"
-        return 1;
-    fi;
-
     cluster=$(echo ${cluster} | awk '{print toupper($0)}');
-
-    cyclone_folder=$(pwd -P);
     cyc_configs_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_configs);
-    cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
     cluster_config_file=${cyc_configs_folder}/cyc-cfg.txt.${cluster}-BM;
-    if ! [ -e source/third_party/cyc_platform/src/third_party/PNVMeT ] ; then
-        echo -e "\n!! warning !! : no such folder : source/third_party/cyc_platform/src/third_party/PNVMeT\n";
-    else
-        third_party_folder=$(readlink -f source/third_party/cyc_platform/src/third_party/PNVMeT);
-    fi;
+    CYC_CONFIG=${cluster_config_file};
 
-    dell_kernel_objects=$(readlink -f source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT)
-
-    echo "export CYC_CONFIG=${cluster_config_file}";
-    ask_user_default_yes "Correct ? "
-    [ $? -eq 0 ] && return;
-    
     export CYC_CONFIG=${cluster_config_file};
+    cyclone_folder=$(pwd -P);
     export YONI_CLUSTER=${cluster};
-
     _dellclusterruntimeenvvalidate;
     if [[ $? -ne 0 ]] ; then
         ask_user_default_no "set it anyways ? ";
         if [ $? -eq 0 ] ; then
             echo "!!! failed to set runtimeenv !!!";
+            export CYC_CONFIG=;
+            cyclone_folder=;
+            export YONI_CLUSTER=;
             return 1;
         fi;
     fi;
 
-    echo "export CYC_CONFIG=${CYC_CONFIG}" > ${dellclusterruntimeenvbkpfile};
-    echo "export YONI_CLUSTER=${cluster}"  >> ${dellclusterruntimeenvbkpfile};
-    echo "export YONI_PDR=${cyclone_folder}"  >> ${dellclusterruntimeenvbkpfile};
+
+    if ! [ -e source/third_party/cyc_platform/src/third_party/PNVMeT ] ; then
+        echo -e "${RED}\n!! warning !! : no such folder : source/third_party/cyc_platform/src/third_party/PNVMeT\n${NC}";
+    else
+        third_party_folder=$(readlink -f source/third_party/cyc_platform/src/third_party/PNVMeT);
+    fi;
+
+    cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
+    dell_kernel_objects=$(readlink -f source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT)
+
+    echo "export CYC_CONFIG=${cluster_config_file}";
+    ask_user_default_yes "Correct ? "
+    [ $? -eq 0 ] && return;
+
+    echo "export CYC_CONFIG=${CYC_CONFIG}"    >  ./.dellclusterruntimeenvbkpfile;
+    echo "export YONI_CLUSTER=${cluster}"     >> ./.dellclusterruntimeenvbkpfile;
+    echo "export YONI_PDR=${cyclone_folder}"  >> ./.dellclusterruntimeenvbkpfile;
+    ask_user_default_no "update setting with global backup file"
+    if [ $? -eq 1 ] ; then
+        /bin/cp ./.dellclusterruntimeenvbkpfile ${dellclusterruntimeenvbkpfile}
+    fi;
 
     # _dellclusterlistaddcluster ${YONI_CLUSTER};
     dellclusterruntimeenvget;
@@ -885,22 +878,13 @@ ssh2core ()
 {
     local cluster=${1};
 
-    if [[ -z ${cluster} ]] ; then
-        if [[ -n "${YONI_CLUSTER}" ]] ; then
-            ask_user_default_yes "cluster not specified. would you like to use ${YONI_CLUSTER} ? "
-            if [[ 1 == $? ]] ; then
-                cluster=${YONI_CLUSTER};
-            fi;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        # if [ $? -ne 0 -z "${cluster}" ] ; then
+        if (( $? != 0 )) ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
         fi;
-    fi;
-    
-    if [[ -z ${cluster} ]] ; then
-        cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
-    fi;
-
-    if [[ -z ${cluster} ]] ; then
-        echo "you must specify a cluster";
-        return -1;
     fi;
 
     echo "xxssh ${cluster}";
@@ -911,22 +895,12 @@ ssh2bsc ()
 {
     local cluster=${1};
 
-    if [[ -z ${cluster} ]] ; then
-        if [[ -n "${YONI_CLUSTER}" ]] ; then
-            ask_user_default_yes "cluster not specified. would you like to use ${YONI_CLUSTER} ? ";
-            if [[ 1 == $? ]] ; then
-                cluster=${YONI_CLUSTER};
-            fi;
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z "${cluster}" ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
         fi;
-    fi;
-
-    if [[ -z ${cluster} ]] ; then
-        cluster="$(printf "%s\n" ${trident_cluster_list_nodes[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
-    fi;
-
-    if [[ -z ${cluster} ]] ; then
-        echo "you must specify a cluster";
-        return -1;
     fi;
 
     echo "xxbsc ${cluster}";
@@ -1114,7 +1088,7 @@ _dellclusterget ()
 
     if [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
-        ask_user_default_yes "you did not specify <cluster> use ? ${last_used_cluster}";
+        ask_user_default_yes "use ${last_used_cluster} again ?";
         if [[ $? -eq 1 ]] ; then
             echo ${last_used_cluster};
             return 0;
@@ -1123,10 +1097,10 @@ _dellclusterget ()
 
     cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
     # cluster="$(printf "%s\n" ${!dell_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-    if [ -z ${cluster} ] ; then
-        echo "usage : dellclusterruntimeenvset <cluster name>";
-        return 1;
-    fi;
+#   if [ -z "${cluster}" ] ; then
+#       echo "usage : dellclusterruntimeenvset <cluster name>";
+#       return 1;
+#   fi;
 
     echo ${cluster};
     return 0;
@@ -1544,32 +1518,34 @@ dellclusteryonienvupdate ()
 		# return;
 	# fi;
 
-	ask_user_default_yes "update ${YONI_CLUSTER} ?";
+	ask_user_default_yes "update ${cluster} ?";
 	[ $? -eq 0 ] && return -1;
 
-	dellcdclusterscripts;
+	# dellcdclusterscripts;
+    cd /home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_helpers
+    CYC_CONFIG=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${cluster}-BM
 
-    sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${YONI_CLUSTER}/" ~/yonienv/scripts/yonidell.sh;
+    sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${cluster}/" ~/yonienv/scripts/yonidell.sh;
 
-    echo "copy yonidell.sh -> core-a@${YONI_CLUSTER}";
+    echo "copy yonidell.sh -> core-a@${cluster}";
     ./scp_core_to_a.sh ~/yonienv/scripts/yonidell.sh
-    echo "copy vimrcyoni.sh -> core-a@${YONI_CLUSTER}";
+    echo "copy vimrcyoni.sh -> core-a@${cluster}";
     ./scp_core_to_a.sh ~/yonienv/scripts/vimrcyoni.vim
-    echo "copy yonidell.sh -> core-b@${YONI_CLUSTER}";
+    echo "copy yonidell.sh -> core-b@${cluster}";
     ./scp_core_to_b.sh ~/yonienv/scripts/yonidell.sh
-    echo "copy vimrcyoni.vim -> core-b@${YONI_CLUSTER}";
+    echo "copy vimrcyoni.vim -> core-b@${cluster}";
     ./scp_core_to_b.sh ~/yonienv/scripts/vimrcyoni.vim
 
-    echo "copy yonidell.sh -> bsc-a@${YONI_CLUSTER}";
+    echo "copy yonidell.sh -> bsc-a@${cluster}";
     ./scp_cyc_to_a.sh ~/yonienv/scripts/yonidell.sh;
     # ./run_core_a.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
-    echo "copy vimrcyoni.vim -> bsc-a@${YONI_CLUSTER}";
+    echo "copy vimrcyoni.vim -> bsc-a@${cluster}";
     ./scp_cyc_to_a.sh ~/yonienv/scripts/vimrcyoni.vim;
     # ./run_core_a.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
-    echo "copy yonidell.sh -> bsc-b@${YONI_CLUSTER}";
+    echo "copy yonidell.sh -> bsc-b@${cluster}";
     ./scp_cyc_to_b.sh ~/yonienv/scripts/yonidell.sh;
     # ./run_core_b.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
-    echo "copy vimrcyoni.vim -> bsc-b@${YONI_CLUSTER}";
+    echo "copy vimrcyoni.vim -> bsc-b@${cluster}";
     ./scp_cyc_to_b.sh ~/yonienv/scripts/vimrcyoni.vim;
     # ./run_core_b.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
 
