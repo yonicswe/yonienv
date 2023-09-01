@@ -211,6 +211,11 @@ corelistkernelmodules ()
 
 bsclistports ()
 {
+    local subsystem=;
+
+    subsystem=$(ls /sys/kernel/config/nvmet/subsystems);
+    echo "subsystem = ${subsystem}";
+    echo "==================================================="
     for i in /sys/kernel/config/nvmet/ports/* ; do
         echo -n "$(cat $i/user_port_idx) |";
         echo -n "$i |";
@@ -476,11 +481,20 @@ get_node_id ()
     fi;
 }
 
-export debuc_node="$(get_node_id)";
-if [[ ${debuc_node} != 0 ]] ; then
-    echo "${YONI_CLUSTER}";
-    echo "debuc_node: $debuc_node";
+# set SYM_SYSTEM_NAME with cluster name
+# eval $(export $(grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini | sed 's/\ //g'));
+if [ -e /dev/shm/xenv_1.ini ] ; then
+    export $(grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini | sed 's/\ //g');
+    export YONI_CLUSTER=${SYM_SYSTEM_NAME};
+    export debuc_node="$(get_node_id)";
+
+    if [[ ${debuc_node} != 0 ]] ; then
+        echo "${YONI_CLUSTER}";
+        echo "debuc_node: $debuc_node";
+    fi;
 fi;
+
+
 
 debuc-command ()
 {
@@ -1037,6 +1051,8 @@ dellnvme-fc-connect ()
 # copy files between nodes 
 # scp <file> peer:~/
 
+# get cluser name from within the cluster
+# grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini
 
 
 unset PROMPT_COMMAND
