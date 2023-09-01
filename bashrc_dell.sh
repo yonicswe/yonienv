@@ -1128,6 +1128,7 @@ dellclusterinstall ()
     local deploy_time=;
     local reinit_time=;
     local create_cluster_time=;
+    local create_cluster_failed=0;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1300,9 +1301,10 @@ dellclusterinstall ()
 
             if [[ $? -ne 0 ]] ; then
                 echo -e "\n${RED}\t\tcreate_cluster failed ! ! !${NC}";
+                create_cluster_failed=1;
                 continue;
             else
-                echo -e "${GREEN}\t\t\tGreat success${NC}";
+                create_cluster_failed=0;
                 break;
             fi;
 
@@ -1310,6 +1312,10 @@ dellclusterinstall ()
     else
         create_cluster_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
         echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} minutes)${NC}";
+    fi;
+
+    if [ 1 -eq ${create_cluster_failed} ] ; then
+        return -1;
     fi;
 
     echo -e "\n\n${GREEN}\t\t\tGreat success ! ${cluster} is installed${NC}";
