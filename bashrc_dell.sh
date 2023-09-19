@@ -131,6 +131,10 @@ dellcyclonedevelenvsetup ()
 {
     local pdr_folder_name=${1:-cyclone};
 
+	echo "git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git ${pdr_folder_name}";
+    ask_user_default_no "continue";
+    if [ $? -eq 0 ] ; then return; fi;
+
 	git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git ${pdr_folder_name};
 	cd ${pdr_folder_name};
 	git submodule update --init source/cyc_core
@@ -289,6 +293,10 @@ _dellcyclonebuild_validate_build_machine ()
 
     # ok to build in dev-vm
     if (( 0 !=  $(hostname -i | grep ${yonivmipaddress}  | wc -l ) )) ; then
+        return 0;
+    fi;
+
+    if (( 0 !=  $(hostname -i | grep ${yonivm2ipaddress}  | wc -l ) )) ; then
         return 0;
     fi;
 
