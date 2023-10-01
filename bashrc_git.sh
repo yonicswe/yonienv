@@ -287,10 +287,13 @@ git-checkoutremotebranch ()
         local_branch=${remote_branch};
     fi;
 
-    if [ $( git b | grep ${local_branch} | wc -l ) -gt 0 ] ; then
-        echo "${local_branch} already checked out !! remove it and try again";
-        return;
-    fi;
+    for b in $(git b |grep -v HEAD ) ; do
+        if [[ ${b} == "${local_branch}" ]] ; then 
+            echo "${local_branch} already checked out !! remove it and try again";
+            echo "doing return";
+            return -1;
+        fi;
+    done;
 
     echo "git fetch origin ${remote_branch}";
     echo "git checkout -b ${local_branch} FETCH_HEAD";
@@ -299,6 +302,9 @@ git-checkoutremotebranch ()
 
     git fetch origin ${remote_branch};
     git checkout -b ${local_branch} FETCH_HEAD;
+
+    echo "setting ${local_branch} to track upsteam ${remote_branch}";
+    git trackbranch;
 
     return 0;
 }
