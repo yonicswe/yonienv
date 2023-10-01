@@ -193,6 +193,11 @@ coregetkernelversion ()
    cat /sys/module/nvmet_power/parameters/githash;
 }
 
+bsclist-tcp-controllers ()
+{
+    echo 1 | sudo tee  /sys/module/nvmet_tcp/parameters/nr_tcp_queues
+}
+
 bsclistkernelmodules ()
 {
     local kernel_modules_folder=/cyc_host/cyc_common/modules/;
@@ -306,7 +311,7 @@ alias journalalllast3minutes='sudo journalctl --since="3 minutes ago"'
 alias journalallf='sudo journalctl -f'
 
 alias journalnt='sudo journalctl SUB_COMPONENT=nt'
-alias journalntf='sudo journalctl -f SUB_COMPONENT=nt'
+alias journalntf='journalctl -f SUB_COMPONENT=nt'
 alias journalntlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
 alias journalmbe-r='sudo journalctl SUB_COMPONENT=mbe_r'
@@ -481,15 +486,16 @@ get_node_id ()
     fi;
 }
 
+export debuc_node="$(get_node_id)";
+
 # set SYM_SYSTEM_NAME with cluster name
 # eval $(export $(grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini | sed 's/\ //g'));
 if [ -e /dev/shm/xenv_1.ini ] ; then
     export $(grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini | sed 's/\ //g');
     export YONI_CLUSTER=${SYM_SYSTEM_NAME};
-    export debuc_node="$(get_node_id)";
 
     if [[ ${debuc_node} != 0 ]] ; then
-        echo "${YONI_CLUSTER}";
+        echo "YONI_CLUSTER: ${YONI_CLUSTER}";
         echo "debuc_node: $debuc_node";
     fi;
 fi;
@@ -539,6 +545,9 @@ alias debuc-qos-delete-bucket-0='debuc-command "del qos bucket idx=0"'
 alias debuc-list-hosts='debuc-command "log hosts"'
 alias debuc-list-host-groups='debuc-command "log host groups"'
 alias debuc-list-devices='debuc-command "log devices"';
+alias debuc-list-controllers='debuc-command "log controllers all"';
+alias debuc-list-controllers-io='debuc-command "log controllers io"';
+alias debuc-list-controllers-discovery='debuc-command "log controllers discovery"';
 
 alias debuc-set-inactive='debuc-command "set inactive"';
 alias debuc-set-active='debuc-command "set active"';
