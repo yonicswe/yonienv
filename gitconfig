@@ -243,16 +243,16 @@
         fi;                                  \
     }; f"
 
-    find-commit-in-branch = "!f() {     \
+    find-commit-in-branch = "!f() {   \
 	c=$1;                         \
 	if [ -z $c ] ; then           \
-		echo "missing commit" \
-		return;               \
+		echo 'usage find-commit-in-branch <commit>'; \
+	else                          \
+		git log |grep --color $c;     \
 	fi;                           \
-	git log |grep $c;             \
 	}; f"
 
-	find-file = "!f() { c=$1; if [ -z $c ] ; then return ; fi ;  git ls-files | grep --color $c; }; f"
+    find-file = "!f() { c=$1; if [ -z $c ] ; then return ; fi ;  git ls-files | grep --color $c; }; f"
 
 # ───────g──────────────────────────────────────────────────────────────────────
     gl = log --graph --full-history --all --color --pretty=format:%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s
@@ -268,14 +268,14 @@
 	git logstat -1;}; f"
 
 # ───────i──────────────────────────────────────────────────────────────────────
-    info = logstat -1
+    info = logstat -1 --pretty=fuller
 
 # ───────l──────────────────────────────────────────────────────────────────────
 #                                   SHA          date                   name             msg
     ls = log --pretty=format:'%C(yellow) %h %Cred%<(9,trunc)%aN %Cgreen%s %Creset' 
     ll = ls -10
 #   lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
-    lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short
+    lll = log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short
 #   lf = log --pretty=short
 #   ll = log --pretty=format:'%C(yellow)%h %Cred%cd %C(magenta)[author %ad] %Cblue%an%Cgreen%d %Creset%s' --date=short
 #   l = "!f() { n=${1:-200}; git log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s' --date=short ${count} -$n; }; f"
@@ -372,15 +372,16 @@
     syncbranches = fetch -p
 
 # ───────t──────────────────────────────────────────────────────────────────────
-    t = track
+    trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
+		   echo tracking ; git t; }; f"
     tb = trackbranch
-    track = status -uno -sb
+    track = rev-parse --abbrev-ref --symbolic-full-name @{u}
+    t = track 
+#   track = status -uno -sb
 #   trackmaster = branch --set-upstream-to=origin/master
 #   trackmasternext = branch --set-upstream-to=origin/master_next
 #   tm = trackmaster
 #   tmn = trackmasternext
-    trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
-		   echo tracking ; git t; }; f"
 
 # ───────u──────────────────────────────────────────────────────────────────────
 
