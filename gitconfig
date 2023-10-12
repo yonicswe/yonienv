@@ -264,7 +264,7 @@
 
 # ───────h──────────────────────────────────────────────────────────────────────
 #   h = log -n1 --pretty=oneline
-	h = "!f() { git lll -1 ; echo '------------------------------------'; \
+	h = "!f() { cat .git/refs/heads/$(git bb); echo '------------------------------------'; \
 	git logstat -1;}; f"
 
 # ───────i──────────────────────────────────────────────────────────────────────
@@ -358,7 +358,7 @@
 
 
 # ───────s──────────────────────────────────────────────────────────────────────
-    s = "!f() { git track ;  git status -uno; }; f"
+    s = "!f() { git tt ;  git status -uno; }; f"
     
     su = status -u
     ss = show --stat
@@ -377,7 +377,7 @@
     tb = trackbranch
     track = rev-parse --abbrev-ref --symbolic-full-name @{u}
     t = track 
-#   track = status -uno -sb
+    tt = status -uno -sb
 #   trackmaster = branch --set-upstream-to=origin/master
 #   trackmasternext = branch --set-upstream-to=origin/master_next
 #   tm = trackmaster
