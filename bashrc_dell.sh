@@ -887,7 +887,16 @@ ssh2core ()
     local cluster=${1};
 
     if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
+        if [ -e ~/.dellssh2cluster.bkp ] ; then 
+            cluster=$(cat ~/.dellssh2cluster.bkp);
+        fi;
+        if [ -n ${cluster} ] ; then 
+            ask_user_default_yes "use ${cluster} again ?";
+            if [ $? -eq 0 ] ; then cluster=; fi;
+        fi;
+        if [ -z ${cluster} ] ; then
+            cluster=$(_dellclusterget);
+        fi;
         # if [ $? -ne 0 -z "${cluster}" ] ; then
         if (( $? != 0 )) ; then
             echo "${FUNCNAME} <cluster>"; 
@@ -897,6 +906,7 @@ ssh2core ()
 
     echo "xxssh ${cluster}";
     xxssh ${cluster};
+    echo ${cluster} > ~/.dellssh2cluster.bkp
 }
 
 ssh2bsc ()
@@ -904,7 +914,16 @@ ssh2bsc ()
     local cluster=${1};
 
     if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
+        if [ -e ~/.dellssh2cluster.bkp ] ; then 
+            cluster=$(cat ~/.dellssh2cluster.bkp);
+        fi;
+        if [ -n ${cluster} ] ; then 
+            ask_user_default_yes "use ${cluster} again ?";
+            if [ $? -eq 0 ] ; then cluster=; fi;
+        fi;
+        if [ -z ${cluster} ] ; then
+            cluster=$(_dellclusterget);
+        fi;
         if [ -z "${cluster}" ] ; then
             echo "${FUNCNAME} <cluster>"; 
             return -1;
@@ -913,6 +932,7 @@ ssh2bsc ()
 
     echo "xxbsc ${cluster}";
     xxbsc ${cluster};
+    echo ${cluster} > ~/.dellssh2cluster.bkp
 }
 
 cyc_configs_folder=;
@@ -1538,12 +1558,15 @@ dellclusteryonienvupdate ()
 		# return;
 	# fi;
 
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -ne 0 ]] ; then
+        return -1;
+    fi;
+
 	ask_user_default_yes "update ${cluster} ?";
 	[ $? -eq 0 ] && return -1;
 
-	# dellcdclusterscripts;
-    cd /home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_helpers
-    CYC_CONFIG=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs/cyc-cfg.txt.${cluster}-BM
+	dellcdclusterscripts;
 
     sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${cluster}/" ~/yonienv/scripts/yonidell.sh;
 
@@ -1598,9 +1621,20 @@ dellclusteryonienvupdate ()
 #     dellclusterkernelspaceupdate ${cluster};
 # }
 
+delllastusedlgbkpfile=~/.delllastusedlgbkpfile;
 ssh2lg ()
 {
     local lg_name=${1};
+
+    if [[ -z ${lg_name} ]]; then 
+        if [ -e ${delllastusedlgbkpfile} ] ; then
+            lg_name=$(cat ${delllastusedlgbkpfile});
+            ask_user_default_yes "use ${lg_name} again ";
+            if [ $? -eq 0 ] ; then
+                lg_name=;
+            fi;
+        fi;
+    fi;
 
     if [[ -z ${lg_name} ]]; then 
         lg_name="$(printf "%s\n" ${lg_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
@@ -1613,6 +1647,8 @@ ssh2lg ()
 
     ask_user_default_yes "ssh2lg ${lg_name} ? ";
     if [[ $? -eq 0 ]] ; then return 0 ; fi;
+
+    echo ${lg_name} > ${delllastusedlgbkpfile};
 
     sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
 }
@@ -1869,12 +1905,15 @@ dellcyclonekernelshaupdate ()
         fi;
 
         print_underline_size "_" 80;
-        sha=$(git log -1 | awk '/commit/{print $2}');
+        # sha=$(git log -1 | awk '/commit/{print $2}');
+        sha=$(cat .git/refs/heads/$(git bb));
         echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
         dellcyclonebuildhistorylog $(pwd) $(git bb) $(git h);
         export pnvmet_folder=$(pwd);
     fi
     
+    echo -e "update ${RED}${mfile}${NC} with ${GREEN}${sha}${NC}";
+    ask_user_default_yes "continue ";
     sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
     dellcdthirdparty;
     print_underline_size "_" 80;
