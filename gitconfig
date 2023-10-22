@@ -339,7 +339,11 @@
 
 
 
+
 # ───────r──────────────────────────────────────────────────────────────────────
+    reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
+
+
     r = remote -vv
 
     rebaseback = "!f() { if [[ $# -eq 0 ]] ; then  \
@@ -371,6 +375,40 @@
 
     syncbranches = fetch -p
 
+    # showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | sed 's/alias\.//g' | grep -w --color $me;}; f"
+    showuser = "!f() { me=${1-:*} ; git config --get-regex alias.$me | grep --color $me;}; f"
+
+    sm = submodule
+    smdiff = diff --submodule
+    smgrep = grep --recurse-submodules
+    smupdate = submodule update
+    smupdateinit = submodule update --init
+    smstatus = sm foreach
+#   smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
+    smremove = submodule deinit
+#
+#   sm-resetall = submodule foreach --recursive git reset --hard; 
+    sm-resetall = "!f() {\
+        for s in source/* ; do\
+           echo "$s reset modified content";\
+           cd $s ; git c . ;\
+           cd - ;\
+           echo "$s reset new commits";\
+           git smupdate $s;\
+        done; }; f"
+
+    sm-update-all = submodule update --recursive
+    sm-updateinit-all = submodule update --init --recursive
+#   cleanuntracked = clean -df	
+
+#     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
+#     rebase-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git rebase FETCH_HEAD ; }; f"
+#     branch-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git c -b $1@for-upstream FETCH_HEAD ; }; f"
+#     rebase-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git rebase FETCH_HEAD ; }; f"
+#     branch-ofa-kernel-4-6 = "!f() { if [ -z $1 ] ; then return ; fi;  git fetch origin mlnx_ofed_4_6 ; git c -b $1@mlnx_ofed_4_6 FETCH_HEAD ; }; f"
+#     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
+
+
 # ───────t──────────────────────────────────────────────────────────────────────
     trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
 		   echo tracking ; git t; }; f"
@@ -397,33 +435,6 @@
 	    git commit -a -n -m 'save work'; \
     }; f"
     sl = stash list
-
-# ───────r──────────────────────────────────────────────────────────────────────
-    reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
-
-    # showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | sed 's/alias\.//g' | grep -w --color $me;}; f"
-    showuser = "!f() { me=${1-:*} ; git config --get-regex alias.$me | grep --color $me;}; f"
-
-    sm = submodule
-    smdiff = diff --submodule
-    smgrep = grep --recurse-submodules
-    smupdate = submodule update
-    smupdateinit = submodule update --init
-    smstatus = sm foreach
-#   smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
-    smremove = submodule deinit
-    sm-resetall = submodule foreach --recursive git reset --hard
-    sm-update-all = submodule update --recursive
-    sm-updateinit-all = submodule update --init --recursive
-#   cleanuntracked = clean -df	
-
-#     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
-#     rebase-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git rebase FETCH_HEAD ; }; f"
-#     branch-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git c -b $1@for-upstream FETCH_HEAD ; }; f"
-#     rebase-rdmacore-for-upsteam = "!f() { git fetch origin for-upstream ; git rebase FETCH_HEAD ; }; f"
-#     branch-ofa-kernel-4-6 = "!f() { if [ -z $1 ] ; then return ; fi;  git fetch origin mlnx_ofed_4_6 ; git c -b $1@mlnx_ofed_4_6 FETCH_HEAD ; }; f"
-#     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
-
 [core]
 	editor = vim
 
