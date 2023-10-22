@@ -303,7 +303,7 @@ git-checkoutremotebranch ()
     git fetch origin ${remote_branch};
     git checkout -b ${local_branch} FETCH_HEAD;
 
-    echo "would you like to set ${local_branch} to track upsteam ${remote_branch}";
+    echo "would you like to set ${local_branch} to track upstream ${remote_branch}";
     ask_user_default_yes;
     if test $?
     then
