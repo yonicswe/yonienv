@@ -1288,13 +1288,13 @@ dellclusterinstall ()
         eval ${reinit_cmd};
         ret=$?;
         if [[ ${ret} -ne 0 ]] ; then 
-            echo -e"${RED}\t\t\t reinit failed ! ! ! ${NC}";
+            echo -e "${RED}\t\t\t reinit failed ! ! ! ${NC}";
             while (( 1 == $(ask_user_default_yes "retry reinit ? " ; echo $?) )) ; do
                 echo -e "\n${BLUE}\t\t\t${reinit_cmd} ${NC}\n";
                 eval ${reinit_cmd};
                 ret=$?
                 if [ ${ret} -ne 0 ] ; then
-                    echo -e"${RED}\t\t reinit failed ! ! ! ${NC}";
+                    echo -e "${RED}\t\t reinit failed ! ! ! ${NC}";
                     continue;
                 else
                     break;
@@ -1302,7 +1302,7 @@ dellclusterinstall ()
             done;
 
             if [[ ${ret} -ne 0 ]] ; then 
-                echo -e"${RED}\t\t reinit failed ! ! ! ${NC}";
+                echo -e "${RED}\t\t reinit failed ! ! ! ${NC}";
                 return -1;
             fi;
         fi;
@@ -1321,6 +1321,7 @@ dellclusterinstall ()
     cmd_start_time=${SECONDS};
     eval ${create_cluster_cmd};
     if [[ $? -ne 0 ]] ; then 
+        create_cluster_failed=1;
         echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
         while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
 
@@ -1329,7 +1330,6 @@ dellclusterinstall ()
 
             if [[ $? -ne 0 ]] ; then
                 echo -e "\n${RED}\t\tcreate_cluster failed ! ! !${NC}";
-                create_cluster_failed=1;
                 continue;
             else
                 create_cluster_failed=0;
