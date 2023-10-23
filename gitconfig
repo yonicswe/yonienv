@@ -264,8 +264,16 @@
 
 # ───────h──────────────────────────────────────────────────────────────────────
 #   h = log -n1 --pretty=oneline
-	h = "!f() { cat .git/refs/heads/$(git bb); echo '------------------------------------'; \
-	git logstat -1;}; f"
+        h = "!f() { if [ -e .git ] ; then\
+                       if [ -d .git ] ; then\
+                          cat .git/refs/heads/$(git bb);\
+                          echo '------------------------------------';\
+                       elif [ -f .git ] ; then\
+                          echo "$(cat $(cat .git | cut -d ' ' -f 2 )/refs/heads/$(git bb))";\
+                          echo '------------------------------------';\
+                       fi;\
+                    fi;\
+                    git logstat -1;}; f"
 
 # ───────i──────────────────────────────────────────────────────────────────────
     info = logstat -1 --pretty=fuller
