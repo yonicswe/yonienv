@@ -1,7 +1,7 @@
 #!/bin/bash
 
 alias editbashdell='v ${yonienv}/bashrc_dell.sh'
-alias ssh2amitvm='echo cycpass; ssh cyc@10.207.202.38'
+alias ssh2amitvm='echo cycpass; ssh cyc@10.227.212.159'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
 alias ssh2iritvm='echo cycpass; ssh cyc@10.227.212.132'
 # yonivmipaddress="10.244.196.235"
