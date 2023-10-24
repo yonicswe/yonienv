@@ -314,6 +314,10 @@ alias journalnt='sudo journalctl SUB_COMPONENT=nt'
 alias journalntf='journalctl -f SUB_COMPONENT=nt'
 alias journalntlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
+alias journalcyc='sudo journalctl -t cyc_bsc'
+alias journalcycf='journalctl -f -t cyc_bsc'
+alias journalcyclast3minutes='sudo journalctl --since="3 minutes ago" -t cyc_bsc'
+
 alias journalmbe-r='sudo journalctl SUB_COMPONENT=mbe_r'
 alias journalmbe-rf='sudo journalctl -f SUB_COMPONENT=mbe_r'
 alias journalmbe-rlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=mbe_r'
@@ -1013,6 +1017,20 @@ dellnvme-fc-connect ()
     echo "nvme connect -t fc -a ${cluster_nn_pn} -w ${host_nn_pn} -n ${cluster_subnqn[0]}";
     # nvme connect -t fc -a ${cluster_subnqn} -w ${host_nn_pn} -n ${cluster_sub_nqn}";
 }
+ 
+core-list-fc-ports ()
+{
+    systool -c fc_host -v | grep -i "device\|inuse\|state";
+}
+
+#        service mode
+#=============================
+# docker exec -it service bash 
+# cd /cyc_host/cyc_service/bin 
+# ./svc_rescue_state list 
+# ./svc_rescue_state clear 
+# ./svc_node reboot local -f
+#=============================
 
 # nvme discover|connect example
 # nvme discover -t tcp -a <take from bsclistports>
