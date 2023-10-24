@@ -484,15 +484,17 @@ alias dellclusterlist-yoni='          _dellclusterlist ~/docs/dell-cluster-list-
 alias dellclusterlist-user='          _dellclusterlistuser'
 alias dellclusterlist-trident='       _dellclusterlist ~/docs/dell-cluster-list-trident.txt         Trident-kernel-IL'
 alias dellclusterlist-pm-il='         _dellclusterlist ~/docs/dell-cluster-list-platformmanager.txt PM-IL'
+alias dellclusterlist-platformio-fe=' _dellclusterlist ~/docs/dell-cluster-list-platformmanager.txt PlatformIO-FE'
 alias dellclusterlist-xblock='        _dellclusterlist ~/docs/dell-cluster-list-xblock.txt          Xblock-NDU'
 alias dellclusterlist-shared='        _dellclusterlist ~/docs/dell-cluster-list-shared.txt          Core-Dev-Shared'
 alias dellclusterlist-shared-nvmeofc='_dellclusterlist ~/docs/dell-cluster-list-shared-nvmeofc.txt  Core-Dev-Shared NVMeOF-FC'
 alias dellclusterlist-shared-indus='  _dellclusterlist ~/docs/dell-cluster-list-shared-indus.txt    Core-Dev-Shared-Indus'
 alias dellclusterlist-qa-app-lab='    _dellclusterlist ~/docs/dell-cluster-list-qa-app-lab.txt      QA-AppLab'
 alias dellclusterlist-trident-roce='  _dellclusterlist ~/docs/dell-cluster-list-trident-roce.txt    Trident-kernel-IL NVMeOF-RoCE'
-alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt    Trident-kernel-IL indus'
+alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt   Trident-kernel-IL indus'
 
-xpool_users=(y_cohen grupie amite eldadz levyi2);
+# PlatformIO-FE:adamh
+xpool_users=(y_cohen grupie amite eldadz levyi2 adamh);
 complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterlease-update-user;
 
 dellclusterleaserelease ()
