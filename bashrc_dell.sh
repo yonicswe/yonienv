@@ -307,6 +307,7 @@ _dellcyclonebuild_validate_build_machine ()
 dellcyclonebuild ()
 {
     local build_cmd='make cyc_core force=yes'
+    local repeat_last_choice=0;
 
     _dellcyclonebuild_validate_build_machine
     if [[ $? -ne 0 ]] ; then
@@ -322,37 +323,48 @@ dellcyclonebuild ()
     [[ $? -eq 0 ]] && return -1;
 
     # dellcyclonebuildhistorylog;
-
-    ask_user_default_no "flavor DEBUG ? ";
-    if [[ $? -eq 0 ]] ; then
-        build_cmd+=" flavor=RETAIL";
-    else
-        build_cmd+=" flavor=DEBUG";
+     
+    if [ -e .build_choices_bkp ] ; then
+        echo "last command choices : $(cat .build_choices_bkp)";
+        ask_user_default_yes "repeat your last choices ? ";
+        if [ $? -eq 1 ] ; then
+            repeat_last_choice=1;
+            build_cmd=$(cat .build_choices_bkp);
+        fi;
     fi;
 
-    ask_user_default_yes "use cached repos ? ";
-    if [ $? -eq 0 ] ; then
-        build_cmd+=" acache=no mcache=no dcache=no";
-    fi;
+    if [ ${repeat_last_choice} -eq 0 ] ; then
+        ask_user_default_no "flavor DEBUG ? ";
+        if [[ $? -eq 0 ]] ; then
+            build_cmd+=" flavor=RETAIL";
+        else
+            build_cmd+=" flavor=DEBUG";
+        fi;
 
-    ask_user_default_no "verbose=3 ? ";
-    if [ $? -eq 1 ] ; then
-        build_cmd+=" verbose=3";
-    fi;
+        ask_user_default_yes "use cached repos ? ";
+        if [ $? -eq 0 ] ; then
+            build_cmd+=" acache=no mcache=no dcache=no";
+        fi;
 
-	ask_user_default_no "prune before build ?"
-	if [[ $? -eq 1 ]] ; then
-	    build_cmd="time make prune && time ${build_cmd}";
+        ask_user_default_no "verbose=3 ? ";
+        if [ $? -eq 1 ] ; then
+            build_cmd+=" verbose=3";
+        fi;
+
+        ask_user_default_no "prune before build ?"
+        if [[ $? -eq 1 ]] ; then
+            build_cmd="time make prune && time ${build_cmd}";
+        fi;
 	fi;
 
 	echo -e "\n========== start build ($(pwd)) ===================\n";
-	echo "${build_cmd}";
+	echo "${build_cmd}" | tee .build_choices_bkp;
 	echo "========================================================";
     ask_user_default_yes "continue ?";
     [ $? -eq 0 ] && return 0;
 
     # build_cmd="time ${build_cmd}";
-    eval ${build_cmd} | tee dellcyclonebuild.log
+    eval ${build_cmd} | tee dellcyclonebuild.log;
 	echo -e "\n${build_cmd}\n";
     # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
 

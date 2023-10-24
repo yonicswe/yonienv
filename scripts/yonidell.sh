@@ -172,11 +172,15 @@ lld ()
 coregetversion ()
 {
     local version_file=/working/cyc_host/.version
-    grep core-version ${version_file};
-    grep -A 2 pnvmet ${version_file};
-    grep source-reference ${version_file};
-    grep git-hash ${version_file};
     grep program_name ${version_file};
+    grep branch ${version_file};
+    grep -w flavor ${version_file};
+    echo "--------------------------------------------"
+    echo "nt_nvmeof_frontend $(grep -A 2 nt_nvmeof_frontend ${version_file} | awk '/hash/{print $2}')";
+    echo "pnvmet $(grep -A 2 pnvmet ${version_file} | awk '/hash/{print $2}' )";
+    echo "cyc_core : $(awk '/git-hash/{print $2}' ${version_file} )";
+    grep core-version ${version_file};
+    grep source-reference ${version_file};
     ask_user_default_no "would you like to open : ${version_file} ? ";
     if [ $? -eq 0 ] ; then return ; fi;
     less ${version_file};
@@ -1021,6 +1025,11 @@ dellnvme-fc-connect ()
 core-list-fc-ports ()
 {
     systool -c fc_host -v | grep -i "device\|inuse\|state";
+}
+
+core-restart-bsc ()
+{ 
+    docker restart cyc_bsc_docker;
 }
 
 #        service mode
