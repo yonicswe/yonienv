@@ -424,6 +424,10 @@
 #     branch-ofa-kernel-4-6 = "!f() { if [ -z $1 ] ; then return ; fi;  git fetch origin mlnx_ofed_4_6 ; git c -b $1@mlnx_ofed_4_6 FETCH_HEAD ; }; f"
 #     rebase-ofa-kernel-4-6 = "!f() { git fetch origin mlnx_ofed_4_6 ; git rebase FETCH_HEAD ; }; f"
 
+    savework = "!f() { \
+	    git commit -a -n -m 'save work'; \
+    }; f"
+    sl = stash list
 
 # ───────t──────────────────────────────────────────────────────────────────────
     trackbranch = "!f() { git branch --set-upstream-to=origin/$(git bb); \
@@ -447,10 +451,6 @@
 
     untrackfile = rm --cached 
 
-    savework = "!f() { \
-	    git commit -a -n -m 'save work'; \
-    }; f"
-    sl = stash list
 [core]
 	editor = vim
 
