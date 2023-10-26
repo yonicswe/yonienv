@@ -1610,6 +1610,44 @@ dellclusteryonienvupdate ()
     cd -
 }
 
+_dellclusterrestartbsc ()
+{
+    local node=${1};
+    local cluster=${2};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -ne 0 ]] ; then
+        return -1;
+    fi;
+
+	ask_user_default_no "restart ${cluster} node ${node} ?";
+	[ $? -eq 0 ] && return -1;
+
+	dellcdclusterscripts;
+    if [ ${node} == 'a' ] ; then
+        echo "./do_bsc_down_a.sh";
+        ./do_bsc_down_a.sh;
+        echo "./do_bsc_up_a.sh";
+        ./do_bsc_up_a.sh;
+    else
+        echo "./do_bsc_down_b.sh";
+        ./do_bsc_down_b.sh;
+        echo "./do_bsc_up_b.sh";
+        ./do_bsc_up_b.sh;
+    fi;
+}
+
+alias dellclusterrestartbscnode-a="_dellclusterrestartbsc a";
+alias dellclusterrestartbscnode-b="_dellclusterrestartbsc b";
+
 # dellclusterkernelspaceupdate-fzf ()
 # {
 #     local cluster=${1};
