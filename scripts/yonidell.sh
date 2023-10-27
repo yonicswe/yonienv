@@ -246,7 +246,15 @@ bsclistfeatureflags ()
 }
 alias corelistfeatureflags='bsclistfeatureflags';
 
-alias bsclist-xtremapp='pgrep xtremapp -a'
+bsclist-xtremapp ()
+{
+    local xtremapp_pid=;
+
+    pgrep xtremapp -a;
+    echo "--------------------------;"
+    echo "sudo kill $(pgrep -x xtremapp)";
+}
+
 _delljournalctl ()
 {
     local node=${1};
@@ -1030,6 +1038,16 @@ core-list-fc-ports ()
 core-restart-bsc ()
 { 
     docker restart cyc_bsc_docker;
+}
+
+core-list-kernel-configs ()
+{
+    #echo "ls -ltr /sys/kernel/config/nvmet/ports/";
+    ls -ltrR /sys/kernel/config/nvmet/ports/;
+    #echo "ls -ltr /sys/kernel/config/nvmet/subsystems/";
+    ls -ltrR /sys/kernel/config/nvmet/subsystems/;
+    #echo "ls -ltr /sys/kernel/config/nvmet/hosts/";
+    ls -ltrR /sys/kernel/config/nvmet/hosts/;
 }
 
 #        service mode
