@@ -526,6 +526,7 @@ dellclusterleaserelease ()
     [[ $? -eq 0 ]] && return;
 
     /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
+    sed -i "/${cluster}/d" ~/.dell_leased_clusters;
 }
 
 _dellclusterlease ()
@@ -544,6 +545,7 @@ _dellclusterlease ()
     echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
     /home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster};
     echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
+    echo ${cluster} >> ~/.dell_leased_clusters
 }
 
 dellclusterlease-update-user ()
@@ -850,6 +852,11 @@ dellclusterleaseextend ()
 
     if [ "${cluster}" == "ask" ] ; then
         cluster=;
+    fi;
+
+    # offer to extend a leased cluster
+    if [ -z ${cluster} ] ; then
+        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
     fi;
 
     if [ -z "${cluster}" ] ; then 
