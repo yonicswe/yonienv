@@ -10,11 +10,21 @@ __pd	bashrc_bookmarks.sh	/^__pd () $/;"	f
 _bugs	folder_name_complete.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
 _code	folder_name_complete.sh	/^_code ()$/;"	f
-_dellcyclonebuild	bashrc_dell.sh	/^_dellcyclonebuild ()$/;"	f
+_dellclusterget	bashrc_dell.sh	/^_dellclusterget ()$/;"	f
+_dellclusterlease	bashrc_dell.sh	/^_dellclusterlease ()$/;"	f
+_dellclusterlist	bashrc_dell.sh	/^_dellclusterlist ()$/;"	f
+_dellclusterlistaddcluster	bashrc_dell.sh	/^_dellclusterlistaddcluster ()$/;"	f
+_dellclusterlistfindcluster	bashrc_dell.sh	/^_dellclusterlistfindcluster ()$/;"	f
+_dellclusterlistinit	bashrc_dell.sh	/^_dellclusterlistinit ()$/;"	f
+_dellclusterlistuser	bashrc_dell.sh	/^_dellclusterlistuser ()$/;"	f
+_dellclusterrestartbsc	bashrc_dell.sh	/^_dellclusterrestartbsc ()$/;"	f
+_dellclusterruntimeenvvalidate	bashrc_dell.sh	/^_dellclusterruntimeenvvalidate ()$/;"	f
+_dellcyclonebuild_validate_build_machine	bashrc_dell.sh	/^_dellcyclonebuild_validate_build_machine ()$/;"	f
 _dellrebootnode	bashrc_dell.sh	/^_dellrebootnode ()$/;"	f
 _devel	folder_name_complete.sh	/^_devel ()$/;"	f
 _docs	folder_name_complete.sh	/^_docs ()$/;"	f
 _downloads	folder_name_complete.sh	/^_downloads ()$/;"	f
+_find_zip_files_of_chapter	bashrc_misc.sh	/^_find_zip_files_of_chapter ()$/;"	f
 _gcdcomplete	task_complete.sh	/^function _gcdcomplete()$/;"	f
 _gitdiscard	bashrc_git.sh	/^_gitdiscard () $/;"	f
 _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
@@ -22,8 +32,10 @@ _regression	regression_complete.sh	/^_regression ()$/;"	f
 _share	folder_name_complete.sh	/^_share ()$/;"	f
 _tasks	folder_name_complete.sh	/^_tasks ()$/;"	f
 _tmp	folder_name_complete.sh	/^_tmp ()$/;"	f
+_trident_cluster_list_nodes_init	bashrc_dell.sh	/^_trident_cluster_list_nodes_init ()$/;"	f
 _upstream	upstream_complete_dir.sh	/^_upstream ()$/;"	f
 _usage_dellclusterinstallibid	bashrc_dell.sh	/^_usage_dellclusterinstallibid ()$/;"	f
+_usage_dellclusterinstallibid_with_autoinstall	bashrc_dell.sh	/^_usage_dellclusterinstallibid_with_autoinstall ()$/;"	f
 _weather	bashrc_misc.sh	/^_weather(){ curl -s "wttr.in?m1" ;}$/;"	f
 _yonienv	folder_name_complete.sh	/^_yonienv ()$/;"	f
 acs_build_vars	bashrc_nice.sh	/^acs_build_vars () $/;"	f
@@ -85,27 +97,40 @@ cw	bashrc_fs.sh	/^cw () $/;"	f
 debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
+dell_mount_jiraproduction	bashrc_dell.sh	/^dell_mount_jiraproduction ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
 dellcdclusterscripts	bashrc_dell.sh	/^dellcdclusterscripts ()$/;"	f
 dellcdcyclonefolder	bashrc_dell.sh	/^dellcdcyclonefolder ()$/;"	f
 dellcdkernelobjects	bashrc_dell.sh	/^dellcdkernelobjects ()$/;"	f
+dellcdmdt	bashrc_dell.sh	/^dellcdmdt ()$/;"	f
+dellcdpnvmetfolder	bashrc_dell.sh	/^dellcdpnvmetfolder ()$/;"	f
 dellcdthirdparty	bashrc_dell.sh	/^dellcdthirdparty ()$/;"	f
+dellclusterconfigupdate	bashrc_dell.sh	/^dellclusterconfigupdate ()$/;"	f
+dellclustergeneratecfg	bashrc_dell.sh	/^dellclustergeneratecfg ()$/;"	f
 dellclusterguiipget	bashrc_dell.sh	/^dellclusterguiipget ()$/;"	f
 dellclusterinfo	bashrc_dell.sh	/^dellclusterinfo ()$/;"	f
 dellclusterinstall	bashrc_dell.sh	/^dellclusterinstall ()$/;"	f
-dellclusterinstallibid	bashrc_dell.sh	/^dellclusterinstallibid ()$/;"	f
+dellclusterinstallfeatureflag	bashrc_dell.sh	/^dellclusterinstallfeatureflag ()$/;"	f
 dellclusterkernelspaceupdate	bashrc_dell.sh	/^dellclusterkernelspaceupdate ()$/;"	f
 dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
+dellclusterleaserelease	bashrc_dell.sh	/^dellclusterleaserelease ()$/;"	f
+dellclusterlgipget	bashrc_dell.sh	/^dellclusterlgipget ()$/;"	f
 dellclusterruntimeenvget	bashrc_dell.sh	/^dellclusterruntimeenvget ()  $/;"	f
 dellclusterruntimeenvset	bashrc_dell.sh	/^dellclusterruntimeenvset ()$/;"	f
 dellclusteruserspaceupdate	bashrc_dell.sh	/^dellclusteruserspaceupdate ()$/;"	f
 dellclusteryonienvupdate	bashrc_dell.sh	/^dellclusteryonienvupdate ()$/;"	f
-dellcyclonebuildhisorydelete	bashrc_dell.sh	/^dellcyclonebuildhisorydelete ()$/;"	f
+dellcyclonebackup	bashrc_dell.sh	/^dellcyclonebackup ()$/;"	f
+dellcyclonebuild	bashrc_dell.sh	/^dellcyclonebuild ()$/;"	f
 dellcyclonebuildhistorylog	bashrc_dell.sh	/^dellcyclonebuildhistorylog () $/;"	f
+dellcyclonebuildhistoryreset	bashrc_dell.sh	/^dellcyclonebuildhistoryreset ()$/;"	f
 dellcyclonebuildhistoryshow	bashrc_dell.sh	/^dellcyclonebuildhistoryshow ()$/;"	f
 dellcyclonedevelenvsetup	bashrc_dell.sh	/^dellcyclonedevelenvsetup ()$/;"	f
+dellcyclonedevelreset	bashrc_dell.sh	/^dellcyclonedevelreset ()$/;"	f
+dellcyclonefeatureflaglist	bashrc_dell.sh	/^dellcyclonefeatureflaglist ()$/;"	f
+dellcyclonegitdeinit	bashrc_dell.sh	/^dellcyclonegitdeinit ()$/;"	f
 dellcyclonekernelshaget	bashrc_dell.sh	/^dellcyclonekernelshaget ()$/;"	f
 dellcyclonekernelshaupdate	bashrc_dell.sh	/^dellcyclonekernelshaupdate ()$/;"	f
+dellenvrebash	bashrc_dell.sh	/^dellenvrebash ()$/;"	f
 dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
 dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
 dellrbatracedump	bashrc_dell.sh	/^dellrbatracedump ()$/;"	f
@@ -138,6 +163,7 @@ findexecutable	bashrc_fs.sh	/^findexecutable ()$/;"	f
 findiblib_old	bashrc_mlx.sh	/^findiblib_old ()$/;"	f
 findkernelsources	bashrc_devel.sh	/^findkernelsources ()$/;"	f
 findmin	bashrc_fs.sh	/^findmin ()$/;"	f
+findreject	bashrc_devel.sh	/^findreject ()$/;"	f
 findvideofiles	bashrc_misc.sh	/^findvideofiles ()$/;"	f
 findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
@@ -154,8 +180,6 @@ getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f
 gitapplyPatchList	bashrc_git.sh	/^gitapplyPatchList () $/;"	f
 gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
-gitcheckoutbranch	bashrc_git.sh	/^gitcheckoutbranch ()$/;"	f
-gitcheckoutremotebranch	bashrc_git.sh	/^gitcheckoutremotebranch ()$/;"	f
 gitclearcache	bashrc_git.sh	/^gitclearcache ()$/;"	f
 gitcommitdell	bashrc_dell.sh	/^gitcommitdell ()$/;"	f
 gitcommitfixup	bashrc_git.sh	/^gitcommitfixup ()$/;"	f
@@ -169,6 +193,9 @@ gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
 gitshowfilefromindex	bashrc_git.sh	/^gitshowfilefromindex ()$/;"	f
+gitsmlist	bashrc_git.sh	/^gitsmlist ()$/;"	f
+gitsmstatus	bashrc_git.sh	/^gitsmstatus ()$/;"	f
+gitsmtop	bashrc_git.sh	/^gitsmtop ()$/;"	f
 gituncommit	bashrc_git.sh	/^gituncommit ()$/;"	f
 gitviewpatchsidebyside	bashrc_git.sh	/^gitviewpatchsidebyside () $/;"	f
 gl	bashrc_git.sh	/^gl ()$/;"	f
@@ -198,6 +225,7 @@ icm_kill	bashrc_nice.sh	/^icm_kill () $/;"	f
 icm_sbuild_vars	bashrc_nice.sh	/^icm_sbuild_vars ()$/;"	f
 icm_sockets	bashrc_nice.sh	/^icm_sockets () $/;"	f
 icm_threads	bashrc_nice.sh	/^icm_threads () $/;"	f
+installfzf	bashrc_devel.sh	/^installfzf ()$/;"	f
 ips_affinity_threads	bashrc_nice.sh	/^ips_affinity_threads () $/;"	f
 ips_kill	bashrc_nice.sh	/^ips_kill () $/;"	f
 ips_sockets	bashrc_nice.sh	/^ips_sockets () $/;"	f
@@ -237,6 +265,7 @@ listkernelmodules	bashrc_devel.sh	/^listkernelmodules ()$/;"	f
 lld	bashrc_fs.sh	/^lld ()$/;"	f
 loadmoduleifnotloaded	bashrc_mlx.sh	/^loadmoduleifnotloaded ()$/;"	f
 locatelibibverbs	bashrc_mlx.sh	/^locatelibibverbs ()$/;"	f
+logged_to_arwen	bashrc_dell.sh	/^logged_to_arwen ()$/;"	f
 logq	bashrc_svn.sh	/^logq () $/;"	f
 logu	bashrc_svn.sh	/^logu () $/;"	f
 m	bashrc_fs.sh	/^m ()$/;"	f
@@ -380,11 +409,14 @@ sl	bashrc_screen.sh	/^sl () $/;"	f
 sm	bashrc_mlx.sh	/^sm ()$/;"	f
 space_2_underscore	bashrc_fs.sh	/^space_2_underscore ()$/;"	f
 sriovsetupmlx5_1	bashrc_mlx.sh	/^sriovsetupmlx5_1 ()$/;"	f
+ssh2arwen	bashrc_dell.sh	/^ssh2arwen ()$/;"	f
 ssh2bsc	bashrc_dell.sh	/^ssh2bsc ()$/;"	f
 ssh2core	bashrc_dell.sh	/^ssh2core ()$/;"	f
+ssh2lg	bashrc_dell.sh	/^ssh2lg ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
 subtitlenamesync	bashrc_misc.sh	/^subtitlenamesync ()$/;"	f
+subtitleseriesnamesync	bashrc_misc.sh	/^subtitleseriesnamesync ()$/;"	f
 svl	bashrc_svn.sh	/^svl () $/;"	f
 svn_complete	bashrc_svn.sh	/^svn_complete () $/;"	f
 svn_reachable	bashrc_svn.sh	/^svn_reachable () $/;"	f
