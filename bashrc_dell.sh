@@ -1049,6 +1049,7 @@ dellclusterinstallibid-with-autoinstall ()
     local ibid=${1};
     local cluster=${2};
     local feature_flag=;
+    local flavor=retail;
     local autoinstall_cmd=/home/public/devutils/bin/autoInstall.pl
    
     if [[ -z ${ibid} ]] ; then
@@ -1065,12 +1066,17 @@ dellclusterinstallibid-with-autoinstall ()
         fi;
     fi;
 
+    ask_user_default_no "flavor is debug ?"
+    if [ $? -eq 1 ] ; then
+        flavor=debug;
+    fi;
+
     ask_user_default_no "would you like a feature flag ? ";
     if [ $? -eq 0 ] ; then
-        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor retail -ibid ${ibid} ");
+        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor ${flavor} -ibid ${ibid} ");
     else
         read -p "enter feature : " feature_flag;
-        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor retail -ibid ${ibid} -feature ${feature_flag}");
+        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor ${flavor} -ibid ${ibid} -feature ${feature_flag}");
     fi;
     
     echo ${autoinstall_cmd};
