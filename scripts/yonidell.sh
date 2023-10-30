@@ -251,7 +251,7 @@ bsclist-xtremapp ()
     local xtremapp_pid=;
 
     pgrep xtremapp -a;
-    echo "--------------------------;"
+    echo "--------------------------";
     echo "sudo kill $(pgrep -x xtremapp)";
 }
 
