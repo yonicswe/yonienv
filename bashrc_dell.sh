@@ -367,6 +367,7 @@ dellcyclonebuild ()
     eval ${build_cmd} | tee dellcyclonebuild.log;
 	echo -e "\n${build_cmd}\n";
     # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
+	echo "${build_cmd}" | tee .build_choices_bkp;
 
     p;
     fd -I -t f ".*xtremapp$"
@@ -480,8 +481,18 @@ _dellclusterlist ()
 _dellclusterlistuser ()
 {
     local user=${1};
+
     [ -z ${user} ] && return;
-    /home/public/scripts/xpool_trident/prd/xpool list -u ${user};
+
+    if [ -e ~/docs/dell-cluster-list-${user}.txt ] ; then
+        ask_user_default_no "open last user cluster leased list ? ";
+        if [ $? -eq 1 ] ; then
+            less ~/docs/dell-cluster-list-${user}.txt;
+            return;
+        fi;
+    fi;
+
+    /home/public/scripts/xpool_trident/prd/xpool list -u ${user} | tee ~/docs/dell-cluster-list-${user}.txt;
 }
 
 # alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
