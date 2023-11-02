@@ -1250,3 +1250,11 @@ function ww ()
 }
 
 alias rr=ranger
+
+
+# howto
+# to kill a user session
+# use w to find his pts/<number>
+# pkill -t pts/<number>
+#
+# stty -echo // will turn off terminal echo
