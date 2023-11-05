@@ -305,8 +305,7 @@ git-checkoutremotebranch ()
 
     echo "would you like to set ${local_branch} to track upstream ${remote_branch}";
     ask_user_default_yes;
-    if test $?
-    then
+    if [ $? -eq 1 ] ; then
         git branch --set-upstream-to=origin/${remote_branch};
     fi;
 
