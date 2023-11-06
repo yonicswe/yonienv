@@ -2128,6 +2128,12 @@ dell_mount_jiraproduction ()
     sudo mount cecaunity01-nas.corp.emc.com:/jiraproduction /disks/jiraproduction;
     sudo mount cecaunity01-nas.corp.emc.com:/jiraproduction2 /disks/jiraproduction2
 }
+
+dell_mount_public_devutils ()
+{
+    sudo mkdir /home/public
+    sudo mount -o nolock file.xiodrm.lab.emc.com:/home/public /home/public
+}
  
 if ! [ -d /disks/jiraproduction ]  || ! [ -d /disks/jiraproduction2 ] ; then
     echo "/disks/jiraproduction not mounted";
