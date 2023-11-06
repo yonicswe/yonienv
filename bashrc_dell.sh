@@ -195,11 +195,12 @@ dellpdr-gitsmup ()
     ask_user_default_yes "update source/nt-nvmeof-frontend ?";
     [ $? -eq 1 ] && nt_nvmeof_frontend=1;
 
-    ask_user_default_yes "update source/linux ?";
-    [ $? -eq 1 ] && linux=1;
-
     ask_user_default_yes "update source/third_party ?";
     [ $? -eq 1 ] && third_party=1;
+
+    ask_user_default_no "update source/linux ?";
+    [ $? -eq 1 ] && linux=1;
+
 
     #--------------------------------------
     #            do it
