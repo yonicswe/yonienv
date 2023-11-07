@@ -123,6 +123,12 @@ yonidellcptopeer ()
     scp yonidell.sh vimrcyoni.vim peer:~/;
 }
 
+yonidellcptobscandpeer ()
+{
+    yonidellcptopeer;
+    yonidellcptobsc;
+}
+
 # return 0:no 1:yes
 ask_user_default_no ()
 {
