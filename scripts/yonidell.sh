@@ -216,12 +216,24 @@ bsclistkernelmodules ()
 
 corelistkernelmodules ()
 {
-    local kernel_modules_folder=/cyc_software_0/cyc_host/cyc_common/modules/;
+    local kernel_modules_folder_0=/cyc_software_0/cyc_host/cyc_common/modules/;
+    local kernel_modules_folder_1=/cyc_software_1/cyc_host/cyc_common/modules/;
+    local kernel_modules_folder;
+
+    if [ -e ${kernel_modules_folder_0} ] ; then
+        kernel_modules_folder=${kernel_modules_folder_0};
+    elif [ -e ${kernel_modules_folder_1} ] ; then
+        kernel_modules_folder=${kernel_modules_folder_1};
+    else
+        echo "path not found ${kernel_modules_folder_0} or ${kernel_modules_folder_1}";
+        return;
+    fi;
+
     if [ -d ${kernel_modules_folder} ] ; then
         (set -x ; ls -ltr ${kernel_modules_folder};);
         return;
     fi;
-    bsclistkernelmodules;
+    #bsclistkernelmodules;
 }
 
 bsclistports ()
