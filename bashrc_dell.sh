@@ -371,7 +371,8 @@ dellcyclonebuild ()
 	echo "${build_cmd}" | tee .build_choices_bkp;
 
     p;
-    fd -I -t f ".*xtremapp$"
+    fd -I -t f ".*xtremapp$";
+    fd -IH -t f -e ko nvmet-power source/third_party/;
     # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
     # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
 
@@ -518,7 +519,7 @@ alias dellclusterlist-trident-roce='  _dellclusterlist ~/docs/dell-cluster-list-
 alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt   Trident-kernel-IL indus'
 
 # PlatformIO-FE:adamh
-xpool_users=(y_cohen grupie amite eldadz levyi2 adamh);
+xpool_users=(y_cohen grupie amite eldadz levyi2 adamh joseph_karner);
 complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterlease-update-user;
 
 dellclusterleaserelease ()
@@ -1217,6 +1218,14 @@ dellclusterinstall ()
     
     dellcdclusterscripts;
 
+    if [ -e .install_choices_bkp ] ; then
+        echo "your last install choices were : $(cat .install_choices_bkp)";
+        ask_user_default_no "do it again ?";
+        if [ $? -eq 1 ] ; then
+            return;
+        fi;
+    fi;
+
     deploy_cmd="./deploy  --deploytype san ${cluster}";
     reinit_cmd="./reinit_array.sh -F Retail factory sys_mode=block";
     create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
@@ -1270,6 +1279,8 @@ dellclusterinstall ()
         [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
         one_sweep_cmd+="${create_cluster_cmd}";
     fi;
+
+    echo "${one_sweep_cmd}" > .install_choices_bkp;
 
     if [ -z "${deploy_cmd}" ] && [ -z "${reinit_cmd}" ] && [ -z "${create_cluster_cmd}" ] ; then
         echo "nothing to do. bailing out!";
