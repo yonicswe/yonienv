@@ -295,8 +295,9 @@ git-checkoutremotebranch ()
         fi;
     done;
 
-    echo "git fetch origin ${remote_branch}";
-    echo "git checkout -b ${local_branch} FETCH_HEAD";
+    echo -e  "\t${GREEN}git fetch origin ${YELLOW}${remote_branch}${NC}";
+    echo -e  "\t${GREEN}git checkout -b ${YELLOW}${local_branch}${GREEN} FETCH_HEAD${NC}";
+
     ask_user_default_no "continue";
     if [ $? -eq 0 ] ; then return -1; fi;
 
