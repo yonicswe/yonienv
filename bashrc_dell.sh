@@ -916,6 +916,57 @@ alias ssh2arwen5='ssh2arwen arwen5'
 alias ssh2arwen6='ssh2arwen arwen6'
 alias ssh2arwen7='ssh2arwen arwen7'
 
+#ssh2core-a ()
+#{
+    #local core_ip=;
+
+    #_dellclusterruntimeenvvalidate;
+    #if [[ $? -ne 0 ]] ; then
+        #return -1;
+    #fi;
+    #core_ip=$(grep local_ip_a $CYC_CONFIG | sed 's/"//g' | sed 's/.*=//g');
+
+    #sshpass -p cycpass ssh core@${core_ip};
+#}
+
+ssh2bsc-a ()
+{
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -ne 0 ]] ; then
+        return -1;
+    fi;
+    dellcdclusterscripts;
+    ./ssh_cyc_a.sh;
+    cd -;
+}
+
+ssh2bsc-b ()
+{
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -ne 0 ]] ; then
+        return -1;
+    fi;
+    dellcdclusterscripts;
+    ./ssh_cyc_b.sh;
+    cd -;
+}
+
+_ssh2core-node ()
+{
+    local core_ip=;
+    local node=$1
+
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -ne 0 ]] ; then
+        return -1;
+    fi;
+    core_ip=$(grep local_ip_${node} $CYC_CONFIG | sed 's/"//g' | sed 's/.*=//g');
+    sshpass -p cycpass ssh core@${core_ip};
+}
+
+alias ssh2core-a='_ssh2core-node a';
+alias ssh2core-b='_ssh2core-node b';
+
 ssh2core ()
 {
     local cluster=${1};
@@ -928,11 +979,9 @@ ssh2core ()
             ask_user_default_yes "use ${cluster} again ?";
             if [ $? -eq 0 ] ; then cluster=; fi;
         fi;
+
+        cluster=$(_dellclusterget);
         if [ -z ${cluster} ] ; then
-            cluster=$(_dellclusterget);
-        fi;
-        # if [ $? -ne 0 -z "${cluster}" ] ; then
-        if (( $? != 0 )) ; then
             echo "${FUNCNAME} <cluster>"; 
             return -1;
         fi;
@@ -1794,6 +1843,16 @@ dellclusterguiipget ()
 
 }
  
+delleditclusterconfig ()
+{
+    _dellclusterruntimeenvvalidate
+    if [[ $? -ne 0 ]] ; then
+        return -1;
+    fi;
+
+    v ${CYC_CONFIG};
+}
+
 dellclusterconfigupdate ()
 {
     local cluster_config_source_folder=~/docs/cluster_config_files;
