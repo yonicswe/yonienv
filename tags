@@ -98,6 +98,7 @@ debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
 dell_mount_jiraproduction	bashrc_dell.sh	/^dell_mount_jiraproduction ()$/;"	f
+dell_mount_public_devutils	bashrc_dell.sh	/^dell_mount_public_devutils ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
 dellcdclusterscripts	bashrc_dell.sh	/^dellcdclusterscripts ()$/;"	f
 dellcdcyclonefolder	bashrc_dell.sh	/^dellcdcyclonefolder ()$/;"	f
@@ -130,6 +131,7 @@ dellcyclonefeatureflaglist	bashrc_dell.sh	/^dellcyclonefeatureflaglist ()$/;"	f
 dellcyclonegitdeinit	bashrc_dell.sh	/^dellcyclonegitdeinit ()$/;"	f
 dellcyclonekernelshaget	bashrc_dell.sh	/^dellcyclonekernelshaget ()$/;"	f
 dellcyclonekernelshaupdate	bashrc_dell.sh	/^dellcyclonekernelshaupdate ()$/;"	f
+delleditclusterconfig	bashrc_dell.sh	/^delleditclusterconfig ()$/;"	f
 dellenvrebash	bashrc_dell.sh	/^dellenvrebash ()$/;"	f
 dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
 dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
