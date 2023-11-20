@@ -228,7 +228,9 @@ git-rebase-remote-branch ()
 
     branch=$(echo ${branch} | sed 's/origin\///g');
 
-    ask_user_default_no  "git rebase over : ${branch}";
+    echo -e "\t${BLUE}git fetch origin ${branch}${NC}";
+    echo -e "\t${BLUE}git rebase FETCH_HEAD${NC}";
+    ask_user_default_no  "continue ?";
     if [ $? -eq 0 ] ; then
         return;
     fi;
