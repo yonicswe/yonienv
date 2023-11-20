@@ -780,3 +780,9 @@ installfzf ()
     git clone https://github.com/junegunn/fzf.git ~/.fzf/
     ~/.fzf/install
 }
+
+# howto read from /proc/<pid>/mem
+# read from offset 0x55fe7eec6000
+# get the size from /proc/<pid>/maps by subtracting end-address from start-address
+# then use xxd like so
+# sudo xxd -s 0x55fe7eec6000 -l $((0x55fe7eee7000 - 0x55fe7eec6000)) /proc/<pid>/mem  | less
