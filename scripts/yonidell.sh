@@ -1,4 +1,4 @@
-export YONI_CLUSTER=
+#export YONI_CLUSTER=
  
 ######################################
 # colors
@@ -103,7 +103,7 @@ yonidellupdate ()
 {
     1>/dev/null pushd ${HOME};
     scp y_cohen@10.55.226.121:"~/yonienv/scripts/{yonidell.sh,vimrcyoni.vim}" ~/;
-    sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${YONI_CLUSTER}/" yonidell.sh;
+    #sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${YONI_CLUSTER}/" yonidell.sh;
     source ~/yonidell.sh;
     1>/dev/null popd;
 }
@@ -509,30 +509,37 @@ dellnvmetargetlist ()
 
 get_node_id ()
 {
-    local node=$(hostname |sed 's/.*-//g');
+    #local node=$(hostname |sed 's/.*-//g');
 
-    if [[ ${node} == 'A' ]] ; then
+    #if [[ ${node} == 'A' ]] ; then
+        #echo "31010";
+    #elif [[ ${node} == 'B' ]] ; then
+        #echo "31011"
+    #else
+        #echo 0;
+    #fi;
+
+    if [ 1 -eq $(cat /cyc_var/cyc-system-node-id.txt) ] ; then
         echo "31010";
-    elif [[ ${node} == 'B' ]] ; then
-        echo "31011"
     else
-        echo 0;
+        echo "31011"
     fi;
+
 }
 
 export debuc_node="$(get_node_id)";
 
 # set SYM_SYSTEM_NAME with cluster name
 # eval $(export $(grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini | sed 's/\ //g'));
-if [ -e /dev/shm/xenv_1.ini ] ; then
-    export $(grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini | sed 's/\ //g');
-    export YONI_CLUSTER=${SYM_SYSTEM_NAME};
+#if [ -e /dev/shm/xenv_1.ini ] ; then
+    #export $(grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini | sed 's/\ //g' | sed 's/"//g');
+    #export YONI_CLUSTER=${SYM_SYSTEM_NAME};
 
-    if [[ ${debuc_node} != 0 ]] ; then
-        echo "YONI_CLUSTER: ${YONI_CLUSTER}";
-        echo "debuc_node: $debuc_node";
-    fi;
-fi;
+    #if [[ ${debuc_node} != 0 ]] ; then
+        #echo "YONI_CLUSTER: ${YONI_CLUSTER}";
+        #echo "debuc_node: $debuc_node";
+    #fi;
+#fi;
 
 
 
@@ -1058,6 +1065,11 @@ core-restart-bsc ()
     docker restart cyc_bsc_docker;
 }
 
+core-attach-bsc ()
+{
+    docker exec -it cyc_bsc_docker bash
+}
+
 core-list-kernel-configs ()
 {
     #echo "ls -ltr /sys/kernel/config/nvmet/ports/";
@@ -1067,6 +1079,24 @@ core-list-kernel-configs ()
     #echo "ls -ltr /sys/kernel/config/nvmet/hosts/";
     ls -ltrR /sys/kernel/config/nvmet/hosts/;
 }
+
+coreid ()
+{
+    local system_name;
+    local system_node;
+
+    system_name=$(cat /cyc_var/cyc-system-name.txt);
+    if [ 1 -eq $(cat /cyc_var/cyc-system-node-id.txt) ] ; then
+        system_node=A;
+    else
+        system_node=B;
+    fi;
+    #echo ${YONI_CLUSTER}-$(hostname |sed 's/.*-//g');
+    echo ${system_name}-${system_node};
+    echo debuc_node : ${debuc_node};
+}
+
+coreid;
 
 #        service mode
 #=============================
