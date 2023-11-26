@@ -1977,6 +1977,24 @@ dellcdbroadcomsources ()
     return -1;
 }
 
+dellcdkernelmodules ()
+{
+    if [ -d ${cyclone_folder} ] ; then
+        if [ -d ${cyclone_folder}/source/cyc_core/cyc_platform/obj_Release ] ; then
+            cd ${cyclone_folder}/source/cyc_core/cyc_platform/obj_Release/package/final/top_host/cyc_host/cyc_common/modules
+        elif [ -d ${cyclone_folder}/source/cyc_core/cyc_platform/obj_Debug ] ; then
+            cd ${cyclone_folder}/source/cyc_core/cyc_platform/obj_Debug/package/final/top_host/cyc_host/cyc_common/modules
+        else
+            echo -e "${RED}modules are not built yet${NC}";
+            return -1;
+        fi;
+        return 0;
+    fi; 
+
+    echo -e "${RED}cyclone_folder not defined!!${NC}";
+    return -1;
+}
+
 dell_kernel_objects=
 dellcdkernelobjects ()
 {
