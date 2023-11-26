@@ -1299,9 +1299,9 @@ dellclusterinstall ()
 
         ask_user_default_no "reinit debug ? ";
         if [ $? -eq 1 ] ; then
-            reinit_cmd+="-F Debug";
+            reinit_cmd+=" -F Debug";
         else
-            reinit_cmd+="-F Retail";
+            reinit_cmd+=" -F Retail";
         fi;
 
         ask_user_default_no "would you like to enable a feature flag ? ";
