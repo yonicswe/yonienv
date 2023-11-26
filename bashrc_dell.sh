@@ -1276,8 +1276,10 @@ dellclusterinstall ()
     fi;
 
     deploy_cmd="./deploy  --deploytype san ${cluster}";
-    reinit_cmd="./reinit_array.sh -F Retail factory sys_mode=block";
-    create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
+    #reinit_cmd="./reinit_array.sh factory;
+    reinit_cmd="./reinit_array.sh factory sys_mode=block";
+    #create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
+    create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -admin -stdout -y -post";
 
     #
     # ask user to define commands and offer to do it all without stopping.
@@ -1294,6 +1296,13 @@ dellclusterinstall ()
     ask_user_default_no "Skip reinit ? "
     if [[ $? -eq 0 ]] ; then
         reinit_choice=1;
+
+        ask_user_default_no "reinit debug ? ";
+        if [ $? -eq 1 ] ; then
+            reinit_cmd+="-F Debug";
+        else
+            reinit_cmd+="-F Retail";
+        fi;
 
         ask_user_default_no "would you like to enable a feature flag ? ";
         if [ $? -eq 1 ] ; then
@@ -1843,7 +1852,7 @@ dellclusterguiipget ()
 
 }
  
-delleditclusterconfig ()
+dellclustereditcycconfig ()
 {
     _dellclusterruntimeenvvalidate
     if [[ $? -ne 0 ]] ; then
@@ -1946,6 +1955,26 @@ dellcdthirdparty ()
 
     cd $third_party_folder;
     return 0;
+}
+
+dellcdqlasources ()
+{
+    dellcdthirdparty;
+    if [ $? -ne 0 ] ; then
+        return -1;
+    fi;
+    
+    cd cyc_platform/src/third_party/QLA/qla2xxx/src/;
+}
+
+dellcdbroadcomsources ()
+{
+    dellcdthirdparty;
+    if [ $? -ne 0 ] ; then
+        return -1;
+    fi;
+    
+    cd cyc_platform/src/third_party/BRCM_OCS;
 }
 
 dell_kernel_objects=

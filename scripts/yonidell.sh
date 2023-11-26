@@ -214,6 +214,26 @@ bsclistkernelmodules ()
     (set -x ; ls -ltr ${kernel_modules_folder};);
 }
 
+corecdtkernelmodules ()
+{
+    local kernel_modules_folder_0=/cyc_software_0/cyc_host/cyc_common/modules/;
+    local kernel_modules_folder_1=/cyc_software_1/cyc_host/cyc_common/modules/;
+    local kernel_modules_folder;
+
+    if [ -e ${kernel_modules_folder_0} ] ; then
+        kernel_modules_folder=${kernel_modules_folder_0};
+    elif [ -e ${kernel_modules_folder_1} ] ; then
+        kernel_modules_folder=${kernel_modules_folder_1};
+    else
+        echo "path not found ${kernel_modules_folder_0} or ${kernel_modules_folder_1}";
+        return;
+    fi;
+
+    if [ -d ${kernel_modules_folder} ] ; then
+        cd ${kernel_modules_folder};
+    fi;
+}
+
 corelistkernelmodules ()
 {
     local kernel_modules_folder_0=/cyc_software_0/cyc_host/cyc_common/modules/;
@@ -231,7 +251,6 @@ corelistkernelmodules ()
 
     if [ -d ${kernel_modules_folder} ] ; then
         (set -x ; ls -ltr ${kernel_modules_folder};);
-        return;
     fi;
     #bsclistkernelmodules;
 }
@@ -264,14 +283,15 @@ bsclistfeatureflags ()
 }
 alias corelistfeatureflags='bsclistfeatureflags';
 
-bsclist-xtremapp ()
+_bsclist-xtremapp ()
 {
     local xtremapp_pid=;
 
     pgrep xtremapp -a;
     echo "--------------------------";
-    echo "sudo kill $(pgrep -x xtremapp)";
+    
 }
+alias bsclist-xtremapp='_bsclist-xtremapp | column -t; echo "sudo kill $(pgrep -x xtremapp)";'
 
 _delljournalctl ()
 {
