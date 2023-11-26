@@ -1959,22 +1959,22 @@ dellcdthirdparty ()
 
 dellcdqlasources ()
 {
-    dellcdthirdparty;
-    if [ $? -ne 0 ] ; then
-        return -1;
+    if [ -d ${cyclone_folder} ] ; then
+        cd ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/QLA/qla2xxx/src/;
+        return 0;
     fi;
-    
-    cd cyc_platform/src/third_party/QLA/qla2xxx/src/;
+ 
+    return -1;
 }
 
 dellcdbroadcomsources ()
 {
-    dellcdthirdparty;
-    if [ $? -ne 0 ] ; then
-        return -1;
+    if [ -d ${cyclone_folder} ] ; then
+        cd ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS;
+        return 0;
     fi;
-    
-    cd cyc_platform/src/third_party/BRCM_OCS;
+ 
+    return -1;
 }
 
 dell_kernel_objects=
