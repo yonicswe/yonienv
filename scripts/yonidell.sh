@@ -368,6 +368,10 @@ alias journalcyc='sudo journalctl -t cyc_bsc'
 alias journalcycf='journalctl -f -t cyc_bsc'
 alias journalcyclast3minutes='sudo journalctl --since="3 minutes ago" -t cyc_bsc'
 
+alias journaldcengine='sudo journalctl -t dc_engine'
+alias journaldcenginef='journalctl -f -t dc_engine'
+alias journaldcenginelast3minutes='sudo journalctl --since="3 minutes ago" -t dc_engine'
+
 alias journalmbe-r='sudo journalctl SUB_COMPONENT=mbe_r'
 alias journalmbe-rf='sudo journalctl -f SUB_COMPONENT=mbe_r'
 alias journalmbe-rlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=mbe_r'
