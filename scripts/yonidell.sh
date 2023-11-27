@@ -372,6 +372,14 @@ alias journaldcengine='sudo journalctl -t dc_engine'
 alias journaldcenginef='journalctl -f -t dc_engine'
 alias journaldcenginelast3minutes='sudo journalctl --since="3 minutes ago" -t dc_engine'
 
+alias journalpm='journalctl |grep xtremapp-pm | less'
+alias journalpmf='journalctl -f |grep xtremapp-pm'
+alias journalpmlast3minutes='journalctl --since="3 minutes ago" |grep xtremapp-pm|less'
+
+alias journalsym='journalctl |grep xtremapp-sym | less'
+alias journalsymf='journalctl -f |grep xtremapp-sym'
+alias journalsymlast3minutes='journalctl --since="3 minutes ago" |grep xtremapp-sym|less'
+
 alias journalmbe-r='sudo journalctl SUB_COMPONENT=mbe_r'
 alias journalmbe-rf='sudo journalctl -f SUB_COMPONENT=mbe_r'
 alias journalmbe-rlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=mbe_r'
