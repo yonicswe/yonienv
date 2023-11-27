@@ -214,7 +214,7 @@ bsclistkernelmodules ()
     (set -x ; ls -ltr ${kernel_modules_folder};);
 }
 
-corecdtkernelmodules ()
+corecdkernelmodules ()
 {
     local kernel_modules_folder_0=/cyc_software_0/cyc_host/cyc_common/modules/;
     local kernel_modules_folder_1=/cyc_software_1/cyc_host/cyc_common/modules/;
@@ -903,7 +903,12 @@ _pr_debug_usage ()
     echo "echo 'module nvmet +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
     echo "echo 'module nvmet_power +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
     echo "echo 'module nvme_qla2xxx +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
+    echo "--------------------------------------------------------------------------------";
+    echo "enable all functions in the kernel module qla2xxx.ko";
     echo "echo 'module qla2xxx +p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
+    echo "--------------------------------------------------------------------------------";
+    echo "disable all functions in the kernel module qla2xxx.ko";
+    echo "echo 'module qla2xxx -p' | sudo tee /sys/kernel/debug/dynamic_debug/control";
 }
 
 prdebug () 
@@ -938,7 +943,8 @@ prdebug ()
     fi
 
     if [ ${show_enabled} -eq 1 ] ; then 
-        sudo cat /sys/kernel/debug/dynamic_debug/control |awk '/.*=pfl/{print $0}';
+        #sudo cat /sys/kernel/debug/dynamic_debug/control |awk '/.*=pfl/{print $0}';
+        sudo cat /sys/kernel/debug/dynamic_debug/control |awk '/.*=p/{print $0}';
         return;
     fi; 
 
