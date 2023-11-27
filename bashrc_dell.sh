@@ -1246,6 +1246,9 @@ dellclusterinstall ()
     local reinit_time=;
     local create_cluster_time=;
     local create_cluster_failed=0;
+    local install_choices=;
+    local reinit_flavor=;
+    local add_feature=;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1281,31 +1284,64 @@ dellclusterinstall ()
     #create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
     create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -admin -stdout -y -post";
 
-    #
+    ######################## get user choices with menu ###########################
+    install_choices=($(whiptail --checklist "cluster install options" 15 40 5\
+                   deploy "install os on cluster" on \
+                   reinit "copy files to cluster" on  \
+                   cc "create cluster" on 3>&1 1>&2 2>&3));
+
+    if [[ ${install_choices[@]} =~ reinit ]] ; then
+            whiptail --yesno "reinit retail or debug ?" \
+                        --yes-button "retail" \
+                        --no-button "debug"  8 80;
+        reinit_flavor=$?;
+        # retail 0 
+        # debug 1
+
+        whiptail --yesno "add feature flag ?" \
+                    --yes-button "yes" \
+                    --no-button "no"  8 80;
+        #whiptail --title "add feature flag ?" --yesno "" 8 80;
+        add_feature=$?;
+        # 0 - add feature flag
+        # 1 - do not add feature flag
+
+        #if [[ $feature -eq 0 ]] ; then
+            #feature_flag=$(whiptail --inputbox "which feature ?" 8 78 Blue --title "Example Dialog" 3>&1 1>&2 2>&3);
+        #fi;
+    fi;
+    ###############################################################################
+
+
+    ###############################################################################
     # ask user to define commands and offer to do it all without stopping.
     #
     # echo -e "\n${deploy_cmd}";
-    ask_user_default_no "Skip  deploy ? "
-    if [[ $? -eq 0 ]] ; then
+    #ask_user_default_no "Skip  deploy ? "
+    #if [[ $? -eq 0 ]] ; then
+    if [[ ${install_choices[@]} =~ deploy ]] ; then
         deploy_choice=1;
     else
         deploy_cmd="";
     fi;
 
     # echo -e "\n\n${reinit_cmd}\n\n";
-    ask_user_default_no "Skip reinit ? "
-    if [[ $? -eq 0 ]] ; then
+    #ask_user_default_no "Skip reinit ? "
+    #if [[ $? -eq 0 ]] ; then
+    if [[ ${install_choices[@]} =~ reinit ]] ; then
         reinit_choice=1;
 
-        ask_user_default_no "reinit debug ? ";
-        if [ $? -eq 1 ] ; then
+        #ask_user_default_no "reinit debug ? ";
+        #if [ $? -eq 1 ] ; then
+        if [[ ${reinit_flavor} -eq 1 ]] ; then
             reinit_cmd+=" -F Debug";
         else
             reinit_cmd+=" -F Retail";
         fi;
 
-        ask_user_default_no "would you like to enable a feature flag ? ";
-        if [ $? -eq 1 ] ; then
+        #ask_user_default_no "would you like to enable a feature flag ? ";
+        #if [ $? -eq 1 ] ; then
+        if [[ ${add_feature} -eq 0 ]] ; then
             feature=$(dellcyclonefeatureflaglist);
             reinit_cmd+=" feature=\"${feature}\"";
             echo -e "\n\n${reinit_cmd}\n\n";
@@ -1315,8 +1351,9 @@ dellclusterinstall ()
     fi;
 
     # echo -e "\n\n${create_cluster_cmd}\n\n";
-    ask_user_default_no "Skip create_cluster ? "
-    if [[ $? -eq 0 ]] ; then
+    #ask_user_default_no "Skip create_cluster ? "
+    #if [[ $? -eq 0 ]] ; then
+    if [[ ${install_choices[@]} =~ cc ]] ; then
         create_cluster_choice=1;
     else
         create_cluster_cmd="";
