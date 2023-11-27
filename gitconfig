@@ -585,3 +585,7 @@
 #    git checkout <remote>/<branch -- <path-to-file/filename>
 #    now that file will appear as staged.
 #    you can commit it here but its original  commit will not show in the logs.
+#
+# disable password on push when cloned as https
+# git config credential.helper store
+
