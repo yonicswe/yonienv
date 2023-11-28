@@ -309,6 +309,7 @@ dellcyclonebuild ()
 {
     local build_cmd='make cyc_core force=yes'
     local repeat_last_choice=0;
+    local build_choices=;
 
     _dellcyclonebuild_validate_build_machine
     if [[ $? -ne 0 ]] ; then
@@ -327,7 +328,7 @@ dellcyclonebuild ()
      
     if [ -e .build_choices_bkp ] ; then
         echo "last command choices : $(cat .build_choices_bkp)";
-        ask_user_default_yes "repeat your last choices ? ";
+        ask_user_default_no "repeat your last choices ? ";
         if [ $? -eq 1 ] ; then
             repeat_last_choice=1;
             build_cmd=$(cat .build_choices_bkp);
@@ -335,25 +336,35 @@ dellcyclonebuild ()
     fi;
 
     if [ ${repeat_last_choice} -eq 0 ] ; then
-        ask_user_default_no "flavor DEBUG ? ";
-        if [[ $? -eq 0 ]] ; then
-            build_cmd+=" flavor=RETAIL";
-        else
+        build_choices=($(whiptail --checklist "cyclone build" 9 30 4\
+                       prune "" off \
+                       debug "" off  \
+                       verbose "" off  \
+                       disable-cache "" off 3>&1 1>&2 2>&3));
+
+        #ask_user_default_no "flavor DEBUG ? ";
+        #if [[ $? -eq 0 ]] ; then
+        if [[ ${build_choices[@]} =~ debug ]] ; then
             build_cmd+=" flavor=DEBUG";
+        else
+            build_cmd+=" flavor=RETAIL";
         fi;
 
-        ask_user_default_yes "use cached repos ? ";
-        if [ $? -eq 0 ] ; then
+        #ask_user_default_yes "use cached repos ? ";
+        #if [ $? -eq 0 ] ; then
+        if [[ ${build_choices[@]} =~ cache ]] ; then
             build_cmd+=" acache=no mcache=no dcache=no";
         fi;
 
-        ask_user_default_no "verbose=3 ? ";
-        if [ $? -eq 1 ] ; then
+        #ask_user_default_no "verbose=3 ? ";
+        #if [ $? -eq 1 ] ; then
+        if [[ ${build_choices[@]} =~ verbose ]] ; then
             build_cmd+=" verbose=3";
         fi;
 
-        ask_user_default_no "prune before build ?"
-        if [[ $? -eq 1 ]] ; then
+        #ask_user_default_no "prune before build ?"
+        #if [[ $? -eq 1 ]] ; then
+        if [[ ${build_choices[@]} =~ prune ]] ; then
             build_cmd="time make prune && time ${build_cmd}";
         fi;
 	fi;
