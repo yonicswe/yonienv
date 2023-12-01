@@ -310,6 +310,8 @@ dellcyclonebuild ()
     local build_cmd='make cyc_core force=yes'
     local repeat_last_choice=0;
     local build_choices=;
+    local build_third_party_cmd=;
+    local flavor=;
 
     _dellcyclonebuild_validate_build_machine
     if [[ $? -ne 0 ]] ; then
@@ -336,19 +338,23 @@ dellcyclonebuild ()
     fi;
 
     if [ ${repeat_last_choice} -eq 0 ] ; then
-        build_choices=($(whiptail --checklist "cyclone build" 9 30 4\
+        build_choices=($(whiptail --checklist "cyclone build" 11 30 5\
                        prune "" off \
                        debug "" off  \
                        verbose "" off  \
-                       disable-cache "" off 3>&1 1>&2 2>&3));
+                       disable-cache "" off \
+                       third-party "" off 3>&1 1>&2 2>&3));
 
         #ask_user_default_no "flavor DEBUG ? ";
         #if [[ $? -eq 0 ]] ; then
         if [[ ${build_choices[@]} =~ debug ]] ; then
-            build_cmd+=" flavor=DEBUG";
+            flavor=DEBUG;
         else
-            build_cmd+=" flavor=RETAIL";
+            flavor=RETAIL;
         fi;
+
+        build_cmd+=" flavor=${flavor}";
+
 
         #ask_user_default_yes "use cached repos ? ";
         #if [ $? -eq 0 ] ; then
@@ -366,6 +372,10 @@ dellcyclonebuild ()
         #if [[ $? -eq 1 ]] ; then
         if [[ ${build_choices[@]} =~ prune ]] ; then
             build_cmd="time make prune && time ${build_cmd}";
+        fi;
+
+        if [[ ${build_choices[@]} =~ third-pary ]] ; then
+            build_third_party_cmd="make third_party force=yes flavor=${flavor}";
         fi;
 	fi;
 
@@ -387,6 +397,12 @@ dellcyclonebuild ()
     # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
     # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
 
+    if ! [ -z ${build_third_party_cmd} ] ; then
+        ask_user_default_no "build third_party ? "
+        if [ $? -eq 1 ] ; then
+            eval ${build_third_party_cmd};
+        fi;
+    fi;
 }
 
 builds_journal_db="build-history";
@@ -2018,7 +2034,19 @@ dellcdqlasources ()
 dellcdbroadcomsources ()
 {
     if [ -d ${cyclone_folder} ] ; then
-        cd ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS;
+        if [ -e ${cyclone_folder}/source/third_party/cyc_platform/obj_Debug ] ; then
+            cd ${cyclone_folder}/source/third_party/cyc_platform/obj_Debug;
+        elif [ -e ${cyclone_folder}/source/third_party/cyc_platform/obj_Release ] ; then
+            cd ${cyclone_folder}/source/third_party/cyc_platform/obj_Release;
+        else
+            echo "missing : "
+            echo "${cyclone_folder}/source/third_party/cyc_platform/obj_Release";
+            echo "${cyclone_folder}/source/third_party/cyc_platform/obj_Debug";
+            echo "you should : make third_party force=yes flavor=<DEBUG|RELEASE>";
+        fi;
+
+        echo "makefiles and patches are in :";
+        echo "${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS";
         return 0;
     fi;
  

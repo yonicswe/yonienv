@@ -241,18 +241,6 @@ git-rebase-remote-branch ()
     git rebase FETCH_HEAD;
 }
 
-git-deletebranch ()
-{
-    branch="$(git b | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-
-    if [ -n "${branch}" ] ; then
-        ask_user_default_no "git branch -D ${branch} ";
-        if [ $? -eq 1 ] ; then
-            git checkout ${branch};
-        fi;
-    fi;
-}
-
 gitcheckoutbranch ()
 {
     branch="$(git b | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
@@ -314,6 +302,18 @@ gitcheckoutremotebranch ()
 
     return 0;
 }
+
+#git-deletebranch ()
+#{
+    #branch="$(git b | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+
+    #if [ -n "${branch}" ] ; then
+        #ask_user_default_no "git branch -D ${branch} ";
+        #if [ $? -eq 1 ] ; then
+            #git checkout ${branch};
+        #fi;
+    #fi;
+#}
 
 git-deletebranch ()
 {
