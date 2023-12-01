@@ -374,7 +374,7 @@ dellcyclonebuild ()
             build_cmd="time make prune && time ${build_cmd}";
         fi;
 
-        if [[ ${build_choices[@]} =~ third-pary ]] ; then
+        if [[ ${build_choices[@]} =~ third-party ]] ; then
             build_third_party_cmd="make third_party force=yes flavor=${flavor}";
         fi;
 	fi;
@@ -397,7 +397,7 @@ dellcyclonebuild ()
     # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
     # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
 
-    if ! [ -z ${build_third_party_cmd} ] ; then
+    if ! [ -z "${build_third_party_cmd}" ] ; then
         ask_user_default_no "build third_party ? "
         if [ $? -eq 1 ] ; then
             eval ${build_third_party_cmd};
