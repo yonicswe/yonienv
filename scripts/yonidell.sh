@@ -552,10 +552,14 @@ get_node_id ()
         #echo 0;
     #fi;
 
-    if [ 1 -eq $(cat /cyc_var/cyc-system-node-id.txt) ] ; then
-        echo "31010";
+    if [ -e /cyc_var/cyc-system-node-id.txt ] ; then
+        if [ 1 -eq $(cat /cyc_var/cyc-system-node-id.txt) ] ; then
+            echo "31010";
+        else
+            echo "31011"
+        fi;
     else
-        echo "31011"
+        echo "none";
     fi;
 
 }
