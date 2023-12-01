@@ -1124,11 +1124,16 @@ coreid ()
     local system_name;
     local system_node;
 
-    system_name=$(cat /cyc_var/cyc-system-name.txt);
-    if [ 1 -eq $(cat /cyc_var/cyc-system-node-id.txt) ] ; then
-        system_node=A;
-    else
-        system_node=B;
+    if [ -e /cyc_var/cyc-system-name.txt ] ; then
+        system_name=$(cat /cyc_var/cyc-system-name.txt);
+    fi;
+
+    if [ -e /cyc_var/cyc-system-node-id.txt ] ; then
+        if [ 1 -eq $(cat /cyc_var/cyc-system-node-id.txt) ] ; then
+            system_node=A;
+        else
+            system_node=B;
+        fi;
     fi;
     #echo ${YONI_CLUSTER}-$(hostname |sed 's/.*-//g');
     echo ${system_name}-${system_node};
