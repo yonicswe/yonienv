@@ -99,14 +99,19 @@ define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
 dell_mount_jiraproduction	bashrc_dell.sh	/^dell_mount_jiraproduction ()$/;"	f
 dell_mount_public_devutils	bashrc_dell.sh	/^dell_mount_public_devutils ()$/;"	f
+dellcdbroadcommakefiles	bashrc_dell.sh	/^dellcdbroadcommakefiles ()$/;"	f
+dellcdbroadcomsources	bashrc_dell.sh	/^dellcdbroadcomsources ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
 dellcdclusterscripts	bashrc_dell.sh	/^dellcdclusterscripts ()$/;"	f
 dellcdcyclonefolder	bashrc_dell.sh	/^dellcdcyclonefolder ()$/;"	f
+dellcdkernelmodules	bashrc_dell.sh	/^dellcdkernelmodules ()$/;"	f
 dellcdkernelobjects	bashrc_dell.sh	/^dellcdkernelobjects ()$/;"	f
 dellcdmdt	bashrc_dell.sh	/^dellcdmdt ()$/;"	f
 dellcdpnvmetfolder	bashrc_dell.sh	/^dellcdpnvmetfolder ()$/;"	f
+dellcdqlasources	bashrc_dell.sh	/^dellcdqlasources ()$/;"	f
 dellcdthirdparty	bashrc_dell.sh	/^dellcdthirdparty ()$/;"	f
 dellclusterconfigupdate	bashrc_dell.sh	/^dellclusterconfigupdate ()$/;"	f
+dellclustereditcycconfig	bashrc_dell.sh	/^dellclustereditcycconfig ()$/;"	f
 dellclustergeneratecfg	bashrc_dell.sh	/^dellclustergeneratecfg ()$/;"	f
 dellclusterguiipget	bashrc_dell.sh	/^dellclusterguiipget ()$/;"	f
 dellclusterinfo	bashrc_dell.sh	/^dellclusterinfo ()$/;"	f
@@ -131,7 +136,6 @@ dellcyclonefeatureflaglist	bashrc_dell.sh	/^dellcyclonefeatureflaglist ()$/;"	f
 dellcyclonegitdeinit	bashrc_dell.sh	/^dellcyclonegitdeinit ()$/;"	f
 dellcyclonekernelshaget	bashrc_dell.sh	/^dellcyclonekernelshaget ()$/;"	f
 dellcyclonekernelshaupdate	bashrc_dell.sh	/^dellcyclonekernelshaupdate ()$/;"	f
-delleditclusterconfig	bashrc_dell.sh	/^delleditclusterconfig ()$/;"	f
 dellenvrebash	bashrc_dell.sh	/^dellenvrebash ()$/;"	f
 dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
 dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
@@ -182,6 +186,8 @@ getlogdir	bashrc_nice.sh	/^getlogdir () $/;"	f
 gitapplyPatchList	bashrc_git.sh	/^gitapplyPatchList () $/;"	f
 gitb	bashrc_git.sh	/^gitb () $/;"	f
 gitcatpatchfile	bashrc_git.sh	/^gitcatpatchfile ()$/;"	f
+gitcheckoutbranch	bashrc_git.sh	/^gitcheckoutbranch ()$/;"	f
+gitcheckoutremotebranch	bashrc_git.sh	/^gitcheckoutremotebranch ()$/;"	f
 gitclearcache	bashrc_git.sh	/^gitclearcache ()$/;"	f
 gitcommitdell	bashrc_dell.sh	/^gitcommitdell ()$/;"	f
 gitcommitfixup	bashrc_git.sh	/^gitcommitfixup ()$/;"	f
