@@ -377,6 +377,10 @@ alias journalpm='journalctl |grep xtremapp-pm | less'
 alias journalpmf='journalctl -f |grep xtremapp-pm'
 alias journalpmlast3minutes='journalctl --since="3 minutes ago" |grep xtremapp-pm|less'
 
+alias journalcrypto='journalctl |grep CryptoApi | less'
+alias journalcryptof='journalctl -f |grep CryptoApi'
+alias journalcryptolast3minutes='journalctl --since="3 minutes ago" |grep CryptoApi|less'
+
 alias journalsym='journalctl |grep xtremapp-sym | less'
 alias journalsymf='journalctl -f |grep xtremapp-sym'
 alias journalsymlast3minutes='journalctl --since="3 minutes ago" |grep xtremapp-sym|less'
@@ -1157,6 +1161,7 @@ coreid;
 
 # nvme discover|connect example
 # nvme discover -t tcp -a <take from bsclistports>
+# nvme discover -t tcp -a 10.181.193.11
 # nvme discover -t fc -a <take from bsclistports> -w <take from dellnvme-fc-nodename-portname>
 # nvme discover -t rdma --traddr=10.219.146.182 -w 10.219.146.186
 # nvme connect -t rdma -a 10.219.146.182 -n nqn.1988-11.com.dell:powerstore:00:60148e5c7660A3D9C763 -s 4420 -w 10.219.146.186 -D 
