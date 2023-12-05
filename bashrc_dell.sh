@@ -195,7 +195,7 @@ dellpdr-gitsmup ()
     ask_user_default_yes "update source/nt-nvmeof-frontend ?";
     [ $? -eq 1 ] && nt_nvmeof_frontend=1;
 
-    ask_user_default_yes "update source/third_party ?";
+    ask_user_default_no "update source/third_party ?";
     [ $? -eq 1 ] && third_party=1;
 
     ask_user_default_no "update source/linux ?";
@@ -2031,26 +2031,72 @@ dellcdqlasources ()
     return -1;
 }
 
+dellcdbroadcommakefiles ()
+{
+    if [ -z ${cyclone_folder} ] ; then
+        echo -e "${RED}cyclone_folder empty! use dellclusterruntimeenvset${NC}"; 
+        return -1;
+    fi;
+
+    if ! [ -d ${cyclone_folder} ] ; then
+        echo -e "${RED}${cyclone_folder} does not exist! use dellclusterruntimeenvset${NC}"; 
+        return -1;
+    fi;
+
+    if ! [ -d ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS ] ; then
+        echo -e "${RED}missing broadcom folder. try the feature branch feature/pl-trif-2474-brcm-fc-64gb${NC}";
+        return -1;
+    fi;
+
+    cd ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS;
+    return 0;
+
+}
+
 dellcdbroadcomsources ()
 {
-    if [ -d ${cyclone_folder} ] ; then
-        if [ -e ${cyclone_folder}/source/third_party/cyc_platform/obj_Debug ] ; then
-            cd ${cyclone_folder}/source/third_party/cyc_platform/obj_Debug;
-        elif [ -e ${cyclone_folder}/source/third_party/cyc_platform/obj_Release ] ; then
-            cd ${cyclone_folder}/source/third_party/cyc_platform/obj_Release;
-        else
-            echo "missing : "
-            echo "${cyclone_folder}/source/third_party/cyc_platform/obj_Release";
-            echo "${cyclone_folder}/source/third_party/cyc_platform/obj_Debug";
-            echo "you should : make third_party force=yes flavor=<DEBUG|RELEASE>";
-        fi;
+    local platform_debug=source/third_party/cyc_platform/obj_Debug;
+    local platform_release=source/third_party/cyc_platform/obj_Release;
+    local broadcom_src=third_party/BRCM_OCS/src/BRCM_OCS;
+    local broadcom=;
 
-        echo "makefiles and patches are in :";
-        echo "${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS";
-        return 0;
+    if [ -z ${cyclone_folder} ] ; then
+        echo -e "${RED}cyclone_folder empty! use dellclusterruntimeenvset${NC}"; 
+        return -1;
     fi;
- 
-    return -1;
+
+    if ! [ -d ${cyclone_folder} ] ; then
+        echo -e "${RED}${cyclone_folder} does not exist! use dellclusterruntimeenvset${NC}"; 
+        return -1;
+    fi;
+
+    broadcom=${cyclone_folder}
+    if [ -e ${broadcom}/${platform_debug} ] ; then
+        broadcom=${broadcom}/${platform_debug};
+    elif [ -e ${broadcom}/${platform_release} ] ; then
+        broadcom=${broadcom}/${platform_release};
+    else
+        echo "missing : "
+        echo "${cyclone_folder}${platform_debug}";
+        echo "${cyclone_folder}${platform_release}";
+        echo "you should : make third_party force=yes flavor=<DEBUG|RELEASE>";
+        return -1;
+    fi;
+
+    broadcom=${broadcom}/${broadcom_src};
+
+    if [ -d ${broadcom} ] ; then
+        cd ${broadcom};
+    else
+        echo "missing folder ${broadcom}";
+        echo -e "${RED}missing broadcom folder. try the feature branch feature//pl-trif-2474-brcm-fc-64gb${NC}";
+        return -1;
+    fi;
+
+    echo "makefiles and patches in";
+    echo "==============================";
+    echo "${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS";
+    return 0;
 }
 
 dellcdkernelmodules ()
