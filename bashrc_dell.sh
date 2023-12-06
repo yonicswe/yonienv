@@ -1326,8 +1326,8 @@ dellclusterinstall ()
         # debug 1
 
         whiptail --yesno "add feature flag ?" \
-                    --yes-button "yes" \
-                    --no-button "no"  8 80;
+                    --no-button "no" \
+                    --yes-button "yes"  8 80;
         #whiptail --title "add feature flag ?" --yesno "" 8 80;
         add_feature=$?;
         # 0 - add feature flag
