@@ -1301,6 +1301,7 @@ dellclusterinstall ()
         echo "your last install choices were : $(cat .install_choices_bkp)";
         ask_user_default_no "do it again ?";
         if [ $? -eq 1 ] ; then
+            eval "$(cat .install_choices_bkp)";
             return;
         fi;
     fi;
@@ -2363,13 +2364,18 @@ delljournalctl-all-logs-node-b ()
     fi;
 }
 
-dell_mount_jiraproduction ()
+dell-mount-home-qa ()
+{
+    mount 10.55.160.100:/home/qa /home/qa;
+}
+
+dell-mount-jiraproduction ()
 {
     sudo mount cecaunity01-nas.corp.emc.com:/jiraproduction /disks/jiraproduction;
     sudo mount cecaunity01-nas.corp.emc.com:/jiraproduction2 /disks/jiraproduction2
 }
 
-dell_mount_public_devutils ()
+dell-mount-public-devutils ()
 {
     sudo mkdir /home/public
     sudo mount -o nolock file.xiodrm.lab.emc.com:/home/public /home/public
