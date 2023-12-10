@@ -150,6 +150,51 @@ dellcyclonedevelenvsetup ()
 	git reset --hard origin/int/foothills-prime/main-pl
 }
 
+dellcyclonetagsupdate ()
+{
+    local sed_cyclone_folder=;
+
+    if [ -z ${cyclone_folder} ] ; then
+        echo "cyclone folder not defined";
+        return -1;
+    fi;
+
+    if ! [ -d ${cyclone_folder} ] ; then
+        echo "${cyclone_folder} does not exist";
+        return -1;
+    fi;
+
+    sed_cyclone_folder=$(echo ${cyclone_folder} | sed 's/\//\\\//g');
+    dellcdcyclonefolder;
+
+     # copy tags from ~/tasks/tags/ to source/cyc_core
+     \cp ${yonienv}/dell-tags/tagme-cyc_core.sh source/cyc_core/tagme.sh;
+     \cp ${yonienv}/dell-tags/tags.vim          source/cyc_core/tags.vim;
+
+     # tag cyc_core
+     cd source/cyc_core;
+     tttt;
+     cd -;
+
+     # fix tags file to match cyclone folder path
+     sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" source/cyc_core/tags.vim;
+
+     # copy tags from ~/tasks/tags/ to source/nt_nvmeof_frontend
+     \cp ${yonienv}/dell-tags/tagme-nt.sh source/nt-nvmeof-frontend/tagme.sh;
+     \cp ${yonienv}/dell-tags/tags.vim    source/nt-nvmeof-frontend/tags.vim;
+
+     # tag nt
+     cd source/nt-nvmeof-frontend;
+     tttt;
+     cd -;
+
+     # fix tags file to match cyclone folder path
+     sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" source/nt-nvmeof-frontend/tags.vim;
+
+     return 0;
+
+}
+
 alias dell-clone-cyclone='git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git'
 alias dell-clone-pnvmet='git clone git@eos2git.cec.lab.emc.com:cyclone/linux.git'
 
