@@ -361,9 +361,9 @@ alias journalall='sudo journalctl'
 alias journalalllast3minutes='sudo journalctl --since="3 minutes ago"'
 alias journalallf='sudo journalctl -f'
 
-alias journalnt='sudo journalctl SUB_COMPONENT=nt'
+alias journalnt='journalctl SUB_COMPONENT=nt'
 alias journalntf='journalctl -f SUB_COMPONENT=nt'
-alias journalntlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
+alias journalntlast3minutes='journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
 alias journalcyc='sudo journalctl -t cyc_bsc'
 alias journalcycf='journalctl -f -t cyc_bsc'
