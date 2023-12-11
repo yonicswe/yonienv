@@ -806,6 +806,9 @@ dellcdcyclonefolder ()
     return 0;
 }
 alias ddd='dellcdcyclonefolder'
+alias dddcore='dellcdcyclonefolder; [ $? -eq 0 ] && c source/cyc_core'
+alias dddnt='dellcdcyclonefolder; [ $? -eq 0 ] && c source/nt-nvmeof-frontend'
+
 export _dellclusterruntimeenvset=0
 dellclusterruntimeenvset ()
 {
