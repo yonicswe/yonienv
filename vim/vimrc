@@ -760,7 +760,12 @@ nmap <script> <silent> <F6> :call ToggleQuickFix()<CR>
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 "map M :tp<cr>
 "map N :tn<cr>
- 
+
+" always jump to the 2nd tag
+" to make sure that when you <ctrl>+] you will go to the definition instead of
+" the decleration
+noremap <c-]> 2<c-]>
+
 nnoremap <silent> <F8> :TlistToggle<CR>
 let Tlist_GainFocus_On_ToggleOpen = 1
 let Tlist_WinWidth = 50
