@@ -380,15 +380,19 @@ dellcyclonebuild ()
         if [ $? -eq 1 ] ; then
             repeat_last_choice=1;
             build_cmd=$(cat .build_choices_bkp);
+            eval ${build_cmd};
+            return 0;
         fi;
     fi;
 
+    # whiptail --checklist "cyclone build" hight width num-of-items
     if [ ${repeat_last_choice} -eq 0 ] ; then
-        build_choices=($(whiptail --checklist "cyclone build" 11 30 5\
+        build_choices=($(whiptail --checklist "cyclone build" 11 30 6\
                        prune "" off \
                        debug "" off  \
                        verbose "" off  \
                        disable-cache "" off \
+                       cyc_core "" on \
                        third-party "" off 3>&1 1>&2 2>&3));
 
         #ask_user_default_no "flavor DEBUG ? ";
@@ -400,7 +404,6 @@ dellcyclonebuild ()
         fi;
 
         build_cmd+=" flavor=${flavor}";
-
 
         #ask_user_default_yes "use cached repos ? ";
         #if [ $? -eq 0 ] ; then
@@ -425,27 +428,34 @@ dellcyclonebuild ()
         fi;
 	fi;
 
-	echo -e "\n========== start build ($(pwd)) ===================\n";
-	echo "${build_cmd}" | tee .build_choices_bkp;
-	echo "========================================================";
-    ask_user_default_yes "continue ?";
-    [ $? -eq 0 ] && return 0;
+    if ! [[ ${build_choices[@]} =~ cyc_core ]] ; then
+        build_cmd=;
+    fi;
 
-    # build_cmd="time ${build_cmd}";
-    eval ${build_cmd} | tee dellcyclonebuild.log;
-	echo -e "\n${build_cmd}\n";
-    # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
-	echo "${build_cmd}" | tee .build_choices_bkp;
+    if  [ -n "${build_cmd}" ] ; then
+        echo -e "\n========== start build ($(pwd)) ===================\n";
+        echo -n "${build_cmd}" | tee .build_choices_bkp;
+        echo -e "\n========================================================";
+        ask_user_default_yes "continue ?";
+        [ $? -eq 0 ] && return 0;
 
-    p;
-    fd -I -t f ".*xtremapp$";
-    fd -IH -t f -e ko nvmet-power source/third_party/;
-    # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
-    # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
+        # build_cmd="time ${build_cmd}";
+        eval ${build_cmd} | tee dellcyclonebuild.log;
+        # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
+        echo -n "${build_cmd}" | tee .build_choices_bkp;
 
-    if ! [ -z "${build_third_party_cmd}" ] ; then
-        ask_user_default_no "build third_party ? "
+        echo;
+        p;
+        fd -I -t f ".*xtremapp$";
+        fd -IH -t f -e ko nvmet-power source/third_party/;
+        # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
+        # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
+    fi;
+
+    if [ -n "${build_third_party_cmd}" ] ; then
+        ask_user_default_no "build third_party ? [${build_third_party_cmd}]";
         if [ $? -eq 1 ] ; then
+            #echo " && ${build_third_party_cmd}" >> .build_choices_bkp
             eval ${build_third_party_cmd};
         fi;
     fi;
