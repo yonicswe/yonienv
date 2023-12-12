@@ -153,6 +153,7 @@ dellcyclonedevelenvsetup ()
 dellcyclonetagsupdate ()
 {
     local sed_cyclone_folder=;
+    local dst_folder=;
 
     if [ -z ${cyclone_folder} ] ; then
         echo "cyclone folder not defined";
@@ -166,32 +167,32 @@ dellcyclonetagsupdate ()
 
     sed_cyclone_folder=$(echo ${cyclone_folder} | sed 's/\//\\\//g');
     dellcdcyclonefolder;
+    \cp ${yonienv}/dell-tags/tags.vim .;
 
-     # copy tags from ~/tasks/tags/ to source/cyc_core
-     \cp ${yonienv}/dell-tags/tagme-cyc_core.sh source/cyc_core/tagme.sh;
-     \cp ${yonienv}/dell-tags/tags.vim          source/cyc_core/tags.vim;
+    # fix tags file to match cyclone folder path
+    sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" tags.vim;
 
-     # tag cyc_core
-     cd source/cyc_core;
-     tttt;
-     cd -;
+    ######################################################################################
+    dst_folder=source/cyc_core;
+    \cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
+    \cp tags.vim ${dst_folder};
 
-     # fix tags file to match cyclone folder path
-     sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" source/cyc_core/tags.vim;
+    cd ${dst_folder}; tttt; cd -;
+    ######################################################################################
+    dst_folder=source/nt-nvmeof-frontend;
+    \cp ${yonienv}/dell-tags/tagme-nt.sh ${dst_folder}/tagme.sh;
+    \cp tags.vim ${dst_folder};
 
-     # copy tags from ~/tasks/tags/ to source/nt_nvmeof_frontend
-     \cp ${yonienv}/dell-tags/tagme-nt.sh source/nt-nvmeof-frontend/tagme.sh;
-     \cp ${yonienv}/dell-tags/tags.vim    source/nt-nvmeof-frontend/tags.vim;
+    cd ${dst_folder}; tttt; cd -;
+    ######################################################################################
+    dst_folder=source/third_party;
+    # copy tags from ~/tasks/tags/ to 
+    \cp ${yonienv}/dell-tags/tagme-third-party.sh ${dst_folder}/tagme.sh;
+    \cp tags.vim ${dst_folder};
 
-     # tag nt
-     cd source/nt-nvmeof-frontend;
-     tttt;
-     cd -;
+    cd ${dst_folder}; tttt; cd -;
 
-     # fix tags file to match cyclone folder path
-     sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" source/nt-nvmeof-frontend/tags.vim;
-
-     return 0;
+    return 0;
 
 }
 
