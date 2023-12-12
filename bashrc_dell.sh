@@ -707,13 +707,15 @@ dellclusterruntimeenvget ()
      
     _dellclusterruntimeenvvalidate ;
 
-    echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
 	print_underline_size "_" 80	 
+    echo -e "\033[1;31mYONI_CLUSTER\033[0m\t\t\033[1;32m$YONI_CLUSTER\033[0m"
     echo -e "\033[1;31mcyclone_folder\033[0m\t\t${cyclone_folder}";
-    echo -e "\033[1;31mCYC_CONFIG\033[0m\t\t${CYC_CONFIG}"
-    echo -e "\033[1;31mcyc_helpers_folder\033[0m\t${cyc_helpers_folder}";
-    echo -e "\033[1;31mthird_party_folder\033[0m\t${third_party_folder}";
-    echo -e "\033[1;31mpnvmet_folder\033[0m\t\t${pnvmet_folder}";
+    #echo -e "\033[1;31mCYC_CONFIG\033[0m\t\t${CYC_CONFIG}"
+    #echo -e "\033[1;31mcyc_helpers_folder\033[0m\t${cyc_helpers_folder}";
+    #echo -e "\033[1;31mthird_party_folder\033[0m\t${third_party_folder}";
+    if ! [ -z ${pnvmet_folder} ] ; then
+        echo -e "\033[1;31mpnvmet_folder\033[0m\t\t${pnvmet_folder}";
+    fi;
 	print_underline_size "_" 80	 
     echo;
 }
