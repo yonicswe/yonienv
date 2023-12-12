@@ -1324,6 +1324,7 @@ dellclusterinstall ()
     local install_choices=;
     local reinit_flavor=;
     local add_feature=;
+    local last_used_install_choices=;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1346,11 +1347,14 @@ dellclusterinstall ()
     dellcdclusterscripts;
 
     if [ -e .install_choices_bkp ] ; then
-        echo "your last install choices were : $(cat .install_choices_bkp)";
-        ask_user_default_no "do it again ?";
-        if [ $? -eq 1 ] ; then
-            eval "$(cat .install_choices_bkp)";
-            return;
+        last_used_install_choices=$(cat .install_choices_bkp);
+        if ! [ -z "${last_used_install_choices}" ] ; then 
+            echo "your last install choices were : ${last_used_install_choices}";
+            ask_user_default_no "do it again ?";
+            if [ $? -eq 1 ] ; then
+                eval "$(cat .install_choices_bkp)";
+                return;
+            fi;
         fi;
     fi;
 
