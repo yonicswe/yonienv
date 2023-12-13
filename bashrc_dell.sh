@@ -420,7 +420,7 @@ dellcyclonebuild ()
         #ask_user_default_no "prune before build ?"
         #if [[ $? -eq 1 ]] ; then
         if [[ ${build_choices[@]} =~ prune ]] ; then
-            build_cmd="time make prune && time ${build_cmd}";
+            build_cmd="time make prune flavor=${flavor} && time ${build_cmd}";
         fi;
 
         if [[ ${build_choices[@]} =~ third-party ]] ; then

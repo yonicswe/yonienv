@@ -324,7 +324,7 @@ alias gitclone-dpdk='git clone https://github.com/mellanox/dpdk.org'
 alias gitclone-ucx='git clone https://github.com/openucx/ucx'
 alias gitclone-perftest='git clone ssh://yonatanc@l-gerrit.mtl.labs.mlnx:29418/Performance/perftest'
 
-alias gitrebase-ofed-kernel-5-0='git fetch origin mlnx_ofed_5_0; git rebase FETCH_HEAD'
+#alias gitrebase-ofed-kernel-5-0='git fetch origin mlnx_ofed_5_0; git rebase FETCH_HEAD'
 
 
 ucxbuild ()

@@ -213,7 +213,7 @@ gitcommitmetadata ()
     # git checkout -b ${new_branch_name} tags/${tag};
 # }
 
-git-rebase-remote-branch ()
+gitrebaseremotebranch ()
 {
     ask_user_default_no "git fetch before we start ? ";
     if [ $? -eq 1 ] ; then
