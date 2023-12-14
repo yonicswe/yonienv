@@ -357,21 +357,21 @@ alias delljournalctl-kernel-logs-node-b='_delljournalctl b kernel'
 alias delljournalctl-nt-logs-node-a='_delljournalctl a nt'
 alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 
-alias journalall='sudo journalctl'
-alias journalalllast3minutes='sudo journalctl --since="3 minutes ago"'
-alias journalallf='sudo journalctl -f'
+alias journalall='journalctl'
+alias journalalllast3minutes='journalctl --since="3 minutes ago"'
+alias journalallf='journalctl -f'
 
 alias journalnt='journalctl SUB_COMPONENT=nt'
 alias journalntf='journalctl -f SUB_COMPONENT=nt'
 alias journalntlast3minutes='journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
-alias journalcyc='sudo journalctl -t cyc_bsc'
+alias journalcyc='journalctl -t cyc_bsc'
 alias journalcycf='journalctl -f -t cyc_bsc'
-alias journalcyclast3minutes='sudo journalctl --since="3 minutes ago" -t cyc_bsc'
+alias journalcyclast3minutes='journalctl --since="3 minutes ago" -t cyc_bsc'
 
-alias journaldcengine='sudo journalctl -t dc_engine'
+alias journaldcengine='journalctl -t dc_engine'
 alias journaldcenginef='journalctl -f -t dc_engine'
-alias journaldcenginelast3minutes='sudo journalctl --since="3 minutes ago" -t dc_engine'
+alias journaldcenginelast3minutes='journalctl --since="3 minutes ago" -t dc_engine'
 
 alias journalpm='journalctl |grep xtremapp-pm | less'
 alias journalpmf='journalctl -f |grep xtremapp-pm'
@@ -385,13 +385,13 @@ alias journalsym='journalctl |grep xtremapp-sym | less'
 alias journalsymf='journalctl -f |grep xtremapp-sym'
 alias journalsymlast3minutes='journalctl --since="3 minutes ago" |grep xtremapp-sym|less'
 
-alias journalmbe-r='sudo journalctl SUB_COMPONENT=mbe_r'
-alias journalmbe-rf='sudo journalctl -f SUB_COMPONENT=mbe_r'
-alias journalmbe-rlast3minutes='sudo journalctl --since="3 minutes ago" SUB_COMPONENT=mbe_r'
+alias journalmbe-r='journalctl SUB_COMPONENT=mbe_r'
+alias journalmbe-rf='journalctl -f SUB_COMPONENT=mbe_r'
+alias journalmbe-rlast3minutes='journalctl --since="3 minutes ago" SUB_COMPONENT=mbe_r'
 
-alias journalkernel='sudo journalctl -k'
-alias journalkernelf='sudo journalctl -k -f'
-alias journalkernellast3minutes='sudo journalctl -k --since="3 minutes ago"'
+alias journalkernel='journalctl -k'
+alias journalkernelf='journalctl -k -f'
+alias journalkernellast3minutes='journalctl -k --since="3 minutes ago"'
 
 alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j -- -a"
 alias delltriage-all-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -a -r"
