@@ -1141,6 +1141,7 @@ dellcdclusterscripts ()
     
     return 0;
 }
+alias dddscripts='dellcdclusterscripts'
 
 _usage_dellclusterinstallibid ()
 {
@@ -1458,17 +1459,17 @@ dellclusterinstall ()
     # print the entire triplet commands and let the user decide to decide how to proceed.
     one_sweep_cmd=""
     if [ -n "${deploy_cmd}" ] ; then
-        one_sweep_cmd+="${deploy_cmd}";
+        one_sweep_cmd+="echo deploy && ${deploy_cmd}";
     fi;
 
     if [ -n "${reinit_cmd}" ] ; then
         [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
-        one_sweep_cmd+="${reinit_cmd}";
+        one_sweep_cmd+=" echo reinit && ${reinit_cmd}";
     fi;
 
     if [ -n "${create_cluster_cmd}" ] ; then
         [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
-        one_sweep_cmd+="${create_cluster_cmd}";
+        one_sweep_cmd+="echo create_cluster && ${create_cluster_cmd}";
     fi;
 
     echo "${one_sweep_cmd}" > .install_choices_bkp;
