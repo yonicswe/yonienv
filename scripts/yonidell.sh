@@ -42,6 +42,19 @@ alias f='fg'
 alias j='jobs'
 k () {
     job=$1 ; 
+    if [ -z "$job" ] ; then
+        ask_user_default_no "kill all jobs";
+        if [ $? -eq 0 ] ; then
+            return;
+        fi;
+
+        jobs | sed 's/\].*//g' | sed 's/\[//g' | while read j ; do
+            kill_str="kill -9 %${j}" ; 
+            eval ${kill_str} ; 
+        done;
+
+        return;
+    fi;
     kill_str="kill -9 %${job}" ; 
     eval ${kill_str} ; 
 }
@@ -270,6 +283,33 @@ bsclistports ()
         echo -n "$(cat $i/addr_trsvcid) |";
         echo "$(cat  $i/addr_trtype) |";
     done | column -t;
+    echo "===================================================";
+    echo " scsi ports";
+    echo "===================================================";
+    bsclistscsiports;
+
+}
+
+bsclistscsiports ()
+{
+    local p=/sys/class/fc_host/;
+    ls ${p} | while read h ; do 
+        echo -n "${p}${h} | nn:$(cat ${p}/${h}/node_name)";
+        echo " | pn:$(cat ${p}/${h}/port_name)";
+    done;
+}
+
+alias bsclistbroadcomports='_bsclistbroadcomports | column -t'
+_bsclistbroadcomports ()
+{
+    local p=/sys/kernel/scst_tgt/targets/ocs_xe201/;
+    echo "path | node-name | port-name | enabled | link_up";
+    find ${p} -maxdepth 1 -type d  | sed '1d' | while read h ; do
+        echo -n "${h} | nn:$(cat ${h}/wwnn|head -1)";
+        echo -n " | pn:$(cat ${h}/wwpn|head -1)";
+        echo -n " | $(cat ${h}/enabled)";
+        echo    " | $(cat ${h}/link_up)";
+    done;
 }
 
 bsclistindusdevices ()
@@ -615,6 +655,9 @@ alias debuc-data-collect='debuc-command "log data collect"';
 
 alias debuc-auth-log-enable='debuc-command "log auth enable"';
 alias debuc-auth-log-disable='debuc-command "log auth disable"';
+
+alias debuc-log-commands-enable='debuc-command "log commands enable"';
+alias debuc-log-commands-disable='debuc-command "log commands disable"';
 
 alias debuc-host-add='debuc-command "add hostgroup"';
 alias debuc-host-add-secret='debuc-command "add hostgroup grp_idx=1 host_name=nqn.2014-08.org.nvmexpress:uuid:4c4c4544-005a-3710-8051-b1c04f445732 host_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: subsys_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: "'
