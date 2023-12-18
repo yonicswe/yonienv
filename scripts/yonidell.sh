@@ -299,7 +299,6 @@ bsclistscsiports ()
     done;
 }
 
-alias bsclistbroadcomports='_bsclistbroadcomports | column -t'
 _bsclistbroadcomports ()
 {
     local p=/sys/kernel/scst_tgt/targets/ocs_xe201/;
@@ -310,6 +309,18 @@ _bsclistbroadcomports ()
         echo -n " | $(cat ${h}/enabled)";
         echo    " | $(cat ${h}/link_up)";
     done;
+}
+alias bsclistbroadcomports='_bsclistbroadcomports | column -t'
+
+bsclistbroadcomvports ()
+{
+    if [ -e /cyc_host/cyc_bin/elxsdkutil ] ; then
+        echo "sudo /cyc_host/cyc_bin/elxsdkutil list";
+        sudo /cyc_host/cyc_bin/elxsdkutil list;
+        return 0;
+    fi;
+    echo "/cyc_host/cyc_bin/elxsdkutil is missing";
+    return -1;
 }
 
 bsclistindusdevices ()
