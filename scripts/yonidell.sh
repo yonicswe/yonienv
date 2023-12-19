@@ -290,19 +290,24 @@ bsclistports ()
 
 }
 
-bsclistscsiports ()
+_bsclistscsiports ()
 {
     local p=/sys/class/fc_host/;
+    echo " path | node-name | port-name | port_state";
+    echo " ---- | --------- | --------- | ----------"
     ls ${p} | while read h ; do 
         echo -n "${p}${h} | nn:$(cat ${p}/${h}/node_name)";
-        echo " | pn:$(cat ${p}/${h}/port_name)";
+        echo -n " | pn:$(cat ${p}/${h}/port_name)";
+        echo " | pn:$(cat ${p}/${h}/port_state)";
     done;
 }
+alias bsclistscsiports='_bsclistscsiports| column -t'
 
 _bsclistbroadcomports ()
 {
     local p=/sys/kernel/scst_tgt/targets/ocs_xe201/;
-    echo "path | node-name | port-name | enabled | link_up";
+    echo " path | node-name | port-name | enabled | link_up";
+    echo " ---- | --------- | --------- | ------- | -------"
     find ${p} -maxdepth 1 -type d  | sed '1d' | while read h ; do
         echo -n "${h} | nn:$(cat ${h}/wwnn|head -1)";
         echo -n " | pn:$(cat ${h}/wwpn|head -1)";
