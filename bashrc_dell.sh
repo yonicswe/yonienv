@@ -1076,17 +1076,8 @@ ssh2core ()
     local cluster=${1};
 
     if [ -z "${cluster}" ] ; then 
-        if [ -e ~/.dellssh2cluster.bkp ] ; then 
-            cluster=$(cat ~/.dellssh2cluster.bkp);
-        fi;
-        if [ -n ${cluster} ] ; then 
-            ask_user_default_yes "use ${cluster} again ?";
-            if [ $? -eq 0 ] ; then cluster=; fi;
-        fi;
-
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
             return -1;
         fi;
     fi;
@@ -1101,18 +1092,8 @@ ssh2bsc ()
     local cluster=${1};
 
     if [ -z "${cluster}" ] ; then 
-        if [ -e ~/.dellssh2cluster.bkp ] ; then 
-            cluster=$(cat ~/.dellssh2cluster.bkp);
-        fi;
-        if [ -n ${cluster} ] ; then 
-            ask_user_default_yes "use ${cluster} again ?";
-            if [ $? -eq 0 ] ; then cluster=; fi;
-        fi;
-        if [ -z ${cluster} ] ; then
-            cluster=$(_dellclusterget);
-        fi;
+        cluster=$(_getlastusedcluster);
         if [ -z "${cluster}" ] ; then
-            echo "${FUNCNAME} <cluster>"; 
             return -1;
         fi;
     fi;
@@ -1120,6 +1101,32 @@ ssh2bsc ()
     echo "xxbsc ${cluster}";
     xxbsc ${cluster};
     echo ${cluster} > ~/.dellssh2cluster.bkp
+}
+
+_getlastusedcluster ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        if [ -e ~/.dellssh2cluster.bkp ] ; then 
+            cluster=$(cat ~/.dellssh2cluster.bkp);
+        fi;
+        if [ -n "${cluster}" ] ; then 
+            ask_user_default_yes "use ${cluster} again ?";
+            if [ $? -eq 0 ] ; then cluster=; fi;
+        fi;
+
+        if [ -z "${cluster}" ] ; then 
+            cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        fi;
+    fi;
+
+    if [ -z "${cluster}" ] ; then
+       return -1; 
+    fi;
+
+    echo ${cluster};
+    return 0;
 }
 
 cyc_configs_folder=;
