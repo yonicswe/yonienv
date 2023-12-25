@@ -1129,10 +1129,13 @@ dellnvme-fc-host-nodename-portname ()
         return;
     fi;
 
-    for h in /sys/class/fc_host/* ; do echo "$(basename $h) : nn-$(cat $h/node_name):pn-$(cat $h/port_name)" ; done
+    for h in /sys/class/fc_host/* ; do
+        echo -n "$(basename $h) : nn-$(cat $h/node_name):pn-$(cat $h/port_name)";
+        echo    " | $(cat $h/port_state)";
+    done;
 }
 
-alias dellnvme-tcp-host-nqn='cat /etc/nvme/hostnqn'
+alias dellnvme-host-nqn='cat /etc/nvme/hostnqn'
  
 dellnvme-fc-connect ()
 {
@@ -1221,7 +1224,7 @@ coreid;
 # nvme discover|connect example
 # nvme discover -t tcp -a <take from bsclistports>
 # nvme discover -t tcp -a 10.181.193.11
-# nvme discover -t fc -a <take from bsclistports> -w <take from dellnvme-fc-nodename-portname>
+# nvme discover -t fc -a <take from bsclistports> -w <take from dellnvme-fc-host-nodename-portname>
 # nvme discover -t rdma --traddr=10.219.146.182 -w 10.219.146.186
 # nvme connect -t rdma -a 10.219.146.182 -n nqn.1988-11.com.dell:powerstore:00:60148e5c7660A3D9C763 -s 4420 -w 10.219.146.186 -D 
 #
