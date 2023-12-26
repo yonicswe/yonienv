@@ -269,6 +269,19 @@ corelistkernelmodules ()
     #bsclistkernelmodules;
 }
 
+_bsclistscsiports ()
+{
+    local p=/sys/class/fc_host/;
+    echo " path | node-name | port-name | port_state";
+    echo " ---- | --------- | --------- | ----------"
+    ls ${p} | while read h ; do 
+        echo -n "${p}${h} | nn:$(cat ${p}/${h}/node_name)";
+        echo -n " | pn:$(cat ${p}/${h}/port_name)";
+        echo " | pn:$(cat ${p}/${h}/port_state)";
+    done;
+}
+alias bsclistscsiports='_bsclistscsiports| column -t'
+
 bsclistports ()
 {
     local subsystem=;
@@ -289,20 +302,6 @@ bsclistports ()
     bsclistscsiports;
 
 }
-
-_bsclistscsiports ()
-{
-    local p=/sys/class/fc_host/;
-    echo " path | node-name | port-name | port_state";
-    echo " ---- | --------- | --------- | ----------"
-    ls ${p} | while read h ; do 
-        echo -n "${p}${h} | nn:$(cat ${p}/${h}/node_name)";
-        echo -n " | pn:$(cat ${p}/${h}/port_name)";
-        echo " | pn:$(cat ${p}/${h}/port_state)";
-    done;
-}
-alias bsclistscsiports='_bsclistscsiports| column -t'
-
 _bsclistbroadcomports ()
 {
     local p=/sys/kernel/scst_tgt/targets/ocs_xe201/;
