@@ -193,19 +193,16 @@ alias f='fg'
 alias b='bg'
 k () {
     job=$1 ; 
-    if [ -n "$job" ] ; then
+    if [ -z "$job" ] ; then
         ask_user_default_no "kill all jobs";
         if [ $? -eq 0 ] ; then
             return;
         fi;
 
-        jobs | sed 's/\].*//g' | sed 's/\[//g' | while read j ; do
-            echo "kill -9 %{j}";
-            kill -9 %{j};
-        done;
-
+        kill -9 $(jobs -p);
         return;
     fi;
+
     kill_str="kill -9 %${job}" ; 
     eval ${kill_str} ; 
 }
