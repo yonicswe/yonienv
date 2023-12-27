@@ -1083,8 +1083,8 @@ ssh2core ()
     fi;
 
     echo "xxssh ${cluster}";
-    xxssh ${cluster};
     echo ${cluster} > ~/.dellssh2cluster.bkp
+    xxssh ${cluster};
 }
 
 ssh2bsc ()
@@ -1099,8 +1099,8 @@ ssh2bsc ()
     fi;
 
     echo "xxbsc ${cluster}";
-    xxbsc ${cluster};
     echo ${cluster} > ~/.dellssh2cluster.bkp
+    xxbsc ${cluster};
 }
 
 _getlastusedcluster ()
@@ -1479,17 +1479,17 @@ dellclusterinstall ()
     # print the entire triplet commands and let the user decide to decide how to proceed.
     one_sweep_cmd=""
     if [ -n "${deploy_cmd}" ] ; then
-        one_sweep_cmd+="echo deploy && ${deploy_cmd}";
+        one_sweep_cmd+="echo -e \"========\ndeploy\n========\n\" && ${deploy_cmd}";
     fi;
 
     if [ -n "${reinit_cmd}" ] ; then
         [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
-        one_sweep_cmd+=" echo reinit && ${reinit_cmd}";
+        one_sweep_cmd+=" echo -e \"========\nreinit\n========\n\" && ${reinit_cmd}";
     fi;
 
     if [ -n "${create_cluster_cmd}" ] ; then
         [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
-        one_sweep_cmd+="echo create_cluster && ${create_cluster_cmd}";
+        one_sweep_cmd+="echo -e \"========\ncreate_cluster\n========\n\" && ${create_cluster_cmd}";
     fi;
 
     echo "${one_sweep_cmd}" > .install_choices_bkp;
