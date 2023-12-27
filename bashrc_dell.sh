@@ -1103,7 +1103,7 @@ ssh2core ()
     if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
         echo ${cluster} >> ${dell_clusters_file};
         trident_cluster_list+=" ${cluster}";
-        echo "added ${cluster} to saved clusters"
+        echo -e "${RED}added ${cluster} to saved clusters${NC}";
     fi;
 
     echo "xxssh ${cluster}";
@@ -1125,7 +1125,7 @@ ssh2bsc ()
     if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
         echo ${cluster} >> ${dell_clusters_file};
         trident_cluster_list+=" ${cluster}";
-        echo "added ${cluster} to saved clusters"
+        echo -e "${RED}added ${cluster} to saved clusters${NC}";
     fi;
 
     echo "xxbsc ${cluster}";
@@ -1981,7 +1981,7 @@ ssh2lg ()
     if ! [[ ${lg_list[@]} =~ ${lg_name} ]] ; then
         echo ${lg_name} >> ${lg_list_file};
         lg_list+=" ${lg_name}";
-        echo "added ${lg_name} to saved lgs"
+        echo -e "${RED}added ${lg_name} to saved lgs${NC}";
     fi;
 
     echo ${lg_name} > ${delllastusedlgbkpfile};
