@@ -207,6 +207,8 @@ dellcyclonetagsupdate ()
         \cp tags.vim ${dst_folder};
 
         cd ${dst_folder}; tttt; cd -;
+    else
+        sed -i '/third_party/d' tags.vim;
     fi;
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_crypto ]] ; then
@@ -217,6 +219,8 @@ dellcyclonetagsupdate ()
         \cp tags.vim ${dst_folder};
 
         cd ${dst_folder}; tttt; cd -;
+    else
+        sed -i '/cyc_crypto/d' tags.vim;
     fi;
 
     return 0;
