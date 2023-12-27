@@ -36,7 +36,7 @@ alias l='ls -ltr --color'
 alias c='cd'
 alias ..='cd ..'
 alias p='pwd -P'
-alias v='vim -u ~/vimrcyoni.vim'
+alias v='vim'
 alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
@@ -112,6 +112,9 @@ alias dellcdcore-bin='cd /cyc_software_0/cyc_host/cyc_bin'
 alias dellcdbsc-bin='cd /cyc_host/cyc_bin'
 alias dellcd-datacollectlogs='cd /disks/jiraproduction2'
 
+if [ -e ~/vimrcyoni.vim ] ; then
+    ln -snf  ~/vimrcyoni.vim ~/.vimrc;
+fi;
 yonidellupdate ()
 {
     1>/dev/null pushd ${HOME};
