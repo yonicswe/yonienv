@@ -173,15 +173,17 @@ dellcyclonetagsupdate ()
     sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" tags.vim;
 
     # whiptail --checklist "subject" hight width num-of-items
-    build_choices=($(whiptail --checklist "cyclone tags" 11 30 3\
+    build_choices=($(whiptail --checklist "cyclone tags" 11 30 4\
                    nt-nvmeof-frontend "" on \
                    cyc_core "" on  \
-                   third_party "" off 3>&1 1>&2 2>&3));
+                   third_party "" off \
+                   cyc_crypto "" off 3>&1 1>&2 2>&3));
 
 
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_core ]] ; then
         dst_folder=source/cyc_core;
+        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         \cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
         \cp tags.vim ${dst_folder};
 
@@ -190,6 +192,7 @@ dellcyclonetagsupdate ()
     ######################################################################################
     if [[ ${build_choices[@]} =~ nt-nvmeof-frontend ]] ; then
         dst_folder=source/nt-nvmeof-frontend;
+        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         \cp ${yonienv}/dell-tags/tagme-nt.sh ${dst_folder}/tagme.sh;
         \cp tags.vim ${dst_folder};
 
@@ -198,8 +201,19 @@ dellcyclonetagsupdate ()
     ######################################################################################
     if [[ ${build_choices[@]} =~ third_party ]] ; then
         dst_folder=source/third_party;
+        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         # copy tags from ~/tasks/tags/ to 
         \cp ${yonienv}/dell-tags/tagme-third-party.sh ${dst_folder}/tagme.sh;
+        \cp tags.vim ${dst_folder};
+
+        cd ${dst_folder}; tttt; cd -;
+    fi;
+    ######################################################################################
+    if [[ ${build_choices[@]} =~ cyc_crypto ]] ; then
+        dst_folder=source/cyc_crypto;
+        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
+        # copy tags from ~/tasks/tags/ to 
+        \cp ${yonienv}/dell-tags/tagme-nt.sh ${dst_folder}/tagme.sh;
         \cp tags.vim ${dst_folder};
 
         cd ${dst_folder}; tttt; cd -;
