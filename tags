@@ -26,6 +26,7 @@ _docs	folder_name_complete.sh	/^_docs ()$/;"	f
 _downloads	folder_name_complete.sh	/^_downloads ()$/;"	f
 _find_zip_files_of_chapter	bashrc_misc.sh	/^_find_zip_files_of_chapter ()$/;"	f
 _gcdcomplete	task_complete.sh	/^function _gcdcomplete()$/;"	f
+_getlastusedcluster	bashrc_dell.sh	/^_getlastusedcluster ()$/;"	f
 _gitdiscard	bashrc_git.sh	/^_gitdiscard () $/;"	f
 _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
 _regression	regression_complete.sh	/^_regression ()$/;"	f
@@ -199,6 +200,7 @@ gitdiscardcached	bashrc_git.sh	/^gitdiscardcached () $/;"	f
 gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
+gitrebaseremotebranch	bashrc_git.sh	/^gitrebaseremotebranch ()$/;"	f
 gitshowfilefromindex	bashrc_git.sh	/^gitshowfilefromindex ()$/;"	f
 gitsmlist	bashrc_git.sh	/^gitsmlist ()$/;"	f
 gitsmstatus	bashrc_git.sh	/^gitsmstatus ()$/;"	f

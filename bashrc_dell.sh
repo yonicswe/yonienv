@@ -1100,6 +1100,12 @@ ssh2core ()
         fi;
     fi;
 
+    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
+        echo ${cluster} >> ${dell_clusters_file};
+        trident_cluster_list+=" ${cluster}";
+        echo "added ${cluster} to saved clusters"
+    fi;
+
     echo "xxssh ${cluster}";
     echo ${cluster} > ~/.dellssh2cluster.bkp
     xxssh ${cluster};
@@ -1114,6 +1120,12 @@ ssh2bsc ()
         if [ -z "${cluster}" ] ; then
             return -1;
         fi;
+    fi;
+
+    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
+        echo ${cluster} >> ${dell_clusters_file};
+        trident_cluster_list+=" ${cluster}";
+        echo "added ${cluster} to saved clusters"
     fi;
 
     echo "xxbsc ${cluster}";
@@ -1966,11 +1978,18 @@ ssh2lg ()
     ask_user_default_yes "ssh2lg ${lg_name} ? ";
     if [[ $? -eq 0 ]] ; then return 0 ; fi;
 
+    if ! [[ ${lg_list[@]} =~ ${lg_name} ]] ; then
+        echo ${lg_name} >> ${lg_list_file};
+        lg_list+=" ${lg_name}";
+        echo "added ${lg_name} to saved lgs"
+    fi;
+
     echo ${lg_name} > ${delllastusedlgbkpfile};
 
     sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
 }
 
+alias delleditlglist="v ${lg_list_file}";
 lg_list_file=~/yonienv/bashrc_dell_lg_list_file
 lg_list=( $(cat ${lg_list_file} ));
 complete -W "$(echo ${lg_list[@]})" ssh2lg;
