@@ -1051,43 +1051,139 @@ alias ssh2arwen7='ssh2arwen arwen7'
     #sshpass -p cycpass ssh core@${core_ip};
 #}
 
+# ######################################################################
+# ssh2core-a, ssh2core-b,ssh2bsc_a,ssh2bsc-b all depend on CYC_CONFIG 
+# a better approach is to use sshswarm
+#ssh2bsc-a ()
+#{
+    #_dellclusterruntimeenvvalidate;
+    #if [[ $? -ne 0 ]] ; then
+        #return -1;
+    #fi;
+    #dellcdclusterscripts;
+    #./ssh_cyc_a.sh;
+    #cd -;
+#}
+
+#ssh2bsc-b ()
+#{
+    #_dellclusterruntimeenvvalidate;
+    #if [[ $? -ne 0 ]] ; then
+        #return -1;
+    #fi;
+    #dellcdclusterscripts;
+    #./ssh_cyc_b.sh;
+    #cd -;
+#}
+
+#_ssh2core-node ()
+#{
+    #local core_ip=;
+    #local node=$1
+
+    #_dellclusterruntimeenvvalidate;
+    #if [[ $? -ne 0 ]] ; then
+        #return -1;
+    #fi;
+    #core_ip=$(grep local_ip_${node} $CYC_CONFIG | sed 's/"//g' | sed 's/.*=//g');
+    #sshpass -p cycpass ssh core@${core_ip};
+#}
+
+#alias ssh2core-a='_ssh2core-node a';
+#alias ssh2core-b='_ssh2core-node b';
+# ######################################################################
+
+ssh2core-a ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
+    fi;
+
+    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
+        echo ${cluster} >> ${dell_clusters_file};
+        trident_cluster_list+=" ${cluster}";
+        echo -e "${RED}added ${cluster} to saved clusters${NC}";
+    fi;
+
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+    cluster=${cluster}-spa;
+    echo "swarmssh ${cluster}";
+    swarmssh ${cluster};
+}
+
+ssh2core-b ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
+    fi;
+
+    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
+        echo ${cluster} >> ${dell_clusters_file};
+        trident_cluster_list+=" ${cluster}";
+        echo -e "${RED}added ${cluster} to saved clusters${NC}";
+    fi;
+
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+    cluster=${cluster}-spb;
+    echo "swarmssh ${cluster}";
+    swarmssh ${cluster};
+}
+
 ssh2bsc-a ()
 {
-    _dellclusterruntimeenvvalidate;
-    if [[ $? -ne 0 ]] ; then
-        return -1;
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
     fi;
-    dellcdclusterscripts;
-    ./ssh_cyc_a.sh;
-    cd -;
+
+    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
+        echo ${cluster} >> ${dell_clusters_file};
+        trident_cluster_list+=" ${cluster}";
+        echo -e "${RED}added ${cluster} to saved clusters${NC}";
+    fi;
+
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+    cluster=${cluster}-spa;
+    echo "swarmssh --docker bsc ${cluster}";
+    swarmssh --docker bsc ${cluster};
 }
 
 ssh2bsc-b ()
 {
-    _dellclusterruntimeenvvalidate;
-    if [[ $? -ne 0 ]] ; then
-        return -1;
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
     fi;
-    dellcdclusterscripts;
-    ./ssh_cyc_b.sh;
-    cd -;
-}
 
-_ssh2core-node ()
-{
-    local core_ip=;
-    local node=$1
-
-    _dellclusterruntimeenvvalidate;
-    if [[ $? -ne 0 ]] ; then
-        return -1;
+    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
+        echo ${cluster} >> ${dell_clusters_file};
+        trident_cluster_list+=" ${cluster}";
+        echo -e "${RED}added ${cluster} to saved clusters${NC}";
     fi;
-    core_ip=$(grep local_ip_${node} $CYC_CONFIG | sed 's/"//g' | sed 's/.*=//g');
-    sshpass -p cycpass ssh core@${core_ip};
-}
 
-alias ssh2core-a='_ssh2core-node a';
-alias ssh2core-b='_ssh2core-node b';
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+    cluster=${cluster}-spb;
+    echo "swarmssh --docker bsc ${cluster}";
+    swarmssh --docker bsc ${cluster};
+}
 
 ssh2core ()
 {
