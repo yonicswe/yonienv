@@ -1226,7 +1226,9 @@ coreid;
 # nvme discover|connect example
 # nvme discover -t tcp -a <take from bsclistports>
 # nvme discover -t tcp -a 10.181.193.11
+# nvme connect -t tcp -a 10.181.193.11 -n nqn.1988-11.com.dell:powerstore:00:133a0e05d77e9473A5F6 //  -n <nqn from discovery>
 # nvme discover -t fc -a <take from bsclistports> -w <take from dellnvme-fc-host-nodename-portname>
+# nvme connect -t fc -a <take from bsclistports> -w <take from dellnvme-fc-host-nodename-portname> -n nqn.1988-11.com.dell:powerstore:00:133a0e05d77e9473A5F6 //  -n <nqn from discovery>
 # nvme discover -t rdma --traddr=10.219.146.182 -w 10.219.146.186
 # nvme connect -t rdma -a 10.219.146.182 -n nqn.1988-11.com.dell:powerstore:00:60148e5c7660A3D9C763 -s 4420 -w 10.219.146.186 -D 
 #
