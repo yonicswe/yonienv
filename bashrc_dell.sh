@@ -467,7 +467,7 @@ dellcyclonebuild ()
         echo -e "\n========== start build ($(pwd)) ===================\n";
         echo -n "${build_cmd}" | tee .build_choices_bkp;
         if [ -n "${build_third_party_cmd}" ] ; then
-            echo "${build_third_party_cmd}";
+            echo -e "\n${build_third_party_cmd}";
         fi;
         echo -e "\n========================================================";
         ask_user_default_yes "continue ?";
