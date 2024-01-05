@@ -2303,8 +2303,8 @@ dellcdbroadcomsources ()
         broadcom=${broadcom}/${platform_release};
     else
         echo "missing : "
-        echo "${cyclone_folder}${platform_debug}";
-        echo "${cyclone_folder}${platform_release}";
+        echo "${cyclone_folder}/${platform_debug}";
+        echo "${cyclone_folder}/${platform_release}";
         echo "you should : make third_party force=yes flavor=<DEBUG|RELEASE>";
         return -1;
     fi;
