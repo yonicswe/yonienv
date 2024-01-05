@@ -229,9 +229,10 @@ set nu
 
 
 " surround selected text with quotes.
+" assumes that autocomplete quotes is enabled.
 " map <F2> c"<C-R>""<ESC>xx
-map <F2> ciw"<esc>pa"<esc>
-vmap <F2> c"<esc>pa"<esc>
+map <F2> ciw"<esc>pa<esc>
+vmap <F2> c"<esc>pa<esc>
 
 " insert the date
 map <F5> a<C-R>=strftime("%A %d/%m/%Y")<CR><Esc>
