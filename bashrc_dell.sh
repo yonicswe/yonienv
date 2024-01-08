@@ -1205,14 +1205,23 @@ ssh2core ()
         echo -e "${RED}added ${cluster} to saved clusters${NC}";
     fi;
 
-    echo "xxssh ${cluster}";
     echo ${cluster} > ~/.dellssh2cluster.bkp
+
+    read -p "[a|b|default BOTH] : " node;
+    if [ ${node} = 'a' ] ; then
+        cluster=${cluster}-a;
+    elif [ ${node} = 'b' ] ; then
+        cluster=${cluster}-b;
+    fi;
+
+    echo "xxssh ${cluster}";
     xxssh ${cluster};
 }
 
 ssh2bsc ()
 {
     local cluster=${1};
+    local node=BOTH;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_getlastusedcluster);
@@ -1227,8 +1236,16 @@ ssh2bsc ()
         echo -e "${RED}added ${cluster} to saved clusters${NC}";
     fi;
 
-    echo "xxbsc ${cluster}";
     echo ${cluster} > ~/.dellssh2cluster.bkp
+
+    read -p "[a|b|default BOTH] : " node;
+    if [ ${node} = 'a' ] ; then
+        cluster=${cluster}-a;
+    elif [ ${node} = 'b' ] ; then
+        cluster=${cluster}-b;
+    fi;
+
+    echo "xxbsc ${cluster}";
     xxbsc ${cluster};
 }
 
@@ -2093,10 +2110,36 @@ lg_list_file=~/yonienv/bashrc_dell_lg_list_file
 lg_list=( $(cat ${lg_list_file} ));
 complete -W "$(echo ${lg_list[@]})" ssh2lg;
 
+dellclusteripget ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    echo "swarm --showipinfo ${cluster}";
+    swarm --showipinfo ${cluster};
+}
+
 dellclusterlgipget ()
 {
     local cluster=${1};
-    xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]'
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
+    xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
 }
 
 dellclusterguiipget ()
