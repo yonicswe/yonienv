@@ -270,35 +270,38 @@ lld ()
 }
 
 # list hidden files
-la ()
-{
-    verbose=0
+# la ()
+# {
+#     verbose=0
+# 
+#     oper=$1
+#     case $oper in 
+#     "-l")
+#         new_path=$2
+#         verbose=1
+#         ;; 
+#     *)
+#         new_path=$1
+#         ;;
+#     esac
+# 
+#     if [ -n "${new_path}" ] ; then 
+#         cd ${new_path}
+#     fi
+# 
+#     if  (( $verbose == 1 )) ; then 
+#         ls --color -ld $(ls -Atr  | awk '/^\./{print $0}' ) 
+#     else
+#         ls -Atr  | awk '/^\./{print $0}' | xargs
+#     fi        
+# 
+#     if [ -n "${new_path}" ] ; then 
+#       cd -  1>/dev/null
+#     fi         
+# }
 
-    oper=$1
-    case $oper in 
-    "-l")
-        new_path=$2
-        verbose=1
-        ;; 
-    *)
-        new_path=$1
-        ;;
-    esac
-
-    if [ -n "${new_path}" ] ; then 
-        cd ${new_path}
-    fi
-
-    if  (( $verbose == 1 )) ; then 
-        ls --color -ld $(ls -Atr  | awk '/^\./{print $0}' ) 
-    else
-        ls -Atr  | awk '/^\./{print $0}' | xargs
-    fi        
-
-    if [ -n "${new_path}" ] ; then 
-      cd -  1>/dev/null
-    fi         
-}
+#alias la='ls -d .?*'
+alias la='ls -d .!(|.)'
 
 # show disk layout
 dfa () 
