@@ -1209,13 +1209,13 @@ ssh2core ()
     echo ${cluster} > ~/.dellssh2cluster.bkp
 
     read -p "[a|b|default BOTH] : " node;
-    if [ ${node} = 'a' ] ; then
+    if [ "${node}" = 'a' ] ; then
         cluster=${cluster}-a;
-    elif [ ${node} = 'b' ] ; then
+    elif [ "${node}" = 'b' ] ; then
         cluster=${cluster}-b;
     fi;
 
-    echo "xxssh ${cluster}";
+    echo -e "\t${BLUE}xxssh ${cluster}${NC}";
     xxssh ${cluster};
 }
 
@@ -1240,13 +1240,13 @@ ssh2bsc ()
     echo ${cluster} > ~/.dellssh2cluster.bkp
 
     read -p "[a|b|default BOTH] : " node;
-    if [ ${node} = 'a' ] ; then
+    if [ "${node}" = 'a' ] ; then
         cluster=${cluster}-a;
-    elif [ ${node} = 'b' ] ; then
+    elif [ "${node}" = 'b' ] ; then
         cluster=${cluster}-b;
     fi;
 
-    echo "xxbsc ${cluster}";
+    echo -e "\t${BLUE}xxbsc ${cluster}${NC}";
     xxbsc ${cluster};
 }
 
