@@ -33,7 +33,7 @@ export LESS_TERMCAP_us=$'\e[1;4;31m'    # begin underline
 
 alias y='source ~/yonidell.sh'
 alias l='ls -ltr --color'
-alias la='ls -d .!(|.)'
+alias la='ls -d .?*  --color'
 alias c='cd'
 alias ..='cd ..'
 alias p='pwd -P'
