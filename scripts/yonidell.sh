@@ -33,6 +33,7 @@ export LESS_TERMCAP_us=$'\e[1;4;31m'    # begin underline
 
 alias y='source ~/yonidell.sh'
 alias l='ls -ltr --color'
+alias la='ls -d .!(|.)'
 alias c='cd'
 alias ..='cd ..'
 alias p='pwd -P'
@@ -40,6 +41,7 @@ alias v='vim'
 alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
+
 k () {
     job=$1 ; 
     if [ -z "$job" ] ; then
@@ -115,6 +117,7 @@ alias dellcd-datacollectlogs='cd /disks/jiraproduction2'
 if [ -e ~/vimrcyoni.vim ] ; then
     ln -snf  ~/vimrcyoni.vim ~/.vimrc;
 fi;
+
 yonidellupdate ()
 {
     1>/dev/null pushd ${HOME};

@@ -1191,6 +1191,7 @@ ssh2bsc-b ()
 ssh2core ()
 {
     local cluster=${1};
+    local node=BOTH;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_getlastusedcluster);
@@ -1949,6 +1950,131 @@ dellclusterkernelspaceupdate ()
 	return 0;
 }
 
+# dellclusteryonienvupdate ()
+# {
+#     local cluster=${1};
+# 
+#     if [ -z "${cluster}" ] ; then 
+#         cluster=$(_dellclusterget);
+#         if [ -z ${cluster} ] ; then
+#             echo "${FUNCNAME} <cluster>"; 
+#             return -1;
+#         fi;
+#     fi;
+# 
+#     # if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
+#         # echo "you must be in arwen";
+#         # return;
+#     # fi;
+# 
+#     _dellclusterruntimeenvvalidate;
+#     if [[ $? -ne 0 ]] ; then
+#         return -1;
+#     fi;
+# 
+#     ask_user_default_yes "update ${cluster} ?";
+#     [ $? -eq 0 ] && return -1;
+# 
+#     dellcdclusterscripts;
+# 
+#     sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${cluster}/" ~/yonienv/scripts/yonidell.sh;
+# 
+#     echo "copy yonidell.sh -> core-a@${cluster}";
+#     ./scp_core_to_a.sh ~/yonienv/scripts/yonidell.sh
+#     echo "copy vimrcyoni.sh -> core-a@${cluster}";
+#     ./scp_core_to_a.sh ~/yonienv/scripts/vimrcyoni.vim
+#     echo "copy yonidell.sh -> core-b@${cluster}";
+#     ./scp_core_to_b.sh ~/yonienv/scripts/yonidell.sh
+#     echo "copy vimrcyoni.vim -> core-b@${cluster}";
+#     ./scp_core_to_b.sh ~/yonienv/scripts/vimrcyoni.vim
+# 
+#     echo "copy yonidell.sh -> bsc-a@${cluster}";
+#     ./scp_cyc_to_a.sh ~/yonienv/scripts/yonidell.sh;
+#     # ./run_core_a.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
+#     echo "copy vimrcyoni.vim -> bsc-a@${cluster}";
+#     ./scp_cyc_to_a.sh ~/yonienv/scripts/vimrcyoni.vim;
+#     # ./run_core_a.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
+#     echo "copy yonidell.sh -> bsc-b@${cluster}";
+#     ./scp_cyc_to_b.sh ~/yonienv/scripts/yonidell.sh;
+#     # ./run_core_b.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
+#     echo "copy vimrcyoni.vim -> bsc-b@${cluster}";
+#     ./scp_cyc_to_b.sh ~/yonienv/scripts/vimrcyoni.vim;
+#     # ./run_core_b.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
+# 
+#     sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=/" ~/yonienv/scripts/yonidell.sh;
+#     cd -
+# }
+
+scp2core ()
+{
+    local cluster=${1};
+    local node=${2};
+    local file=${3};
+
+    if [ -z "${3}" ] ; then
+        file=${yonienv}/scripts/*yoni*
+    fi;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    if [[ -z "${node}" ]] ; then
+        read -p "[a|b|default BOTH] : " node;
+        if [ "${node}" = 'a' ] ; then
+            node=-a;
+        elif [ "${node}" = 'b' ] ; then
+            node=-b;
+        fi;
+    fi;
+
+    if [ ${node} == BOTH ] ; then
+        node=;
+    fi;
+
+    echo -e "\t${BLUE}xxscp ${cluster}${node} ${file} :/home/core/${NC}";
+    xxscp ${cluster}${node} ${file} :/home/core/
+}
+
+scp2bsc ()
+{
+    local cluster=${1};
+    local node=${2};
+    local file=${3};
+
+    if [ -z "${3}" ] ; then
+        file=${yonienv}/scripts/*yoni*
+    fi;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    if [[ -z "${node}" ]] ; then
+        read -p "[a|b|default BOTH] : " node;
+        if [ "${node}" = 'a' ] ; then
+            node=-a;
+        elif [ "${node}" = 'b' ] ; then
+            node=-b;
+        fi;
+    fi;
+     
+    if [ ${node} == BOTH ] ; then
+        node=;
+    fi;
+
+    echo -e "\t${BLUE}xxbsc_scp ${cluster}${node} ${file} :/home/cyc/${NC}";
+    xxbsc_scp ${cluster}${node} ${file} :/home/cyc/
+}
+
 dellclusteryonienvupdate ()
 {
     local cluster=${1};
@@ -1961,47 +2087,8 @@ dellclusteryonienvupdate ()
         fi;
     fi;
 
-	# if [[ $(hostname|grep arwen|wc -l) == 0 ]] ; then
-		# echo "you must be in arwen";
-		# return;
-	# fi;
-
-    _dellclusterruntimeenvvalidate;
-    if [[ $? -ne 0 ]] ; then
-        return -1;
-    fi;
-
-	ask_user_default_yes "update ${cluster} ?";
-	[ $? -eq 0 ] && return -1;
-
-	dellcdclusterscripts;
-
-    sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${cluster}/" ~/yonienv/scripts/yonidell.sh;
-
-    echo "copy yonidell.sh -> core-a@${cluster}";
-    ./scp_core_to_a.sh ~/yonienv/scripts/yonidell.sh
-    echo "copy vimrcyoni.sh -> core-a@${cluster}";
-    ./scp_core_to_a.sh ~/yonienv/scripts/vimrcyoni.vim
-    echo "copy yonidell.sh -> core-b@${cluster}";
-    ./scp_core_to_b.sh ~/yonienv/scripts/yonidell.sh
-    echo "copy vimrcyoni.vim -> core-b@${cluster}";
-    ./scp_core_to_b.sh ~/yonienv/scripts/vimrcyoni.vim
-
-    echo "copy yonidell.sh -> bsc-a@${cluster}";
-    ./scp_cyc_to_a.sh ~/yonienv/scripts/yonidell.sh;
-    # ./run_core_a.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
-    echo "copy vimrcyoni.vim -> bsc-a@${cluster}";
-    ./scp_cyc_to_a.sh ~/yonienv/scripts/vimrcyoni.vim;
-    # ./run_core_a.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
-    echo "copy yonidell.sh -> bsc-b@${cluster}";
-    ./scp_cyc_to_b.sh ~/yonienv/scripts/yonidell.sh;
-    # ./run_core_b.sh 'docker cp yonidell.sh   cyc_bsc_docker:/home/cyc/';
-    echo "copy vimrcyoni.vim -> bsc-b@${cluster}";
-    ./scp_cyc_to_b.sh ~/yonienv/scripts/vimrcyoni.vim;
-    # ./run_core_b.sh 'docker cp vimrcyoni.vim cyc_bsc_docker:/home/cyc/';
-
-    sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=/" ~/yonienv/scripts/yonidell.sh;
-    cd -
+    scp2core ${cluster} BOTH;
+    scp2bsc ${cluster} BOTH;
 }
 
 _dellclusterrestartbsc ()
