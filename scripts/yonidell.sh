@@ -312,8 +312,8 @@ bsclistports ()
 _bsclistbroadcomscsiports ()
 {
     local p=/sys/kernel/scst_tgt/targets/ocs_xe201/;
-    echo " path | node-name | port-name | enabled | link_up";
-    echo " ---- | --------- | --------- | ------- | -------"
+    echo " scsi-ports | node-name | port-name | enabled | link_up";
+    echo " ---------- | --------- | --------- | ------- | -------"
     find ${p} -maxdepth 1 -type d  | sed '1d' | while read h ; do
         echo -n "${h} | nn:$(cat ${h}/wwnn|head -1)";
         echo -n " | pn:$(cat ${h}/wwpn|head -1)";
@@ -326,15 +326,22 @@ alias bsclistbroadcomscsiports='_bsclistbroadcomscsiports | column -t'
 _bsclistbroadcomnvmeports ()
 {
     local p=/sys/kernel/debug/ocs_fc_scst/;
-    echo " path | node-name | port-name | enabled ";
-    echo " ---- | --------- | --------- | ------- "
-    find ${p} -maxdepth 1 -type d  | sed '1d' | while read h ; do
-        echo -n "${h} | nn:$(cat ${h}/vport_spec0/wwnn|head -1)";
-        echo -n " | pn:$(cat ${h}/vport_spec0/wwpn|head -1)";
-        echo " | $(cat ${h}/vport_spec0/enable)";
+    echo " nvme-ports | node-name | port-name | enabled ";
+    echo " ---------- | --------- | --------- | ------- "
+    sudo find ${p} -maxdepth 1 -type d  | sed '1d' | while read h ; do
+        echo -n "${h} | nn:$(sudo cat ${h}/vport_spec0/wwnn|head -1)";
+        echo -n " | pn:$(sudo cat ${h}/vport_spec0/wwpn|head -1)";
+        echo " | $(sudo cat ${h}/vport_spec0/enable)";
     done;
 }
 alias bsclistbroadcomnvmeports='_bsclistbroadcomnvmeports | column -t'
+
+bsclistbroadcomports ()
+{
+    bsclistbroadcomscsiports;
+    echo;
+    bsclistbroadcomnvmeports;
+}
 
 bsclistbroadcomvports ()
 {
@@ -345,6 +352,16 @@ bsclistbroadcomvports ()
     fi;
     echo "/cyc_host/cyc_bin/elxsdkutil is missing";
     return -1;
+}
+
+bsclistfcports ()
+{
+    for f in /sys/class/fc_host/* ; do 
+        echo $f;
+        echo -e "\t|-$f/node_name : $(cat $f/node_name)";
+        echo -e "\t|-$f/port_name : $(cat $f/port_name)";
+        echo -e "\t\`-$f/port_state : $(cat $f/port_state)";
+    done;
 }
 
 bsclistindusdevices ()
