@@ -308,7 +308,8 @@ bsclistports ()
     bsclistscsiports;
 
 }
-_bsclistbroadcomports ()
+
+_bsclistbroadcomscsiports ()
 {
     local p=/sys/kernel/scst_tgt/targets/ocs_xe201/;
     echo " path | node-name | port-name | enabled | link_up";
@@ -320,7 +321,20 @@ _bsclistbroadcomports ()
         echo    " | $(cat ${h}/link_up)";
     done;
 }
-alias bsclistbroadcomports='_bsclistbroadcomports | column -t'
+alias bsclistbroadcomscsiports='_bsclistbroadcomscsiports | column -t'
+
+_bsclistbroadcomnvmeports ()
+{
+    local p=/sys/kernel/debug/ocs_fc_scst/;
+    echo " path | node-name | port-name | enabled ";
+    echo " ---- | --------- | --------- | ------- "
+    find ${p} -maxdepth 1 -type d  | sed '1d' | while read h ; do
+        echo -n "${h} | nn:$(cat ${h}/vport_spec0/wwnn|head -1)";
+        echo -n " | pn:$(cat ${h}/vport_spec0/wwpn|head -1)";
+        echo " | $(cat ${h}/vport_spec0/enable)";
+    done;
+}
+alias bsclistbroadcomnvmeports='_bsclistbroadcomnvmeports | column -t'
 
 bsclistbroadcomvports ()
 {
