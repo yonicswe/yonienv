@@ -2198,6 +2198,22 @@ lg_list_file=~/yonienv/bashrc_dell_lg_list_file
 lg_list=( $(cat ${lg_list_file} ));
 complete -W "$(echo ${lg_list[@]})" ssh2lg;
 
+dellclustertest ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    echo "swarm ${cluster} -ping";
+    swarm  ${cluster} -ping;
+}
+
 dellclusteripget ()
 {
     local cluster=${1};
