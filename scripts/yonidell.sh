@@ -360,9 +360,12 @@ bsclistfcports ()
         echo $f;
         echo -e "\t|-$f/node_name : $(cat $f/node_name)";
         echo -e "\t|-$f/port_name : $(cat $f/port_name)";
-        echo -e "\t\`-$f/port_state : $(cat $f/port_state)";
+        echo -e "\to-$f/port_state : $(cat $f/port_state)";
     done;
 }
+
+alias bscshowfctabel='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
+alias bsclistqlaports='ls -l /sys/class/nvme_qla2xxx/'
 
 bsclistindusdevices ()
 {
@@ -449,6 +452,7 @@ alias delljournalctl-kernel-logs-node-b='_delljournalctl b kernel'
 alias delljournalctl-nt-logs-node-a='_delljournalctl a nt'
 alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 
+alias journalpanic='journalctl | grep "PANIC\|log_backtrace_backend"'
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
 alias journalallf='journalctl -f'
