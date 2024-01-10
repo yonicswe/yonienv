@@ -2758,11 +2758,22 @@ if ! [ -d /disks/jiraproduction ]  || ! [ -d /disks/jiraproduction2 ] ; then
     echo "use dell_mount_jiraproduction";
 fi
 
-alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j"
-alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j"
+alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j -- -a"
+alias delltriage-all-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -a -r"
+alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j -- -a"
+alias delltriage-all-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -a -r"
+
 alias delltriage-nt-logs-node-a="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt"
 alias delltriage-nt-logs-node-b="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt"
+alias delltriage-nt-logs-node-a-r="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt -r"
+alias delltriage-nt-logs-node-b-r="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt -r"
 
+alias delltriage-kernel-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t kernel"
+alias delltriage-kernel-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -t kernel -r"
+alias delltriage-kernel-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
+alias delltriage-kernel-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -t kernel-r"
+alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
+alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
