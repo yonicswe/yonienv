@@ -199,7 +199,7 @@ k () {
             return;
         fi;
 
-        kill -9 $(jobs -p);
+        jobs -p | xargs kill -9
         return;
     fi;
 
