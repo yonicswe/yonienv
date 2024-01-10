@@ -2777,3 +2777,47 @@ alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
+
+_delldc-node-x ()
+{
+    local node_dir=${1};
+    local flags="${2}";
+    local journalctl_cmd=;
+
+    if ! [ -d ${node_dir} ] ; then
+        echo "directory ${node_dir} does not exist";
+        return -1;
+    fi;
+
+    if ! [ -d ${node_dir}/journalctl ] ; then
+        echo "directory ${node_dir}/journalctl does not exist";
+        return -1;
+    fi;
+
+    cd ${node_dir};
+
+    journalctl_cmd="./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags}";
+    echo "${journalctl_cmd}";
+    ask_user_default_yes "continue ";
+    if [ $? -eq 1 ] ; then
+        eval ${journalctl_cmd};
+    fi;
+    
+    cd -;
+}
+
+alias delldc-all-node-a='_delldc-node-x node_a'
+alias delldc-all-node-b='_delldc-node-x node_b'
+alias delldc-all-node-a-r='_delldc-node-x node_a -r'
+alias delldc-all-node-b-r='_delldc-node-x node_b -r'
+
+alias delldc-kernel-node-a='_delldc-node-x node_a -k'
+alias delldc-kernel-node-a-r='_delldc-node-x node_a -k -r'
+alias delldc-kernel-node-b='_delldc-node-x node_b -k'
+alias delldc-kernel-node-b-r='_delldc-node-x node_b "-k -r"'
+
+alias delldc-nt-node-a='_delldc-node-x node_a SUB_COMPONENT=nt'
+alias delldc-nt-node-b='_delldc-node-x node_b SUB_COMPONENT=nt'
+alias delldc-nt-node-a-r='_delldc-node-x node_a "SUB_COMPONENT=nt -r"'
+alias delldc-nt-node-b-r='_delldc-node-x node_b "SUB_COMPONENT=nt -r"'
+
