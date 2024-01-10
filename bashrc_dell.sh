@@ -2687,54 +2687,115 @@ gitcommitdell ()
 
 complete -W "67933 rdma" gitcommitdell
 
-
-delljournalctl-nt-logs-node-a ()
+_delljournalctl ()
 {
-    local since="${1}";
-    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal";
+    local node=${1};
+    local component=${2};
+    local since="${3}";
+    local pager=0;
+    local options;
+    local journal_cmd=;
 
-    if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" ${options} | less -N -I
+    if [[ -z ${node} ]] ; then
+        echo "missing node";
+        return -1;
+    fi;
+
+    if [[ ${node}  == "a" ]] ; then
+        # options="--utc -o short-precise -a -D node_a/var/log/journal";
+        options="-a -D node_a/var/log/journal";
+    elif [[ ${node} == "b" ]] ; then
+        # options="--utc -o short-precise -a -D node_b/var/log/journal";
+        options="-a -D node_b/var/log/journal";
     else
-        eval journalctl ${options}  | less -N -I
+        echo "node can be a or b only";
+    fi;
+
+    if [[ -z ${component} ]] ; then
+        echo "missing component";
+        return -1;
+    fi;
+    
+    ask_user_default_no "use pager ?";
+    if [ $? -eq 1 ] ; then
+        options+=" --no-pager | less -N -I" 
+    fi;
+
+    case ${component} in
+        "all") 
+            ;;
+        "nt") 
+            options+=" SUB_COMPONENT=nt";
+            ;;
+        "kernel") options+=" -k";
+            ;;
+        *)
+            echo "no such componenet ${componenet}";
+            return 1;
+            ;;
+    esac;
+
+    journal_cmd=
+    if [[ -n "${since}" ]] ; then
+        (set -x ; eval journalctl --since=\"${since}\" ${options});
+    else
+        (set -x ; eval journalctl ${options});
     fi;
 }
 
-delljournalctl-nt-logs-node-b ()
-{
-    local since="${1}";
-    local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal";
+alias delljournalctl-all-logs-node-a='_delljournalctl a all'
+alias delljournalctl-all-logs-node-b='_delljournalctl b all'
+alias delljournalctl-kernel-logs-node-a='_delljournalctl a kernel'
+alias delljournalctl-kernel-logs-node-b='_delljournalctl b kernel'
+alias delljournalctl-nt-logs-node-a='_delljournalctl a nt'
+alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
+#delljournalctl-nt-logs-node-a ()
+#{
+    #local since="${1}";
+    #local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_a/var/log/journal";
 
-    if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" ${options} | less -N -I
-    else
-        eval journalctl ${options} | less -N -I
-    fi;
-}
+    #if [[ -n "${since}" ]] ; then
+        #eval journalctl --since=\"${since}\" ${options} | less -N -I
+    #else
+        #eval journalctl ${options}  | less -N -I
+    #fi;
+#}
 
-delljournalctl-all-logs-node-a ()
-{
-    local since="${1}";
-    local options="--utc --no-pager -o short-precise -a -D node_a/var/log/journal";
+#delljournalctl-nt-logs-node-b ()
+#{
+    #local since="${1}";
+    #local options="--utc SUB_COMPONENT=nt --no-pager -o short-precise -a -D node_b/var/log/journal";
 
-    if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" ${options} | less -N -I
-    else
-        eval journalctl ${options} | less -N -I
-    fi;
-}
+    #if [[ -n "${since}" ]] ; then
+        #eval journalctl --since=\"${since}\" ${options} | less -N -I
+    #else
+        #eval journalctl ${options} | less -N -I
+    #fi;
+#}
 
-delljournalctl-all-logs-node-b ()
-{
-    local since="${1}";
-    local options="--utc --no-pager -o short-precise -a -D node_b/var/log/journal";
+#delljournalctl-all-logs-node-a ()
+#{
+    #local since="${1}";
+    #local options="--utc --no-pager -o short-precise -a -D node_a/var/log/journal";
 
-    if [[ -n "${since}" ]] ; then
-        eval journalctl --since=\"${since}\" ${options} | less -N -I
-    else
-        eval journalctl ${options} | less -N -I
-    fi;
-}
+    #if [[ -n "${since}" ]] ; then
+        #eval journalctl --since=\"${since}\" ${options} | less -N -I
+    #else
+        #eval journalctl ${options} | less -N -I
+    #fi;
+#}
+
+#delljournalctl-all-logs-node-b ()
+#{
+    #local since="${1}";
+    #local options="--utc --no-pager -o short-precise -a -D node_b/var/log/journal";
+
+    #if [[ -n "${since}" ]] ; then
+        #eval journalctl --since=\"${since}\" ${options} | less -N -I
+    #else
+        #eval journalctl ${options} | less -N -I
+    #fi;
+#}
 
 dell-mount-home-qa ()
 {
