@@ -20,6 +20,7 @@ _dellclusterlistuser	bashrc_dell.sh	/^_dellclusterlistuser ()$/;"	f
 _dellclusterrestartbsc	bashrc_dell.sh	/^_dellclusterrestartbsc ()$/;"	f
 _dellclusterruntimeenvvalidate	bashrc_dell.sh	/^_dellclusterruntimeenvvalidate ()$/;"	f
 _dellcyclonebuild_validate_build_machine	bashrc_dell.sh	/^_dellcyclonebuild_validate_build_machine ()$/;"	f
+_delljournalctl	bashrc_dell.sh	/^_delljournalctl ()$/;"	f
 _dellrebootnode	bashrc_dell.sh	/^_dellrebootnode ()$/;"	f
 _devel	folder_name_complete.sh	/^_devel ()$/;"	f
 _docs	folder_name_complete.sh	/^_docs ()$/;"	f
@@ -116,12 +117,14 @@ dellclusterguiipget	bashrc_dell.sh	/^dellclusterguiipget ()$/;"	f
 dellclusterinfo	bashrc_dell.sh	/^dellclusterinfo ()$/;"	f
 dellclusterinstall	bashrc_dell.sh	/^dellclusterinstall ()$/;"	f
 dellclusterinstallfeatureflag	bashrc_dell.sh	/^dellclusterinstallfeatureflag ()$/;"	f
+dellclusteripget	bashrc_dell.sh	/^dellclusteripget ()$/;"	f
 dellclusterkernelspaceupdate	bashrc_dell.sh	/^dellclusterkernelspaceupdate ()$/;"	f
 dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
 dellclusterleaserelease	bashrc_dell.sh	/^dellclusterleaserelease ()$/;"	f
 dellclusterlgipget	bashrc_dell.sh	/^dellclusterlgipget ()$/;"	f
 dellclusterruntimeenvget	bashrc_dell.sh	/^dellclusterruntimeenvget ()  $/;"	f
 dellclusterruntimeenvset	bashrc_dell.sh	/^dellclusterruntimeenvset ()$/;"	f
+dellclustertest	bashrc_dell.sh	/^dellclustertest ()$/;"	f
 dellclusteruserspaceupdate	bashrc_dell.sh	/^dellclusteruserspaceupdate ()$/;"	f
 dellclusteryonienvupdate	bashrc_dell.sh	/^dellclusteryonienvupdate ()$/;"	f
 dellcyclonebackup	bashrc_dell.sh	/^dellcyclonebackup ()$/;"	f
@@ -263,7 +266,6 @@ kmsreleaseyoni	bashrc_habana.sh	/^kmsreleaseyoni ()$/;"	f
 kmsretake	bashrc_habana.sh	/^kmsretake ()$/;"	f
 kmsssh	bashrc_habana.sh	/^kmsssh ()$/;"	f
 kmssshyoni	bashrc_habana.sh	/^kmssshyoni ()$/;"	f
-la	bashrc_fs.sh	/^la ()$/;"	f
 listbuildservers	bashrc_mlx.sh	/^listbuildservers () { less \/auto\/integration\/builders.txt ; }$/;"	f
 listdevelservers	bashrc_mlx.sh	/^listdevelservers ()$/;"	f
 listerrnovalues	bashrc_devel.sh	/^listerrnovalues ()$/;"	f
@@ -394,6 +396,8 @@ rxerestart	bashrc_mlx.sh	/^rxerestart ()$/;"	f
 rxestart	bashrc_mlx.sh	/^rxestart ()$/;"	f
 rxestop	bashrc_mlx.sh	/^rxestop ()$/;"	f
 sbuild_vars	bashrc_nice.sh	/^sbuild_vars () $/;"	f
+scp2bsc	bashrc_dell.sh	/^scp2bsc ()$/;"	f
+scp2core	bashrc_dell.sh	/^scp2core ()$/;"	f
 scpcommandforfile	bashrc_fs.sh	/^scpcommandforfile ()$/;"	f
 setup_acs_gdbinit	bashrc_nice.sh	/^setup_acs_gdbinit () $/;"	f
 setup_bash_env	commonyonienv.sh	/^setup_bash_env ()$/;"	f
