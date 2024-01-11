@@ -384,7 +384,7 @@ _dellcyclonebuild_validate_build_machine ()
 
 dellcyclonebuild ()
 {
-    local build_cmd='make cyc_core force=yes'
+    local build_cmd='nice -20 make cyc_core force=yes'
     local repeat_last_choice=0;
     local build_choices=;
     local build_third_party_cmd=;
@@ -451,7 +451,7 @@ dellcyclonebuild ()
         #ask_user_default_no "prune before build ?"
         #if [[ $? -eq 1 ]] ; then
         if [[ ${build_choices[@]} =~ prune ]] ; then
-            build_cmd="time make prune flavor=${flavor} && time ${build_cmd}";
+            build_cmd="time nice -20 make prune flavor=${flavor} && time ${build_cmd}";
         fi;
 
         if [[ ${build_choices[@]} =~ third-party ]] ; then
@@ -2819,22 +2819,22 @@ if ! [ -d /disks/jiraproduction ]  || ! [ -d /disks/jiraproduction2 ] ; then
     echo "use dell_mount_jiraproduction";
 fi
 
-alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j -- -a"
-alias delltriage-all-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -a -r"
-alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j -- -a"
-alias delltriage-all-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -a -r"
+alias delltriage-all-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -a"
+alias delltriage-all-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j -- -a -r"
+alias delltriage-all-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -a"
+alias delltriage-all-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j -- -a -r"
 
-alias delltriage-nt-logs-node-a="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt"
-alias delltriage-nt-logs-node-b="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt"
-alias delltriage-nt-logs-node-a-r="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt -r"
-alias delltriage-nt-logs-node-b-r="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt -r"
+alias delltriage-nt-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt"
+alias delltriage-nt-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt"
+alias delltriage-nt-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt -r"
+alias delltriage-nt-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt -r"
 
-alias delltriage-kernel-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t kernel"
-alias delltriage-kernel-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -t kernel -r"
-alias delltriage-kernel-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
-alias delltriage-kernel-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -t kernel-r"
-alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
-alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
+alias delltriage-kernel-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t kernel"
+alias delltriage-kernel-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j -- -t kernel -r"
+alias delltriage-kernel-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t kernel"
+alias delltriage-kernel-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j -- -t kernel-r"
+alias delltriage-sym-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t xtremapp"
+alias delltriage-sym-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
