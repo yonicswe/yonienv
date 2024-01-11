@@ -1255,10 +1255,14 @@ coreid;
 #        service mode
 #=============================
 # docker exec -it service bash 
-# cd /cyc_host/cyc_service/bin 
-# ./svc_rescue_state list 
-# ./svc_rescue_state clear 
-# ./svc_node reboot local -f
+alias core-servicemode-start-docker='docker exec -it service bash' 
+core-servicemode ()
+{
+    echo "core-servicemode-start-docker";
+    echo "/cyc_host/cyc_service/bin/svc_rescue_state list";
+    echo "/cyc_host/cyc_service/bin/svc_rescue_state clear";
+    echo "/cyc_host/cyc_service/bin/svc_node reboot local -f";
+}
 #=============================
 
 # nvme discover|connect example
