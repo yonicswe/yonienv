@@ -326,6 +326,78 @@ dellpdr-gitsmup ()
     # git sm update source/trident-sdnas
     # git sm update source/xblock
 }
+ 
+dellpdr-create-new-branches ()
+{
+    local cyc_core=0;
+    local nt_nvmeof_frontend=0;
+    local linux=0;
+    local third_party=0;
+    local pdr_branch=;
+
+    ask_user_default_no "are you in a pdr ? ";
+    if [ $? -eq 0 ] ; then
+        echo "bailing out";
+        return;
+    fi;
+
+    ask_user_default_no "reset the pdr before we start ? ";
+    [ $? -eq 1 ] && dellpdr-reset;
+
+    pdr_branch=$(git bb);
+    #--------------------------------------
+    #            ask user
+    #--------------------------------------
+    ask_user_default_yes "update source/cyc_core ?";
+    [ $? -eq 1 ] && cyc_core=1;
+
+    ask_user_default_yes "update source/nt-nvmeof-frontend ?";
+    [ $? -eq 1 ] && nt_nvmeof_frontend=1;
+
+    ask_user_default_no "update source/third_party ?";
+    [ $? -eq 1 ] && third_party=1;
+
+    ask_user_default_no "update source/linux ?";
+    [ $? -eq 1 ] && linux=1;
+
+    ask_user_default_no "are you sure ?";
+    [ $? -eq 0 ] && return;
+    #--------------------------------------
+    #            do it
+    #--------------------------------------
+    if (( ${cyc_core} == 1 )) ; then 
+        echo -e "${BLUE}---->update cyc_core${NC}";           
+        echo -e "${YELLOW}cd source/cyc_core${NC}";
+        cd source/cyc_core;
+        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
+        git cb ${pdr_branch};
+        cd - 1>/dev/null;
+    fi;
+    if (( ${nt_nvmeof_frontend} == 1 )) ; then
+        echo -e "${BLUE}---->update nt-nvmeof-frontend${NC}";
+        echo -e "${YELLOW}cd source/nt-nvmeof-frontend${NC}";
+        cd source/nt-nvmeof-frontend;
+        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
+        git cb ${pdr_branch};
+        cd - 1>/dev/null;
+    fi;
+    if (( ${linux} == 1 )) ; then
+        echo -e "${BLUE}---->update linux${NC}";              
+        echo -e "${YELLOW}cd source/linux${NC}";
+        cd source/linux;
+        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
+        git cb ${pdr_branch};
+        cd - 1>/dev/null;
+    fi;
+    if (( ${third_party} == 1 )) ; then
+        echo -e "${BLUE}---->update third_party${NC}";
+        echo -e "${YELLOW}cd source/third_party${NC}";
+        cd source/third_party;
+        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
+        git cb ${pdr_branch};
+        cd - 1>/dev/null;
+    fi;
+}
 
 dellcyclonegitdeinit ()
 {
@@ -2198,7 +2270,7 @@ lg_list_file=~/yonienv/bashrc_dell_lg_list_file
 lg_list=( $(cat ${lg_list_file} ));
 complete -W "$(echo ${lg_list[@]})" ssh2lg;
 
-dellclustertest ()
+dellclusterping ()
 {
     local cluster=${1};
 
@@ -2210,8 +2282,8 @@ dellclustertest ()
         fi;
     fi;
 
-    echo "swarm ${cluster} -ping";
-    swarm  ${cluster} -ping;
+    echo "swarm ${cluster} -ping --showallips";
+    swarm  ${cluster} -ping --showallips;
 }
 
 dellclusteripget ()
