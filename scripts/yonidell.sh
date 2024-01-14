@@ -364,6 +364,8 @@ bsclistfcports ()
     done;
 }
 
+alias dellnvmelistfcports='bsclistfcports'
+
 alias bscshowfctabel='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
 alias bsclistqlaports='ls -l /sys/class/nvme_qla2xxx/'
 
@@ -1281,6 +1283,7 @@ core-servicemode ()
 
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
+# /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/nvme0n1
 
 # multipath -ll
 # nvme discover -t tcp -a <port from bsclistports>
