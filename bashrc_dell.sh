@@ -23,8 +23,9 @@ trident_cluster_list=( $(cat ${dell_clusters_file}) );
 # declare -A dell_cluster_list;
 # export dell_cluster_list;
 
+echo "bashrc_dell.sh:$LINENO"
 [ -f /home/build/xscripts/xxsh ] && . /home/build/xscripts/xxsh 
-
+echo "bashrc_dell.sh:$LINENO"
 
 yonivm-update-yonienv ()
 {
