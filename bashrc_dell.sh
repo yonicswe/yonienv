@@ -2954,7 +2954,7 @@ _delldc-node-x ()
 
     cd ${node_dir};
 
-    journalctl_cmd="./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags}";
+    journalctl_cmd="nice -20 ./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags}";
     echo "${journalctl_cmd}";
     ask_user_default_yes "continue ";
     if [ $? -eq 1 ] ; then
