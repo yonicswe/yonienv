@@ -399,6 +399,30 @@ dellpdr-create-new-branches ()
         cd - 1>/dev/null;
     fi;
 }
+ 
+dellpdr-show-branches ()
+{
+    cd source/cyc_core;
+    echo -e "${BLUE}$(pwd)${NC}";
+    echo -e "\t${GREEN}$(git bb)${NC} -> ${RED}$(git t 2>/dev/null)${NC}";
+    cd - 1>/dev/null;
+
+    cd source/nt-nvmeof-frontend;
+    echo -e "${BLUE}$(pwd)${NC}";
+    echo -e "\t${GREEN}$(git bb)${NC} -> ${RED}$(git t 2>/dev/null)${NC}";
+    cd - 1>/dev/null;
+     
+    cd source/third_party;
+    echo -e "${BLUE}$(pwd)${NC}";
+    echo -e "\t${GREEN}$(git bb)${NC} -> ${RED}$(git t 2>/dev/null)${NC}";
+    cd - 1>/dev/null;
+
+    cd source/linux;
+    echo -e "${BLUE}$(pwd)${NC}";
+    echo -e "\t${GREEN}$(git bb)${NC} -> ${RED}$(git t 2>/dev/null)${NC}";
+    cd - 1>/dev/null;
+
+}
 
 dellcyclonegitdeinit ()
 {
