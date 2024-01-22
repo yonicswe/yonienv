@@ -955,6 +955,15 @@ alias dddnt='dellcdcyclonefolder; [ $? -eq 0 ] && c source/nt-nvmeof-frontend'
 alias dddthird-party='dellcdcyclonefolder; [ $? -eq 0 ] && c source/third_party'
 alias dddbroadcomesources='dellcdbroadcomsources'
 alias dddbroadcomemakefiles='dellcdbroadcommakefiles'
+dellcdcyclonescripts ()
+{
+    if [ -z ${cyclone_folder} ] ; then
+        echo "runtime env is not set";
+        return -1;
+    fi;
+    cd ${cyclone_folder}/source/cyc_core/cyc_platform/src/package/cyc_host/cyc_bsc/scripts
+    return 0;
+}
 
 export _dellclusterruntimeenvset=0
 dellclusterruntimeenvset ()
@@ -2290,6 +2299,7 @@ ssh2lg ()
     sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
 }
 
+alias delleditclusterconfig='v ${CYC_CONFIG}'
 alias delleditlglist="v ${lg_list_file}";
 lg_list_file=~/yonienv/bashrc_dell_lg_list_file
 lg_list=( $(cat ${lg_list_file} ));
