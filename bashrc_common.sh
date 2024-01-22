@@ -3,6 +3,13 @@
 unalias -a;
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 unset SSH_ASKPASS
+
+yelp ()
+{
+    local file=${BASH_SOURCE[1]##*/} func=${FUNCNAME[1]} line=${BASH_LINENO[0]};
+    echo "${file##*/}:$func:$line $*" > /dev/tty;
+}
+
 alias editbashcommon='${v_or_g} ${yonienv}/bashrc_common.sh';
 alias gitclone-yonienv='git clone https://github.com/yonicswe/yonienv'
 grepyonienv () 

@@ -255,6 +255,7 @@ rebash ()
 #  delete all bookmarks they will be re-created by sourcing the bookmarks file
    pdc 1>/dev/null ; 
 
+   yelp;
 #    source ~/.bashrc ;
 if [[ -e ${yonienv} ]] ; then echo found ${yonienv} ; fi;
 if [[ -e ${yonienv}/bashrc_main.sh ]] ; then echo found ${yonienv}/bashrc_main.sh ; fi;
