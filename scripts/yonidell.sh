@@ -125,6 +125,13 @@ yonidellupdate ()
     #sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${YONI_CLUSTER}/" yonidell.sh;
     source ~/yonidell.sh;
     1>/dev/null popd;
+     
+    if [ $(grep "alias y" ~/.bashrc | wc -l) -eq 1 ] ; then
+        return 0;
+    fi;
+
+    echo "alias y='source ~/yonidell.sh'" >> ~/.bashrc;
+    return 0;
 }
 
 probe_topology ()
@@ -454,7 +461,12 @@ alias delljournalctl-kernel-logs-node-b='_delljournalctl b kernel'
 alias delljournalctl-nt-logs-node-a='_delljournalctl a nt'
 alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 
-alias journalpanic='journalctl | grep "PANIC\|log_backtrace_backend"'
+# ############ for cluster only #############################################################
+alias journal-grep-panic='journalctl | grep "PANIC\|log_backtrace_backend"'
+alias journal-grep-connect='journalnt | grep "nvme.*alloc"'
+alias journal-grep-ntstart='journalnt | grep "nt_start"'
+
+
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
 alias journalallf='journalctl -f'
@@ -491,6 +503,8 @@ alias journalkernel='journalctl -k'
 alias journalkernelf='journalctl -k -f'
 alias journalkernellast3minutes='journalctl -k --since="3 minutes ago"'
 
+# ##################################################################################
+
 alias delltriage-all-logs-node-a="./cyc_triage.pl -b . -n a -j -- -a"
 alias delltriage-all-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -a -r"
 alias delltriage-all-logs-node-b="./cyc_triage.pl -b . -n b -j -- -a"
@@ -526,7 +540,7 @@ _delldc-node-x ()
 
     cd ${node_dir};
 
-    journalctl_cmd="./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags}";
+    journalctl_cmd="nice -20 ./journalctl/ld-linux-x86-64.so.2 --library-path ./journalctl ./journalctl/journalctl -o short-precise --utc -D var/log/journal/ ${flags}";
     echo "${journalctl_cmd}";
     ask_user_default_yes "continue ";
     if [ $? -eq 1 ] ; then
