@@ -15,6 +15,7 @@ export CYC_CONFIG=;
 dell_clusters_file=${yonienv}/bashrc_dell_clusters.sh;
 dell_cluster_list_file=${yonienv}/bashrc_dell_cluster_list_file.sh;
 alias delleditclusterlist="v ${dell_clusters_file}";
+alias delleditleasedclusters='v ~/.dell_leased_clusters'
 # trident_cluster_list=(RT-G0082 RT-D3082 WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list=( $(cat ${dell_clusters_file}) );
 # trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
@@ -1324,6 +1325,54 @@ ssh2core ()
     echo -e "\t${BLUE}xxssh ${cluster}${NC}";
     xxssh ${cluster};
 }
+ 
+ssh2coreleased ()
+{
+    local cluster=${1};
+    local node=BOTH;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
+    fi;
+
+    read -p "[a|b|default BOTH] : " node;
+    if [ "${node}" = 'a' ] ; then
+        cluster=${cluster}-a;
+    elif [ "${node}" = 'b' ] ; then
+        cluster=${cluster}-b;
+    fi;
+
+    echo -e "\t${BLUE}xxssh ${cluster}${NC}";
+    xxssh ${cluster};
+}
+
+ssh2bscleased ()
+{
+    local cluster=${1};
+    local node=BOTH;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
+    fi;
+
+    read -p "[a|b|default BOTH] : " node;
+    if [ "${node}" = 'a' ] ; then
+        cluster=${cluster}-a;
+    elif [ "${node}" = 'b' ] ; then
+        cluster=${cluster}-b;
+    fi;
+
+    echo -e "\t${BLUE}xxbsc ${cluster}${NC}";
+    xxbsc ${cluster};
+}
+
+complete -W "$(cat ~/.dell_leased_clusters)" ssh2coreleased ssh2bscleased 
 
 ssh2bsc ()
 {
@@ -2925,6 +2974,18 @@ if ! [ -d /disks/jiraproduction ]  || ! [ -d /disks/jiraproduction2 ] ; then
     echo "/disks/jiraproduction not mounted";
     echo "use dell_mount_jiraproduction";
 fi
+
+
+alias delltriage-node-a-grep-panic='delltriage-all-logs-node-a | grep "PANIC\|log_backtrace_backend"'
+alias delltriage-node-b-grep-panic='delltriage-all-logs-node-b | grep "PANIC\|log_backtrace_backend"'
+alias delltriage-node-a-grep-connect='delltriage-nt-logs-node-a | grep "nvme.*alloc"'
+alias delltriage-node-b-grep-connect='delltriage-nt-logs-node-b | grep "nvme.*alloc"'
+alias delltriage-node-a-grep-ntstart='delltriage-nt-logs-node-a | grep "nt_start"'
+alias delltriage-node-b-grep-ntstart='delltriage-nt-logs-node-b | grep "nt_start"'
+alias delltriage-node-a-grep-set-active='delltriage-nt-logs-node-a | grep "nt_disc_set_active\|nt_disc_set_inactive"'
+alias delltriage-node-b-grep-set-active='delltriage-nt-logs-node-b | grep "nt_disc_set_active\|nt_disc_set_inactive"'
+alias delltriage-node-a-grep-cluster-name='delltriage-all-logs-node-a | grep -i "cyc_config.*creating cluster"'
+alias delltriage-node-b-grep-cluster-name='delltriage-all-logs-node-b | grep -i "cyc_config.*creating cluster"'
 
 alias delltriage-all-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -a"
 alias delltriage-all-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j -- -a -r"
