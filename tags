@@ -7,6 +7,7 @@
 Ethlist	bashrc_fs.sh	/^Ethlist () $/;"	f
 __kernel_version_in_given_path	bashrc_mlx.sh	/^__kernel_version_in_given_path ()$/;"	f
 __pd	bashrc_bookmarks.sh	/^__pd () $/;"	f
+_add_cluster_to_list	bashrc_dell.sh	/^_add_cluster_to_list ()$/;"	f
 _bugs	folder_name_complete.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
 _code	folder_name_complete.sh	/^_code ()$/;"	f
@@ -96,6 +97,7 @@ create_alias_for_host	bashrc_fs.sh	/^create_alias_for_host ()$/;"	f
 create_habana_alias_for_host	bashrc_habana.sh	/^create_habana_alias_for_host ()$/;"	f
 csfiles	bashrc_mlx.sh	/^csfiles ()$/;"	f
 cw	bashrc_fs.sh	/^cw () $/;"	f
+debug	bashrc_bookmarks.sh	/^debug()$/;"	f
 debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
@@ -104,6 +106,7 @@ dellcdbroadcomsources	bashrc_dell.sh	/^dellcdbroadcomsources ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
 dellcdclusterscripts	bashrc_dell.sh	/^dellcdclusterscripts ()$/;"	f
 dellcdcyclonefolder	bashrc_dell.sh	/^dellcdcyclonefolder ()$/;"	f
+dellcdcyclonescripts	bashrc_dell.sh	/^dellcdcyclonescripts ()$/;"	f
 dellcdkernelmodules	bashrc_dell.sh	/^dellcdkernelmodules ()$/;"	f
 dellcdkernelobjects	bashrc_dell.sh	/^dellcdkernelobjects ()$/;"	f
 dellcdmdt	bashrc_dell.sh	/^dellcdmdt ()$/;"	f
@@ -122,9 +125,9 @@ dellclusterkernelspaceupdate	bashrc_dell.sh	/^dellclusterkernelspaceupdate ()$/;
 dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
 dellclusterleaserelease	bashrc_dell.sh	/^dellclusterleaserelease ()$/;"	f
 dellclusterlgipget	bashrc_dell.sh	/^dellclusterlgipget ()$/;"	f
+dellclusterping	bashrc_dell.sh	/^dellclusterping ()$/;"	f
 dellclusterruntimeenvget	bashrc_dell.sh	/^dellclusterruntimeenvget ()  $/;"	f
 dellclusterruntimeenvset	bashrc_dell.sh	/^dellclusterruntimeenvset ()$/;"	f
-dellclustertest	bashrc_dell.sh	/^dellclustertest ()$/;"	f
 dellclusteruserspaceupdate	bashrc_dell.sh	/^dellclusteruserspaceupdate ()$/;"	f
 dellclusteryonienvupdate	bashrc_dell.sh	/^dellclusteryonienvupdate ()$/;"	f
 dellcyclonebackup	bashrc_dell.sh	/^dellcyclonebackup ()$/;"	f
@@ -424,7 +427,9 @@ space_2_underscore	bashrc_fs.sh	/^space_2_underscore ()$/;"	f
 sriovsetupmlx5_1	bashrc_mlx.sh	/^sriovsetupmlx5_1 ()$/;"	f
 ssh2arwen	bashrc_dell.sh	/^ssh2arwen ()$/;"	f
 ssh2bsc	bashrc_dell.sh	/^ssh2bsc ()$/;"	f
+ssh2bscleased	bashrc_dell.sh	/^ssh2bscleased ()$/;"	f
 ssh2core	bashrc_dell.sh	/^ssh2core ()$/;"	f
+ssh2coreleased	bashrc_dell.sh	/^ssh2coreleased ()$/;"	f
 ssh2lg	bashrc_dell.sh	/^ssh2lg ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
@@ -503,6 +508,7 @@ wifiNotLan	bashrc_nice.sh	/^wifiNotLan ()$/;"	f
 wttr	bashrc_misc.sh	/^wttr()$/;"	f
 ww	bashrc_fs.sh	/^function ww ()$/;"	f
 xtermblack	bashrc_misc.sh	/^xtermblack () $/;"	f
+yelp	bashrc_common.sh	/^yelp ()$/;"	f
 yonienvconfigureforputty	bashrc_common.sh	/^yonienvconfigureforputty ()$/;"	f
 yonienvdepsinstall	bashrc_misc.sh	/^yonienvdepsinstall ()$/;"	f
 yuminstallfromrepo	bashrc_misc.sh	/^yuminstallfromrepo ()$/;"	f
