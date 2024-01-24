@@ -126,7 +126,7 @@ yonidellupdate ()
     source ~/yonidell.sh;
     1>/dev/null popd;
      
-    if [ $(grep "alias y" ~/.bashrc | wc -l) -eq 1 ] ; then
+    if [ $(grep "alias y=" ~/.bashrc | wc -l) -eq 1 ] ; then
         return 0;
     fi;
 
@@ -465,7 +465,8 @@ alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 alias journal-grep-panic='journalctl | grep "PANIC\|log_backtrace_backend"'
 alias journal-grep-connect='journalnt | grep "nvme.*alloc"'
 alias journal-grep-ntstart='journalnt | grep "nt_start"'
-
+alias journal-grep-set-active='journalnt | grep "nt_disc_set_active\|nt_disc_set_inactive"'
+alias journal-grep-cluster-name='journalall | grep -i "cyc_config.*creating cluster"'
 
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
@@ -502,6 +503,8 @@ alias journalmbe-rlast3minutes='journalctl --since="3 minutes ago" SUB_COMPONENT
 alias journalkernel='journalctl -k'
 alias journalkernelf='journalctl -k -f'
 alias journalkernellast3minutes='journalctl -k --since="3 minutes ago"'
+
+alias journalservicemode='journalctl SUB_COMPONENT=servicemode'
 
 # ##################################################################################
 
@@ -694,7 +697,14 @@ export debuc_node="$(get_node_id)";
     #fi;
 #fi;
 
-
+bscedit-xenv-ini-file ()
+{
+    if [ "${debuc_node}" == "31010" ] ; then
+        less /dev/shm/xenv_10.ini;
+    else
+        less /dev/shm/xenv_11.ini;
+    fi;
+}
 
 debuc-command ()
 {
@@ -1264,6 +1274,12 @@ coreid ()
     #echo ${YONI_CLUSTER}-$(hostname |sed 's/.*-//g');
     echo ${system_name}-${system_node};
     echo debuc_node : ${debuc_node};
+
+    if [ $(grep "alias y=" ~/.bashrc | wc -l) -eq 1 ] ; then
+        return 0;
+    fi;
+
+    echo "alias y='source ~/yonidell.sh'" >> ~/.bashrc;
 }
 
 coreid;
