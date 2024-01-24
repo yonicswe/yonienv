@@ -175,9 +175,11 @@ dellcyclonetagsupdate ()
     sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" tags.vim;
 
     # whiptail --checklist "subject" hight width num-of-items
-    build_choices=($(whiptail --checklist "cyclone tags" 11 30 4\
+    build_choices=($(whiptail --checklist "cyclone tags" 11 30 6\
                    nt-nvmeof-frontend "" on \
                    cyc_core "" on  \
+                   xios "" off  \
+                   scsi "" off  \
                    third_party "" off \
                    cyc_crypto "" off 3>&1 1>&2 2>&3));
 
@@ -185,9 +187,32 @@ dellcyclonetagsupdate ()
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_core ]] ; then
         dst_folder=source/cyc_core;
-        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
+        #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         \cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
         \cp tags.vim ${dst_folder};
+    fi;
+    ######################################################################################
+    if [[ ${build_choices[@]} =~ cyc_core && ${build_choices[@]} =~ xios ]] ; then
+        dst_folder=source/cyc_core;
+        #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
+        #\cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
+        echo 'includeTagdir+=(cyc_platform/src/xios/)' >> ${dst_folder}/tagme.sh
+        echo 'includeTagdir+=(cyc_platform/src/include/)' >> ${dst_folder}/tagme.sh
+        \cp tags.vim ${dst_folder};
+    fi;
+    ######################################################################################
+    if [[ ${build_choices[@]} =~ cyc_core && ${build_choices[@]} =~ scsi ]] ; then
+        dst_folder=source/cyc_core;
+        #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
+        #\cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
+        echo 'includeTagdir+=(cyc_platform/src/st/)' >> ${dst_folder}/tagme.sh
+        \cp tags.vim ${dst_folder};
+    fi;
+    ######################################################################################
+    if [[ ${build_choices[@]} =~ cyc_core ]] ; then
+        dst_folder=source/cyc_core;
+        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
+        cat  ${yonienv}/bin/tagme.sh >> ${dst_folder}/tagme.sh ;
 
         cd ${dst_folder}; tttt; cd -;
     fi;
@@ -1203,6 +1228,20 @@ alias ssh2arwen7='ssh2arwen arwen7'
 #alias ssh2core-b='_ssh2core-node b';
 # ######################################################################
 
+_add_cluster_to_list ()
+{
+    local cluster=${1};
+
+    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
+        ask_user_default_no "add ${cluster} to list";
+        if [ $? -eq 0 ] ; then return ; fi;
+        echo ${cluster} >> ${dell_clusters_file};
+        trident_cluster_list+=" ${cluster}";
+        echo -e "${RED}added ${cluster} to saved clusters${NC}";
+    fi;
+
+}
+
 ssh2core-a ()
 {
     local cluster=${1};
@@ -1214,11 +1253,7 @@ ssh2core-a ()
         fi;
     fi;
 
-    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
-        echo ${cluster} >> ${dell_clusters_file};
-        trident_cluster_list+=" ${cluster}";
-        echo -e "${RED}added ${cluster} to saved clusters${NC}";
-    fi;
+    _add_cluster_to_list ${cluster};
 
     echo ${cluster} > ~/.dellssh2cluster.bkp
     cluster=${cluster}-spa;
@@ -1237,11 +1272,7 @@ ssh2core-b ()
         fi;
     fi;
 
-    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
-        echo ${cluster} >> ${dell_clusters_file};
-        trident_cluster_list+=" ${cluster}";
-        echo -e "${RED}added ${cluster} to saved clusters${NC}";
-    fi;
+    _add_cluster_to_list ${cluster};
 
     echo ${cluster} > ~/.dellssh2cluster.bkp
     cluster=${cluster}-spb;
@@ -1260,11 +1291,7 @@ ssh2bsc-a ()
         fi;
     fi;
 
-    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
-        echo ${cluster} >> ${dell_clusters_file};
-        trident_cluster_list+=" ${cluster}";
-        echo -e "${RED}added ${cluster} to saved clusters${NC}";
-    fi;
+    _add_cluster_to_list ${cluster};
 
     echo ${cluster} > ~/.dellssh2cluster.bkp
     cluster=${cluster}-spa;
@@ -1283,11 +1310,7 @@ ssh2bsc-b ()
         fi;
     fi;
 
-    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
-        echo ${cluster} >> ${dell_clusters_file};
-        trident_cluster_list+=" ${cluster}";
-        echo -e "${RED}added ${cluster} to saved clusters${NC}";
-    fi;
+    _add_cluster_to_list ${cluster};
 
     echo ${cluster} > ~/.dellssh2cluster.bkp
     cluster=${cluster}-spb;
@@ -1307,11 +1330,7 @@ ssh2core ()
         fi;
     fi;
 
-    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
-        echo ${cluster} >> ${dell_clusters_file};
-        trident_cluster_list+=" ${cluster}";
-        echo -e "${RED}added ${cluster} to saved clusters${NC}";
-    fi;
+    _add_cluster_to_list ${cluster};
 
     echo ${cluster} > ~/.dellssh2cluster.bkp
 
@@ -1386,11 +1405,7 @@ ssh2bsc ()
         fi;
     fi;
 
-    if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
-        echo ${cluster} >> ${dell_clusters_file};
-        trident_cluster_list+=" ${cluster}";
-        echo -e "${RED}added ${cluster} to saved clusters${NC}";
-    fi;
+    _add_cluster_to_list ${cluster};
 
     echo ${cluster} > ~/.dellssh2cluster.bkp
 
@@ -3003,6 +3018,10 @@ alias delltriage-kernel-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t
 alias delltriage-kernel-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j -- -t kernel-r"
 alias delltriage-sym-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t xtremapp"
+
+alias delltriage-servicemode-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t servicemode"
+alias delltriage-servicemode-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t servicemode"
+
 # howto
 # journalctl SUBCOMPONENT=nt
 # journalctl -o short-precise --since "2022-07-04 07:56:00"
