@@ -372,7 +372,11 @@ subtitle-series-sort-directories ()
         echo "cp $f e$e";
         mv $f e$e;
         pushd e$e;
-        subtitlenamesync *mkv
+        if (( $(ls *mkv  | wc -l ) > 0 )) ; then
+            subtitlenamesync *mkv
+        elif (( $(ls *mp4  | wc -l ) > 0 )) ; then
+            subtitlenamesync *mp4
+        fi;
         popd
     done;
 
@@ -385,25 +389,25 @@ subtitle-series-sort-directories ()
 
 #}
 
-subtitleseriesnamesync ()
-{
-    local nr_episodes=${1};
-    local prefix_name=${2};
+#subtitleseriesnamesync ()
+#{
+    #local nr_episodes=${1};
+    #local prefix_name=${2};
 
-    if [[ -z ${nr_episodes} ]] ; then
-        _subtitleseriesnamesync_usage;
-        return -1;
-    fi;
+    #if [[ -z ${nr_episodes} ]] ; then
+        #_subtitleseriesnamesync_usage;
+        #return -1;
+    #fi;
 
-    if [[ -z ${prefix_name} ]] ; then
-        return -1;
-    fi;
+    #if [[ -z ${prefix_name} ]] ; then
+        #return -1;
+    #fi;
 
-    # create directories
-    seq -w 1 ${nr_episodes} | while read e ; do 
-        mkdir E$e;
-        m=$(basename $(ls ${prefix_name}$e*) ) ; 
-        echo "ln -snf ../../$m E$e/$m"; 
-        ln -snf ../../$m E$e/$m; 
-    done;
-}
+    ## create directories
+    #seq -w 1 ${nr_episodes} | while read e ; do 
+        #mkdir E$e;
+        #m=$(basename $(ls ${prefix_name}$e*) ) ; 
+        #echo "ln -snf ../../$m E$e/$m"; 
+        #ln -snf ../../$m E$e/$m; 
+    #done;
+#}
