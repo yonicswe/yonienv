@@ -1391,7 +1391,9 @@ ssh2bscleased ()
     xxbsc ${cluster};
 }
 
-complete -W "$(cat ~/.dell_leased_clusters)" ssh2coreleased ssh2bscleased 
+if [[ -e ~/.dell_leased_clusters ]] ; then
+    complete -W "$(cat ~/.dell_leased_clusters)" ssh2coreleased ssh2bscleased
+fi;
 
 ssh2bsc ()
 {
