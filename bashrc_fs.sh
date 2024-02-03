@@ -207,6 +207,44 @@ k () {
     eval ${kill_str} ; 
 }
 
+jj ()
+{
+    local -a job_array=( $(j | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g') );
+    local -a job_array_bkp;
+
+    #echo ${job_array[@]};
+
+    if ! [ -e ~/.jobs ] ; then
+        j | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g' > ~/.jobs
+    else
+        # compare current jobs array with ~/.jobs
+        job_array_bkp=$(cat ~/.jobs | cut -f 1 -d ' ' | xargs);
+        #echo "job_array_bkp: ${job_array_bkp[@]}";
+        for j in ${job_array[@]}  ; do
+            if [[  ${job_array_bkp[@]} =~ $j ]] ; then
+                continue;
+            fi;
+            echo $j >> ~/.jobs;
+        done;
+
+        for j in ${job_array_bkp[@]}  ; do
+            if [[  ${job_array[@]} =~ $j ]] ; then
+                continue;
+            fi;
+            sed -i "/$j.*/d" ~/.jobs;
+        done;
+
+        # remove j from bkp file
+    fi;
+
+    cat ~/.jobs
+}
+
+je () 
+{
+    jj; 
+    v ~/.jobs
+}
 
 alias l='/usr/bin/ls --group-directories-first -l --color -F'
 alias ls='/usr/bin/ls --group-directories-first --color -F'
