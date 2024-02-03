@@ -507,10 +507,10 @@ _dellcyclonebuild_validate_build_machine ()
 
 dellcyclonebuild ()
 {
-    local build_cmd='nice -20 make cyc_core force=yes'
+    local build_third_party_cmd=;
     local repeat_last_choice=0;
     local build_choices=;
-    local build_third_party_cmd=;
+    local build_cmd=;
     local flavor=;
 
     _dellcyclonebuild_validate_build_machine
@@ -529,18 +529,26 @@ dellcyclonebuild ()
     # dellcyclonebuildhistorylog;
      
     if [ -e .build_choices_bkp ] ; then
-        echo "last command choices : $(cat .build_choices_bkp)";
+        source .build_choices_bkp;
+
+        echo "====== last command choices =============";
+        echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
+        echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
+
         ask_user_default_no "repeat your last choices ? ";
         if [ $? -eq 1 ] ; then
             repeat_last_choice=1;
-            build_cmd=$(cat .build_choices_bkp);
-            eval ${build_cmd};
-            return 0;
+            #build_cmd=$(cat .build_choices_bkp);
+            #eval ${build_cmd};
+            #return 0;
         fi;
     fi;
 
     # whiptail --checklist "cyclone build" hight width num-of-items
     if [ ${repeat_last_choice} -eq 0 ] ; then
+        build_cmd=;
+        build_third_party_cmd=;
+
         build_choices=($(whiptail --checklist "cyclone build" 11 30 6\
                        prune "" off \
                        debug "" off  \
@@ -549,32 +557,36 @@ dellcyclonebuild ()
                        cyc_core "" on \
                        third-party "" off 3>&1 1>&2 2>&3));
 
-        #ask_user_default_no "flavor DEBUG ? ";
-        #if [[ $? -eq 0 ]] ; then
-        if [[ ${build_choices[@]} =~ debug ]] ; then
-            flavor=DEBUG;
-        else
-            flavor=RETAIL;
-        fi;
+        if [[ ${build_choices[@]} =~ cyc_core ]] ; then
+            build_cmd='nice -20 make cyc_core force=yes'
+        
+            #ask_user_default_no "flavor DEBUG ? ";
+            #if [[ $? -eq 0 ]] ; then
+            if [[ ${build_choices[@]} =~ debug ]] ; then
+                flavor=DEBUG;
+            else
+                flavor=RETAIL;
+            fi;
 
-        build_cmd+=" flavor=${flavor}";
+            build_cmd+=" flavor=${flavor}";
 
-        #ask_user_default_yes "use cached repos ? ";
-        #if [ $? -eq 0 ] ; then
-        if [[ ${build_choices[@]} =~ cache ]] ; then
-            build_cmd+=" acache=no mcache=no dcache=no";
-        fi;
+            #ask_user_default_yes "use cached repos ? ";
+            #if [ $? -eq 0 ] ; then
+            if [[ ${build_choices[@]} =~ cache ]] ; then
+                build_cmd+=" acache=no mcache=no dcache=no";
+            fi;
 
-        #ask_user_default_no "verbose=3 ? ";
-        #if [ $? -eq 1 ] ; then
-        if [[ ${build_choices[@]} =~ verbose ]] ; then
-            build_cmd+=" verbose=3";
-        fi;
+            #ask_user_default_no "verbose=3 ? ";
+            #if [ $? -eq 1 ] ; then
+            if [[ ${build_choices[@]} =~ verbose ]] ; then
+                build_cmd+=" verbose=3";
+            fi;
 
-        #ask_user_default_no "prune before build ?"
-        #if [[ $? -eq 1 ]] ; then
-        if [[ ${build_choices[@]} =~ prune ]] ; then
-            build_cmd="time nice -20 make prune flavor=${flavor} && time ${build_cmd}";
+            #ask_user_default_no "prune before build ?"
+            #if [[ $? -eq 1 ]] ; then
+            if [[ ${build_choices[@]} =~ prune ]] ; then
+                build_cmd="time nice -20 make prune flavor=${flavor} && time ${build_cmd}";
+            fi;
         fi;
 
         if [[ ${build_choices[@]} =~ third-party ]] ; then
@@ -582,15 +594,18 @@ dellcyclonebuild ()
         fi;
 	fi;
 
-    if ! [[ ${build_choices[@]} =~ cyc_core ]] ; then
-        build_cmd=;
-    fi;
+    echo -e "build_cmd=\"${build_cmd}\"" > .build_choices_bkp;
+    echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> .build_choices_bkp
+
+    #if ! [[ ${build_choices[@]} =~ cyc_core ]] ; then
+        #build_cmd=;
+    #fi;
 
     if  [ -n "${build_cmd}" ] ; then
         echo -e "\n========== start build ($(pwd)) ===================\n";
-        echo -n "${build_cmd}" | tee .build_choices_bkp;
+        echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
         if [ -n "${build_third_party_cmd}" ] ; then
-            echo -e "\n${build_third_party_cmd}";
+            echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
         fi;
         echo -e "\n========================================================";
         ask_user_default_yes "continue ?";
@@ -599,7 +614,6 @@ dellcyclonebuild ()
         # build_cmd="time ${build_cmd}";
         eval ${build_cmd} | tee dellcyclonebuild.log;
         # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
-        echo -n "${build_cmd}" | tee .build_choices_bkp;
 
         echo;
         p;
@@ -612,7 +626,6 @@ dellcyclonebuild ()
     if [ -n "${build_third_party_cmd}" ] ; then
         ask_user_default_no "build third_party ? [${build_third_party_cmd}]";
         if [ $? -eq 1 ] ; then
-            #echo " && ${build_third_party_cmd}" >> .build_choices_bkp
             eval ${build_third_party_cmd};
         fi;
     fi;
