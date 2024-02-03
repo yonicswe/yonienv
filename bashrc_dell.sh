@@ -511,7 +511,7 @@ dellcyclonebuild ()
     local repeat_last_choice=0;
     local build_choices=;
     local build_cmd=;
-    local flavor=;
+    local flavor=RETAIL;
 
     _dellcyclonebuild_validate_build_machine
     if [[ $? -ne 0 ]] ; then
@@ -557,18 +557,12 @@ dellcyclonebuild ()
                        cyc_core "" on \
                        third-party "" off 3>&1 1>&2 2>&3));
 
-        if [[ ${build_choices[@]} =~ cyc_core ]] ; then
-            build_cmd='nice -20 make cyc_core force=yes'
-        
-            #ask_user_default_no "flavor DEBUG ? ";
-            #if [[ $? -eq 0 ]] ; then
-            if [[ ${build_choices[@]} =~ debug ]] ; then
-                flavor=DEBUG;
-            else
-                flavor=RETAIL;
-            fi;
+        if [[ ${build_choices[@]} =~ debug ]] ; then
+            flavor=DEBUG;
+        fi;
 
-            build_cmd+=" flavor=${flavor}";
+        if [[ ${build_choices[@]} =~ cyc_core ]] ; then
+            build_cmd='nice -20 make cyc_core force=yes flavor=${flavor}';
 
             #ask_user_default_yes "use cached repos ? ";
             #if [ $? -eq 0 ] ; then
