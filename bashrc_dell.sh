@@ -562,7 +562,7 @@ dellcyclonebuild ()
         fi;
 
         if [[ ${build_choices[@]} =~ cyc_core ]] ; then
-            build_cmd='nice -20 make cyc_core force=yes flavor=${flavor}';
+            build_cmd="nice -20 make cyc_core force=yes flavor=${flavor}";
 
             #ask_user_default_yes "use cached repos ? ";
             #if [ $? -eq 0 ] ; then
