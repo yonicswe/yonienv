@@ -462,11 +462,13 @@ alias delljournalctl-nt-logs-node-a='_delljournalctl a nt'
 alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 
 # ############ for cluster only #############################################################
-alias journal-grep-panic='journalctl | grep "PANIC\|log_backtrace_backend"'
-alias journal-grep-connect='journalnt | grep "nvme.*alloc"'
-alias journal-grep-ntstart='journalnt | grep "nt_start"'
-alias journal-grep-set-active='journalnt | grep "nt_disc_set_active\|nt_disc_set_inactive"'
-alias journal-grep-cluster-name='journalall | grep -i "cyc_config.*creating cluster"'
+alias journal-grep-panic='journalctl | grep --color "PANIC\|log_backtrace_backend"'
+alias journal-grep-connect='journalnt | grep  --color "nvme.*alloc"'
+alias journal-grep-discover='journalnt | grep  --color "discover.*alloc"'
+alias journal-grep-ntstart='journalnt | grep --color "nt_start"'
+alias journal-grep-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
+alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
+alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
 
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
@@ -476,9 +478,11 @@ alias journalnt='journalctl SUB_COMPONENT=nt'
 alias journalntf='journalctl -f SUB_COMPONENT=nt'
 alias journalntlast3minutes='journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
-alias journalcyc='journalctl -t cyc_bsc'
-alias journalcycf='journalctl -f -t cyc_bsc'
-alias journalcyclast3minutes='journalctl --since="3 minutes ago" -t cyc_bsc'
+alias journalcycconfig='journalctl -t cyc_config'
+
+alias journalcycbsc='journalctl -t cyc_bsc'
+alias journalcycbscf='journalctl -f -t cyc_bsc'
+alias journalcycbsclast3minutes='journalctl --since="3 minutes ago" -t cyc_bsc'
 
 alias journaldcengine='journalctl -t dc_engine'
 alias journaldcenginef='journalctl -f -t dc_engine'
