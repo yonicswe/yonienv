@@ -340,7 +340,7 @@ git-deletemultiplebranches ()
     delete_branches=($(echo ${delete_branches[@]} | sed 's/"//g'));
 
     for b in ${delete_branches[@]} ; do
-        echo -e  "${RED}git delete branch $b${NC}";
+        echo -e  "git delete branch ${RED}$b${NC}";
         git bdelete $b;
     done;
 }
