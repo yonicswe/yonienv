@@ -228,8 +228,8 @@ gitrebaseremotebranch ()
 
     branch=$(echo ${branch} | sed 's/origin\///g');
 
-    echo -e "\t${BLUE}git fetch origin ${branch}${NC}";
-    echo -e "\t${BLUE}git rebase FETCH_HEAD${NC}";
+    echo -e "\t${BLUE}git fetch origin ${GREEN}${branch}${NC}";
+    echo -e "\t${BLUE}git rebase ${GREEN}FETCH_HEAD${NC}";
     ask_user_default_no  "continue ?";
     if [ $? -eq 0 ] ; then
         return;
