@@ -377,17 +377,39 @@ dellpdr-git-sync-submodules ()
     #--------------------------------------
     #            ask user
     #--------------------------------------
-    ask_user_default_yes "update source/cyc_core ?";
-    [ $? -eq 1 ] && cyc_core=1;
+    build_choices=($(whiptail --checklist "sync submodules" 11 30 6\
+                   nt "" on \
+                   cyc_core "" on  \
+                   third_party "" off  \
+                   linux "" off 3>&1 1>&2 2>&3));
 
-    ask_user_default_yes "update source/nt-nvmeof-frontend ?";
-    [ $? -eq 1 ] && nt_nvmeof_frontend=1;
+    if [[ ${build_choices[@]} =~ cyc_core ]] ; then
+        cyc_core=1;
+    fi;
 
-    ask_user_default_no "update source/third_party ?";
-    [ $? -eq 1 ] && third_party=1;
+    if [[ ${build_choices[@]} =~ nt ]] ; then
+        nt_nvmeof_frontend=1;
+    fi;
 
-    ask_user_default_no "update source/linux ?";
-    [ $? -eq 1 ] && linux=1;
+    if [[ ${build_choices[@]} =~ third_party ]] ; then
+        third_party=1;
+    fi;
+
+    if [[ ${build_choices[@]} =~ linux ]] ; then
+        linux=1;
+    fi;
+
+    #ask_user_default_yes "update source/cyc_core ?";
+    #[ $? -eq 1 ] && cyc_core=1;
+
+    #ask_user_default_yes "update source/nt-nvmeof-frontend ?";
+    #[ $? -eq 1 ] && nt_nvmeof_frontend=1;
+
+    #ask_user_default_no "update source/third_party ?";
+    #[ $? -eq 1 ] && third_party=1;
+
+    #ask_user_default_no "update source/linux ?";
+    #[ $? -eq 1 ] && linux=1;
 
     read -p "[c]heckout or create new [b]ranch ? [C|b]" ans;
     if [[  ${ans} == c ]] ; then
