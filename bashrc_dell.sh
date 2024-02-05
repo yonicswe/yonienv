@@ -354,13 +354,15 @@ dellpdr-gitsmup ()
     # git sm update source/xblock
 }
  
-dellpdr-create-new-branches ()
+dellpdr-git-sync-submodules ()
 {
     local cyc_core=0;
     local nt_nvmeof_frontend=0;
     local linux=0;
     local third_party=0;
     local pdr_branch=;
+    local checkout_cmd=cb;
+    local ans=;
 
     ask_user_default_no "are you in a pdr ? ";
     if [ $? -eq 0 ] ; then
@@ -387,6 +389,11 @@ dellpdr-create-new-branches ()
     ask_user_default_no "update source/linux ?";
     [ $? -eq 1 ] && linux=1;
 
+    read -p "[c]heckout or create new [b]ranch ? [C|b]" ans;
+    if [[  ${ans} == c ]] ; then
+        checkout_cmd=c;
+    fi;
+
     ask_user_default_no "are you sure ?";
     [ $? -eq 0 ] && return;
     #--------------------------------------
@@ -396,32 +403,32 @@ dellpdr-create-new-branches ()
         echo -e "${BLUE}---->update cyc_core${NC}";           
         echo -e "${YELLOW}cd source/cyc_core${NC}";
         cd source/cyc_core;
-        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
-        git cb ${pdr_branch};
+        echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
     if (( ${nt_nvmeof_frontend} == 1 )) ; then
         echo -e "${BLUE}---->update nt-nvmeof-frontend${NC}";
         echo -e "${YELLOW}cd source/nt-nvmeof-frontend${NC}";
         cd source/nt-nvmeof-frontend;
-        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
-        git cb ${pdr_branch};
+        echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
     if (( ${linux} == 1 )) ; then
         echo -e "${BLUE}---->update linux${NC}";              
         echo -e "${YELLOW}cd source/linux${NC}";
         cd source/linux;
-        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
-        git cb ${pdr_branch};
+        echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
     if (( ${third_party} == 1 )) ; then
         echo -e "${BLUE}---->update third_party${NC}";
         echo -e "${YELLOW}cd source/third_party${NC}";
         cd source/third_party;
-        echo -e "${YELLOW}git cb ${pdr_branch}${NC}";
-        git cb ${pdr_branch};
+        echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
 }
@@ -2604,6 +2611,50 @@ dellcdbroadcommakefiles ()
     cd ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS;
     return 0;
 
+}
+
+delldeletebroadcomsources ()
+{
+    local platform_debug=source/third_party/cyc_platform/obj_Debug;
+    local platform_release=source/third_party/cyc_platform/obj_Release;
+    local broadcom_src=third_party/BRCM_OCS/;
+    local broadcom=;
+
+    if [ -z ${cyclone_folder} ] ; then
+        echo -e "${RED}cyclone_folder empty! use dellclusterruntimeenvset${NC}"; 
+        return -1;
+    fi;
+
+    if ! [ -d ${cyclone_folder} ] ; then
+        echo -e "${RED}${cyclone_folder} does not exist! use dellclusterruntimeenvset${NC}"; 
+        return -1;
+    fi;
+
+    broadcom=${cyclone_folder}
+    if [ -e ${broadcom}/${platform_debug} ] ; then
+        broadcom=${broadcom}/${platform_debug};
+    elif [ -e ${broadcom}/${platform_release} ] ; then
+        broadcom=${broadcom}/${platform_release};
+    else
+        echo "missing : "
+        echo "${cyclone_folder}/${platform_debug}";
+        echo "${cyclone_folder}/${platform_release}";
+        echo "you should : make third_party force=yes flavor=<DEBUG|RELEASE>";
+        return -1;
+    fi;
+
+    broadcom=${broadcom}/${broadcom_src};
+
+    if [ -d ${broadcom} ] ; then
+        ask_user_default_no "delete ${broadcom}";
+        if [ $? -eq 1 ] ; then
+            rm -rf ${broadcom};
+        fi;
+    else
+        echo "missing folder ${broadcom}";
+        echo -e "${RED}missing broadcom folder. try the feature branch feature//pl-trif-2474-brcm-fc-64gb${NC}";
+        return -1;
+    fi;
 }
 
 dellcdbroadcomsources ()
