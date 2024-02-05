@@ -1302,6 +1302,13 @@ function ww ()
 
 alias rr=ranger
 
+deletefast ()
+{
+    mkdir empty_dir;
+    rsync -a --delete empty_dir/ $1/;
+    rmdir empty_dir;
+    rmdir $1;
+}
 
 # howto
 # to kill a user session
