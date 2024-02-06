@@ -637,6 +637,10 @@ dellcyclonebuild ()
         # build_cmd="time ${build_cmd}";
         eval ${build_cmd} | tee dellcyclonebuild.log;
         # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
+        if [[ ${build_choices[@]} =~ prune ]] ; then
+            echo -e "build_cmd=\"${build_cmd}\"" > .build_choices_bkp;
+            echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> .build_choices_bkp
+        fi;
 
         echo;
         p;
