@@ -224,7 +224,7 @@ jj ()
             if [[  ${job_array_bkp[@]} =~ $j ]] ; then
                 continue;
             fi;
-            echo $j >> ~/.jobs;
+            echo "$j" >> ~/.jobs;
         done;
 
         for j in ${job_array_bkp[@]}  ; do
@@ -242,7 +242,23 @@ jj ()
 
 je () 
 {
+    local job=${1};
+    local comment=${2};
+
     jj; 
+
+    if [[ -n "${job}" && -n "${comment}" ]] ; then
+        if [ $(grep "^${job}" ~/.jobs | wc -l ) -gt 0 ] ; then 
+            sed -i "s/^${job}.*/${job} ${comment}/" ~/.jobs;
+            return;
+        fi;
+    fi;
+
+    if [[ -n "${job}" ]] ; then
+        v ~/.jobs +"/^${job}";
+        return;
+    fi;
+
     v ~/.jobs
 }
 
