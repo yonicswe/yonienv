@@ -540,6 +540,7 @@ dellcyclonebuild ()
     local repeat_last_choice=0;
     local build_choices=;
     local build_cmd=;
+    local prune_cmd=;
     local flavor=RETAIL;
 
     _dellcyclonebuild_validate_build_machine
@@ -548,6 +549,11 @@ dellcyclonebuild ()
         return -1
     fi;
     
+    if [ -z "${cyclone_folder}" ]  ; then
+        echo "cyclone_folder not set! use dellclusterruntimeenvset";
+        return -1;
+    fi;
+
 	dellcdcyclonefolder;
 	[[ $? -ne 0 ]] && return -1;
 	
@@ -557,10 +563,11 @@ dellcyclonebuild ()
 
     # dellcyclonebuildhistorylog;
      
-    if [ -e .build_choices_bkp ] ; then
-        source .build_choices_bkp;
+    if [ -e ${cyclone_folder}/.build_choices_bkp ] ; then
+        source ${cyclone_folder}/.build_choices_bkp;
 
         echo "====== last command choices =============";
+        echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
         echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
         echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
 
@@ -575,6 +582,7 @@ dellcyclonebuild ()
 
     # whiptail --checklist "cyclone build" hight width num-of-items
     if [ ${repeat_last_choice} -eq 0 ] ; then
+        prune_cmd=;
         build_cmd=;
         build_third_party_cmd=;
 
@@ -593,32 +601,31 @@ dellcyclonebuild ()
         if [[ ${build_choices[@]} =~ cyc_core ]] ; then
             build_cmd="nice -20 make cyc_core force=yes flavor=${flavor}";
 
-            #ask_user_default_yes "use cached repos ? ";
-            #if [ $? -eq 0 ] ; then
             if [[ ${build_choices[@]} =~ cache ]] ; then
                 build_cmd+=" acache=no mcache=no dcache=no";
             fi;
 
-            #ask_user_default_no "verbose=3 ? ";
-            #if [ $? -eq 1 ] ; then
             if [[ ${build_choices[@]} =~ verbose ]] ; then
                 build_cmd+=" verbose=3";
             fi;
 
-            #ask_user_default_no "prune before build ?"
-            #if [[ $? -eq 1 ]] ; then
             if [[ ${build_choices[@]} =~ prune ]] ; then
-                build_cmd="time nice -20 make prune flavor=${flavor} && time ${build_cmd}";
+                prune_cmd="nice -20 make prune flavor=${flavor}";
             fi;
         fi;
 
         if [[ ${build_choices[@]} =~ third-party ]] ; then
             build_third_party_cmd="make third_party force=yes flavor=${flavor}";
+
+            if [[ ${build_choices[@]} =~ prune ]] ; then
+                prune_cmd="nice -20 make prune flavor=${flavor}";
+            fi;
         fi;
 	fi;
 
-    echo -e "build_cmd=\"${build_cmd}\"" > .build_choices_bkp;
-    echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> .build_choices_bkp
+    echo -e "prune_cmd=\"${prune_cmd}\"" > ${cyclone_folder}/.build_choices_bkp;
+    echo -e "build_cmd=\"${build_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp;
+    echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp
 
     #if ! [[ ${build_choices[@]} =~ cyc_core ]] ; then
         #build_cmd=;
@@ -626,21 +633,22 @@ dellcyclonebuild ()
 
     if  [ -n "${build_cmd}" ] ; then
         echo -e "\n========== start build ($(pwd)) ===================\n";
+        echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
         echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
-        if [ -n "${build_third_party_cmd}" ] ; then
-            echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
-        fi;
+        echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
         echo -e "\n========================================================";
         ask_user_default_yes "continue ?";
         [ $? -eq 0 ] && return 0;
 
+        if [[ ${build_choices[@]} =~ prune ]] ; then
+            _dellcyclonebackupuserchoices backup;
+            eval ${prune_cmd};
+            _dellcyclonebackupuserchoices restore;
+        fi;
+
         # build_cmd="time ${build_cmd}";
         eval ${build_cmd} | tee dellcyclonebuild.log;
         # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
-        if [[ ${build_choices[@]} =~ prune ]] ; then
-            echo -e "build_cmd=\"${build_cmd}\"" > .build_choices_bkp;
-            echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> .build_choices_bkp
-        fi;
 
         echo;
         p;
@@ -651,8 +659,18 @@ dellcyclonebuild ()
     fi;
 
     if [ -n "${build_third_party_cmd}" ] ; then
-        ask_user_default_no "build third_party ? [${build_third_party_cmd}]";
+        echo "===================================================";
+        echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
+        echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
+        echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
+
+        ask_user_default_no "build third_party ? ";
         if [ $? -eq 1 ] ; then
+            if [[ -n "${prune_cmd}" && -z "${build_cmd}" ]] ; then
+                _dellcyclonebackupuserchoices backup;
+                eval ${prune_cmd};
+                _dellcyclonebackupuserchoices restore;
+            fi;
             eval ${build_third_party_cmd};
         fi;
     fi;
@@ -1719,6 +1737,41 @@ _dellclusterget ()
     return 0;
 }
 
+_dellcyclonebackupuserchoices ()
+{
+    local backup_restore=${1:-backup};
+    if [ -z "${cyclone_folder}" ] ; then
+        echo "cyclone_folder not set ! cant backup user choices. use dellclusterruntimeenvset";
+        return -1;
+    fi;
+
+    if [[ "${backup_restore}" == "backup" ]] ; then
+        if [ -e ${cyclone_folder}/.install_choices_bkp ] ; then
+            cp ${cyclone_folder}/.install_choices_bkp ~/.install_choices_bkp;
+        fi
+        if [ -e ${cyclone_folder}/.build_choices_bkp ] ; then
+            cp ${cyclone_folder}/.build_choices_bkp ~/.build_choices_bkp;
+        fi;
+        if [ -e ${cyclone_folder}/.dellclusterruntimeenvbkpfile ] ; then
+            cp ${cyclone_folder}/.dellclusterruntimeenvbkpfile ~/.dellclusterruntimeenvbkpfile;
+        fi;
+
+    elif [[ "${backup_restore}" == "restore" ]] ; then
+        if [ -e ~/.install_choices_bkp ] ; then
+            cp  ~/.install_choices_bkp ${cyclone_folder}/.install_choices_bkp;
+        fi
+        if [ -e ~/.build_choices_bkp ] ; then
+            cp  ~/.build_choices_bkp ${cyclone_folder}/.build_choices_bkp;
+        fi;
+        if [ -e ~/.dellclusterruntimeenvbkpfile ] ; then
+            cp  ~/.dellclusterruntimeenvbkpfile ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+        fi;
+    else
+        echo "unknown command backup_restore=${backup_restore}";
+        return -1;
+    fi;
+}
+
 dellclusterinstall ()
 {
     local cluster=${1};
@@ -1761,14 +1814,14 @@ dellclusterinstall ()
     
     dellcdclusterscripts;
 
-    if [ -e .install_choices_bkp ] ; then
-        last_used_install_choices=$(cat .install_choices_bkp);
+    if [ -e ${cyclone_folder}/.install_choices_bkp ] ; then
+        last_used_install_choices=$(cat ${cyclone_folder}/.install_choices_bkp);
         if ! [ -z "${last_used_install_choices}" ] ; then 
             echo "your last install choices were";
             echo ${last_used_install_choices} | awk  '{print $0}' RS="&&"|sed 's/echo.*//g'
             ask_user_default_no "do it again ?";
             if [ $? -eq 1 ] ; then
-                eval "$(cat .install_choices_bkp)";
+                eval "$(cat ${cyclone_folder}/.install_choices_bkp)";
                 return;
             fi;
         fi;
@@ -1871,7 +1924,7 @@ dellclusterinstall ()
         one_sweep_cmd+="echo -e \"========\ncreate_cluster\n========\n\" && ${create_cluster_cmd}";
     fi;
 
-    echo "${one_sweep_cmd}" > .install_choices_bkp;
+    echo "${one_sweep_cmd}" > ${cyclone_folder}/.install_choices_bkp;
 
     if [ -z "${deploy_cmd}" ] && [ -z "${reinit_cmd}" ] && [ -z "${create_cluster_cmd}" ] ; then
         echo "nothing to do. bailing out!";

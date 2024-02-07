@@ -20,6 +20,7 @@ _dellclusterlistinit	bashrc_dell.sh	/^_dellclusterlistinit ()$/;"	f
 _dellclusterlistuser	bashrc_dell.sh	/^_dellclusterlistuser ()$/;"	f
 _dellclusterrestartbsc	bashrc_dell.sh	/^_dellclusterrestartbsc ()$/;"	f
 _dellclusterruntimeenvvalidate	bashrc_dell.sh	/^_dellclusterruntimeenvvalidate ()$/;"	f
+_dellcyclonebackupuserchoices	bashrc_dell.sh	/^_dellcyclonebackupuserchoices ()$/;"	f
 _dellcyclonebuild_validate_build_machine	bashrc_dell.sh	/^_dellcyclonebuild_validate_build_machine ()$/;"	f
 _delljournalctl	bashrc_dell.sh	/^_delljournalctl ()$/;"	f
 _dellrebootnode	bashrc_dell.sh	/^_dellrebootnode ()$/;"	f
@@ -101,6 +102,7 @@ debug	bashrc_bookmarks.sh	/^debug()$/;"	f
 debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
+deletefast	bashrc_fs.sh	/^deletefast ()$/;"	f
 dellcdbroadcommakefiles	bashrc_dell.sh	/^dellcdbroadcommakefiles ()$/;"	f
 dellcdbroadcomsources	bashrc_dell.sh	/^dellcdbroadcomsources ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
@@ -142,6 +144,7 @@ dellcyclonegitdeinit	bashrc_dell.sh	/^dellcyclonegitdeinit ()$/;"	f
 dellcyclonekernelshaget	bashrc_dell.sh	/^dellcyclonekernelshaget ()$/;"	f
 dellcyclonekernelshaupdate	bashrc_dell.sh	/^dellcyclonekernelshaupdate ()$/;"	f
 dellcyclonetagsupdate	bashrc_dell.sh	/^dellcyclonetagsupdate ()$/;"	f
+delldeletebroadcomsources	bashrc_dell.sh	/^delldeletebroadcomsources ()$/;"	f
 dellenvrebash	bashrc_dell.sh	/^dellenvrebash ()$/;"	f
 dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
 dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
@@ -248,6 +251,8 @@ ips_telnet	bashrc_nice.sh	/^ips_telnet () $/;"	f
 ips_threads	bashrc_nice.sh	/^ips_threads () $/;"	f
 iserstart	bashrc_mlx.sh	/^iserstart ()$/;"	f
 ismoduleup	bashrc_mlx.sh	/^ismoduleup ()$/;"	f
+je	bashrc_fs.sh	/^je () $/;"	f
+jj	bashrc_fs.sh	/^jj ()$/;"	f
 k	bashrc_fs.sh	/^k () {$/;"	f
 kernelbuild	bashrc_devel.sh	/^kernelbuild ()$/;"	f
 kernelbuildall	bashrc_devel.sh	/^kernelbuildall ()$/;"	f
@@ -434,7 +439,6 @@ ssh2lg	bashrc_dell.sh	/^ssh2lg ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
 subtitlenamesync	bashrc_misc.sh	/^subtitlenamesync ()$/;"	f
-subtitleseriesnamesync	bashrc_misc.sh	/^subtitleseriesnamesync ()$/;"	f
 svl	bashrc_svn.sh	/^svl () $/;"	f
 svn_complete	bashrc_svn.sh	/^svn_complete () $/;"	f
 svn_reachable	bashrc_svn.sh	/^svn_reachable () $/;"	f
