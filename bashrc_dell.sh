@@ -865,7 +865,7 @@ alias dellclusterleasewithforce='/home/public/scripts/xpool_trident/prd/xpool up
 alias dellclusterlease='_dellclusterlease 3d';
 alias dellclusterleaseshared='_dellclusterlease 72h'
 
-dellclusterruntimeenvbkpfile=~/.dellclusterruntimeenvbkpfile
+dellclusterglobalruntimeenvbkpfile=~/.dellclusterruntimeenvbkpfile
 # _dellclusterleaseshared ()
 # {
     # local cluster=${1};
@@ -952,30 +952,49 @@ dellenvrebash ()
     # cluster=$(awk '/YONI_CLUSTER/{print $2}' cluster_runtime_env.txt);
     # cd - ;
 
-    if ! [[ -e ./.dellclusterruntimeenvbkpfile ]] ; then
-        # echo -e "${RED}./.dellclusterruntimeenvbkpfile not found!${NC}";
+    if [[ "cyclone" == "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
+        if [[ -e ./.dellclusterruntimeenvbkpfile ]] ; then
+            bkp_file=./.dellclusterruntimeenvbkpfile;
+        fi;
+    fi;
 
-        if ! [[ -e ${dellclusterruntimeenvbkpfile} ]] ; then
-            echo "${dellclusterruntimeenvbkpfile} not found! bailing out";
+    if [ -z "${bkp_file}" ] ; then
+        if  [[ -e ${dellclusterglobalruntimeenvbkpfile} ]] ; then
+            bkp_file=${dellclusterglobalruntimeenvbkpfile};
+        fi;
+    fi;
+
+    if [ -n "${bkp_file}" ] ; then
+        pdr_folder=$(awk -F '='  '/YONI_PDR/{print $2}' ${bkp_file});
+        if [[ -z ${pdr_folder} ]] ; then
+            echo -e "${RED}last used pdr folder not saved${NC}";
+            echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
             return -1;
-        else
-            bkp_file=${dellclusterruntimeenvbkpfile};
+        fi;
+
+        cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${bkp_file});
+        if [[ -z ${cluster} ]] ; then
+            echo -e "${RED}last used cluster not saved${NC}";
+            #return -1;
         fi;
     else
-        bkp_file=./.dellclusterruntimeenvbkpfile;
-    fi;
-
-    pdr_folder=$(awk -F '='  '/YONI_PDR/{print $2}' ${bkp_file});
-    if [[ -z ${pdr_folder} ]] ; then
-        echo -e "${RED}last used pdr folder not saved${NC}";
-        echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
+        echo "${RED}no backup files were found. bailing out${NC}";
         return -1;
     fi;
+     
+    if [ -n "${cluster}" ] ; then
+        ask_user_default_yes "$FUNCNAME use ${cluster} again ?";
+        if [ $? -eq 0 ] ; then
+            cluster=;
+        fi;
+    fi;
 
-    cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${bkp_file});
-    if [[ -z ${cluster} ]] ; then
-        echo -e "${RED}last used cluster not saved${NC}";
-        return -1;
+    if [ -z "${cluster}" ] ; then 
+        cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
     fi;
 
     cd ${pdr_folder};
@@ -1080,9 +1099,9 @@ dellclusterruntimeenvset ()
     cyc_helpers_folder=$(readlink -f source/cyc_core/cyc_platform/src/package/cyc_helpers);
     dell_kernel_objects=$(readlink -f source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT)
 
-    echo "export CYC_CONFIG=${cluster_config_file}";
-    ask_user_default_yes "Correct ? "
-    [ $? -eq 0 ] && return;
+    #echo "export CYC_CONFIG=${cluster_config_file}";
+    #ask_user_default_yes "Correct ? "
+    #[ $? -eq 0 ] && return;
 
     echo "export CYC_CONFIG=${CYC_CONFIG}"    >  ./.dellclusterruntimeenvbkpfile;
     echo "export YONI_CLUSTER=${cluster}"     >> ./.dellclusterruntimeenvbkpfile;
@@ -1667,13 +1686,13 @@ _dellclusterget ()
     local last_used_cluster=;
     local cluster=;
 
-    if ! [ -z ${YONI_CLUSTER} ] ; then
-        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
-        if [[ $? -eq 1 ]] ; then
-            echo ${YONI_CLUSTER};
-            return 0;
-        fi;
-    fi;
+    #if ! [ -z ${YONI_CLUSTER} ] ; then
+        #ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
+        #if [[ $? -eq 1 ]] ; then
+            #echo ${YONI_CLUSTER};
+            #return 0;
+        #fi;
+    #fi;
 
     if [ -e ./.dellclusterruntimeenvbkpfile ] ; then
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ./.dellclusterruntimeenvbkpfile);
@@ -1682,7 +1701,7 @@ _dellclusterget ()
     fi;
 
     if ! [ -z ${last_used_cluster} ] ; then
-        ask_user_default_yes "use ${last_used_cluster} again ?";
+        ask_user_default_yes "$FUNCNAME use ${last_used_cluster} again ?";
         if [[ $? -eq 1 ]] ; then
             echo ${last_used_cluster};
             return 0;
