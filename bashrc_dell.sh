@@ -640,7 +640,7 @@ dellcyclonebuild ()
         ask_user_default_yes "continue ?";
         [ $? -eq 0 ] && return 0;
 
-        if [[ ${build_choices[@]} =~ prune ]] ; then
+        if [[ -n "${prune_cmd}" ]] ; then
             _dellcyclonebackupuserchoices backup;
             eval ${prune_cmd};
             _dellcyclonebackupuserchoices restore;
@@ -1747,24 +1747,24 @@ _dellcyclonebackupuserchoices ()
 
     if [[ "${backup_restore}" == "backup" ]] ; then
         if [ -e ${cyclone_folder}/.install_choices_bkp ] ; then
-            cp ${cyclone_folder}/.install_choices_bkp ~/.install_choices_bkp;
+            \cp -f ${cyclone_folder}/.install_choices_bkp ~/.install_choices_bkp;
         fi
         if [ -e ${cyclone_folder}/.build_choices_bkp ] ; then
-            cp ${cyclone_folder}/.build_choices_bkp ~/.build_choices_bkp;
+            \cp -f ${cyclone_folder}/.build_choices_bkp ~/.build_choices_bkp;
         fi;
         if [ -e ${cyclone_folder}/.dellclusterruntimeenvbkpfile ] ; then
-            cp ${cyclone_folder}/.dellclusterruntimeenvbkpfile ~/.dellclusterruntimeenvbkpfile;
+            \cp -f ${cyclone_folder}/.dellclusterruntimeenvbkpfile ~/.dellclusterruntimeenvbkpfile;
         fi;
 
     elif [[ "${backup_restore}" == "restore" ]] ; then
         if [ -e ~/.install_choices_bkp ] ; then
-            cp  ~/.install_choices_bkp ${cyclone_folder}/.install_choices_bkp;
+            \cp -f  ~/.install_choices_bkp ${cyclone_folder}/.install_choices_bkp;
         fi
         if [ -e ~/.build_choices_bkp ] ; then
-            cp  ~/.build_choices_bkp ${cyclone_folder}/.build_choices_bkp;
+            \cp -f  ~/.build_choices_bkp ${cyclone_folder}/.build_choices_bkp;
         fi;
         if [ -e ~/.dellclusterruntimeenvbkpfile ] ; then
-            cp  ~/.dellclusterruntimeenvbkpfile ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+            \cp -f  ~/.dellclusterruntimeenvbkpfile ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
         fi;
     else
         echo "unknown command backup_restore=${backup_restore}";
