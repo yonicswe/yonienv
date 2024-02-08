@@ -947,6 +947,34 @@ dellclusterruntimeenvget ()
 }
 alias gd='dellclusterruntimeenvget'
 
+_dellclusteruserchoicesget ()
+{
+    if [ -n "${cyclone_folder}" ] ; then
+        echo "==== ${cyclone_folder} ========"
+        if [ -e ${cyclone_folder}/.install_choices_bkp ] ; then
+            cat ${cyclone_folder}/.install_choices_bkp;
+        fi
+        if [ -e ${cyclone_folder}/.build_choices_bkp ] ; then
+            cat ${cyclone_folder}/.build_choices_bkp;
+        fi;
+        if [ -e ${cyclone_folder}/.dellclusterruntimeenvbkpfile ] ; then
+            cat ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+        fi;
+    fi;
+
+    if [ -e ./.install_choices_bkp ] ; then
+        cat ./.install_choices_bkp;
+    fi
+    if [ -e ./.build_choices_bkp ] ; then
+        cat ./.build_choices_bkp;
+    fi;
+    if [ -e ./.dellclusterruntimeenvbkpfile ] ; then
+        cat ./.dellclusterruntimeenvbkpfile;
+    fi;
+
+}
+alias gdd='_dellclusteruserchoicesget'
+
 dellenvrebash ()
 {
     local cluster=;
@@ -982,6 +1010,8 @@ dellenvrebash ()
         fi;
     fi;
 
+    echo "bkp_file=${bkp_file}";
+
     if [ -n "${bkp_file}" ] ; then
         pdr_folder=$(awk -F '='  '/YONI_PDR/{print $2}' ${bkp_file});
         if [[ -z ${pdr_folder} ]] ; then
@@ -996,7 +1026,7 @@ dellenvrebash ()
             #return -1;
         fi;
     else
-        echo "${RED}no backup files were found. bailing out${NC}";
+        echo -e "${RED}no backup files were found. bailing out${NC}";
         return -1;
     fi;
      
@@ -1073,6 +1103,7 @@ dellclusterruntimeenvset ()
 {
     local cluster=${1};
     local cluster_config_file=;
+    local global_needs_update=0;
 
     if [[ "cyclone" != "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
         echo -e "${RED}you should do this from a cyclone pdr repo${NC}";
@@ -1121,12 +1152,23 @@ dellclusterruntimeenvset ()
     #ask_user_default_yes "Correct ? "
     #[ $? -eq 0 ] && return;
 
-    echo "export CYC_CONFIG=${CYC_CONFIG}"    >  ./.dellclusterruntimeenvbkpfile;
-    echo "export YONI_CLUSTER=${cluster}"     >> ./.dellclusterruntimeenvbkpfile;
-    echo "export YONI_PDR=${cyclone_folder}"  >> ./.dellclusterruntimeenvbkpfile;
-    ask_user_default_no "update setting with global backup file"
-    if [ $? -eq 1 ] ; then
-        /bin/cp ./.dellclusterruntimeenvbkpfile ${dellclusterruntimeenvbkpfile}
+    echo "export CYC_CONFIG=${CYC_CONFIG}"    >  ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+    echo "export YONI_CLUSTER=${cluster}"     >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+    echo "export YONI_PDR=${cyclone_folder}"  >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+
+    if [[ -e ${dellclusterglobalruntimeenvbkpfile} ]] ; then
+        if [[ $(diff ${cyclone_folder}/.dellclusterruntimeenvbkpfile ${dellclusterglobalruntimeenvbkpfile} | wc -l) -gt 0 ]] ; then
+            global_needs_update=1;
+        fi;
+    else
+        global_needs_update=1;
+    fi;
+
+    if [[ ${global_needs_update}  -eq 1 ]] ; then
+        ask_user_default_no "update setting with global backup file"
+        if [ $? -eq 1 ] ; then
+            /bin/cp ${cyclone_folder}/.dellclusterruntimeenvbkpfile ${dellclusterglobalruntimeenvbkpfile}
+        fi;
     fi;
 
     # _dellclusterlistaddcluster ${YONI_CLUSTER};
