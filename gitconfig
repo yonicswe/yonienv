@@ -191,6 +191,8 @@
     dc = diff --cached
     dtc = difftool  --cached
     ds = diff --stat
+    # create a simple patch file to use with the patch tool
+    diffsimple = diff --no-prefix
 
 
     # discardall = checkout HEAD -- .
