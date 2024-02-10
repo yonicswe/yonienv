@@ -966,7 +966,7 @@ _dellclusteruserchoicesget ()
 
     if [ -e ${dellclusterglobalruntimeenvbkpfile} ] ; then
         echo -e "${PURPLE}============ global backup file ${dellclusterglobalruntimeenvbkpfile} ============${NC}";
-        cat ./.dellclusterruntimeenvbkpfile | grep "YONI_CLUSTER\|YONI_PDR" | sed 's/export//g';
+        cat ${dellclusterglobalruntimeenvbkpfile} | grep "YONI_CLUSTER\|YONI_PDR" | sed 's/export//g';
     fi;
 
 }
