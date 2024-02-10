@@ -245,21 +245,22 @@ je ()
     local job=${1};
     local comment=${2};
 
-    jj; 
-
     if [[ -n "${job}" && -n "${comment}" ]] ; then
         if [ $(grep "^${job}" ~/.jobs | wc -l ) -gt 0 ] ; then 
             sed -i "s/^${job}.*/${job} ${comment}/" ~/.jobs;
+            jj;
             return;
         fi;
     fi;
 
     if [[ -n "${job}" ]] ; then
         v ~/.jobs +"/^${job}";
+        jj; 
         return;
     fi;
 
     v ~/.jobs
+    jj; 
 }
 
 alias l='/usr/bin/ls --group-directories-first -l --color -F'
