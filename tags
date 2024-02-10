@@ -20,6 +20,7 @@ _dellclusterlistinit	bashrc_dell.sh	/^_dellclusterlistinit ()$/;"	f
 _dellclusterlistuser	bashrc_dell.sh	/^_dellclusterlistuser ()$/;"	f
 _dellclusterrestartbsc	bashrc_dell.sh	/^_dellclusterrestartbsc ()$/;"	f
 _dellclusterruntimeenvvalidate	bashrc_dell.sh	/^_dellclusterruntimeenvvalidate ()$/;"	f
+_dellclusteruserchoicesget	bashrc_dell.sh	/^_dellclusteruserchoicesget ()$/;"	f
 _dellcyclonebackupuserchoices	bashrc_dell.sh	/^_dellcyclonebackupuserchoices ()$/;"	f
 _dellcyclonebuild_validate_build_machine	bashrc_dell.sh	/^_dellcyclonebuild_validate_build_machine ()$/;"	f
 _delljournalctl	bashrc_dell.sh	/^_delljournalctl ()$/;"	f

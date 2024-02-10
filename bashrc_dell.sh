@@ -950,26 +950,23 @@ alias gd='dellclusterruntimeenvget'
 _dellclusteruserchoicesget ()
 {
     if [ -n "${cyclone_folder}" ] ; then
-        echo "==== ${cyclone_folder} ========"
+        echo -e "${GREEN}============= ${cyclone_folder} =============${NC}"
         if [ -e ${cyclone_folder}/.install_choices_bkp ] ; then
             cat ${cyclone_folder}/.install_choices_bkp;
+            echo -e "${GREEN}===================================================${NC}";
         fi
         if [ -e ${cyclone_folder}/.build_choices_bkp ] ; then
             cat ${cyclone_folder}/.build_choices_bkp;
+            echo -e "${GREEN}===================================================${NC}";
         fi;
         if [ -e ${cyclone_folder}/.dellclusterruntimeenvbkpfile ] ; then
-            cat ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+            cat ${cyclone_folder}/.dellclusterruntimeenvbkpfile | grep "YONI_CLUSTER\|YONI_PDR" | sed 's/export//g';
         fi;
     fi;
 
-    if [ -e ./.install_choices_bkp ] ; then
-        cat ./.install_choices_bkp;
-    fi
-    if [ -e ./.build_choices_bkp ] ; then
-        cat ./.build_choices_bkp;
-    fi;
-    if [ -e ./.dellclusterruntimeenvbkpfile ] ; then
-        cat ./.dellclusterruntimeenvbkpfile;
+    if [ -e ${dellclusterglobalruntimeenvbkpfile} ] ; then
+        echo -e "${PURPLE}============ global backup file ${dellclusterglobalruntimeenvbkpfile} ============${NC}";
+        cat ./.dellclusterruntimeenvbkpfile | grep "YONI_CLUSTER\|YONI_PDR" | sed 's/export//g';
     fi;
 
 }
@@ -1822,19 +1819,16 @@ dellclusterinstall ()
     local deploy_cmd=;
     local reinit_cmd=;
     local create_cluster_cmd=;
-    local deploy_choice=0;
-    local reinit_choice=0;
-    local create_cluster_choice=0;
     local feature=;
     local cmd_start_time=;
-    local deploy_time=;
-    local reinit_time=;
-    local create_cluster_time=;
+    local deploy_time=0;
+    local reinit_time=0;
+    local create_cluster_time=0;
     local create_cluster_failed=0;
     local install_choices=;
-    local reinit_flavor=;
+    local reinit_choices=;
     local add_feature=;
-    local last_used_install_choices=;
+    local repeat_last_choice=0;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1854,142 +1848,86 @@ dellclusterinstall ()
     ask_user_default_yes "Continue ? ";
     [ $? -eq 0 ] && return; 
     
-    dellcdclusterscripts;
 
     if [ -e ${cyclone_folder}/.install_choices_bkp ] ; then
-        last_used_install_choices=$(cat ${cyclone_folder}/.install_choices_bkp);
-        if ! [ -z "${last_used_install_choices}" ] ; then 
-            echo "your last install choices were";
-            echo ${last_used_install_choices} | awk  '{print $0}' RS="&&"|sed 's/echo.*//g'
-            ask_user_default_no "do it again ?";
-            if [ $? -eq 1 ] ; then
-                eval "$(cat ${cyclone_folder}/.install_choices_bkp)";
-                return;
+        source ${cyclone_folder}/.install_choices_bkp;
+        echo "your last install choices were";
+        echo "====================================";
+        echo -e "${YELLOW} ${deploy_cmd} ${NC}";
+        echo -e "${YELLOW} ${reinit_cmd} ${NC}";
+        echo -e "${YELLOW} ${create_cluster_cmd} ${NC}\n";
+
+        ask_user_default_no "do it again ?";
+        if [ $? -eq 1 ] ; then
+            repeat_last_choice=1;
+        fi;
+    fi;
+
+    if [[ ${repeat_last_choice} == 0 ]] ; then
+        install_choices=($(whiptail --checklist "cluster install options" 15 40 5\
+                       deploy "install os on cluster" on \
+                       reinit "copy files to cluster" on  \
+                       cc "create cluster" on 3>&1 1>&2 2>&3));
+
+        if [[ ${install_choices[@]} =~ deploy ]] ; then
+            deploy_cmd="./deploy  --deploytype san ${cluster}";
+        fi;
+
+        if [[ ${install_choices[@]} =~ reinit ]] ; then
+            reinit_cmd="./reinit_array.sh factory sys_mode=block";
+
+            reinit_choices=($(whiptail --checklist "reinit options" 15 50 5\
+                           release "uncheck for debug" on \
+                           feature_flag "add feature flag" off  3>&1 1>&2 2>&3));
+
+            if [[ ${reinit_choices} =~ release ]] ; then
+                reinit_cmd+=" -F Retail";
+            else
+                reinit_cmd+=" -F Debug";
+            fi;
+
+            if [[ ${reinit_choices[@]} =~ feature_flag ]] ; then
+                feature=$(dellcyclonefeatureflaglist);
+                reinit_cmd+=" feature=\"${feature}\"";
             fi;
         fi;
-    fi;
 
-    deploy_cmd="./deploy  --deploytype san ${cluster}";
-    #reinit_cmd="./reinit_array.sh factory;
-    reinit_cmd="./reinit_array.sh factory sys_mode=block";
-    #create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -stdout -y -post";
-    create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -admin -stdout -y -post";
-
-    ######################## get user choices with menu ###########################
-    install_choices=($(whiptail --checklist "cluster install options" 15 40 5\
-                   deploy "install os on cluster" on \
-                   reinit "copy files to cluster" on  \
-                   cc "create cluster" on 3>&1 1>&2 2>&3));
-
-    if [[ ${install_choices[@]} =~ reinit ]] ; then
-            whiptail --yesno "reinit retail or debug ?" \
-                        --yes-button "retail" \
-                        --no-button "debug"  8 80;
-        reinit_flavor=$?;
-        # retail 0 
-        # debug 1
-
-        whiptail --yesno "add feature flag ?" \
-                    --no-button "no" \
-                    --yes-button "yes"  8 80;
-        #whiptail --title "add feature flag ?" --yesno "" 8 80;
-        add_feature=$?;
-        # 0 - add feature flag
-        # 1 - do not add feature flag
-
-        #if [[ $feature -eq 0 ]] ; then
-            #feature_flag=$(whiptail --inputbox "which feature ?" 8 78 Blue --title "Example Dialog" 3>&1 1>&2 2>&3);
-        #fi;
-    fi;
-    ###############################################################################
-
-
-    ###############################################################################
-    # ask user to define commands and offer to do it all without stopping.
-    #
-    # echo -e "\n${deploy_cmd}";
-    #ask_user_default_no "Skip  deploy ? "
-    #if [[ $? -eq 0 ]] ; then
-    if [[ ${install_choices[@]} =~ deploy ]] ; then
-        deploy_choice=1;
-    else
-        deploy_cmd="";
-    fi;
-
-    # echo -e "\n\n${reinit_cmd}\n\n";
-    #ask_user_default_no "Skip reinit ? "
-    #if [[ $? -eq 0 ]] ; then
-    if [[ ${install_choices[@]} =~ reinit ]] ; then
-        reinit_choice=1;
-
-        #ask_user_default_no "reinit debug ? ";
-        #if [ $? -eq 1 ] ; then
-        if [[ ${reinit_flavor} -eq 1 ]] ; then
-            reinit_cmd+=" -F Debug";
-        else
-            reinit_cmd+=" -F Retail";
+        if [[ ${install_choices[@]} =~ cc ]] ; then
+            create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -admin -stdout -y -post";
         fi;
-
-        #ask_user_default_no "would you like to enable a feature flag ? ";
-        #if [ $? -eq 1 ] ; then
-        if [[ ${add_feature} -eq 0 ]] ; then
-            feature=$(dellcyclonefeatureflaglist);
-            reinit_cmd+=" feature=\"${feature}\"";
-            echo -e "\n\n${reinit_cmd}\n\n";
-        fi;
-    else
-        reinit_cmd="";
     fi;
-
-    # echo -e "\n\n${create_cluster_cmd}\n\n";
-    #ask_user_default_no "Skip create_cluster ? "
-    #if [[ $? -eq 0 ]] ; then
-    if [[ ${install_choices[@]} =~ cc ]] ; then
-        create_cluster_choice=1;
-    else
-        create_cluster_cmd="";
-    fi;
-
-    # print the entire triplet commands and let the user decide to decide how to proceed.
-    one_sweep_cmd=""
-    if [ -n "${deploy_cmd}" ] ; then
-        one_sweep_cmd+="echo -e \"========\ndeploy\n========\n\" && ${deploy_cmd}";
-    fi;
-
-    if [ -n "${reinit_cmd}" ] ; then
-        [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
-        one_sweep_cmd+=" echo -e \"========\nreinit\n========\n\" && ${reinit_cmd}";
-    fi;
-
-    if [ -n "${create_cluster_cmd}" ] ; then
-        [ -n "${one_sweep_cmd}" ] && one_sweep_cmd+=" && ";
-        one_sweep_cmd+="echo -e \"========\ncreate_cluster\n========\n\" && ${create_cluster_cmd}";
-    fi;
-
-    echo "${one_sweep_cmd}" > ${cyclone_folder}/.install_choices_bkp;
 
     if [ -z "${deploy_cmd}" ] && [ -z "${reinit_cmd}" ] && [ -z "${create_cluster_cmd}" ] ; then
         echo "nothing to do. bailing out!";
         return 0;
     fi;
 
-    echo -e "${YELLOW} ${deploy_cmd} ${NC}";
-    echo -e "${YELLOW} ${reinit_cmd} ${NC}";
-    echo -e "${YELLOW} ${create_cluster_cmd} ${NC}";
+    echo "deploy_cmd=\"${deploy_cmd}\"" > ${cyclone_folder}/.install_choices_bkp;
+    echo "reinit_cmd=\"${reinit_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
+    echo "create_cluster_cmd=\"${create_cluster_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
 
-    ask_user_default_no "do it with one-liner ? ";
-    if [ $? -eq 1 ] ; then
-        echo ${one_sweep_cmd};
-        return 0 ;
+
+    if [ ${repeat_last_choice} -eq 0 ] ; then
+        echo -e "${YELLOW} ${deploy_cmd} ${NC}";
+        echo -e "${YELLOW} ${reinit_cmd} ${NC}";
+        echo -e "${YELLOW} ${create_cluster_cmd} ${NC}";
+        ask_user_default_yes "continue";
+        if [ $? -eq 0 ] ; then
+            return 0;
+        fi;
     fi;
+
+    dellcdclusterscripts;
 
     echo "==> $(pwd)";
 
     #############################################
     #            deploy
     #############################################
-    if [[ ${deploy_choice} -eq 1 ]] ; then
-        echo -e "\n${BLUE}\t\t\t${deploy_cmd} ${NC}\n";
+    if [[ -n "${deploy_cmd}" ]] ; then
+        echo "============================================================================================================";
+        echo -e "${BLUE}\t\t\t${deploy_cmd} ${NC}";
+        echo "============================================================================================================";
         cmd_start_time=${SECONDS};
         eval ${deploy_cmd};
         if [[ $? -ne 0 ]] ; then 
@@ -2018,8 +1956,10 @@ dellclusterinstall ()
     #############################################
     #            reinit
     #############################################
-    if [[ ${reinit_choice} -eq 1 ]] ; then
-        echo -e "\n${BLUE}\t\t\t${reinit_cmd} ${NC}\n";
+    if [[ -n "${reinit_cmd}" ]] ; then
+        echo "============================================================================================================";
+        echo -e "${BLUE}\t\t\t${reinit_cmd} ${NC}";
+        echo "============================================================================================================";
         cmd_start_time=${SECONDS};
         eval ${reinit_cmd};
         ret=$?;
@@ -2051,47 +1991,42 @@ dellclusterinstall ()
     #############################################
     #            create_cluster
     #############################################
-    [ ${create_cluster_choice} -eq 0 ] && return 0;
+    if [[ -n "${create_cluster_cmd}" ]] ; then
+        echo "============================================================================================================";
+        echo -e "${BLUE}\t\t\t${create_cluster_cmd} ${NC}";
+        echo "============================================================================================================";
+        cmd_start_time=${SECONDS};
+        eval ${create_cluster_cmd};
+        if [[ $? -ne 0 ]] ; then 
+            create_cluster_failed=1;
+            echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
+            while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
 
-    echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
-    cmd_start_time=${SECONDS};
-    eval ${create_cluster_cmd};
-    if [[ $? -ne 0 ]] ; then 
-        create_cluster_failed=1;
-        echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
-        while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
+                echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
+                eval ${create_cluster_cmd};
 
-            echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
-            eval ${create_cluster_cmd};
+                if [[ $? -ne 0 ]] ; then
+                    echo -e "\n${RED}\t\tcreate_cluster failed ! ! !${NC}";
+                    continue;
+                else
+                    create_cluster_failed=0;
+                    break;
+                fi;
 
-            if [[ $? -ne 0 ]] ; then
-                echo -e "\n${RED}\t\tcreate_cluster failed ! ! !${NC}";
-                continue;
-            else
-                create_cluster_failed=0;
-                break;
-            fi;
+            done;
+        else
+            create_cluster_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
+            echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} minutes)${NC}";
+        fi;
 
-        done;
-    else
-        create_cluster_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
-        echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} minutes)${NC}";
+        if [ 1 -eq ${create_cluster_failed} ] ; then
+            return -1;
+        fi;
     fi;
 
-    if [ 1 -eq ${create_cluster_failed} ] ; then
-        return -1;
-    fi;
-
-    echo -e "\n\n${GREEN}\t\t\tGreat success ! ${cluster} is installed${NC}";
-    if [ ${deploy_choice} -eq 1 ] ; then
-        echo -e "\t${CYAN}deploy         : ${deploy_time} minutes${NC}";
-    fi;
-    if [ ${reinit_choice} -eq 1 ] ; then
-        echo -e "\t${CYAN}reinit         : ${reinit_time} minutes${NC}";
-    fi;
-    if [ ${create_cluster_choice} -eq 1 ] ; then
-        echo -e "\t${CYAN}create_cluster : ${create_cluster_time} minutes${NC}";
-    fi;
+    echo -e "\t${CYAN}deploy         : ${deploy_time} minutes${NC}";
+    echo -e "\t${CYAN}reinit         : ${reinit_time} minutes${NC}";
+    echo -e "\t${CYAN}create_cluster : ${create_cluster_time} minutes${NC}";
 }
 
 logged_to_arwen ()
