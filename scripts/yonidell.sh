@@ -133,6 +133,7 @@ yonidellupdate ()
     echo "alias y='source ~/yonidell.sh'" >> ~/.bashrc;
     return 0;
 }
+alias yy='yonidellupdate'
 
 probe_topology ()
 {
@@ -387,6 +388,15 @@ bsclistfeatureflags ()
     awk '/\"name\"/{printf $0; getline; print $0 }' ${feature_flags_file}  | sed -e 's/\"\|\,\|\://g' -e 's/default_state\|name//g' | column -t;
 }
 alias corelistfeatureflags='bsclistfeatureflags';
+
+corelist-fc-devices ()
+{
+    echo "sudo lspci |grep -i fibre";
+    sudo lspci |grep -i fibre;
+    echo "ls -l /sys/class/fc_host";
+    ls -l /sys/class/fc_host;
+}
+alias bsclist-fc-devices='corelist-fc-devices'
 
 _bsclist-xtremapp ()
 {
