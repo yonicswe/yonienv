@@ -1511,6 +1511,8 @@ if [[ -e ~/.dell_leased_clusters ]] ; then
     complete -W "$(cat ~/.dell_leased_clusters)" ssh2coreleased ssh2bscleased
 fi;
 
+delleditleasedclusters='v ~/.dell_leased_clusters'
+
 ssh2bsc ()
 {
     local cluster=${1};
@@ -1743,13 +1745,13 @@ _dellclusterget ()
     local last_used_cluster=;
     local cluster=;
 
-    #if ! [ -z ${YONI_CLUSTER} ] ; then
-        #ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
-        #if [[ $? -eq 1 ]] ; then
-            #echo ${YONI_CLUSTER};
-            #return 0;
-        #fi;
-    #fi;
+    if ! [ -z ${YONI_CLUSTER} ] ; then
+        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
+        if [[ $? -eq 1 ]] ; then
+            echo ${YONI_CLUSTER};
+            return 0;
+        fi;
+    fi;
 
     if [ -e ./.dellclusterruntimeenvbkpfile ] ; then
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ./.dellclusterruntimeenvbkpfile);
@@ -1758,7 +1760,7 @@ _dellclusterget ()
     fi;
 
     if ! [ -z ${last_used_cluster} ] ; then
-        ask_user_default_yes "$FUNCNAME use ${last_used_cluster} again ?";
+        ask_user_default_yes "use ${last_used_cluster} again ?";
         if [[ $? -eq 1 ]] ; then
             echo ${last_used_cluster};
             return 0;
@@ -2459,6 +2461,17 @@ alias delleditlglist="v ${lg_list_file}";
 lg_list_file=~/yonienv/bashrc_dell_lg_list_file
 lg_list=( $(cat ${lg_list_file} ));
 complete -W "$(echo ${lg_list[@]})" ssh2lg;
+
+dellclusteraddtolist ()
+{ 
+    local cluster=${1};
+
+    if [[ -z "${cluster}" ]] ; then
+        return -1;
+    fi;
+
+     _add_cluster_to_list ${cluster};
+}
 
 dellclusterping ()
 {
