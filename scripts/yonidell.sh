@@ -135,6 +135,12 @@ yonidellupdate ()
 }
 alias yy='yonidellupdate'
 
+yonidelldelete ()
+{
+    rm -f ~/yonidell.sh ~/vimrcyoni.vim ~/.vimrc
+    sed -i '/alias y=.*/d' ~/.bashrc;
+}
+
 probe_topology ()
 {
     local core=( $(cat /proc/cpuinfo | awk '/processor/{print $3}') );
