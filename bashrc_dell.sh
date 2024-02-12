@@ -1845,6 +1845,8 @@ dellclusterinstall ()
         return -1;
     fi;
     
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+
     echo -e "\nAbout to install cluster ${cluster}\n";
     dellclusterruntimeenvget;
     ask_user_default_yes "Continue ? ";
