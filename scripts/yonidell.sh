@@ -355,6 +355,8 @@ bsclistbroadcomports ()
     bsclistbroadcomscsiports;
     echo;
     bsclistbroadcomnvmeports;
+
+    echo -e "try also :\ndellcdbsc-bin ; ./cyc_wwn_initializer -d";
 }
 
 bsclistbroadcomvports ()
@@ -485,6 +487,7 @@ alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
 alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
 alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
+alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel"'
 
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
@@ -525,6 +528,8 @@ alias journalkernelf='journalctl -k -f'
 alias journalkernellast3minutes='journalctl -k --since="3 minutes ago"'
 
 alias journalservicemode='journalctl SUB_COMPONENT=servicemode'
+
+alias journal-clear-1d='journalctl --vacuum-time=1d'
 
 # ##################################################################################
 
@@ -1209,10 +1214,25 @@ dellclustergeneratecfg ()
 
 dellnvme-fc-host-nodename-portname ()
 {
-    if [ 0 -eq $(lsmod | grep qla2xxx | wc -l) ] ; then
-        echo "qla module not loaded";
-        echo "modprobe qla2xxx and try again";
-        return;
+    local qla_mod=0;
+    local brcm_mod=0;
+
+    if [[  $(lsmod | grep qla2xxx | wc -l) > 0 ]] ; then
+        qla_mod=1;
+        #echo "qla module not loaded";
+        #echo "modprobe qla2xxx and try again";
+        #return;
+    fi;
+
+    if [[  $(lsmod | grep lpfc | wc -l) > 0 ]] ; then
+        brcm_mod=1;
+        #echo "qla module not loaded";
+        #echo "modprobe qla2xxx and try again";
+        #return;
+    fi;
+
+    if [[ ${qla_mod} == 0 && ${brcm_mod} == 0 ]] ; then
+        echo -e "${RED}!! no fc driver is loaded !!${NC}";
     fi;
 
     for h in /sys/class/fc_host/* ; do
