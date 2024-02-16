@@ -825,19 +825,27 @@ dellclusterleaserelease ()
     local cluster=${1};
 
     if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
+        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        if [[ -z "${cluster}" ]] ; then
+            cluster=$(_dellclusterget);
+        fi;
         if [ -z ${cluster} ] ; then
             echo "${FUNCNAME} <cluster>"; 
             return -1;
         fi;
     fi;
 
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+
     echo "/home/public/scripts/xpool_trident/prd/xpool release ${cluster}";
     ask_user_default_no "are you sure ? ";
     [[ $? -eq 0 ]] && return;
 
+    if [[ $(grep ${cluster} ~/.dell_leased_clusters | wc -l) -gt 0 ]] ; then
+        sed -i "/${cluster}/d" ~/.dell_leased_clusters;
+    fi;
+
     /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
-    sed -i "/${cluster}/d" ~/.dell_leased_clusters;
 }
 
 _dellclusterlease ()
@@ -852,6 +860,8 @@ _dellclusterlease ()
             return -1;
         fi;
     fi;
+
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}');
 
     echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
     /home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster};
@@ -1745,7 +1755,7 @@ _dellclusterget ()
     local last_used_cluster=;
     local cluster=;
 
-    if ! [ -z ${YONI_CLUSTER} ] ; then
+    if [ -n "${YONI_CLUSTER}" ] ; then
         ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
         if [[ $? -eq 1 ]] ; then
             echo ${YONI_CLUSTER};
@@ -1759,7 +1769,7 @@ _dellclusterget ()
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
     fi;
 
-    if ! [ -z ${last_used_cluster} ] ; then
+    if  [ -n "${last_used_cluster}" ] ; then
         ask_user_default_yes "use ${last_used_cluster} again ?";
         if [[ $? -eq 1 ]] ; then
             echo ${last_used_cluster};
@@ -1910,6 +1920,10 @@ dellclusterinstall ()
     echo "reinit_cmd=\"${reinit_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
     echo "create_cluster_cmd=\"${create_cluster_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
 
+    if [[ "${YONI_CLUSTER}" != "${cluster}" ]] ; then
+        echo -e "${RED}cannot install ${clutster} while CYC_CONFIG points to ${YONI_CLUSTER}${NC}";
+        return -1;
+    fi;
 
     if [ ${repeat_last_choice} -eq 0 ] ; then
         echo -e "${YELLOW} ${deploy_cmd} ${NC}";
