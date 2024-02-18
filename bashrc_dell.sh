@@ -2438,6 +2438,7 @@ delllastusedlgbkpfile=~/.delllastusedlgbkpfile;
 ssh2lg ()
 {
     local lg_name=${1};
+    local use_backup=0;
 
     if [[ -z ${lg_name} ]]; then 
         if [ -e ${delllastusedlgbkpfile} ] ; then
@@ -2445,6 +2446,8 @@ ssh2lg ()
             ask_user_default_yes "use ${lg_name} again ";
             if [ $? -eq 0 ] ; then
                 lg_name=;
+            else
+                use_backup=1;
             fi;
         fi;
     fi;
@@ -2458,8 +2461,10 @@ ssh2lg ()
         return -1;
     fi;
 
-    ask_user_default_yes "ssh2lg ${lg_name} ? ";
-    if [[ $? -eq 0 ]] ; then return 0 ; fi;
+    if [[ ${use_backup} == 0 ]] ; then
+        ask_user_default_yes "ssh2lg ${lg_name} ? ";
+        if [[ $? -eq 0 ]] ; then return 0 ; fi;
+    fi;
 
     if ! [[ ${lg_list[@]} =~ ${lg_name} ]] ; then
         echo ${lg_name} >> ${lg_list_file};
