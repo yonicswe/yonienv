@@ -50,13 +50,10 @@ k () {
             return;
         fi;
 
-        jobs | sed 's/\].*//g' | sed 's/\[//g' | while read j ; do
-            kill_str="kill -9 %${j}" ; 
-            eval ${kill_str} ; 
-        done;
-
+        jobs -p | xargs kill -9
         return;
     fi;
+
     kill_str="kill -9 %${job}" ; 
     eval ${kill_str} ; 
 }
