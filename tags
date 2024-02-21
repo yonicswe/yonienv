@@ -24,6 +24,10 @@ _dellclusteruserchoicesget	bashrc_dell.sh	/^_dellclusteruserchoicesget ()$/;"	f
 _dellcyclonebackupuserchoices	bashrc_dell.sh	/^_dellcyclonebackupuserchoices ()$/;"	f
 _dellcyclonebuild_validate_build_machine	bashrc_dell.sh	/^_dellcyclonebuild_validate_build_machine ()$/;"	f
 _delljournalctl	bashrc_dell.sh	/^_delljournalctl ()$/;"	f
+_dellpdr_git_sync_submodules	bashrc_dell.sh	/^_dellpdr_git_sync_submodules ()$/;"	f
+_dellpdr_gitsmup	bashrc_dell.sh	/^_dellpdr_gitsmup ()$/;"	f
+_dellpdr_reset	bashrc_dell.sh	/^_dellpdr_reset ()$/;"	f
+_dellpdr_show_branches	bashrc_dell.sh	/^_dellpdr_show_branches ()$/;"	f
 _dellrebootnode	bashrc_dell.sh	/^_dellrebootnode ()$/;"	f
 _devel	folder_name_complete.sh	/^_devel ()$/;"	f
 _docs	folder_name_complete.sh	/^_docs ()$/;"	f
@@ -116,6 +120,7 @@ dellcdmdt	bashrc_dell.sh	/^dellcdmdt ()$/;"	f
 dellcdpnvmetfolder	bashrc_dell.sh	/^dellcdpnvmetfolder ()$/;"	f
 dellcdqlasources	bashrc_dell.sh	/^dellcdqlasources ()$/;"	f
 dellcdthirdparty	bashrc_dell.sh	/^dellcdthirdparty ()$/;"	f
+dellclusteraddtolist	bashrc_dell.sh	/^dellclusteraddtolist ()$/;"	f
 dellclusterconfigupdate	bashrc_dell.sh	/^dellclusterconfigupdate ()$/;"	f
 dellclustereditcycconfig	bashrc_dell.sh	/^dellclustereditcycconfig ()$/;"	f
 dellclustergeneratecfg	bashrc_dell.sh	/^dellclustergeneratecfg ()$/;"	f

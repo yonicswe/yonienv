@@ -207,6 +207,7 @@ k () {
     eval ${kill_str} ; 
 }
 
+export yonienvjobsfile=${yonienv}/jobs
 jj ()
 {
     local -a job_array=( $(j | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g') );
@@ -214,30 +215,32 @@ jj ()
 
     #echo ${job_array[@]};
 
-    if ! [ -e ~/.jobs ] ; then
-        j | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g' > ~/.jobs
+    if ! [ -e ${yonienvjobsfile} ] ; then
+        j | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g' > ${yonienvjobsfile}
     else
-        # compare current jobs array with ~/.jobs
-        job_array_bkp=$(cat ~/.jobs | cut -f 1 -d ' ' | xargs);
+        # compare current jobs array with ${yonienvjobsfile}
+        job_array_bkp=$(cat ${yonienvjobsfile} | cut -f 1 -d ' ' | xargs);
         #echo "job_array_bkp: ${job_array_bkp[@]}";
         for j in ${job_array[@]}  ; do
             if [[  ${job_array_bkp[@]} =~ $j ]] ; then
                 continue;
             fi;
-            echo "$j" >> ~/.jobs;
+            echo "$j" >> ${yonienvjobsfile};
         done;
 
         for j in ${job_array_bkp[@]}  ; do
             if [[  ${job_array[@]} =~ $j ]] ; then
                 continue;
             fi;
-            sed -i "/$j.*/d" ~/.jobs;
+            sed -i "/$j.*/d" ${yonienvjobsfile};
         done;
 
         # remove j from bkp file
     fi;
 
-    cat ~/.jobs
+    #cat ${yonienvjobsfile};
+    awk '{printf "%2s ", $1 ; $1="" ; printf "%s\n", $0}' ${yonienvjobsfile};
+
 }
 
 je () 
@@ -246,20 +249,20 @@ je ()
     local comment=${2};
 
     if [[ -n "${job}" && -n "${comment}" ]] ; then
-        if [ $(grep "^${job}" ~/.jobs | wc -l ) -gt 0 ] ; then 
-            sed -i "s/^${job}.*/${job} ${comment}/" ~/.jobs;
+        if [ $(grep "^${job}" ${yonienvjobsfile} | wc -l ) -gt 0 ] ; then 
+            sed -i "s/^${job}.*/${job} ${comment}/" ${yonienvjobsfile};
             jj;
             return;
         fi;
     fi;
 
     if [[ -n "${job}" ]] ; then
-        v ~/.jobs +"/^${job}";
+        v ${yonienvjobsfile} +"/^${job}";
         jj; 
         return;
     fi;
 
-    v ~/.jobs
+    v ${yonienvjobsfile}
     jj; 
 }
 
