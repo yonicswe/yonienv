@@ -267,19 +267,22 @@ dellsubmodulesdiscard ()
     git submodule update --checkout source/nt-nvmeof-frontend
 }
 
-dellpdr-reset ()
+alias dellpdr-reset='_dellpdr_reset'
+_dellpdr_reset ()
 { 
     echo "git fetch"; git fetch;
     echo "git reset HEAD"; git reset HEAD;
     echo "git c ."; git c .;
 }
 
-dellpdr-gitsmup ()
+alias dellpdr-gitsmup='_dellpdr_gitsmup'
+_dellpdr_gitsmup ()
 {
     local cyc_core=0;
     local nt_nvmeof_frontend=0;
     local linux=0;
     local third_party=0;
+    local -a build_choices=();
 
     ask_user_default_no "are you in a pdr ? ";
     if [ $? -eq 0 ] ; then
@@ -293,26 +296,32 @@ dellpdr-gitsmup ()
     #--------------------------------------
     #            ask user
     #--------------------------------------
-    ask_user_default_yes "update source/cyc_core ?";
-    [ $? -eq 1 ] && cyc_core=1;
+    build_choices=($(whiptail --checklist "sync submodules" 11 30 6\
+                   nt "" on \
+                   cyc_core "" on  \
+                   third_party "" off  \
+                   linux "" off 3>&1 1>&2 2>&3));
 
-    ask_user_default_yes "update source/nt-nvmeof-frontend ?";
-    [ $? -eq 1 ] && nt_nvmeof_frontend=1;
-
-    ask_user_default_no "update source/third_party ?";
-    [ $? -eq 1 ] && third_party=1;
-
-    ask_user_default_no "update source/linux ?";
-    [ $? -eq 1 ] && linux=1;
-
+    if [[ ${build_choices[@]} =~ cyc_core ]] ; then
+        cyc_core=1;
+    fi;
+    if [[ ${build_choices[@]} =~ nt ]] ; then
+        nt_nvmeof_frontend=1;
+    fi;
+    if [[ ${build_choices[@]} =~ third_party ]] ; then
+        third_party=1;
+    fi;
+    if [[ ${build_choices[@]} =~ linux ]] ; then
+        linux=1;
+    fi;
 
     #--------------------------------------
     #            do it
     #--------------------------------------
-    if (( ${cyc_core} == 1           )) ; then echo "-->update cyc_core";           git smupdate source/cyc_core           ; fi;
-    if (( ${nt_nvmeof_frontend} == 1 )) ; then echo "-->update nt-nvmeof-frontend"; git smupdate source/nt-nvmeof-frontend ; fi;
-    if (( ${linux} == 1              )) ; then echo "-->update linux";              git smupdate source/linux              ; fi;
-    if (( ${third_party} == 1        )) ; then echo "-->update third_party";        git smupdate source/third_party        ; fi;
+    if (( ${cyc_core} == 1           )) ; then echo -e "${BLUE}-->update cyc_core${NC}";           git smupdate source/cyc_core           ; fi;
+    if (( ${nt_nvmeof_frontend} == 1 )) ; then echo -e "${BLUE}-->update nt-nvmeof-frontend${NC}"; git smupdate source/nt-nvmeof-frontend ; fi;
+    if (( ${linux} == 1              )) ; then echo -e "${BLUE}-->update linux${NC}";              git smupdate source/linux              ; fi;
+    if (( ${third_party} == 1        )) ; then echo -e "${BLUE}-->update third_party${NC}";        git smupdate source/third_party        ; fi;
 
     #--------------------------------------
     #            verify
@@ -352,9 +361,16 @@ dellpdr-gitsmup ()
     # git sm update source/trident-glider
     # git sm update source/trident-sdnas
     # git sm update source/xblock
+
+
+    if (( ${cyc_core} == 1           )) ; then echo -e "${BLUE}-->updated cyc_core${NC}"; fi;
+    if (( ${nt_nvmeof_frontend} == 1 )) ; then echo -e "${BLUE}-->updated nt-nvmeof-frontend${NC}"; fi;
+    if (( ${linux} == 1              )) ; then echo -e "${BLUE}-->updated linux${NC}"; fi;
+    if (( ${third_party} == 1        )) ; then echo -e "${BLUE}-->updated third_party${NC}"; fi;
 }
  
-dellpdr-git-sync-submodules ()
+alias dellpdr-git-sync-submodules='_dellpdr_git_sync_submodules'
+_dellpdr_git_sync_submodules ()
 {
     local cyc_core=0;
     local nt_nvmeof_frontend=0;
@@ -455,7 +471,8 @@ dellpdr-git-sync-submodules ()
     fi;
 }
  
-dellpdr-show-branches ()
+alias dellpdr-show-branches='_dellpdr_show_branches'
+_dellpdr_show_branches ()
 {
     cd source/cyc_core;
     echo -e "${BLUE}$(pwd)${NC}";
@@ -574,9 +591,6 @@ dellcyclonebuild ()
         ask_user_default_no "repeat your last choices ? ";
         if [ $? -eq 1 ] ; then
             repeat_last_choice=1;
-            #build_cmd=$(cat .build_choices_bkp);
-            #eval ${build_cmd};
-            #return 0;
         fi;
     fi;
 
@@ -632,13 +646,15 @@ dellcyclonebuild ()
     #fi;
 
     if  [ -n "${build_cmd}" ] ; then
-        echo -e "\n========== start build ($(pwd)) ===================\n";
-        echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
-        echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
-        echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
-        echo -e "\n========================================================";
-        ask_user_default_yes "continue ?";
-        [ $? -eq 0 ] && return 0;
+        if [[ ${repeat_last_choice} == 0 ]] ; then
+            echo -e "\n========== start build ($(pwd)) ===================\n";
+            echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
+            echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
+            echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
+            echo -e "\n========================================================";
+            ask_user_default_yes "continue ?";
+            [ $? -eq 0 ] && return 0;
+        fi;
 
         if [[ -n "${prune_cmd}" ]] ; then
             _dellcyclonebackupuserchoices backup;
@@ -1090,9 +1106,9 @@ dellcdcyclonefolder ()
     return 0;
 }
 alias ddd='dellcdcyclonefolder'
-alias dddcore='dellcdcyclonefolder; [ $? -eq 0 ] && c source/cyc_core'
-alias dddnt='dellcdcyclonefolder; [ $? -eq 0 ] && c source/nt-nvmeof-frontend'
-alias dddthird-party='dellcdcyclonefolder; [ $? -eq 0 ] && c source/third_party'
+alias dddcore='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/cyc_core'
+alias dddnt='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/nt-nvmeof-frontend'
+alias dddthird-party='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party'
 alias dddbroadcomesources='dellcdbroadcomsources'
 alias dddbroadcomemakefiles='dellcdbroadcommakefiles'
 dellcdcyclonescripts ()
