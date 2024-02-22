@@ -640,6 +640,7 @@ dellcyclonebuild ()
     echo -e "prune_cmd=\"${prune_cmd}\"" > ${cyclone_folder}/.build_choices_bkp;
     echo -e "build_cmd=\"${build_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp;
     echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp
+    echo "build_date=$(now)" >> ${cyclone_folder}/.build_choices_bkp;
     echo "build_branch=$(git bb)" >> ${cyclone_folder}/.build_choices_bkp;
     echo "build_pdr=${cyclone_folder}" >> ${cyclone_folder}/.build_choices_bkp;
     echo "build_pdr_git_index=$(git hh)" >> ${cyclone_folder}/.build_choices_bkp;
@@ -1956,7 +1957,8 @@ dellclusterinstall ()
         fi;
     fi;
 
-    echo "deploy_cmd=\"${deploy_cmd}\"" > ${cyclone_folder}/.install_choices_bkp;
+    echo "install_date=\"$(now)\"" > ${cyclone_folder}/.install_choices_bkp;
+    echo "deploy_cmd=\"${deploy_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
     echo "reinit_cmd=\"${reinit_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
     echo "create_cluster_cmd=\"${create_cluster_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
     echo "install_branch=$(git bb)" >> ${cyclone_folder}/.install_choices_bkp;
