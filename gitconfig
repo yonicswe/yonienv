@@ -266,24 +266,40 @@
 
 # ───────h──────────────────────────────────────────────────────────────────────
 #   h = log -n1 --pretty=oneline
-        h = "!f() { if [ -e .git ] ; then\
-                       if [ -d .git ] ; then\
-		          if [ $( git bb ) == HEAD ] ; then\
-			     cat .git/HEAD;\
-		          else\
-                             cat .git/refs/heads/$(git bb);\
-		          fi;\
-                          echo '------------------------------------';\
-                       elif [ -f .git ] ; then\
-		          if [ $( git bb ) == HEAD ] ; then\
-                             echo "$(cat $(cat .git | cut -d ' ' -f 2 )/HEAD)";\
-		          else\
-                             echo "$(cat $(cat .git | cut -d ' ' -f 2 )/refs/heads/$(git bb))";\
-		          fi;\
-                          echo '------------------------------------';\
-                       fi;\
+    hh = "!f() { if [ -e .git ] ; then\
+                    if [ -d .git ] ; then\
+    	               if [ $( git bb ) == HEAD ] ; then\
+    		          cat .git/HEAD;\
+    	               else\
+                          cat .git/refs/heads/$(git bb);\
+    	               fi;\
+                    elif [ -f .git ] ; then\
+    	               if [ $( git bb ) == HEAD ] ; then\
+                          echo "$(cat $(cat .git | cut -d ' ' -f 2 )/HEAD)";\
+    	               else\
+                          echo "$(cat $(cat .git | cut -d ' ' -f 2 )/refs/heads/$(git bb))";\
+    	               fi;\
                     fi;\
-                    git logstat -1;}; f"
+                 fi;}; f"
+
+    h = "!f() { if [ -e .git ] ; then\
+                   if [ -d .git ] ; then\
+    	          if [ $( git bb ) == HEAD ] ; then\
+    		     cat .git/HEAD;\
+    	          else\
+                         cat .git/refs/heads/$(git bb);\
+    	          fi;\
+                      echo '------------------------------------';\
+                   elif [ -f .git ] ; then\
+    	          if [ $( git bb ) == HEAD ] ; then\
+                         echo "$(cat $(cat .git | cut -d ' ' -f 2 )/HEAD)";\
+    	          else\
+                         echo "$(cat $(cat .git | cut -d ' ' -f 2 )/refs/heads/$(git bb))";\
+    	          fi;\
+                      echo '------------------------------------';\
+                   fi;\
+                fi;\
+                git logstat -1;}; f"
 
 # ───────i──────────────────────────────────────────────────────────────────────
     info = logstat -1 --pretty=fuller

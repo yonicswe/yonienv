@@ -640,6 +640,9 @@ dellcyclonebuild ()
     echo -e "prune_cmd=\"${prune_cmd}\"" > ${cyclone_folder}/.build_choices_bkp;
     echo -e "build_cmd=\"${build_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp;
     echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp
+    echo "build_branch=$(git bb)" >> ${cyclone_folder}/.build_choices_bkp;
+    echo "build_pdr=${cyclone_folder}" >> ${cyclone_folder}/.build_choices_bkp;
+    echo "build_pdr_git_index=$(git hh)" >> ${cyclone_folder}/.build_choices_bkp;
 
     #if ! [[ ${build_choices[@]} =~ cyc_core ]] ; then
         #build_cmd=;
@@ -1374,6 +1377,8 @@ _add_cluster_to_list ()
 {
     local cluster=${1};
 
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+
     if ! [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then
         ask_user_default_no "add ${cluster} to list";
         if [ $? -eq 0 ] ; then return ; fi;
@@ -1499,6 +1504,8 @@ ssh2coreleased ()
         fi;
     fi;
 
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+
     read -p "[a|b|default BOTH] : " node;
     if [ "${node}" = 'a' ] ; then
         cluster=${cluster}-a;
@@ -1521,6 +1528,8 @@ ssh2bscleased ()
             return -1;
         fi;
     fi;
+
+    echo ${cluster} > ~/.dellssh2cluster.bkp
 
     read -p "[a|b|default BOTH] : " node;
     if [ "${node}" = 'a' ] ; then
@@ -1932,10 +1941,6 @@ dellclusterinstall ()
         return 0;
     fi;
 
-    echo "deploy_cmd=\"${deploy_cmd}\"" > ${cyclone_folder}/.install_choices_bkp;
-    echo "reinit_cmd=\"${reinit_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
-    echo "create_cluster_cmd=\"${create_cluster_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
-
     if [[ "${YONI_CLUSTER}" != "${cluster}" ]] ; then
         echo -e "${RED}cannot install ${clutster} while CYC_CONFIG points to ${YONI_CLUSTER}${NC}";
         return -1;
@@ -1950,6 +1955,13 @@ dellclusterinstall ()
             return 0;
         fi;
     fi;
+
+    echo "deploy_cmd=\"${deploy_cmd}\"" > ${cyclone_folder}/.install_choices_bkp;
+    echo "reinit_cmd=\"${reinit_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
+    echo "create_cluster_cmd=\"${create_cluster_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
+    echo "install_branch=$(git bb)" >> ${cyclone_folder}/.install_choices_bkp;
+    echo "install_pdr=${cyclone_folder}" >> ${cyclone_folder}/.install_choices_bkp;
+    echo "install_pdr_git_index=$(git hh)" >> ${cyclone_folder}/.install_choices_bkp;
 
     dellcdclusterscripts;
 
