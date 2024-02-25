@@ -506,7 +506,7 @@ mv2dir ()
 # by replacing space with underscore
 space_2_underscore ()
 {
-    fileName="$1";
+    filename="$1";
 
     if [ -z "${filename}" ] ; then
         for i  in * ; do 
@@ -514,7 +514,7 @@ space_2_underscore ()
             mv -i -v "$i" $newFileName 
         done
     else
-        newFileName=$(echo "$fileName" | sed 's/\ /_/g')
+        newFileName=$(echo "$filename" | sed 's/\ /_/g')
         mv -i -v "$fileName" $newFileName 
     fi;
 } 
