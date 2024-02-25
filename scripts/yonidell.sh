@@ -306,6 +306,11 @@ bsclistports ()
     subsystem=$(ls /sys/kernel/config/nvmet/subsystems);
     echo "subsystem = ${subsystem}";
     echo "==================================================="
+    printf  "%-20s" idx ;
+    printf  "%-90s" file;
+    printf  "%-28s" addr;
+    printf  "%-7s" port;
+    printf  "%-7s\n" type;
     for i in /sys/kernel/config/nvmet/ports/* ; do
         echo -n "$(cat $i/user_port_idx) |";
         echo -n "$i |";
