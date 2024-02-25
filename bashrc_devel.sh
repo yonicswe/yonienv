@@ -748,6 +748,48 @@ ta ()
     fi
 }
 
+alias hex2bin32="_hex2bin 32"
+alias hex2bin64="_hex2bin 64"
+
+_hex2bin ()
+{ 
+    local binlen=${1:-32};
+    local hex=${2};
+    local binary32=;
+    local binary64=;
+    local binary=;
+    local len=;
+    local bit=;
+    local idx=;
+    binary32=$(echo "obase=2; ibase=16; ${hex}" | bc | awk '{printf "%032d", $0}');
+    binary64=$(echo "obase=2; ibase=16; ${hex}" | bc | awk '{printf "%064d", $0}');
+    #printf "%016x" ${hex} | xxd -r -p | hexdump -C;
+
+    if [[ ${binlen} == 32 ]] ; then
+        binary=${binary32};
+    elif [[ ${binlen} == 64 ]] ; then
+        binary=${binary64};
+    else
+        echo "cannot handle len $len";
+        return -1;
+    fi;
+
+    #echo ${binary};
+
+    len=${#binary};
+    printf "%2s |" $(seq $((len -1 )) -1 0 );
+    echo;
+    for (( idx=0 ; idx<${len} ; idx++ )) ; do
+        bit="${binary:$idx:1}";
+        if [[ ${bit} == 1 ]] ; then
+            echo -en "${RED}$(printf "%2s" ${bit})${NC} |";
+        else
+            printf "%2s |" ${bit};
+        fi;
+    done;
+    echo;
+}
+
 alias tk='tmux kill-session -t'
 
 alias tagginginstall="yuminstall cscope ctags";
