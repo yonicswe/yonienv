@@ -559,6 +559,9 @@ dellcyclonebuild ()
     local build_cmd=;
     local prune_cmd=;
     local flavor=RETAIL;
+    local start_time=;
+    local end_time=;
+    local build_time=;
 
     _dellcyclonebuild_validate_build_machine
     if [[ $? -ne 0 ]] ; then
@@ -666,9 +669,13 @@ dellcyclonebuild ()
             _dellcyclonebackupuserchoices restore;
         fi;
 
+        start_time=$SECONDS;
         # build_cmd="time ${build_cmd}";
         eval ${build_cmd} | tee dellcyclonebuild.log;
         # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
+        end_time=$SECONDS;
+        build_time=$(( ${end_time} - ${start_time} ))
+        echo "build took $(date -u -d @"$build_time" +'%-Mm %-Ss')";
 
         echo;
         p;
