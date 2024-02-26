@@ -762,8 +762,8 @@ debuc-command ()
 
 alias debuc-data-collect='debuc-command "log data collect"';
 
-alias debuc-auth-log-enable='debuc-command "log auth enable"';
-alias debuc-auth-log-disable='debuc-command "log auth disable"';
+alias debuc-log-auth-enable='debuc-command "log auth enable"';
+alias debuc-log-auth-disable='debuc-command "log auth disable"';
 
 alias debuc-log-commands-enable='debuc-command "log commands enable"';
 alias debuc-log-commands-disable='debuc-command "log commands disable"';
