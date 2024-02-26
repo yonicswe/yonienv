@@ -990,13 +990,13 @@ _dellclusteruserchoicesget ()
             echo -e "${GREEN}===================================================${NC}";
         fi;
         if [ -e ${cyclone_folder}/.dellclusterruntimeenvbkpfile ] ; then
-            cat ${cyclone_folder}/.dellclusterruntimeenvbkpfile | grep "YONI_CLUSTER\|YONI_PDR" | sed 's/export//g';
+            cat ${cyclone_folder}/.dellclusterruntimeenvbkpfile | grep "YONI_CLUSTER\|YONI_PDR\|pnvmet_folder" | sed 's/export//g';
         fi;
     fi;
 
     if [ -e ${dellclusterglobalruntimeenvbkpfile} ] ; then
         echo -e "${PURPLE}============ global backup file ${dellclusterglobalruntimeenvbkpfile} ============${NC}";
-        cat ${dellclusterglobalruntimeenvbkpfile} | grep "YONI_CLUSTER\|YONI_PDR" | sed 's/export//g';
+        cat ${dellclusterglobalruntimeenvbkpfile} | grep "YONI_CLUSTER\|YONI_PDR\|pnvmet_folder" | sed 's/export//g';
     fi;
 
 }
@@ -1051,6 +1051,11 @@ dellenvrebash ()
         if [[ -z ${cluster} ]] ; then
             echo -e "${RED}last used cluster not saved${NC}";
             #return -1;
+        fi;
+
+        pnvmet_folder=$(awk -F '='  '/pnvmet_folder/{print $2}' ${bkp_file});
+        if [[ -n "${pnvmet_folder}" ]] ; then
+            export pnvmet_folder=${pnvmet_folder};
         fi;
     else
         echo -e "${RED}no backup files were found. bailing out${NC}";
@@ -1115,6 +1120,7 @@ alias dddnt='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/nt-nvmeof-
 alias dddthird-party='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party'
 alias dddbroadcomesources='dellcdbroadcomsources'
 alias dddbroadcomemakefiles='dellcdbroadcommakefiles'
+alias dddpnvmet='[ -n "${pnvmet_folder}" ] && c ${pnvmet_folder}'
 dellcdcyclonescripts ()
 {
     if [ -z ${cyclone_folder} ] ; then
@@ -1182,6 +1188,7 @@ dellclusterruntimeenvset ()
     echo "export CYC_CONFIG=${CYC_CONFIG}"    >  ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
     echo "export YONI_CLUSTER=${cluster}"     >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
     echo "export YONI_PDR=${cyclone_folder}"  >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+    echo "export pnvmet_folder=${pnvmet_folder}"  >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
 
     if [[ -e ${dellclusterglobalruntimeenvbkpfile} ]] ; then
         if [[ $(diff ${cyclone_folder}/.dellclusterruntimeenvbkpfile ${dellclusterglobalruntimeenvbkpfile} | wc -l) -gt 0 ]] ; then
@@ -2907,7 +2914,7 @@ dellcyclonekernelshaget ()
 export pnvmet_folder=;
 dellcdpnvmetfolder ()
 {
-    if [[ -z ${pnvmet_folder} ]] ; then
+    if [[ -z "${pnvmet_folder}" ]] ; then
         echo "pnvmet_folder not set, (use dellcyclonekernelshaupdate)";
         return -1;
     fi;
@@ -2933,7 +2940,7 @@ dellcyclonekernelshaupdate ()
     local mfile=${third_party_folder}/CMakeLists.txt
     
     # make sure dest file/folder exist.
-    if [[ -z ${third_party_folder} ]] ; then
+    if [[ -z "${third_party_folder}" ]] ; then
         echo "runtime env not set"
         return -1;
     fi;
@@ -2944,7 +2951,7 @@ dellcyclonekernelshaupdate ()
     fi;
 
     # if user did not supply sha, we can still use HEAD
-    if [[ -z ${sha} ]] ; then
+    if [[ -z "${sha}" ]] ; then
         # make sure were in the git repo
         git remote 2>&1 1>/dev/null;
         if [[ $? -ne 0 ]] ; then
@@ -2969,6 +2976,26 @@ dellcyclonekernelshaupdate ()
         echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
         dellcyclonebuildhistorylog $(pwd) $(git bb) $(git h);
         export pnvmet_folder=$(pwd);
+        if [[ -n "${cyclone_folder}/.dellclusterruntimeenvbkpfile" ]] ; then
+            if [ $(grep pnvmet_folder ${cyclone_folder}/.dellclusterruntimeenvbkpfile | wc -l ) -gt 0 ] ; then
+                p=$(echo $pnvmet_folder |sed 's/\//\\\//g');
+                sed -i "s/pnvmet_folder=.*/pnvmet_folder=${p}/g" ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+            else
+                echo "export pnvmet_folder=${pnvmet_folder}" >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+            fi;
+
+            echo "updated pnvmet_folder in ${cyclone_folder}/.dellclusterruntimeenvbkpfile";
+
+            ask_user_default_yes "also update global runtime env file ?"
+            if [ $? -eq 1 ] ; then
+                if [ $(grep pnvmet_folder ${dellclusterglobalruntimeenvbkpfile} | wc -l ) -gt 0 ] ; then
+                    p=$(echo $pnvmet_folder |sed 's/\//\\\//g');
+                    sed -i "s/pnvmet_folder=.*/pnvmet_folder=${p}/g" ${dellclusterglobalruntimeenvbkpfile};
+                else
+                    echo "export pnvmet_folder=${pnvmet_folder}" >> ${dellclusterglobalruntimeenvbkpfile};
+                fi;
+            fi;
+        fi;
     fi
     
     echo -e "update ${RED}${mfile}${NC} with ${GREEN}${sha}${NC}";
