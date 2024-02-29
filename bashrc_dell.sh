@@ -701,6 +701,8 @@ dellcyclonebuild ()
             eval ${build_third_party_cmd};
         fi;
     fi;
+
+    echo -e "build_time=\"$(date -u -d @"$build_time" +'%-Mm %-Ss')\"" >> ${cyclone_folder}/.build_choices_bkp;
 }
 
 builds_journal_db="build-history";
@@ -2011,8 +2013,10 @@ dellclusterinstall ()
                 return -1;
             fi;
         fi;
-        deploy_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
-        echo -e "\n${GREEN}\t\t\t deploy succeeded ( after ${deploy_time} minutes)${NC}";
+        deploy_time=$(( (${SECONDS} - ${cmd_start_time}) ));
+        deploy_time="$(date -u -d @"${deploy_time}" +'%-Mm %-Ss')";
+        echo -e "deploy_time=\"${deploy_time}\"" >> ${cyclone_folder}/.install_choices_bkp;
+        echo -e "\n${GREEN}\t\t\t deploy succeeded ( after ${deploy_time} )${NC}";
     fi;
 
     #############################################
@@ -2045,8 +2049,10 @@ dellclusterinstall ()
             fi;
         fi;
 
-        reinit_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
-        echo -e "\n${GREEN}\t\t\t reinit succeeded ( after ${reinit_time} minutes)${NC}\n";
+        reinit_time=$(( (${SECONDS} - ${cmd_start_time}) ));
+        reinit_time="$(date -u -d @"${reinit_time}" +'%-Mm %-Ss')";
+        echo -e "reinit_time=\"${reinit_time}\"" >> ${cyclone_folder}/.install_choices_bkp;
+        echo -e "\n${GREEN}\t\t\t reinit succeeded ( after ${reinit_time} )${NC}\n";
     fi;
 
 
@@ -2077,8 +2083,10 @@ dellclusterinstall ()
 
             done;
         else
-            create_cluster_time=$(( (${SECONDS} - ${cmd_start_time})/60 ));
-            echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} minutes)${NC}";
+            create_cluster_time=$(( (${SECONDS} - ${cmd_start_time}) ));
+            create_cluster_time="$(date -u -d @"${create_cluster_time}" +'%-Mm %-Ss')";
+            echo -e "create_cluster_time=\"${create_cluster_time}\"" >> ${cyclone_folder}/.install_choices_bkp;
+            echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} )${NC}";
         fi;
 
         if [ 1 -eq ${create_cluster_failed} ] ; then
@@ -2086,9 +2094,9 @@ dellclusterinstall ()
         fi;
     fi;
 
-    echo -e "\t${CYAN}deploy         : ${deploy_time} minutes${NC}";
-    echo -e "\t${CYAN}reinit         : ${reinit_time} minutes${NC}";
-    echo -e "\t${CYAN}create_cluster : ${create_cluster_time} minutes${NC}";
+    echo -e "\t${CYAN}deploy         : ${deploy_time} ${NC}";
+    echo -e "\t${CYAN}reinit         : ${reinit_time} ${NC}";
+    echo -e "\t${CYAN}create_cluster : ${create_cluster_time} ${NC}";
 }
 
 logged_to_arwen ()
