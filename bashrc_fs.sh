@@ -192,7 +192,10 @@ alias j='jobs -l'
 alias f='fg'
 alias b='bg'
 k () {
-    job=$1 ; 
+    local job=$1 ; 
+    local j;
+    local kill_str;
+
     if [ -z "$job" ] ; then
         ask_user_default_no "kill all jobs";
         if [ $? -eq 0 ] ; then
@@ -203,8 +206,10 @@ k () {
         return;
     fi;
 
-    kill_str="kill -9 %${job}" ; 
-    eval ${kill_str} ; 
+    for j in ${@:1} ; do
+        kill_str="kill -9 %${j}" ; 
+        eval ${kill_str}; 
+    done;
 }
 
 export yonienvjobsfile=${yonienv}/jobs
