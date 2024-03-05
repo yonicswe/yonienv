@@ -42,8 +42,12 @@ alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
 
-k () {
-    job=$1 ; 
+k ()
+{
+    local job=$1 ; 
+    local j;
+    local kill_str;
+
     if [ -z "$job" ] ; then
         ask_user_default_no "kill all jobs";
         if [ $? -eq 0 ] ; then
@@ -54,8 +58,10 @@ k () {
         return;
     fi;
 
-    kill_str="kill -9 %${job}" ; 
-    eval ${kill_str} ; 
+    for j in ${@:1} ; do
+        kill_str="kill -9 %${j}" ; 
+        eval ${kill_str}; 
+    done;
 }
 
 alias lessin='less -IN'
@@ -486,6 +492,7 @@ alias journal-grep-panic='journalctl | grep --color "PANIC\|log_backtrace_backen
 alias journal-grep-connect='journalnt | grep  --color "nvme.*alloc"'
 alias journal-grep-discover='journalnt | grep  --color "discover.*alloc"'
 alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
+alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*start"'
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
 alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
 alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
@@ -1356,6 +1363,8 @@ core-servicemode ()
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/nvme0n1
+# if /home/qa is missing you need to mount it like so
+# mount 10.55.160.100:/home/qa /home/qa
 
 # multipath -ll
 # nvme discover -t tcp -a <port from bsclistports>
