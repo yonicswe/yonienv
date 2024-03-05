@@ -1124,12 +1124,12 @@ dellcdcyclonefolder ()
     return 0;
 }
 alias ddd='dellcdcyclonefolder'
-alias dddcore='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/cyc_core'
-alias dddnt='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/nt-nvmeof-frontend'
-alias dddthird-party='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party'
+alias dddcore='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/cyc_core || echo "!!!cyclone_folder empty!!!"'
+alias dddnt='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/nt-nvmeof-frontend || echo "!!!cyclone_folder empty!!!"'
+alias dddthird-party='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party || echo "!!!cyclone_folder empty!!!"'
 alias dddbroadcomesources='dellcdbroadcomsources'
 alias dddbroadcomemakefiles='dellcdbroadcommakefiles'
-alias dddpnvmet='[ -n "${pnvmet_folder}" ] && c ${pnvmet_folder}'
+alias dddpnvmet='[ -n "${pnvmet_folder}" ] && c ${pnvmet_folder} || echo "!!!pnvmet_folder empty!!!"'
 dellcdcyclonescripts ()
 {
     if [ -z ${cyclone_folder} ] ; then
@@ -2999,17 +2999,17 @@ dellcyclonekernelshaupdate ()
                 echo "export pnvmet_folder=${pnvmet_folder}" >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
             fi;
 
-            echo "updated pnvmet_folder in ${cyclone_folder}/.dellclusterruntimeenvbkpfile";
+            #echo "updated pnvmet_folder in ${cyclone_folder}/.dellclusterruntimeenvbkpfile";
 
-            ask_user_default_yes "also update global runtime env file ?"
-            if [ $? -eq 1 ] ; then
+            #ask_user_default_yes "also update global runtime env file ?"
+            #if [ $? -eq 1 ] ; then
                 if [ $(grep pnvmet_folder ${dellclusterglobalruntimeenvbkpfile} | wc -l ) -gt 0 ] ; then
                     p=$(echo $pnvmet_folder |sed 's/\//\\\//g');
                     sed -i "s/pnvmet_folder=.*/pnvmet_folder=${p}/g" ${dellclusterglobalruntimeenvbkpfile};
                 else
                     echo "export pnvmet_folder=${pnvmet_folder}" >> ${dellclusterglobalruntimeenvbkpfile};
                 fi;
-            fi;
+            #fi;
         fi;
     fi
     
