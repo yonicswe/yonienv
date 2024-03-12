@@ -489,8 +489,8 @@ alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 
 # ############ for cluster only #############################################################
 alias journal-grep-panic='journalctl | grep --color "PANIC\|log_backtrace_backend"'
-alias journal-grep-connect='journalnt | grep  --color "nvme.*alloc"'
-alias journal-grep-discover='journalnt | grep  --color "discover.*alloc"'
+alias journal-grep-connect='journalnt | grep  --color "nvme.*allocate"'
+alias journal-grep-discover='journalnt | grep  --color "discover.*allocate"'
 alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
 alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*start"'
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
