@@ -1927,6 +1927,8 @@ dellclusterinstall ()
 
         if [[ ${install_choices[@]} =~ deploy ]] ; then
             deploy_cmd="./deploy  --deploytype san ${cluster}";
+        else
+            deploy_cmd=;
         fi;
 
         if [[ ${install_choices[@]} =~ reinit ]] ; then
@@ -1946,10 +1948,14 @@ dellclusterinstall ()
                 feature=$(dellcyclonefeatureflaglist);
                 reinit_cmd+=" feature=\"${feature}\"";
             fi;
+        else
+            reinit_cmd=;
         fi;
 
         if [[ ${install_choices[@]} =~ cc ]] ; then
             create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -admin -stdout -y -post";
+        else
+            create_cluster_cmd=;
         fi;
     fi;
 
@@ -2526,6 +2532,7 @@ ssh2lg ()
 
     echo ${lg_name} > ${delllastusedlgbkpfile};
 
+    echo "ssh root@${lg_name}";
     sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
 }
 
@@ -2989,7 +2996,7 @@ dellcyclonekernelshaupdate ()
         # sha=$(git log -1 | awk '/commit/{print $2}');
         sha=$(cat .git/refs/heads/$(git bb));
         echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
-        dellcyclonebuildhistorylog $(pwd) $(git bb) $(git h);
+        #dellcyclonebuildhistorylog $(pwd) $(git bb) $(git h);
         export pnvmet_folder=$(pwd);
         if [[ -n "${cyclone_folder}/.dellclusterruntimeenvbkpfile" ]] ; then
             if [ $(grep pnvmet_folder ${cyclone_folder}/.dellclusterruntimeenvbkpfile | wc -l ) -gt 0 ] ; then
