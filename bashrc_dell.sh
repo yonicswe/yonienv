@@ -1127,7 +1127,7 @@ alias ddd='dellcdcyclonefolder'
 alias dddcore='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/cyc_core || echo "!!!cyclone_folder empty!!!"'
 alias dddnt='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/nt-nvmeof-frontend || echo "!!!cyclone_folder empty!!!"'
 alias dddthird-party='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party || echo "!!!cyclone_folder empty!!!"'
-alias dddthird-party-objects='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party/cyc_platform || echo "!!!cyclone_folder empty!!!"'
+alias dddthird-party-objects='dellcdthirdpartyobjects'
 alias dddbroadcomsources='dellcdbroadcomsources'
 alias dddbroadcommakefiles='dellcdbroadcommakefiles'
 alias dddpnvmet='[ -n "${pnvmet_folder}" ] && c ${pnvmet_folder} || echo "!!!pnvmet_folder empty!!!"'
@@ -2824,6 +2824,46 @@ delldeletebroadcomsources ()
         echo -e "${RED}missing broadcom folder. try the feature branch feature//pl-trif-2474-brcm-fc-64gb${NC}";
         return -1;
     fi;
+}
+
+dellcdthirdpartyobjects ()
+{
+    local platform_debug=source/third_party/cyc_platform/obj_Debug;
+    local platform_release=source/third_party/cyc_platform/obj_Release;
+    local thirdpartyobjects=;
+
+    if [ -z ${cyclone_folder} ] ; then
+        echo -e "${RED}cyclone_folder empty! use dellclusterruntimeenvset${NC}"; 
+        return -1;
+    fi;
+
+    if ! [ -d ${cyclone_folder} ] ; then
+        echo -e "${RED}${cyclone_folder} does not exist! use dellclusterruntimeenvset${NC}"; 
+        return -1;
+    fi;
+
+    thirdpartyobjects=${cyclone_folder}
+    if [ -e ${thirdpartyobjects}/${platform_debug} ] ; then
+        thirdpartyobjects=${thirdpartyobjects}/${platform_debug};
+    elif [ -e ${thirdpartyobjects}/${platform_release} ] ; then
+        thirdpartyobjects=${thirdpartyobjects}/${platform_release};
+    else
+        echo "missing : "
+        echo "${cyclone_folder}/${platform_debug}";
+        echo "${cyclone_folder}/${platform_release}";
+        echo "you should : make third_party force=yes flavor=<DEBUG|RELEASE>";
+        return -1;
+    fi;
+    
+    thirdpartyobjects=${thirdpartyobjects}/third_party;
+
+    if [ -d ${thirdpartyobjects} ] ; then
+        cd ${thirdpartyobjects};
+    else
+        echo "missing folder ${thirdpartyobjects}";
+        return -1;
+    fi;
+    return 0;
 }
 
 dellcdbroadcomsources ()
