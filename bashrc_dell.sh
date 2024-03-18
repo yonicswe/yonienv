@@ -1128,8 +1128,8 @@ alias dddcore='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/cyc_core
 alias dddnt='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/nt-nvmeof-frontend || echo "!!!cyclone_folder empty!!!"'
 alias dddthird-party='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party || echo "!!!cyclone_folder empty!!!"'
 alias dddthird-party-objects='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/third_party/cyc_platform || echo "!!!cyclone_folder empty!!!"'
-alias dddbroadcomesources='dellcdbroadcomsources'
-alias dddbroadcomemakefiles='dellcdbroadcommakefiles'
+alias dddbroadcomsources='dellcdbroadcomsources'
+alias dddbroadcommakefiles='dellcdbroadcommakefiles'
 alias dddpnvmet='[ -n "${pnvmet_folder}" ] && c ${pnvmet_folder} || echo "!!!pnvmet_folder empty!!!"'
 dellcdcyclonescripts ()
 {
