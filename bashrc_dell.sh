@@ -562,6 +562,7 @@ dellcyclonebuild ()
     local start_time=;
     local end_time=;
     local build_time=;
+    local r;
 
     _dellcyclonebuild_validate_build_machine
     if [[ $? -ne 0 ]] ; then
@@ -691,8 +692,13 @@ dellcyclonebuild ()
         echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
         echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
 
-        ask_user_default_no "build third_party ? ";
-        if [ $? -eq 1 ] ; then
+        r=1;
+        if [[  ${repeat_last_choice} == 0 ]] ; then
+            ask_user_default_no "build third_party ? ";
+            r=$?;
+        fi;
+
+        if [ $r -eq 1 ] ; then
             if [[ -n "${prune_cmd}" && -z "${build_cmd}" ]] ; then
                 _dellcyclonebackupuserchoices backup;
                 eval ${prune_cmd};
