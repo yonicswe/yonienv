@@ -323,9 +323,9 @@ git-deletemultiplebranches ()
     local delete_branches=();
 
     if [ -n "${branch_filter}" ] ; then
-        branch_list=($(git b | grep ${branch_filter}| sed 's/\*//g'));
+        branch_list=($(git b | grep ${branch_filter}| sed '/\*.*/d'));
     else
-        branch_list=($(git b | sed 's/\*//g'));
+        branch_list=($(git b | sed '/\*.*/d'));
     fi;
 
     for b in ${branch_list[@]} ; do
