@@ -64,6 +64,7 @@
     ba = branch -a
     br = branch -r
     bdelete = branch -D 
+    bdeletemulti = !git_deletemulti.sh
     brename = branch -M
     byoni = ba --list "*ycohen*"
 
