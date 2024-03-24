@@ -1814,8 +1814,8 @@ _dellclusterget ()
 
     if [ -e ./.dellclusterruntimeenvbkpfile ] ; then
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ./.dellclusterruntimeenvbkpfile);
-    elif [ -e ${dellclusterruntimeenvbkpfile} ] ; then
-        last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterruntimeenvbkpfile});
+    elif [ -e ${dellclusterglobalruntimeenvbkpfile} ] ; then
+        last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterglobalruntimeenvbkpfile});
     fi;
 
     if  [ -n "${last_used_cluster}" ] ; then
