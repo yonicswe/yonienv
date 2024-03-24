@@ -36,6 +36,7 @@ _find_zip_files_of_chapter	bashrc_misc.sh	/^_find_zip_files_of_chapter ()$/;"	f
 _gcdcomplete	task_complete.sh	/^function _gcdcomplete()$/;"	f
 _getlastusedcluster	bashrc_dell.sh	/^_getlastusedcluster ()$/;"	f
 _gitdiscard	bashrc_git.sh	/^_gitdiscard () $/;"	f
+_hex2bin	bashrc_devel.sh	/^_hex2bin ()$/;"	f
 _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
 _regression	regression_complete.sh	/^_regression ()$/;"	f
 _share	folder_name_complete.sh	/^_share ()$/;"	f
@@ -120,6 +121,7 @@ dellcdmdt	bashrc_dell.sh	/^dellcdmdt ()$/;"	f
 dellcdpnvmetfolder	bashrc_dell.sh	/^dellcdpnvmetfolder ()$/;"	f
 dellcdqlasources	bashrc_dell.sh	/^dellcdqlasources ()$/;"	f
 dellcdthirdparty	bashrc_dell.sh	/^dellcdthirdparty ()$/;"	f
+dellcdthirdpartyobjects	bashrc_dell.sh	/^dellcdthirdpartyobjects ()$/;"	f
 dellclusteraddtolist	bashrc_dell.sh	/^dellclusteraddtolist ()$/;"	f
 dellclusterconfigupdate	bashrc_dell.sh	/^dellclusterconfigupdate ()$/;"	f
 dellclustereditcycconfig	bashrc_dell.sh	/^dellclustereditcycconfig ()$/;"	f

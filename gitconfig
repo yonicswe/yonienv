@@ -131,6 +131,7 @@
     commitempty = commit --allow-empty
     c = checkout
     cb = checkout -b
+    checkoutremotebranch = !git_checkoutremotebranch.sh
 #   cmn = checkout master_next
     commitfilelist = show --stat --oneline
     checkoutmaster = "!f() { \
