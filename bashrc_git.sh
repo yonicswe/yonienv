@@ -470,6 +470,19 @@ gitsmlist ()
        fi;
    done
 }
+
+alias git-describe-branches='for line in $(git branch); do
+     description=$(git config branch.$line.description)
+     if [ -n "$description" ]; then
+       echo "$line     $description"
+     fi
+done'
+
+alias git-describe-branches-2='git branch | while read line; do
+     description=$(git config branch.$(echo "$line" | sed "s/\* //g").description)
+     echo "$line     $description"
+
+done'
 # howtos and trouble shooting
 # delete .git/index.lock 
 #   - when this happens "another git process seems to be running in this repository
