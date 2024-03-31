@@ -67,6 +67,10 @@
     bdeletemulti = !git_deletemulti.sh
     brename = branch -M
     byoni = ba --list "*ycohen*"
+#   bdescription = !git config --get "branch.$(git rev-parse --abbrev-ref HEAD).description"
+#   bdescription =  !list-git-branches.py
+    bdescription =  !git-list-branches.py
+    bdescriptionedit = branch --edit-description
 
 #   if branch name is posixed with v<number> 
 #   increment the version v<number++>
