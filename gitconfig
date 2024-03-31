@@ -107,7 +107,7 @@
 
 #   print the name of the currently checked branch
     bb = rev-parse --abbrev-ref HEAD
-
+    blamefunc = !git-blame-func.sh
 
 
     edit = "!f() {                  \
