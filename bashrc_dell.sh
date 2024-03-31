@@ -1236,6 +1236,12 @@ dellclustergeneratecfg ()
         # return -1;
     # fi;
 
+    echo -en "${RED}you must do this from dev-vm. are you ? ${NC}";
+    ask_user_default_yes;
+    if [[ $? -eq 0 ]] ; then
+        return -1;
+    fi;
+
     if [[ ${_dellclusterruntimeenvset} -eq 0 ]] ; then
         echo -e "${RED}runtimeenv is not set${NC}}"
         return -1;
