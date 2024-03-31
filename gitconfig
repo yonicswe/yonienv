@@ -133,9 +133,12 @@
 
 # ───────c──────────────────────────────────────────────────────────────────────
     commitempty = commit --allow-empty
+    commityoni = !git-commit-yoni.sh
+    commitdell = !git-commit-dell.sh
     c = checkout
     cb = checkout -b
     checkoutremotebranch = !git_checkoutremotebranch.sh
+    checkoutbranch = !git_checkoutbranch.sh
 #   cmn = checkout master_next
     commitfilelist = show --stat --oneline
     checkoutmaster = "!f() { \
