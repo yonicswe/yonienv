@@ -1893,6 +1893,7 @@ dellclusterinstall ()
     local create_cluster_time=0;
     local create_cluster_failed=0;
     local install_choices=;
+    local create_cluster_choice=;
     local reinit_choices=;
     local add_feature=;
     local repeat_last_choice=0;
@@ -1966,7 +1967,17 @@ dellclusterinstall ()
         fi;
 
         if [[ ${install_choices[@]} =~ cc ]] ; then
-            create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -admin -stdout -y -post";
+
+            create_cluster_choice=($(whiptail --radiolist "create cluster script" 15 60 2\
+                           cc8 "use create_cluster_centos8.sh" off  \
+                           ccpy "use create_cluster.py" on 3>&1 1>&2 2>&3));
+
+            if [[ ${create_cluster_choice[@]} =~ ccpy ]] ; then
+                create_cluster_cmd="./create_cluster.py -sys ${cluster}-BM -admin -stdout -y -post";
+            else
+                create_cluster_cmd="./create_cluster_centos8.sh -sys ${cluster}-BM -admin -stdout -y -post";
+            fi;
+
         else
             create_cluster_cmd=;
         fi;
@@ -2087,7 +2098,8 @@ dellclusterinstall ()
         if [[ $? -ne 0 ]] ; then 
             create_cluster_failed=1;
             echo -e "${RED}\t\tcreate_cluster failed ! ! !${NC}";
-            while (( 1 == $(ask_user_default_yes "retry create_cluster.sh ? " ; echo $?) )) ; do
+            while (( 1 == $(ask_user_default_yes "retry with create_cluster_centos8.sh ? " ; echo $?) )) ; do
+                create_cluster_cmd="./create_cluster_centos8.sh -sys ${cluster}-BM -admin -stdout -y -post";
 
                 echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
                 eval ${create_cluster_cmd};
