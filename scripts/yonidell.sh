@@ -137,6 +137,7 @@ yonidellupdate ()
     return 0;
 }
 alias yy='yonidellupdate'
+alias yyy='yonidellsshkeyset'
 
 yonidelldelete ()
 {
@@ -388,7 +389,7 @@ bsclistfcports ()
     done;
 }
 
-alias dellnvmelistfcports='bsclistfcports'
+alias dellnvme-list-fcports='bsclistfcports'
 
 alias bscshowfctabel='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
 alias bsclistqlaports='ls -l /sys/class/nvme_qla2xxx/'
@@ -494,9 +495,10 @@ alias journal-grep-discover='journalnt | grep  --color "discover.*allocate"'
 alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
 alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*start"'
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
+alias journal-grep-nt-add-port='journalnt | grep --color "add_ports"'
 alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
 alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
-alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel"'
+alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel|less -I"'
 
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
@@ -654,7 +656,7 @@ reloadmodule ()
     loadmoduleifnotloaded ${moule};
 }
 
-dellnvmemodules ()
+dellnvme-list-modules ()
 {
     lsmod |grep "nvme\|qla";
 
@@ -684,7 +686,7 @@ dellnvmemodulesunload ()
     removemoduleifloaded nvme_core
 }
 
-dellnvmetargetlist ()
+bsclist-target-ports ()
 {
     for i in /sys/kernel/config/nvmet/ports/* ; do
         echo -n "$i |"  ; echo -n "$(cat $i/addr_traddr) |" ; echo  "$(cat $i/addr_trsvcid) |" ;
