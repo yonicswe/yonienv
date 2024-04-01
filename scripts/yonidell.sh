@@ -306,12 +306,17 @@ _bsclistscsiports ()
 }
 alias bsclistscsiports='_bsclistscsiports| column -t'
 
-bsclistports ()
+bsclistsubsystem ()
 {
     local subsystem=;
 
     subsystem=$(ls /sys/kernel/config/nvmet/subsystems);
     echo "subsystem = ${subsystem}";
+}
+
+bsclistnvmeports ()
+{
+    bsclistsubsystem;
     echo "==================================================="
     printf  "%-20s" idx ;
     printf  "%-90s" file;
@@ -325,6 +330,15 @@ bsclistports ()
         echo -n "$(cat $i/addr_trsvcid) |";
         echo "$(cat  $i/addr_trtype) |";
     done | column -t;
+}
+
+bsclistports ()
+{
+    echo "===================================================";
+    echo " nvme ports";
+    echo "===================================================";
+    bsclistnvmeports;
+
     echo "===================================================";
     echo " scsi ports";
     echo "===================================================";
@@ -391,7 +405,7 @@ bsclistfcports ()
 
 alias dellnvme-list-fcports='bsclistfcports'
 
-alias bscshowfctabel='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
+alias bscshowfctable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
 alias bsclistqlaports='ls -l /sys/class/nvme_qla2xxx/'
 
 bsclistindusdevices ()
@@ -481,6 +495,51 @@ _delljournalctl ()
     fi;
 }
 
+tmuxsetup ()
+{
+    echo "copy tmux conf from y_cohen@10.55.226.121";
+    scp y_cohen@10.55.226.121:~/yonienv/tmux.conf ~/.tmux.conf;
+
+    echo "cloning tmux-plugin manager tpm";
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm;
+
+    echo "source .tmux.conf"
+    tmux source-file .tmux.conf
+}
+
+# 
+# tn - create a new tmux session 
+tn () 
+{
+    local sess_list=$(tmux ls 2>/dev/null | awk 'BEGIN{FS=":"}{print $1}');
+    local sess_name=${1};
+    if [ -z "${sess_name}" ] ; then
+        read -p "Enter session name : " sess_name;
+        [ -z "${sess_name}" ] && sess_name=yoni;
+    fi;
+
+    complete -W "$(echo ${sess_list})" tl ta tk
+    tmux -u new -s ${sess_name};
+}
+
+tl ()
+{
+    local sess_list=$(tmux ls 2>/dev/null | awk 'BEGIN{FS=":"}{print $1}');
+    complete -W "$(echo ${sess_list})" tl ta tk;
+    tmux ls 2>/dev/null;
+}
+
+ta ()
+{
+    local sess_name=${1};
+
+    if [ -z "${sess_name}" ] ; then
+        tmux -u attach;
+    else 
+        tmux -u attach -t ${sess_name};
+    fi
+}
+
 alias delljournalctl-all-logs-node-a='_delljournalctl a all'
 alias delljournalctl-all-logs-node-b='_delljournalctl b all'
 alias delljournalctl-kernel-logs-node-a='_delljournalctl a kernel'
@@ -495,7 +554,14 @@ alias journal-grep-discover='journalnt | grep  --color "discover.*allocate"'
 alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
 alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*start"'
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
-alias journal-grep-nt-add-port='journalnt | grep --color "add_ports"'
+alias journal-grep-nt-add-ports='journalnt | grep --color "add_ports.*is_local true"'
+alias journal-grep-nt-ports='journalnt | grep --color "log_port"'
+alias journal-grep-nt-local-ports='journalnt | grep --color "log_port.*is_local true"'
+alias journal-grep-nt-local-tcp-ports='journalnt | grep --color "log_port.*trtype tcp.*is_local true"'
+alias journal-grep-nt-local-fc-ports='journalnt | grep --color "log_port.*trtype fc.*is_local true"'
+alias journal-grep-nt-remote-ports='journalnt | grep --color "log_port.*is_local false"'
+alias journal-grep-nt-remote-tcp-ports='journalnt | grep --color "log_port.*trtype tcp.*is_local false"'
+alias journal-grep-nt-remote-fc-ports='journalnt | grep --color "log_port.*trtype fc.*is_local false"'
 alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
 alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
 alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel|less -I"'
@@ -787,6 +853,7 @@ alias debuc-qos-delete-bucket-0='debuc-command "del qos bucket idx=0"'
 
 alias debuc-list-hosts='debuc-command "log hosts"'
 alias debuc-list-host-groups='debuc-command "log host groups"'
+alias debuc-list-ports='debuc-command "log ports"'
 alias debuc-list-devices='debuc-command "log devices"';
 alias debuc-list-controllers='debuc-command "log controllers all"';
 alias debuc-list-controllers-io='debuc-command "log controllers io"';
