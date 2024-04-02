@@ -75,6 +75,13 @@ alias dp='sudo dmesg --color -Hx'
 alias dw='sudo dmesg --color -Hxw'
 alias dcc='sudo dmesg -C'
 
+tagcscope ()
+{
+    source_path=${1:-.};
+    find ${source_path} -regex ".*\.c\|.*\.h"  -type f > cscope.files;
+    cscope -vqb;
+}
+
 dmesg-level-get () 
 {
     echo "current|default|minimum|boot-time-default";
