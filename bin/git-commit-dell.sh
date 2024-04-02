@@ -5,7 +5,7 @@ module=${2:-nt};
 
 if [[ $# -ne 2 ]] ; then
     echo "usage: $FUNCNAME <jira ticket> <module>"
-    return -1;
+    exit
 fi;
 
 if [ -n "${jira_ticket}" ] ; then 
@@ -20,5 +20,5 @@ git config commit.template ${yonienv}/git_templates/git_commit_dell_template;
 git commit -n;
 git config --unset commit.template;
 pushd ${yonienv} 2>/dev/null;
-git checkout ${yonienv}/git_templates/git_commit_dell_template;
+git restore git_templates/git_commit_dell_template;
 popd 2>/dev/null;
