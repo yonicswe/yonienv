@@ -14,7 +14,7 @@ remote_branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --h
 
 if [[ -z ${remote_branch} ]] ; then
     echo "you must specify a valid branch";
-    return -1;
+    exit;
 fi;
 
 echo "remote branch : ${remote_branch}";
@@ -30,7 +30,7 @@ for b in $(git b |grep -v HEAD ) ; do
     if [[ ${b} == "${local_branch}" ]] ; then 
         echo "${local_branch} already checked out !! remove it and try again";
         echo "doing return";
-        return -1;
+        exit;
     fi;
 done;
 
@@ -49,4 +49,4 @@ if [ $? -eq 1 ] ; then
     git branch --set-upstream-to=origin/${remote_branch};
 fi;
 
-return 0;
+exit;
