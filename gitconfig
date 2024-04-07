@@ -134,7 +134,7 @@
 # ───────c──────────────────────────────────────────────────────────────────────
     commitempty = commit --allow-empty
     commityoni = !git-commit-yoni.sh
-    commitdell = !git-commit-dell.sh
+#   commitdell = !git-commit-dell.sh
     c = checkout
     cb = checkout -b
     checkoutremotebranch = !git_checkoutremotebranch.sh
@@ -235,12 +235,17 @@
     }; f"
 
     difffilebetweenbranches = "!f() {  \
-	branchA=$1; \
-	branchB=$2; \
-	file=$3; \
 	if [ $# -eq 0 ] ; then \
 		echo 'difffilebetweenbranches <branch> <branch> <file>'; \
 		return; \
+	fi; \
+	if [ $# -eq 2 ] ; then \
+		branchA=HEAD; \
+		file=$2; \
+	else \
+		branchA=$1; \
+		branchB=$2; \
+		file=$3; \
 	fi; \
 	git dt $branchA $branchB -- $file; \
     }; f"
@@ -401,6 +406,8 @@
                           return ; \
                        fi; \
                        git rebase -i $1^; }; f"
+
+    rebaseremotebranch = !git_rebaseremotebranch.sh
 
 
 
