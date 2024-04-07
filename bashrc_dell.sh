@@ -1824,11 +1824,13 @@ _dellclusterget ()
         last_used_cluster=$(awk -F '='  '/YONI_CLUSTER/{print $2}' ${dellclusterglobalruntimeenvbkpfile});
     fi;
 
-    if  [ -n "${last_used_cluster}" ] ; then
-        ask_user_default_yes "use ${last_used_cluster} again ?";
-        if [[ $? -eq 1 ]] ; then
-            echo ${last_used_cluster};
-            return 0;
+    if [[ "${last_used_cluster}" != "${YONI_CLUSTER}" ]] ; then
+        if  [ -n "${last_used_cluster}" ] ; then
+            ask_user_default_yes "use ${last_used_cluster} again ?";
+            if [[ $? -eq 1 ]] ; then
+                echo ${last_used_cluster};
+                return 0;
+            fi;
         fi;
     fi;
 
@@ -3145,16 +3147,15 @@ alias dellrebootnode-b="_dellrebootnode b";
 
 gitcommitdell ()
 {
-    local jira_ticket=${1};
+    local jira_ticket=${1:-31903};
     local module=${2:-nt};
      
     if [[ $# -ne 2 ]] ; then
         echo "usage: $FUNCNAME <jira ticket> <module>"
-        return -1;
     fi;
  
     if [ -n "${jira_ticket}" ] ; then 
-        sed -i "s/\[MDT-.*\]/\[MDT-${jira_ticket}\]/g" ${yonienv}/git_templates/git_commit_dell_template;
+        sed -i "s/\[TRIES-.*\]/\[TRIES-${jira_ticket}\]/g" ${yonienv}/git_templates/git_commit_dell_template;
     fi
 
     if [ -n "${module}" ] ; then 
