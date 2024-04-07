@@ -157,6 +157,10 @@ gitviewpatchsidebyside ()
 {
     local patchfile=$1;
     local origfile=$2;
+    if [[ $# -ne 2 ]] ; then
+        echo "usage: $FUNCNAME <patchfile> <origfile>";
+        return;
+    fi;
 
 #     gvim -y "+vert diffpatch ${patchfile} " ${origfile};
     ${v_or_g} "+vert diffpatch ${patchfile} " ${origfile};
