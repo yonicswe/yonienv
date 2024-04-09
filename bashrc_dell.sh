@@ -1423,6 +1423,13 @@ ssh2core-a ()
 {
     local cluster=${1};
 
+    if [[ -z "${cluster}" && -n "${YONI_CLUSTER}" ]] ; then 
+        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
+        if [[ $? -eq 1 ]] ; then
+            cluster=${YONI_CLUSTER};
+        fi;
+    fi;
+
     if [ -z "${cluster}" ] ; then 
         cluster=$(_getlastusedcluster);
         if [ -z "${cluster}" ] ; then
@@ -1441,6 +1448,13 @@ ssh2core-a ()
 ssh2core-b ()
 {
     local cluster=${1};
+
+    if [[ -z "${cluster}" && -n "${YONI_CLUSTER}" ]] ; then 
+        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
+        if [[ $? -eq 1 ]] ; then
+            cluster=${YONI_CLUSTER};
+        fi;
+    fi;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_getlastusedcluster);
@@ -1461,6 +1475,13 @@ ssh2bsc-a ()
 {
     local cluster=${1};
 
+    if [[ -z "${cluster}" && -n "${YONI_CLUSTER}" ]] ; then 
+        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
+        if [[ $? -eq 1 ]] ; then
+            cluster=${YONI_CLUSTER};
+        fi;
+    fi;
+
     if [ -z "${cluster}" ] ; then 
         cluster=$(_getlastusedcluster);
         if [ -z "${cluster}" ] ; then
@@ -1479,6 +1500,13 @@ ssh2bsc-a ()
 ssh2bsc-b ()
 {
     local cluster=${1};
+
+    if [[ -z "${cluster}" && -n "${YONI_CLUSTER}" ]] ; then 
+        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
+        if [[ $? -eq 1 ]] ; then
+            cluster=${YONI_CLUSTER};
+        fi;
+    fi;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_getlastusedcluster);
@@ -1499,6 +1527,13 @@ ssh2core ()
 {
     local cluster=${1};
     local node=BOTH;
+
+    if [[ -z "${cluster}" && -n "${YONI_CLUSTER}" ]] ; then 
+        ask_user_default_yes "you did not specify <cluster> use ? YONI_CLUSTER :${YONI_CLUSTER}";
+        if [[ $? -eq 1 ]] ; then
+            cluster=${YONI_CLUSTER};
+        fi;
+    fi;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_getlastusedcluster);
