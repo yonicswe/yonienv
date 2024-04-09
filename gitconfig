@@ -139,6 +139,7 @@
     cb = checkout -b
     checkoutremotebranch = !git_checkoutremotebranch.sh
     checkoutbranch = !git_checkoutbranch.sh
+    switchbranch = !git_checkoutbranch.sh
 #   cmn = checkout master_next
     commitfilelist = show --stat --oneline
     checkoutmaster = "!f() { \
@@ -433,7 +434,7 @@
     smgrep = grep --recurse-submodules
     smupdate = submodule update
     smupdateinit = submodule update --init
-    smstatus = sm foreach
+    smstatus = !git-smstatus.sh
 #   smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
     smremove = submodule deinit
 #
