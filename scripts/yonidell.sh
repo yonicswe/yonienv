@@ -321,6 +321,9 @@ bsclistsubsystem ()
     echo "subsystem = ${subsystem}";
 }
 
+alias bsclistnvmefcports='bsclistnvmeports|grep \|fc'
+alias bsclistnvmetcpports='bsclistnvmeports|grep \|tcp'
+
 bsclistnvmeports ()
 {
     bsclistsubsystem;
