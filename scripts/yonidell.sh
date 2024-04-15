@@ -439,6 +439,11 @@ corelist-fc-devices ()
 }
 alias bsclist-fc-devices='corelist-fc-devices'
 
+corelist-fc-devices-with-fcc-script ()
+{
+    sudo /working/cyc_host/cyc_bsc/scripts/fcc.sh
+}
+
 _bsclist-xtremapp ()
 {
     local xtremapp_pid=;
@@ -565,13 +570,13 @@ alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
 alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*start"'
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
 alias journal-grep-nt-add-ports='journalnt | grep --color "add_ports.*is_local true"'
-alias journal-grep-nt-ports='journalnt | grep --color "log_port"'
-alias journal-grep-nt-local-ports='journalnt | grep --color "log_port.*is_local true"'
-alias journal-grep-nt-local-tcp-ports='journalnt | grep --color "log_port.*trtype tcp.*is_local true"'
-alias journal-grep-nt-local-fc-ports='journalnt | grep --color "log_port.*trtype fc.*is_local true"'
-alias journal-grep-nt-remote-ports='journalnt | grep --color "log_port.*is_local false"'
-alias journal-grep-nt-remote-tcp-ports='journalnt | grep --color "log_port.*trtype tcp.*is_local false"'
-alias journal-grep-nt-remote-fc-ports='journalnt | grep --color "log_port.*trtype fc.*is_local false"'
+alias journal-grep-nt-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port"'
+alias journal-grep-nt-local-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*is_local true"'
+alias journal-grep-nt-local-tcp-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype tcp.*is_local true"'
+alias journal-grep-nt-local-fc-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype fc.*is_local true"'
+alias journal-grep-nt-remote-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*is_local false"'
+alias journal-grep-nt-remote-tcp-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype tcp.*is_local false"'
+alias journal-grep-nt-remote-fc-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype fc.*is_local false"'
 alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
 alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
 alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel|less -I"'
