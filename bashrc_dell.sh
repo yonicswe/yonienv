@@ -2598,6 +2598,16 @@ ssh2lg ()
     sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_name};
 }
 
+dellcyclonegrepconfig ()
+{
+    local p=${1:-pdu};
+
+    _dellclusterruntimeenvvalidate;
+    [ $? -ne 0 ] && return;
+
+    grep -i $p ${CYC_CONFIG};
+}
+
 alias delleditclusterconfig='v ${CYC_CONFIG}'
 alias delleditlglist="v ${lg_list_file}";
 lg_list_file=~/yonienv/bashrc_dell_lg_list_file
