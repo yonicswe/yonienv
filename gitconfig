@@ -138,6 +138,7 @@
     c = checkout
     cb = checkout -b
     checkoutremotebranch = !git_checkoutremotebranch.sh
+    switchremotebranch = !git_checkoutremotebranch.sh
     checkoutbranch = !git_checkoutbranch.sh
     switchbranch = !git_checkoutbranch.sh
 #   cmn = checkout master_next
