@@ -212,7 +212,7 @@ k () {
     done;
 }
 
-export yonienvjobsfile=${yonienv}/jobs
+export yonienvjobsfile=${yonienv}/jobs.$$
 jj ()
 {
     local -a job_array=( $(j | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g') );
