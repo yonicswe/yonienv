@@ -2669,8 +2669,10 @@ dellclusterlgipget ()
         fi;
     fi;
 
-    echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
-    xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
+    # xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
+    echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
+    xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
 }
 
 dellclusterguiipget ()
