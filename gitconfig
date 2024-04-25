@@ -436,8 +436,9 @@
     smgrep = grep --recurse-submodules
     smupdate = submodule update
     smupdateinit = submodule update --init
-    smstatus = !git-smstatus.sh
-#   smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
+    # smstatus = !git-smstatus.sh
+    # smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
+    smstatus = "!f()  { git sm foreach git hh; }; f"
     smremove = submodule deinit
 #
 #   sm-resetall = submodule foreach --recursive git reset --hard; 
