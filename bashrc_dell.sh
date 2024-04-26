@@ -1793,13 +1793,18 @@ dellclusterinstallibid-with-autoinstall ()
     if [ $? -eq 0 ] ; then
         autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor ${flavor} -ibid ${ibid} ");
     else
-        read -p "enter feature : " feature_flag;
+        # read -p "enter feature : " feature_flag;
+        feature_flag=$(dellcyclonefeatureflaglist);
+        if [[ $? -ne 0 ]] ; then
+            echo "CYC_CONFIG not set. use dellclusterruntimeenvset <cluster>";
+            return;
+        fi;
         autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor ${flavor} -ibid ${ibid} -feature ${feature_flag}");
     fi;
     
     echo ${autoinstall_cmd};
 
-    ask_user_default_yes "continue ?";
+    ask_user_default_no "continue ?";
     if [ $? -eq 0 ] ; then
         echo "Bye..";
         return -1;
