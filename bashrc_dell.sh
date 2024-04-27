@@ -2045,6 +2045,7 @@ dellclusterinstall ()
         fi;
     fi;
 
+    ddd;
     echo "install_date=\"$(now)\"" > ${cyclone_folder}/.install_choices_bkp;
     echo "deploy_cmd=\"${deploy_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
     echo "reinit_cmd=\"${reinit_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
