@@ -169,10 +169,10 @@ dellcyclonetagsupdate ()
 
     sed_cyclone_folder=$(echo ${cyclone_folder} | sed 's/\//\\\//g');
     dellcdcyclonefolder;
-    \cp ${yonienv}/dell-tags/tags.vim .;
+    # \cp ${yonienv}/dell-tags/tags.vim .;
 
     # fix tags file to match cyclone folder path
-    sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" tags.vim;
+    # sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" tags.vim;
 
     # whiptail --checklist "subject" hight width num-of-items
     build_choices=($(whiptail --checklist "cyclone tags" 11 30 6\
@@ -184,12 +184,18 @@ dellcyclonetagsupdate ()
                    cyc_crypto "" off 3>&1 1>&2 2>&3));
 
 
+    echo > tags.vim;
+
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_core ]] ; then
         dst_folder=source/cyc_core;
         #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         \cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
-        \cp tags.vim ${dst_folder};
+
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
+
+        #\cp tags.vim ${dst_folder};
     fi;
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_core && ${build_choices[@]} =~ xios ]] ; then
@@ -198,7 +204,7 @@ dellcyclonetagsupdate ()
         #\cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
         echo 'includeTagdir+=(cyc_platform/src/xios/)' >> ${dst_folder}/tagme.sh
         echo 'includeTagdir+=(cyc_platform/src/include/)' >> ${dst_folder}/tagme.sh
-        \cp tags.vim ${dst_folder};
+        #\cp tags.vim ${dst_folder};
     fi;
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_core && ${build_choices[@]} =~ scsi ]] ; then
@@ -206,7 +212,7 @@ dellcyclonetagsupdate ()
         #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         #\cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
         echo 'includeTagdir+=(cyc_platform/src/st/)' >> ${dst_folder}/tagme.sh
-        \cp tags.vim ${dst_folder};
+        #\cp tags.vim ${dst_folder};
     fi;
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_core ]] ; then
@@ -221,7 +227,10 @@ dellcyclonetagsupdate ()
         dst_folder=source/nt-nvmeof-frontend;
         echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         \cp ${yonienv}/dell-tags/tagme-nt.sh ${dst_folder}/tagme.sh;
-        \cp tags.vim ${dst_folder};
+        #\cp tags.vim ${dst_folder};
+
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
 
         cd ${dst_folder}; tttt; cd -;
     fi;
@@ -231,11 +240,13 @@ dellcyclonetagsupdate ()
         echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         # copy tags from ~/tasks/tags/ to 
         \cp ${yonienv}/dell-tags/tagme-third-party.sh ${dst_folder}/tagme.sh;
-        \cp tags.vim ${dst_folder};
+
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
+
+        #\cp tags.vim ${dst_folder};
 
         cd ${dst_folder}; tttt; cd -;
-    else
-        sed -i '/third_party/d' tags.vim;
     fi;
     ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_crypto ]] ; then
@@ -243,12 +254,18 @@ dellcyclonetagsupdate ()
         echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         # copy tags from ~/tasks/tags/ to 
         \cp ${yonienv}/dell-tags/tagme-nt.sh ${dst_folder}/tagme.sh;
-        \cp tags.vim ${dst_folder};
+        #\cp tags.vim ${dst_folder};
+
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
 
         cd ${dst_folder}; tttt; cd -;
-    else
-        sed -i '/cyc_crypto/d' tags.vim;
     fi;
+
+    \cp tags.vim source/cyc_core/tags.vim;
+    \cp tags.vim source/nt-nvmeof-frontend/tags.vim;
+    \cp tags.vim source/third_party/tags.vim;
+    \cp tags.vim source/cyc_crypto/tags.vim;
 
     return 0;
 

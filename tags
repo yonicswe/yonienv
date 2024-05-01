@@ -149,6 +149,7 @@ dellcyclonedevelenvsetup	bashrc_dell.sh	/^dellcyclonedevelenvsetup ()$/;"	f
 dellcyclonedevelreset	bashrc_dell.sh	/^dellcyclonedevelreset ()$/;"	f
 dellcyclonefeatureflaglist	bashrc_dell.sh	/^dellcyclonefeatureflaglist ()$/;"	f
 dellcyclonegitdeinit	bashrc_dell.sh	/^dellcyclonegitdeinit ()$/;"	f
+dellcyclonegrepconfig	bashrc_dell.sh	/^dellcyclonegrepconfig ()$/;"	f
 dellcyclonekernelshaget	bashrc_dell.sh	/^dellcyclonekernelshaget ()$/;"	f
 dellcyclonekernelshaupdate	bashrc_dell.sh	/^dellcyclonekernelshaupdate ()$/;"	f
 dellcyclonetagsupdate	bashrc_dell.sh	/^dellcyclonetagsupdate ()$/;"	f
