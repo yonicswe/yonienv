@@ -1032,7 +1032,16 @@ _dellclusteruserchoicesget ()
     fi;
 
 }
-alias gdd='_dellclusteruserchoicesget'
+#alias gdd='_dellclusteruserchoicesget'
+gdd ()
+{
+    if [[ -n ${cyclone_folder} ]] ; then
+        _dellclusteruserchoicesget | tee ${cyclone_folder}/.install_build_choices_bkp.$(date +"%d_%m_%y");
+        return;
+    fi;
+
+    _dellclusteruserchoicesget;
+}
 
 dellenvrebash ()
 {
