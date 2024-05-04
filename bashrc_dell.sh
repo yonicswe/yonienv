@@ -1012,14 +1012,14 @@ alias gd='dellclusterruntimeenvget'
 _dellclusteruserchoicesget ()
 {
     if [ -n "${cyclone_folder}" ] ; then
-        echo -e "${GREEN}============= ${cyclone_folder} =============${NC}"
+        echo -e "${GREEN}============= ${cyclone_folder} =======================${NC}"
         if [ -e ${cyclone_folder}/.install_choices_bkp ] ; then
             cat ${cyclone_folder}/.install_choices_bkp;
-            echo -e "${GREEN}===================================================${NC}";
+            echo -e "${GREEN}============= ${cyclone_folder} =======================${NC}";
         fi
         if [ -e ${cyclone_folder}/.build_choices_bkp ] ; then
             cat ${cyclone_folder}/.build_choices_bkp;
-            echo -e "${GREEN}===================================================${NC}";
+            echo -e "${GREEN}============= ${cyclone_folder} =======================${NC}";
         fi;
         if [ -e ${cyclone_folder}/.dellclusterruntimeenvbkpfile ] ; then
             cat ${cyclone_folder}/.dellclusterruntimeenvbkpfile | grep "YONI_CLUSTER\|YONI_PDR\|pnvmet_folder" | sed 's/export//g';
@@ -1035,12 +1035,17 @@ _dellclusteruserchoicesget ()
 #alias gdd='_dellclusteruserchoicesget'
 gdd ()
 {
-    if [[ -n ${cyclone_folder} ]] ; then
-        _dellclusteruserchoicesget | tee ${cyclone_folder}/.install_build_choices_bkp.$(date +"%d_%m_%y");
+    if [[ -z ${cyclone_folder} ]] ; then
+        _dellclusteruserchoicesget;
         return;
     fi;
 
-    _dellclusteruserchoicesget;
+    if [[ ${1} == "ls" ]] ; then
+        ls ${cyclone_folder}/.install_build_choices_bkp.*|xargs cat | grep "_date\|_time";
+        return;
+    fi;
+
+    _dellclusteruserchoicesget | tee ${cyclone_folder}/.install_build_choices_bkp.$(date +"%d_%m_%y");
 }
 
 dellenvrebash ()
