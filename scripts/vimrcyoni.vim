@@ -11,3 +11,4 @@ set statusline=%<%F\ %h%m%r%=%-14.(\[%l:%L\]\[%v\]%)\ %P
 colorscheme darkblue
 imap jk <esc>
 set mouse=a
+noremap <S-l> :let @/ = ""<CR>

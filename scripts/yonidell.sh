@@ -425,8 +425,14 @@ bsclistindusdevices ()
 
 bsclistfeatureflags ()
 {
+    local feature=${1};
     local feature_flags_file=/cyc_var/feature_flags.json;
-    awk '/\"name\"/{printf $0; getline; print $0 }' ${feature_flags_file}  | sed -e 's/\"\|\,\|\://g' -e 's/default_state\|name//g' | column -t;
+
+    if [[ -z "${feature}" ]] ; then
+        awk '/\"name\"/{printf $0; getline; print $0 }' ${feature_flags_file}  | sed -e 's/\"\|\,\|\://g' -e 's/default_state\|name//g' | column -t;
+    else
+        awk '/\"name\"/{printf $0; getline; print $0 }' ${feature_flags_file}  | sed -e 's/\"\|\,\|\://g' -e 's/default_state\|name//g' | column -t | grep ${feature};
+    fi;
 }
 alias corelistfeatureflags='bsclistfeatureflags';
 
@@ -567,7 +573,7 @@ alias journal-grep-panic='journalctl | grep --color "PANIC\|log_backtrace_backen
 alias journal-grep-connect='journalnt | grep  --color "nvme.*allocate"'
 alias journal-grep-discover='journalnt | grep  --color "discover.*allocate"'
 alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
-alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*start"'
+alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*driver.*start"'
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
 alias journal-grep-nt-add-ports='journalnt | grep --color "add_ports.*is_local true"'
 alias journal-grep-nt-add-subsys='journalnt | grep --color "add_subsystem"'
