@@ -197,6 +197,7 @@ ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
 ftraceon	bashrc_devel.sh	/^ftraceon ()$/;"	f
 fw_get_path	bashrc_mlx.sh	/^fw_get_path() {$/;"	f
 gdbbt	bashrc_devel.sh	/^gdbbt () $/;"	f
+gdd	bashrc_dell.sh	/^gdd ()$/;"	f
 generate_wbe	bashrc_nice.sh	/^generate_wbe () $/;"	f
 get_branches	bashrc_svn.sh	/^get_branches () $/;"	f
 getconfigdir	bashrc_nice.sh	/^getconfigdir () $/;"	f
