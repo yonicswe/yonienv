@@ -882,6 +882,14 @@ alias debuc-list-controllers='debuc-command "log controllers all"';
 alias debuc-list-controllers-io='debuc-command "log controllers io"';
 alias debuc-list-controllers-discovery='debuc-command "log controllers discovery"';
 
+alias bsc-list-hosts=debuc-list-hosts
+alias bsc-list-host-groups=debuc-list-host-groups
+alias bsc-list-ports=debuc-list-ports
+alias bsc-list-devices=debuc-list-devices
+alias bsc-list-controllers=debuc-list-controllers
+alias bsc-list-controllers-io=debuc-list-controllers-io
+alias bsc-list-controllers-discovery=debuc-list-controllers-discovery
+
 alias debuc-set-inactive='debuc-command "set inactive"';
 alias debuc-set-active='debuc-command "set active"';
 
