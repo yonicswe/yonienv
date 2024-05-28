@@ -881,6 +881,7 @@ alias debuc-list-devices='debuc-command "log devices"';
 alias debuc-list-controllers='debuc-command "log controllers all"';
 alias debuc-list-controllers-io='debuc-command "log controllers io"';
 alias debuc-list-controllers-discovery='debuc-command "log controllers discovery"';
+alias debuc-list-subsystem='debuc-command "log subsystem"';
 
 alias bsclist-hosts=debuc-list-hosts
 alias bsclist-host-groups=debuc-list-host-groups
