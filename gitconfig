@@ -59,8 +59,8 @@
 
 # ───────b──────────────────────────────────────────────────────────────────────
 
-    b = branch
-    bt = branch -vv
+    b = branch --sort=committerdate
+    bt = branch -vv --sort=committerdate
     ba = branch -a
     br = branch -r
     bdel = branch -D
