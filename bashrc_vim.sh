@@ -196,6 +196,11 @@ vs ()
 #     fi 
 }
 
+vf ()
+{
+    v `fzf --preview='cat {}'`;
+}
+
 # start writing a bash script
 editBashrcScript () 
 {
