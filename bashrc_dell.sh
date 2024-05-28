@@ -79,12 +79,24 @@ _dellclusterlistfindcluster ()
 {
     local cluster=${1};
 
-    cluster=$(echo $cluster | awk '{toupper($0)}');
+    if [[ -z "${cluster}" ]] ; then
+        #yelp "cluster is null";
+        return 1;
+    #else
+        #yelp "cluster=${cluster} is not null";
+    fi;
 
+    cluster=$(echo $cluster | awk '{print toupper($0)}');
+
+    trident_cluster_list=( $(cat ${dell_clusters_file}) );
     # if [ ${dell_cluster_list[${cluster}]+_} ] ; then 
-    if [[ " $( echo ${trident_cluster_list[@]}) " =~ " $cluster " ]] ; then 
+    if [[ ${trident_cluster_list[@]} =~ ${cluster} ]] ; then 
+    #if [[ $( printf "%s\n" ${trident_cluster_list[@]} | /bin/grep "${cluster}" | wc -l) -gt 0 ]] ; then 
+        #echo "${cluster} already in trident_cluster_list";
+        #echo ${trident_cluster_list[@]}
         return 1 ; 
     else 
+        #echo "${cluster} not in trident_cluster_list";
         return 0; 
     fi;
 }
@@ -93,10 +105,18 @@ _dellclusterlistaddcluster ()
 {
     local cluster=${1};
 
+    if [[ -z "${cluster}" ]] ; then
+        # yelp "cluster is null";
+        return 1;
+    fi;
+
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}')
+
     _dellclusterlistfindcluster ${cluster};
 
     if [[ 0 -eq $? ]] ; then
         # dell_cluster_list[${cluster}]=1;
+        yelp "Adding ${cluster} to list";
         trident_cluster_list+=${cluster};
         echo "${cluster} " >> ${dell_clusters_file}; 
         _trident_cluster_list_nodes_init;
@@ -802,7 +822,7 @@ _dellclusterlist ()
     echo "$FUNCNAME: list_file=${list_file} dell_group=${dell_group} dell_group_label=${dell_group_label}";
 
     if [ -e ${list_file} ] ; then
-        ask_user_default_yes "re-generate ${list_file}";
+        ask_user_default_no "re-generate ${list_file}";
         if [ $? -eq 0 ] ; then
             v ${list_file}
             return;
@@ -1041,7 +1061,7 @@ gdd ()
     fi;
 
     if [[ ${1} == "ls" ]] ; then
-        ls ${cyclone_folder}/.install_build_choices_bkp.*|xargs cat | grep "_date\|_time";
+        ls -tr ${cyclone_folder}/.install_build_choices_bkp.*|xargs cat | grep "_date\|_time";
         return;
     fi;
 
@@ -1252,7 +1272,7 @@ dellclusterruntimeenvset ()
         fi;
     fi;
 
-    # _dellclusterlistaddcluster ${YONI_CLUSTER};
+    _dellclusterlistaddcluster ${YONI_CLUSTER};
     dellclusterruntimeenvget;
     _dellclusterruntimeenvset=1;
 }
@@ -2673,6 +2693,8 @@ dellclusterping ()
             return -1;
         fi;
     fi;
+
+    _dellclusterlistaddcluster ${cluster};
 
     echo "swarm ${cluster} -ping --showallips";
     swarm  ${cluster} -ping --showallips;
