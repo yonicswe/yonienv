@@ -326,6 +326,8 @@
 #                                   SHA          date                   name             msg
     ls = log --pretty=format:'%C(yellow) %h %Cred%<(9,trunc)%aN %Cgreen%s %Creset' 
     ll = ls -10
+    ll20 = ls -20
+    ll30 = ls -30
 #   lll = log --pretty=format:'%C(yellow)%h %Cred%ad %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s'
     lll = log --pretty=format:'%C(yellow)%h %Cred%cd %>(10,trunc) %Cblue%an%Cgreen%d %Creset%s ' --date=short
 #   lf = log --pretty=short
