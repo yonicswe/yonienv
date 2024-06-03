@@ -2039,9 +2039,10 @@ dellclusterinstall ()
         fi;
 
         if [[ ${install_choices[@]} =~ reinit ]] ; then
-            reinit_cmd="./reinit_array.sh factory sys_mode=block";
+            reinit_cmd="./reinit_array.sh factory";
 
             reinit_choices=($(whiptail --checklist "reinit options" 15 50 5\
+                           block "uncheck for unified" on \
                            release "uncheck for debug" on \
                            feature_flag "add feature flag" off  3>&1 1>&2 2>&3));
 
@@ -2049,6 +2050,12 @@ dellclusterinstall ()
                 reinit_cmd+=" -F Retail";
             else
                 reinit_cmd+=" -F Debug";
+            fi;
+
+            if [[ ${reinit_choices} =~ block ]] ; then
+                reinit_cmd+=" sys_mode=block";
+            else
+                reinit_cmd+=" sys_mode=unified";
             fi;
 
             if [[ ${reinit_choices[@]} =~ feature_flag ]] ; then
