@@ -307,6 +307,30 @@ gitcheckoutremotebranch ()
     return 0;
 }
 
+git-trackremotebranch ()
+{
+    local remote_branch=;
+
+    ask_user_default_no "git fetch before we start ? ";
+    if [ $? -eq 1 ] ; then
+        git fetch -p;
+    fi;
+
+    remote_branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+
+    if [[ -z ${remote_branch} ]] ; then
+        echo "you must specify a valid branch";
+        return -1;
+    fi;
+
+    echo "would you like to set ${local_branch} to track upstream ${remote_branch}";
+    ask_user_default_yes;
+    if [ $? -eq 1 ] ; then
+        git branch --set-upstream-to=origin/${remote_branch};
+    fi;
+
+}
+
 #git-deletebranch ()
 #{
     #branch="$(git b | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
