@@ -41,6 +41,12 @@ alias v='vim'
 alias vs='vim -S Session.vim'
 alias f='fg'
 alias j='jobs'
+ww () 
+{ 
+    w --no-header | awk '{print $3}' | while read i; do
+        nslookup $i;
+    done | grep name
+}
 
 k ()
 {
@@ -131,7 +137,8 @@ fi;
 yonidellupdate ()
 {
     1>/dev/null pushd ${HOME};
-    scp y_cohen@10.55.226.121:"~/yonienv/scripts/{yonidell.sh,vimrcyoni.vim}" ~/;
+    #scp y_cohen@10.55.226.121:"~/yonienv/scripts/{yonidell.sh,vimrcyoni.vim}" ~/;
+    scp y_cohen@10.55.226.121:~/yonienv/scripts/*yoni* ~/;
     #sed -i "1s/YONI_CLUSTER=.*/YONI_CLUSTER=${YONI_CLUSTER}/" yonidell.sh;
     source ~/yonidell.sh;
     1>/dev/null popd;
@@ -441,9 +448,19 @@ corelist-fc-devices ()
     echo "sudo lspci |grep -i fibre";
     sudo lspci |grep -i fibre;
     echo "ls -l /sys/class/fc_host";
-    ls -l /sys/class/fc_host;
+    if [ -d /sys/class/fc_host ] ; then
+        ls -l /sys/class/fc_host;
+    else
+        echo "you might need to modprobe [qla2xxx|lpfc|ocs_fc_scst]";
+        if [ $(sudo lspci | grep -i fibre | grep -i emulex| wc -l ) -gt 0 ] ; then
+            echo -e "found emulex/marvell card installed on pci bus, you need to \"modprobe lpfc\"";
+        elif [ $(sudo lspci | grep -i fibre | grep -i qla| wc -l ) -gt 0 ] ; then
+            echo -e "found qlogic card installed on pci bus, you need to \"modprobe qla2xxx\"";
+        fi;
+    fi;
 }
 alias bsclist-fc-devices='corelist-fc-devices'
+alias delllist-fc-devices='corelist-fc-devices'
 
 corelist-fc-devices-with-fcc-script ()
 {
@@ -648,6 +665,9 @@ alias delltriage-kernel-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
 alias delltriage-kernel-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -t kernel-r"
 alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
+
+alias delltriage-grep-panic-a='./cyc_triage.pl -b . -n a -j -- -a | grep "PANIC\|log_backtrace_backend"'
+alias delltriage-grep-panic-b='./cyc_triage.pl -b . -n b -j -- -a | grep "PANIC\|log_backtrace_backend"'
 
 _delldc-node-x ()
 {
