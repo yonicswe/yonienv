@@ -195,10 +195,11 @@ dellcyclonetagsupdate ()
     # sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" tags.vim;
 
     # whiptail --checklist "subject" hight width num-of-items
-    build_choices=($(whiptail --checklist "cyclone tags" 11 30 6\
+    build_choices=($(whiptail --checklist "cyclone tags" 13 30 7\
                    nt-nvmeof-frontend "" on \
                    cyc_core "" on  \
                    xios "" off  \
+                   pm "" off  \
                    scsi "" off  \
                    third_party "" off \
                    cyc_crypto "" off 3>&1 1>&2 2>&3));
@@ -224,6 +225,14 @@ dellcyclonetagsupdate ()
         #\cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
         echo 'includeTagdir+=(cyc_platform/src/xios/)' >> ${dst_folder}/tagme.sh
         echo 'includeTagdir+=(cyc_platform/src/include/)' >> ${dst_folder}/tagme.sh
+        #\cp tags.vim ${dst_folder};
+    fi;
+    ######################################################################################
+    if [[ ${build_choices[@]} =~ cyc_core && ${build_choices[@]} =~ pm ]] ; then
+        dst_folder=source/cyc_core;
+        #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
+        #\cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
+        echo 'includeTagdir+=(cyc_platform/src/pm/)' >> ${dst_folder}/tagme.sh
         #\cp tags.vim ${dst_folder};
     fi;
     ######################################################################################
