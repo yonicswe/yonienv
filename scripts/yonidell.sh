@@ -445,18 +445,24 @@ alias corelistfeatureflags='bsclistfeatureflags';
 
 corelist-fc-devices ()
 {
-    echo "sudo lspci |grep -i fibre";
-    sudo lspci |grep -i fibre;
     echo "ls -l /sys/class/fc_host";
     if [ -d /sys/class/fc_host ] ; then
-        ls -l /sys/class/fc_host;
+        ls -l /sys/class/fc_host/;
     else
         echo "you might need to modprobe [qla2xxx|lpfc|ocs_fc_scst]";
-        if [ $(sudo lspci | grep -i fibre | grep -i emulex| wc -l ) -gt 0 ] ; then
-            echo -e "found emulex/marvell card installed on pci bus, you need to \"modprobe lpfc\"";
-        elif [ $(sudo lspci | grep -i fibre | grep -i qla| wc -l ) -gt 0 ] ; then
-            echo -e "found qlogic card installed on pci bus, you need to \"modprobe qla2xxx\"";
-        fi;
+    fi;
+
+    echo "sudo lspci |grep -i fibre";
+    if [ $(sudo lspci | grep -i fibre | grep -i emulex| wc -l ) -gt 0 ] ; then
+        sudo lspci | grep -i fibre | grep -i emulex;
+        echo -e "found emulex/marvell card installed on pci bus, you need to \"modprobe lpfc or modprobe ocs_fc_scst\"";
+    elif [ $(sudo lspci | grep -i fibre | grep -i qlogic| wc -l ) -gt 0 ] ; then
+        sudo lspci | grep -i fibre | grep -i qlogic;
+        echo -e "found qlogic card installed on pci bus, you need to \"modprobe qla2xxx\"";
+    elif [ $(sudo lspci | grep -i fibre| wc -l ) -gt 0 ] ; then
+        sudo lspci | grep -i fibre;
+    else
+        echo "NO!! fc devices found on pci bus";
     fi;
 }
 alias bsclist-fc-devices='corelist-fc-devices'
