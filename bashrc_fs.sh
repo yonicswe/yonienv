@@ -599,6 +599,38 @@ dirdiff ()
             echo files2 ${files2[@]};
 }
 
+dirvimdiff ()
+{
+    local dir1=$1
+    local dir2=$2
+
+    local ans;
+
+    # prepare a list of files that differ between dir1 and dir2
+    diff -qrup ${dir1} ${dir2} | grep differ | awk '{print $2" "$4}' > difffiles;
+
+    # prepare a script to compare all ascii files.
+    echo > evaldiff;
+    cat difffiles | 
+        while read r1 r2 ; do 
+            if [[ $(file $r1 | grep -i ascii | wc -l ) -gt 0 ]] ; then
+                echo  "vimdiff $r1 $r2" >> evaldiff;
+                echo  -e "read -p 'continue ENTER or CTRL-C to exit' x" >> evaldiff;
+            fi;
+        done;
+
+    # invoke that script
+    chmod +x evaldiff;
+    ./evaldiff;
+    echo
+
+    ask_user_default_yes  "delete tmp files (difffiles, evaldiff)";
+    if [[ $? -eq 1 ]] ; then
+        rm -f difffiles;
+        rm -f evaldiff;
+    fi;
+}
+
 # dirgvimdiff () 
 # {
 #     dir1=$1
