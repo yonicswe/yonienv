@@ -2746,8 +2746,38 @@ dellclusterlgipget ()
 
     # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
     # xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
-    echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
-    xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
+
+    # num_of_lgs=$(xxlabjungle cluster "name:${cluster}" |  jq ".objects[0].lgs | length"
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
+    # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
+    xxlabjungle cluster "name:${cluster}" | jq -r '.objects[].lgs[]';
+}
+
+ssh2lgofcluster ()
+{
+    local cluster=${1};
+    local lg;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    lg_arr=( $(dellclusterlgipget ${cluster}) );
+
+    echo "lg_arr: ${lg_arr[@]}";
+
+    if [[ ${#lg_arr[@]} -gt 1 ]] ; then
+        echo "${lg_arr[@]}";
+        return;
+    fi;
+
+    lg=${lg_arr[0]};
+
+    ssh2lg ${lg};
 }
 
 dellclusterguiipget ()
