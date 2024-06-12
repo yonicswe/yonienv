@@ -584,6 +584,8 @@ ta ()
     fi
 }
 
+alias tk='tmux kill-session -t'
+
 alias delljournalctl-all-logs-node-a='_delljournalctl a all'
 alias delljournalctl-all-logs-node-b='_delljournalctl b all'
 alias delljournalctl-kernel-logs-node-a='_delljournalctl a kernel'
