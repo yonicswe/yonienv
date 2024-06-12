@@ -748,6 +748,8 @@ ta ()
     fi
 }
 
+alias tk='tmux kill-session -t'
+
 alias hex2bin32="_hex2bin 32"
 alias hex2bin64="_hex2bin 64"
 
@@ -790,7 +792,6 @@ _hex2bin ()
     echo;
 }
 
-alias tk='tmux kill-session -t'
 
 alias tagginginstall="yuminstall cscope ctags";
 
