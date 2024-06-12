@@ -441,6 +441,10 @@ set foldcolumn=1
 " \ V /| || '  \ / _` || ||  _||  _|
 "  \_/ |_||_|_|_|\__,_||_||_|  |_|
 "
+" help commands : do,dp - do-other or do-put
+"
+"
+"
 "
 " to ignore white space :set diffopt+=iwhite
 " :diffupdate to rescan diffs
