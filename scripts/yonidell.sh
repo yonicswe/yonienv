@@ -674,8 +674,12 @@ alias delltriage-kernel-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -t kernel
 alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 
-alias delltriage-grep-panic-a='./cyc_triage.pl -b . -n a -j -- -a | grep "PANIC\|log_backtrace_backend"'
-alias delltriage-grep-panic-b='./cyc_triage.pl -b . -n b -j -- -a | grep "PANIC\|log_backtrace_backend"'
+alias delltriage-grep-panic-a='delltriage-all-logs-node-a | grep "PANIC\|log_backtrace_backend"'
+alias delltriage-grep-panic-b='delltriage-all-logs-node-b | grep "PANIC\|log_backtrace_backend"'
+alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep "nvme.*allocate"'
+alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep "nvme.*allocate"'
+alias delltriage-grep-add-port-a='delltriage-nt-logs-node-a | grep "add_ports.*is_local true"'
+alias delltriage-grep-add-port-b='delltriage-nt-logs-node-b | grep "add_ports.*is_local true"'
 
 _delldc-node-x ()
 {
