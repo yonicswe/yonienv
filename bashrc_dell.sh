@@ -1602,6 +1602,7 @@ ssh2core ()
         fi;
     fi;
 
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}' )
     _add_cluster_to_list ${cluster};
 
     echo ${cluster} > ~/.dellssh2cluster.bkp
