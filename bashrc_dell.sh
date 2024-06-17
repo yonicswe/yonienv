@@ -3458,20 +3458,9 @@ if ! [ -d /disks/jiraproduction ]  || ! [ -d /disks/jiraproduction2 ] ; then
 fi
 
 
-alias delltriage-node-a-grep-panic='delltriage-all-logs-node-a | grep "PANIC\|log_backtrace_backend"'
-alias delltriage-node-b-grep-panic='delltriage-all-logs-node-b | grep "PANIC\|log_backtrace_backend"'
-alias delltriage-node-a-grep-connect='delltriage-nt-logs-node-a | grep "nvme.*alloc"'
-alias delltriage-node-b-grep-connect='delltriage-nt-logs-node-b | grep "nvme.*alloc"'
-alias delltriage-node-a-grep-ntstart='delltriage-nt-logs-node-a | grep "nt_start"'
-alias delltriage-node-b-grep-ntstart='delltriage-nt-logs-node-b | grep "nt_start"'
-alias delltriage-node-a-grep-set-active='delltriage-nt-logs-node-a | grep "nt_disc_set_active\|nt_disc_set_inactive"'
-alias delltriage-node-b-grep-set-active='delltriage-nt-logs-node-b | grep "nt_disc_set_active\|nt_disc_set_inactive"'
-alias delltriage-node-a-grep-cluster-name='delltriage-all-logs-node-a | grep -i "cyc_config.*creating cluster"'
-alias delltriage-node-b-grep-cluster-name='delltriage-all-logs-node-b | grep -i "cyc_config.*creating cluster"'
-
 alias delltriage-all-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -a"
-alias delltriage-all-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j -- -a -r"
 alias delltriage-all-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -a"
+alias delltriage-all-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j -- -a -r"
 alias delltriage-all-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j -- -a -r"
 
 alias delltriage-nt-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt"
@@ -3483,11 +3472,33 @@ alias delltriage-kernel-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t
 alias delltriage-kernel-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j -- -t kernel -r"
 alias delltriage-kernel-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t kernel"
 alias delltriage-kernel-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j -- -t kernel-r"
+
 alias delltriage-sym-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 
-alias delltriage-servicemode-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t servicemode"
-alias delltriage-servicemode-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t servicemode"
+alias delltriage-grep-panic-a='delltriage-all-logs-node-a | grep --color "PANIC\|log_backtrace_backend"'
+alias delltriage-grep-panic-b='delltriage-all-logs-node-b | grep --color "PANIC\|log_backtrace_backend"'
+
+alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep --color "nvme.*alloc"'
+alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep --color "nvme.*alloc"'
+
+alias delltriage-grep-add-port-a='delltriage-nt-logs-node-a | grep --color "add_ports.*is_local true"'
+alias delltriage-grep-add-port-b='delltriage-nt-logs-node-b | grep --color "add_ports.*is_local true"'
+
+alias delltriage-grep-nt-start-a='delltriage-nt-logs-node-a | grep --color "nt_start"'
+alias delltriage-grep-nt-start-b='delltriage-nt-logs-node-b | grep --color "nt_start"'
+
+alias delltriage-grep-set-active-a='delltriage-nt-logs-node-a | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
+alias delltriage-grep-set-active-b='delltriage-nt-logs-node-b | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
+
+alias delltriage-grep-pnvmet-start-a='delltriage-kernel-log-node-a | grep --color "nvmet_power.*driver.*start"'
+alias delltriage-grep-pnvmet-start-b='delltriage-kernel-log-node-b | grep --color "nvmet_power.*driver.*start"'
+
+alias delltriage-grep-cluster-name-a='delltriage-all-logs-node-a | grep -i --color "cyc_config.*creating cluster"'
+alias delltriage-grep-cluster-name-b='delltriage-all-logs-node-b | grep -i --color "cyc_config.*creating cluster"'
+
+alias delltriage-servicemode-logs-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t servicemode"
+alias delltriage-servicemode-logs-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t servicemode"
 
 # howto
 # journalctl SUBCOMPONENT=nt
