@@ -667,12 +667,12 @@ alias delltriage-nt-logs-node-b="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt"
 alias delltriage-nt-logs-node-a-r="./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt -r"
 alias delltriage-nt-logs-node-b-r="./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt -r"
 
-alias delltriage-kernel-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t kernel"
-alias delltriage-kernel-logs-node-a-r="./cyc_triage.pl -b . -n a -j -- -t kernel -r"
-alias delltriage-kernel-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
-alias delltriage-kernel-logs-node-b-r="./cyc_triage.pl -b . -n b -j -- -t kernel-r"
-alias delltriage-sym-logs-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
-alias delltriage-sym-logs-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
+alias delltriage-kernel-log-node-a="./cyc_triage.pl -b . -n a -j -- -t kernel"
+alias delltriage-kernel-log-node-a-r="./cyc_triage.pl -b . -n a -j -- -t kernel -r"
+alias delltriage-kernel-log-node-b="./cyc_triage.pl -b . -n b -j -- -t kernel"
+alias delltriage-kernel-log-node-b-r="./cyc_triage.pl -b . -n b -j -- -t kernel-r"
+alias delltriage-sym-log-node-a="./cyc_triage.pl -b . -n a -j -- -t xtremapp"
+alias delltriage-sym-log-node-b="./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 
 alias delltriage-grep-panic-a='delltriage-all-logs-node-a | grep "PANIC\|log_backtrace_backend"'
 alias delltriage-grep-panic-b='delltriage-all-logs-node-b | grep "PANIC\|log_backtrace_backend"'
@@ -680,6 +680,19 @@ alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep "nvme.*allocat
 alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep "nvme.*allocate"'
 alias delltriage-grep-add-port-a='delltriage-nt-logs-node-a | grep "add_ports.*is_local true"'
 alias delltriage-grep-add-port-b='delltriage-nt-logs-node-b | grep "add_ports.*is_local true"'
+
+alias delltriage-grep-nt-start-a='delltriage-nt-log-node-a | grep --color "nt_start"'
+alias delltriage-grep-nt-start-b='delltriage-nt-log-node-b | grep --color "nt_start"'
+alias delltriage-grep-pnvmet-start-a='delltriage-kernel-log-node-a | grep --color "nvmet_power.*driver.*start"'
+alias delltriage-grep-pnvmet-start-b='delltriage-kernel-log-node-b | grep --color "nvmet_power.*driver.*start"'
+
+dellnvme-show-timeout ()
+{
+    echo "/sys/module/nvme_core/parameters/io_timeout";
+    cat /sys/module/nvme_core/parameters/io_timeout;
+    echo "/sys/module/nvme_core/parameters/admin_timeout";
+    echo /sys/module/nvme_core/parameters/admin_timeout;
+}
 
 _delldc-node-x ()
 {
