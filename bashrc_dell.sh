@@ -3485,6 +3485,9 @@ alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep --color "nvme.
 alias delltriage-grep-connect-queue-a='delltriage-all-logs-node-a | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
 alias delltriage-grep-connect-queue-b='delltriage-all-logs-node-b | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
 
+alias delltriage-grep-disconnect-queue-a='delltriage-all-logs-node-a | grep --color "pnvmet_disconnect|nvmet_fc_fcp_disconnec\|nvmet_tcp_disconnect\|io_ctrl.*disconnect"'
+alias delltriage-grep-disconnect-queue-b='delltriage-all-logs-node-b | grep --color "pnvmet_disconnect|nvmet_fc_fcp_disconnec\|nvmet_tcp_disconnect\|io_ctrl.*disconnect"'
+
 alias delltriage-grep-add-port-a='delltriage-nt-logs-node-a | grep --color "add_ports.*is_local true"'
 alias delltriage-grep-add-port-b='delltriage-nt-logs-node-b | grep --color "add_ports.*is_local true"'
 
