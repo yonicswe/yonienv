@@ -5,6 +5,8 @@
 export VISUAL=vim
 export EDITOR=$VISUAL
 
+alias editbashmisc='vim ${yonienv}/bashrc_misc.sh'
+
 alias connect2remoteDesktop='source $(yonienv)/bin/connectToRemoteDesk.sh'
 alias yuminstallfromiso='yum install --disablerepo=\* --enablerepo=c7-media'
 alias less='less -r'
@@ -188,16 +190,16 @@ extract_srt_files_from_archive ()
     local output_path=${1:-.};
     local cleanup=${2:-0};
 
-    if [ -n "$(ls *zip)" ] ; then
-        ask_user_default_yes "Hey I found zip files should i open them";
-        if [ $? -eq 0 ] ; then 
-#       user answered No!
-            echo "ok!";
-            return -1; 
-        fi;
-    else
-        return 0;
-    fi;
+    #if [ -n "$(ls *zip)" ] ; then
+        #ask_user_default_yes "Hey I found zip files should i open them";
+        #if [ $? -eq 0 ] ; then 
+##       user answered No!
+            #echo "ok!";
+            #return -1; 
+        #fi;
+    #else
+        #return 0;
+    #fi;
 
 #   sanity check
     which 7za 1>/dev/null;
@@ -246,8 +248,9 @@ extract_srt_files_from_archive ()
 
 subtitlenamesync ()
 {
-    movie_name=${1};
-    output_path=${2:-subs.out}
+    local movie_name=${1};
+    local ask_user=${2:-1};
+    local output_path=subs.out;
 
 #   sanity check
     if [ -z ${movie_name} ] ; then 
@@ -302,13 +305,10 @@ subtitlenamesync ()
         ((j++)) ; 
     done;
 
-    ask_user_default_no "delete ${output_path}";
-    if [ $? -eq 1 ] ; then 
-        rm -rf ${output_path}
-    fi
+    rm -rf ${output_path}
 
 #   echo "done";
-    tree -A ${output_path};
+    # tree -A ${output_path};
 }
 
 
@@ -360,8 +360,8 @@ subtitle-series-sort-directories ()
         return -1;
     fi;
 
-    for e in $(seq 1 ${nr_episodes}) ; do
-        f=$(find -regex ".*e$e.*\|.*e0$e.*\|.*E$e.*\|.*E0$e.*")
+    for e in $(seq ${nr_episodes} -1 1) ; do
+        f=$(find -type f -maxdepth 1 -regex ".*e$e.*\|.*e0$e.*\|.*E$e.*\|.*E0$e.*")
         if [ -z "$f" ] ; then
             echo "no files were found";
             break;
@@ -369,7 +369,7 @@ subtitle-series-sort-directories ()
         e=$(printf "%02d" $e)
         echo "mkdir e$e";
         mkdir e$e;
-        echo "cp $f e$e";
+        echo "mv $f e$e";
         mv $f e$e;
         pushd e$e;
         if (( $(ls *mkv  | wc -l ) > 0 )) ; then
