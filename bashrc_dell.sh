@@ -3513,7 +3513,9 @@ alias delltriage-servicemode-logs-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t
 alias delltriage-servicemode-logs-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t servicemode"
 
 alias delltriage-grep-nt-kernel-a='delltriage-all-logs-node-a |grep "\[nt\]\|kernel"|less -I'
+alias delltriage-grep-nt-kernel-a-r='delltriage-all-logs-node-a-r |grep "\[nt\]\|kernel"|less -I'
 alias delltriage-grep-nt-kernel-b='delltriage-all-logs-node-b |grep "\[nt\]\|kernel"|less -I'
+alias delltriage-grep-nt-kernel-b-r='delltriage-all-logs-node-b-r |grep "\[nt\]\|kernel"|less -I'
 
 # howto
 # journalctl SUBCOMPONENT=nt
