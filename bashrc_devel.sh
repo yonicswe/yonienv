@@ -815,7 +815,14 @@ docker-attach-1st-container ()
 
 mann ()
 {
-    man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man
+    if ! [ -e ~/.mann ] ; then
+        echo "generating ~/.mann";
+        find /usr/share/man -type f -exec basename {} \;|sed 's/\..*//g' > ~/.mann;
+        # compgen -c > ~/.mann;
+    fi;
+
+    cat ~/.mann | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man
+    #man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man
 }
 
 installfzf ()
