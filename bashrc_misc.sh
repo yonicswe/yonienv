@@ -294,6 +294,8 @@ subtitlenamesync ()
         output_path=.;
     fi
 
+    cp *.srt ${output_path};
+
     j=1; 
     for i in ${output_path}/*srt ; do 
         echo -e "install -D \"$i\" `pwd`/subs/${movie_name}.$j.srt" ; 

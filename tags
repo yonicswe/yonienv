@@ -164,6 +164,7 @@ dellsubmodulesdiscard	bashrc_dell.sh	/^dellsubmodulesdiscard ()$/;"	f
 dfa	bashrc_fs.sh	/^dfa () $/;"	f
 dirdiff	bashrc_fs.sh	/^dirdiff () $/;"	f
 dirdiffbrief	bashrc_fs.sh	/^dirdiffbrief () $/;"	f
+dirvimdiff	bashrc_fs.sh	/^dirvimdiff ()$/;"	f
 dockerinstall	bashrc_devel.sh	/^dockerinstall ()$/;"	f
 du1	bashrc_fs.sh	/^du1 ()$/;"	f
 du11	bashrc_fs.sh	/^du11 ()$/;"	f
@@ -446,6 +447,7 @@ ssh2bscleased	bashrc_dell.sh	/^ssh2bscleased ()$/;"	f
 ssh2core	bashrc_dell.sh	/^ssh2core ()$/;"	f
 ssh2coreleased	bashrc_dell.sh	/^ssh2coreleased ()$/;"	f
 ssh2lg	bashrc_dell.sh	/^ssh2lg ()$/;"	f
+ssh2lgofcluster	bashrc_dell.sh	/^ssh2lgofcluster ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
 subtitlenamesync	bashrc_misc.sh	/^subtitlenamesync ()$/;"	f
@@ -496,6 +498,7 @@ v	bashrc_vim.sh	/^v ()$/;"	f
 validateState	bashrc_nice.sh	/^validateState ()$/;"	f
 vconsole	bashrc_fs.sh	/^vconsole ()$/;"	f
 vd	bashrc_vim.sh	/^vd () { ${_vd} $1 $2 ;}$/;"	f
+vf	bashrc_vim.sh	/^vf ()$/;"	f
 vforcestop	bashrc_fs.sh	/^vforcestop ()$/;"	f
 vimorgvim	bashrc_vim.sh	/^vimorgvim ()$/;"	f
 virsh_complete	bashrc_fs.sh	/^virsh_complete ()$/;"	f
