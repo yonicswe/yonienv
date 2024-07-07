@@ -396,6 +396,7 @@
 
 # ───────r──────────────────────────────────────────────────────────────────────
     reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
+    recommit = "!f() { git cherry-pick $(cat reuse_commit.txt); }; f"
 
 
     r = remote -vv
@@ -445,15 +446,15 @@
     smremove = submodule deinit
 #
 #   sm-resetall = submodule foreach --recursive git reset --hard; 
-    sm-resetall = checkout -f --recurse-submodules
-#   sm-resetall = "!f() {\
-#       for s in source/* ; do\
-#          echo "------$s reset modified content------";\
-#          cd $s ; git c -f . ;\
-#          cd - ;\
-#          echo "------$s reset new commits-----------";\
-#          git smupdate $s;\
-#       done; }; f"
+#   sm-resetall = checkout -f --recurse-submodules
+    sm-resetall = "!f() {\
+        for s in source/* ; do\
+           echo "------$s reset modified content------";\
+           cd $s ; git c -f . ;\
+           cd - ;\
+           echo "------$s reset new commits-----------";\
+           git smupdate $s;\
+        done; }; f"
 
     sm-update-all = submodule update --recursive
     sm-updateinit-all = submodule update --init --recursive
