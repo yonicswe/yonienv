@@ -887,8 +887,9 @@ dellclusterlist-all ()
 alias dellclusterlist-yoni='          _dellclusterlist ~/docs/dell-cluster-list-yoni.txt'
 alias dellclusterlist-user='          _dellclusterlistuser'
 alias dellclusterlist-trident='       _dellclusterlist ~/docs/dell-cluster-list-trident.txt         Trident-kernel-IL'
-alias dellclusterlist-pm-il='         _dellclusterlist ~/docs/dell-cluster-list-platformmanager.txt PM-IL'
-alias dellclusterlist-platformio-fe=' _dellclusterlist ~/docs/dell-cluster-list-platformmanager.txt PlatformIO-FE'
+alias dellclusterlist-pm-il='         _dellclusterlist ~/docs/dell-cluster-list-pm.txt              PM-IL'
+alias dellclusterlist-platformio-fe=' _dellclusterlist ~/docs/dell-cluster-list-fe.txt              PlatformIO-FE'
+alias dellclusterlist-platformio-be=' _dellclusterlist ~/docs/dell-cluster-list-be.txt              PlatformIO-BE'
 alias dellclusterlist-xblock='        _dellclusterlist ~/docs/dell-cluster-list-xblock.txt          Xblock-NDU'
 alias dellclusterlist-shared='        _dellclusterlist ~/docs/dell-cluster-list-shared.txt          Core-Dev-Shared'
 alias dellclusterlist-shared-nvmeofc='_dellclusterlist ~/docs/dell-cluster-list-shared-nvmeofc.txt  Core-Dev-Shared NVMeOF-FC'
@@ -2561,6 +2562,8 @@ dellclusteryonienvupdate ()
         fi;
     fi;
 
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+
     scp2core ${cluster} BOTH;
     scp2bsc ${cluster} BOTH;
 }
@@ -3276,10 +3279,14 @@ dellcyclonebackup ()
 dellibid2commit ()
 {
     local ibid=$1;
+    echo "phlibid.pl --ibid ${ibid}";
+    echo "---------------------------------------------------------------"
     phlibid.pl --ibid ${ibid};
     echo ===============================================================
     # phlibid.pl --ibid ${ibid} | grep --color -i commit
-    phlibid --getCommit --ibid ${ibid} | grep "Commit ID\|nt-nvmeof"
+    echo "phlibid --getCommit --ibid ${ibid}";
+    echo "---------------------------------------------------------------"
+    phlibid --getCommit --ibid ${ibid} | grep "Commit ID\|nt-nvmeof";
 
 }
 
@@ -3566,3 +3573,19 @@ alias delldc-nt-node-b-r='_delldc-node-x node_b "SUB_COMPONENT=nt -r"'
 
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
 alias yyy='yonidellsshkeyset'
+
+# ------------------------------------------------------------------------------------
+#                python 
+# from /home/y_cohen folder invoke this which spins a docker that is running python3.11 as server 
+# ------------------------------------------------------------------------------------
+# that you can access from web browser with : http://127.0.0.1:8888/lab
+# docker run -p 8888:8888 -v ${PWD}:/home/y_cohen jupyter/base-notebook
+# ------------------------------------------------------------------------------------
+# to run pycharm go to /home/y_cohen/Downloads/pycharm-community-2024.1.4/bin
+# and do ./pycharm.py
+pycharm ()
+{
+    cd /home/y_cohen/Downloads/pycharm-community-2024.1.4/bin;
+    ./pycharm.sh
+}
+# ------------------------------------------------------------------------------------
