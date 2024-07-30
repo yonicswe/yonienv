@@ -448,6 +448,7 @@ corelist-fc-devices ()
     echo "ls -l /sys/class/fc_host";
     if [ -d /sys/class/fc_host ] ; then
         ls -l /sys/class/fc_host/;
+        ls /sys/class/fc_host/ | while read f ; do echo "/sys/class/fc_host/$f $(cat /sys/class/fc_host/$f/port_state)" ; done
     else
         echo "you might need to modprobe [qla2xxx|lpfc|ocs_fc_scst]";
     fi;
@@ -594,7 +595,7 @@ alias delljournalctl-nt-logs-node-a='_delljournalctl a nt'
 alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 
 # ############ for cluster only #############################################################
-alias journal-grep-panic='journalctl | grep --color "PANIC\|log_backtrace_backend\|panic-\|signal_handler"'
+alias journal-grep-panic='journalctl | grep --color "PANIC\|log_backtrace_backend\|panic-\|signal_handler\|called with signal"'
 alias journal-grep-connect='journalnt | grep  --color "nvme.*allocate"'
 alias journal-grep-connect-queue='journalall | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
 alias journal-grep-discover='journalnt | grep  --color "discover.*allocate"'
@@ -623,6 +624,7 @@ alias journalntf='journalctl -f SUB_COMPONENT=nt'
 alias journalntlast3minutes='journalctl --since="3 minutes ago" SUB_COMPONENT=nt'
 
 alias journalcycconfig='journalctl -t cyc_config'
+alias journalcycconfigf='journalctl -t cyc_config -f'
 
 alias journalcycbsc='journalctl -t cyc_bsc'
 alias journalcycbscf='journalctl -f -t cyc_bsc'
@@ -921,6 +923,8 @@ alias debuc-log-auth-disable='debuc-command "log auth disable"';
 
 alias debuc-log-commands-enable='debuc-command "log commands enable"';
 alias debuc-log-commands-disable='debuc-command "log commands disable"';
+alias debuc-log-page-enable='debuc-command "log logpage enable"';
+alias debuc-log-page-disable='debuc-command "log logpage disable"';
 
 alias debuc-host-add='debuc-command "add hostgroup"';
 alias debuc-host-add-secret='debuc-command "add hostgroup grp_idx=1 host_name=nqn.2014-08.org.nvmexpress:uuid:4c4c4544-005a-3710-8051-b1c04f445732 host_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: subsys_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: "'

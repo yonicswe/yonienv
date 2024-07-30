@@ -12,3 +12,5 @@ colorscheme darkblue
 imap jk <esc>
 set mouse=a
 noremap <S-l> :let @/ = ""<CR>
+vmap / y/<C-R>"<CR>
+map <leader>m :source ~/.vimrc<cr>:edit<cr>
