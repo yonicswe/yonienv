@@ -2772,14 +2772,14 @@ ssh2lgofcluster ()
 
     lg_arr=( $(dellclusterlgipget ${cluster}) );
 
-    echo "lg_arr: ${lg_arr[@]}";
+    #echo "lg_arr: ${lg_arr[@]}";
 
     if [[ ${#lg_arr[@]} -gt 1 ]] ; then
-        echo "${lg_arr[@]}";
-        return;
+        echo "more than lg : ${lg_arr[@]}";
+        lg="$(printf "%s\n" ${lg_arr[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    else
+        lg=${lg_arr[0]};
     fi;
-
-    lg=${lg_arr[0]};
 
     ssh2lg ${lg};
 }
