@@ -2038,6 +2038,19 @@ _dellcyclonebackupuserchoices ()
     fi;
 }
 
+_verify_cluster_config ()
+{
+    local cluster=${1};
+
+    if [[ -z ${cluster} || -z ${CYC_CONFIG} ]] ; then
+        echo "error: cluster or CYC_CONFIG not given";
+        return;
+    fi;
+
+    xxutil.py get_config_from_labjungle ${cluster} > ${cluster}.labjungle.cfg 
+    diff     ${cluster}.labjungle.cfg ${CYC_CONFIG} |grep -v "+++\|---" | grep "^-\|^+" | grep -v pdu
+}
+
 dellclusterinstall ()
 {
     local cluster=${1};
