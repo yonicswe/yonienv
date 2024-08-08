@@ -38,7 +38,7 @@ yonivm-update-yonienv ()
 _trident_cluster_list_nodes_init ()
 {
     trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print toupper($0)}' ) $c $c-A $c-B ; done) 
-    complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce dellclusteryonienvupdate
+    complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaseRelease dellclusterdeploy dellclusterleasewithforce dellclusteryonienvupdate
     complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
 }
 _trident_cluster_list_nodes_init;
@@ -899,10 +899,10 @@ alias dellclusterlist-trident-roce='  _dellclusterlist ~/docs/dell-cluster-list-
 alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt   Trident-kernel-IL indus'
 
 # PlatformIO-FE:adamh
-xpool_users=(y_cohen grupie amite eldadz levyi2 adamh joseph_karner);
-complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterlease-update-user;
+xpool_users=(y_cohen grupie amite eldadz levyi2 adamh joseph_karner labmaintenance);
+complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterleaseUpdateUser dellclusterleaseReRelease;
 
-dellclusterleaserelease ()
+dellclusterleaseRelease ()
 {
     local cluster=${1};
 
@@ -951,10 +951,10 @@ _dellclusterlease ()
     echo ${cluster} >> ~/.dell_leased_clusters
 }
 
-dellclusterlease-update-user ()
+dellclusterleaseUpdateUser ()
 {
-    local cluster=${1};
-    local user=${1:-labmaintenance};
+    local user=${1:-y_cohen};
+    local cluster=${2};
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -969,6 +969,62 @@ dellclusterlease-update-user ()
     [ $? -eq 0 ] && return;
 
     /home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster};
+}
+
+dellclusterleaseReRelease ()
+{
+    local user=${1:-y_cohen};
+    local cluster=${2}
+    local new_owner=;
+    local cluster_owner=;
+
+    if [ -z ${cluster} ] ; then
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    cluster_owner=$(xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username");
+    if [[ "${cluster_owner}" == "null" ]] ; then
+        # cluster is free lets just take it
+        /home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster};
+        return;
+    fi;
+
+    if [[ "${cluster_owner}" != "y_cohen" ]] ; then
+        echo -e "${YELLOW}y_cohen is not owner of ${cluster}. lets change that${NC}";
+        #dellclusterleaseUpdateUser y_cohen ${cluster};
+        /home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster};
+    fi;
+
+    echo -e "${YELLOW} y_cohen release ${cluster} ${NC}";
+    #dellclusterleaseRelease ${cluster};
+    /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
+
+    new_owner=$(xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username");
+    # hippo sometimes takes released clusters
+    # in which case update the user back to y_cohen
+    if [[ "${new_owner}" == "null" ]] ; then
+        echo -e "${YELLOW}${cluster} is owned by no one. lets take it${NC}"
+        #_dellclusterlease 3d ${cluster};
+        /home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster};
+    else
+        echo -e "${YELLOW}${new_owner} : got the cluster. lets take it back ;-)${NC}";
+        #dellclusterleaseUpdateUser y_cohen ${cluster};
+        /home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster};
+        echo -e "${YELLOW}y_cohen : extend ${cluster} for 3 days${NC}";
+        #dellclusterleaseextend ${cluster} 3;
+        /home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster};
+    fi;
+
+    if [[ ${user} != "y_cohen" ]] ; then
+        echo -e "${YELLOW}update ${cluster} to user to : ${user}${NC}";
+        #dellclusterleaseUpdateUser ${user} ${cluster};
+        /home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster};
+    fi;
+
 }
 
 alias dellclusterleasewithforce='/home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen '
@@ -1354,7 +1410,8 @@ dellclustergeneratecfg ()
 dellclusterleaseextend () 
 {
     local cluster=${1};
-    local extend=${2:-14d};
+    local extend=${2:-14};
+    local user_extend_choice=;
 
     if [ "${cluster}" == "ask" ] ; then
         cluster=;
@@ -1374,12 +1431,11 @@ dellclusterleaseextend ()
         fi;
     fi;
 
-    echo -n "extend ${cluster} ";
-    read -p "extend 14 days ? : " extend;
-    if [ -z ${extend} ] ; then
-        extend=14d;
-    else
+    read -p "extend ${cluster} ${extend} days ? Enter/or choose a different value: " user_extend_choice;
+    if [ -z "${user_extend_choice}" ] ; then
         extend="${extend}d";
+    else
+        extend=${user_extend_choice}d;
     fi;
 
     echo -e "\t\t-> /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} ${extend}"
@@ -1389,10 +1445,10 @@ dellclusterleaseextend ()
 
 alias dellclusterleaseextendshared='dellclusterleaseextend ask 72h';
 
-# complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce
+# complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaseRelease dellclusterdeploy dellclusterleasewithforce
 # complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
 
-# complete -W "$(echo ${!dell_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaserelease dellclusterdeploy dellclusterleasewithforce xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
+# complete -W "$(echo ${!dell_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaseRelease dellclusterdeploy dellclusterleasewithforce xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
 
 ssh2arwen ()
 {
