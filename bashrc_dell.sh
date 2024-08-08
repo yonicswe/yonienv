@@ -2170,8 +2170,23 @@ dellclusterinstall ()
         fi;
     fi;
 
+    if [ ${repeat_last_choice} -eq 1 ] ; then
+        if [[ "${cluster}" != "${install_cluster}" ]] ; then
+            echo -e "${RED}CYC_CONFIG ${cluster} is not ${install_cluster}${NC}";
+            ask_user_default_yes "would you like to install ${cluster}"
+            if [[ $? -eq 0 ]] ; then
+                return -1;
+            fi;
+
+            deploy_cmd=$(echo ${deploy_cmd} | sed "s/${install_cluster}/${cluster}/g");
+            create_cluster_cmd=$(echo ${create_cluster_cmd} | sed "s/${install_cluster}/${cluster}/g");
+            
+        fi;
+    fi;
+
     ddd;
     echo "install_date=\"$(now)\"" > ${cyclone_folder}/.install_choices_bkp;
+    echo "install_cluster=${cluster}" >> ${cyclone_folder}/.install_choices_bkp;
     echo "deploy_cmd=\"${deploy_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
     echo "reinit_cmd=\"${reinit_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
     echo "create_cluster_cmd=\"${create_cluster_cmd}\"" >> ${cyclone_folder}/.install_choices_bkp;
