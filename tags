@@ -46,6 +46,7 @@ _trident_cluster_list_nodes_init	bashrc_dell.sh	/^_trident_cluster_list_nodes_in
 _upstream	upstream_complete_dir.sh	/^_upstream ()$/;"	f
 _usage_dellclusterinstallibid	bashrc_dell.sh	/^_usage_dellclusterinstallibid ()$/;"	f
 _usage_dellclusterinstallibid_with_autoinstall	bashrc_dell.sh	/^_usage_dellclusterinstallibid_with_autoinstall ()$/;"	f
+_verify_cluster_config	bashrc_dell.sh	/^_verify_cluster_config ()$/;"	f
 _weather	bashrc_misc.sh	/^_weather(){ curl -s "wttr.in?m1" ;}$/;"	f
 _yonienv	folder_name_complete.sh	/^_yonienv ()$/;"	f
 acs_build_vars	bashrc_nice.sh	/^acs_build_vars () $/;"	f
@@ -132,8 +133,10 @@ dellclusterinstall	bashrc_dell.sh	/^dellclusterinstall ()$/;"	f
 dellclusterinstallfeatureflag	bashrc_dell.sh	/^dellclusterinstallfeatureflag ()$/;"	f
 dellclusteripget	bashrc_dell.sh	/^dellclusteripget ()$/;"	f
 dellclusterkernelspaceupdate	bashrc_dell.sh	/^dellclusterkernelspaceupdate ()$/;"	f
+dellclusterleaseReRelease	bashrc_dell.sh	/^dellclusterleaseReRelease ()$/;"	f
+dellclusterleaseRelease	bashrc_dell.sh	/^dellclusterleaseRelease ()$/;"	f
+dellclusterleaseUpdateUser	bashrc_dell.sh	/^dellclusterleaseUpdateUser ()$/;"	f
 dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
-dellclusterleaserelease	bashrc_dell.sh	/^dellclusterleaserelease ()$/;"	f
 dellclusterlgipget	bashrc_dell.sh	/^dellclusterlgipget ()$/;"	f
 dellclusterping	bashrc_dell.sh	/^dellclusterping ()$/;"	f
 dellclusterruntimeenvget	bashrc_dell.sh	/^dellclusterruntimeenvget ()  $/;"	f
@@ -393,6 +396,7 @@ prompt_color	bashrc_fs.sh	/^prompt_color () $/;"	f
 prompt_sc	bashrc_fs.sh	/^prompt_sc ()$/;"	f
 psmine	bashrc_fs.sh	/^psmine ()$/;"	f
 pu	bashrc_bookmarks.sh	/^pu ()$/;"	f
+pycharm	bashrc_dell.sh	/^pycharm ()$/;"	f
 pyverbs_install	bashrc_mlx.sh	/^pyverbs_install ()$/;"	f
 randrme	bashrc_mlx.sh	/^randrme ()$/;"	f
 rdmacorebuild	bashrc_mlx.sh	/^rdmacorebuild ()$/;"	f
