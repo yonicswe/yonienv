@@ -3,7 +3,7 @@
 alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 alias ssh2amitvm='echo cycpass; ssh cyc@10.227.212.159'
 alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
-alias ssh2iritvm='echo cycpass; ssh cyc@10.227.212.132'
+alias ssh2iritvm='echo cycpass; ssh cyc@10.207.132.158'
 # yonivmipaddress="10.244.196.235"
 yonivmipaddress="10.227.212.155"
 yonivm2ipaddress="10.227.212.133"
@@ -166,7 +166,7 @@ dellcyclonedevelenvsetup ()
 	git submodule update --init source/cyclone-controlpath
 	git submodule update --init source/nt-nvmeof-frontend
 	git submodule update --init source/third-party
-	git c int/foothills-prime/main-pl
+	git c int/victory-plus/main
 	git submodule update
 	git fetch origin
 	git reset --hard origin/int/foothills-prime/main-pl
