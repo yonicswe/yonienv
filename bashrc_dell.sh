@@ -971,6 +971,39 @@ dellclusterleaseUpdateUser ()
     /home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster};
 }
 
+dellclusterleaseinfo ()
+{
+
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    echo -e "${BLUE}xxlabjungle cluster \"name:${cluster}\" | jq -r \".objects[].lease\"${NC}";
+    2>/dev/null xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease";
+}
+
+dellclusterowner ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    echo -e "${BLUE}xxlabjungle cluster \"name:${cluster}\" | jq -r \".objects[].lease.user.username\"${NC}";
+    2>/dev/null xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username";
+}
+
 dellclusterleaseReRelease ()
 {
     local user=${1:-y_cohen};
@@ -1002,6 +1035,8 @@ dellclusterleaseReRelease ()
     echo -e "${YELLOW} y_cohen release ${cluster} ${NC}";
     #dellclusterleaseRelease ${cluster};
     /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
+
+    sleep 2;
 
     new_owner=$(xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username");
     # hippo sometimes takes released clusters
