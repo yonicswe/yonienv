@@ -13,7 +13,7 @@ for c in clusters/* ; do
     user_name=$(sed -n "${user}p" ${cluster_list});
     cluster=$(basename ${cluster_list});
 
-    current_user=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username");
+    current_user=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].lease.expires_on , .objects[].lease.user.username" | xargs);
     echo "${cluster} : ${current_user} -> ${user_name}";
 
 done;

@@ -1004,12 +1004,20 @@ dellclusterowner ()
     2>/dev/null xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username";
 }
 
+_cluster_owner ()
+{
+    local cluster=${1};
+
+    2>/dev/null /home/build/xscripts/xxutil.py labjungle  cluster "name:${cluster}" | jq -r ".objects[].lease.user.username"|sed 's/\ //g';
+}
+
 dellclusterleaseReRelease ()
 {
     local user=${1:-y_cohen};
     local cluster=${2}
     local new_owner=;
     local cluster_owner=;
+    local retries=1;
 
     if [ -z ${cluster} ] ; then
         cluster=$(_dellclusterget);
@@ -1019,44 +1027,61 @@ dellclusterleaseReRelease ()
         fi;
     fi;
 
-    cluster_owner=$(xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username");
+    # cluster_owner=$(xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username");
+    cluster_owner=$(_cluster_owner ${cluster});
+
+    if [[ -z "${cluster_owner}" ]] ; then
+        echo -e "${RED}!!error!! could not get cluster owner${NC}";
+        return -1;
+    fi
+
     if [[ "${cluster_owner}" == "null" ]] ; then
-        # cluster is free lets just take it
-        /home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster};
-        return;
-    fi;
-
-    if [[ "${cluster_owner}" != "y_cohen" ]] ; then
-        echo -e "${YELLOW}y_cohen is not owner of ${cluster}. lets change that${NC}";
-        #dellclusterleaseUpdateUser y_cohen ${cluster};
-        /home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster};
-    fi;
-
-    echo -e "${YELLOW} y_cohen release ${cluster} ${NC}";
-    #dellclusterleaseRelease ${cluster};
-    /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
-
-    sleep 2;
-
-    new_owner=$(xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username");
-    # hippo sometimes takes released clusters
-    # in which case update the user back to y_cohen
-    if [[ "${new_owner}" == "null" ]] ; then
-        echo -e "${YELLOW}${cluster} is owned by no one. lets take it${NC}"
-        #_dellclusterlease 3d ${cluster};
+        echo -e "${YELLOW}${cluster} is free lets just take it${NC}";
+        echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster}${NC}";
         /home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster};
     else
-        echo -e "${YELLOW}${new_owner} : got the cluster. lets take it back ;-)${NC}";
-        #dellclusterleaseUpdateUser y_cohen ${cluster};
-        /home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster};
-        echo -e "${YELLOW}y_cohen : extend ${cluster} for 3 days${NC}";
-        #dellclusterleaseextend ${cluster} 3;
-        /home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster};
+        if [[ "${cluster_owner}" != "y_cohen" ]] ; then
+            echo -e "${YELLOW}${cluster} owned by ${cluster_owner}. lets change that${NC}";
+            echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster}${NC}";
+            /home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster};
+        fi;
+
+        echo -e "${YELLOW}release ${cluster} from ${cluster_owner}${NC}";
+        echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool release ${cluster}${NC}";
+        /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
+
+        new_owner=$(_cluster_owner ${cluster});
+        while [[ "${new_owner}" == "y_cohen" ]] ; do
+            echo -e "${RED}${cluster} still owned by ${new_owner}. lets wait 2 more seconds${NC}";
+            sleep 2;
+            new_owner=$(_cluster_owner ${cluster});
+            ((retries++));
+            if [[ ${retries} > 5 ]] ; then
+                echo -e "${RED}failed to release ${cluster}${NC}";
+                return;
+            fi;
+        done;
+
+        if [[ "${new_owner}" == "null" ]] ; then
+            echo -e "${YELLOW}${cluster} is free. lets take it${NC}"
+            echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster}${NC}";
+            /home/public/scripts/xpool_trident/prd/xpool lease 3d -c ${cluster};
+        else
+            # hippo sometimes takes released clusters
+            echo -e "${YELLOW}${new_owner}: got ${cluster}. lets take it back ;-)${NC}";
+            echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster}${NC}";
+            /home/public/scripts/xpool_trident/prd/xpool update --force -u y_cohen ${cluster};
+
+            echo -e "${YELLOW}y_cohen : extend ${cluster} for 3 days${NC}";
+            echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool extend ${cluster} 3d${NC}";
+            /home/public/scripts/xpool_trident/prd/xpool extend ${cluster} 3d;
+        fi;
+
     fi;
 
     if [[ ${user} != "y_cohen" ]] ; then
         echo -e "${YELLOW}update ${cluster} to user to : ${user}${NC}";
-        #dellclusterleaseUpdateUser ${user} ${cluster};
+        echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster}${NC}";
         /home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster};
     fi;
 
