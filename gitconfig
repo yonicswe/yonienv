@@ -72,6 +72,10 @@
 #   bdescription =  !list-git-branches.py
     bdescription =  !git-list-branches.py
     bdescriptionedit = branch --edit-description
+    bgrep = "!f() { \
+       word=$1;\
+		git b | grep $word; \
+    };f "
 
 #   if branch name is posixed with v<number> 
 #   increment the version v<number++>
@@ -130,13 +134,16 @@
     mt = mergetool
     mtv = mergetool --tool=vimdiff
 
-
+    # after using mt you can change the merge with mtabort
+    # like so : git mtabort <file> 
+    mtabort = checkout --conflict=merge
 
 # ───────c──────────────────────────────────────────────────────────────────────
     commitempty = commit --allow-empty
     commityoni = !git-commit-yoni.sh
 #   commitdell = !git-commit-dell.sh
     c = checkout
+    cc = checkout -
     cb = checkout -b
     checkoutremotebranch = !git_checkoutremotebranch.sh
     sw = switch -
@@ -491,7 +498,14 @@
     unstage = reset HEAD
     # uncommit = reset HEAD^
 
-    uncommit = "!f() { git saveheadindex ; git reset HEAD^ ; }; f"
+    uncommit = "!f() { \
+            git saveheadindex; \
+            if [[ $# -eq 0 ]] ; then \
+                git reset HEAD^ ; \
+            else \
+                git reset HEAD~${1}; \
+            fi; \
+            }; f"
 
     untrackfile = rm --cached 
 
