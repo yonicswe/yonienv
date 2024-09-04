@@ -286,6 +286,8 @@ corecdkernelmodules ()
     fi;
 }
 
+alias corecdcrashdumps='cd /cyc_var/cyc_dumps'
+
 corelistkernelmodules ()
 {
     local kernel_modules_folder_0=/cyc_software_0/cyc_host/cyc_common/modules/;
@@ -1553,8 +1555,13 @@ core-servicemode ()
 # sudo ip link set p2p1.1713 up
 
 # triage 
-# search for these
+# search for these in the nodes journalctl
 # allocate.*ctrl|allocate.*cont|alloc_target_queu|kernel|nvmet|pnvmet
+
+# triage search for this string in host logs /var/log/messages
+# doexit|worker_get_duration|usable|nvme.*succ|nvme.*error\ reco|running.*btest|fail.*btest
+# and for this for the connect log
+# new ctrl
 
 # copy files between nodes 
 # scp <file> peer:~/
