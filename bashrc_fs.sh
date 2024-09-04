@@ -202,7 +202,8 @@ k () {
             return;
         fi;
 
-        jobs -p | xargs kill -9
+        #jobs -p | xargs kill -9
+        jobs | sed 's/\].*//g'  | sed 's/\[//g' | while read j ; do echo -n "kill %${j}; " ; done; echo;
         return;
     fi;
 
