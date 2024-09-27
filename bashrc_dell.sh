@@ -316,9 +316,18 @@ dellsubmodulesdiscard ()
 alias dellpdr-reset='_dellpdr_reset'
 _dellpdr_reset ()
 { 
-    echo "git fetch"; git fetch;
-    echo "git reset HEAD"; git reset HEAD;
-    echo "git c ."; git c .;
+    submodules=(cyc_core nt-nvmeof-frontend third_party);
+    local s;
+    local ss;
+
+    for ss in ${submodules[@]} ; do
+        s=source/${ss};
+        echo "------$s reset modified content------";
+        cd $s ; git c -f . ;
+        cd - ;
+        echo "------$s reset new commits-----------";
+        git smupdate $s;
+    done;
 }
 
 alias dellpdr-gitsmup='_dellpdr_gitsmup'
