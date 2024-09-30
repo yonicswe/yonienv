@@ -226,6 +226,8 @@ lld ()
     ls -ltrd --color $(ls -l | awk '/^d/{print $9}')
 }
 
+alias coregettopology='less /cyc_var/cyc-topo.txt'
+
 coregetversion ()
 {
     local version_file=/working/cyc_host/.version
@@ -287,6 +289,10 @@ corecdkernelmodules ()
 }
 
 alias corecdcrashdumps='cd /cyc_var/cyc_dumps'
+alias corecrash-reassemble-crash-dump-file='/usr/sbin/makedumpfile -D --message-level 31 --reassemble vmcore* kdump'
+alias corecrash-crash-py='/triage_analysis/node_a/cyc_bsc/utils/cyc_crash.py --store_with_dump --crashcmds /tmp/RwWTbPQHO9 --vmlinux ./triage_analysis/node_a/2024-09-05-10:50/vmlinux-5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f-default.gz triage_analysis/node_a/2024-09-05-10-50.kdump'
+alias corecrash-crash='crash ./triage_analysis/node_a/2024-09-05-10:50/vmlinux-5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f-default.gz ./triage_analysis/node_a/5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f/usr/lib/debug/boot/vmlinux* triage_analysis/node_a/2024-
+09-05-10-50.kdump'
 
 corelistkernelmodules ()
 {
@@ -700,6 +706,8 @@ alias delltriage-grep-pnvmet-start-b='delltriage-kernel-log-node-b | grep --colo
 
 alias delltriage-node-a-grep-cluster-name='delltriage-all-logs-node-a | grep -i "cyc_config.*creating cluster"'
 alias delltriage-node-b-grep-cluster-name='delltriage-all-logs-node-b | grep -i "cyc_config.*creating cluster"'
+
+alias dellnvme='nvme list -v'
 
 dellnvme-show-timeout ()
 {
@@ -1522,7 +1530,8 @@ core-servicemode ()
 # nvme connect -t tcp -a 10.181.193.11 -n nqn.1988-11.com.dell:powerstore:00:133a0e05d77e9473A5F6 -s 4420  -S DHHC-1:01:C7XNT6VDFTFfbGtrSimOlLFg7BAdH+UwUgkLTuSA5gcd+7/H: -C DHHC-1:01:97vgjyw8YRnwFPn0LYjeGW5/ClRhS5YuVnwTNIwUNHUWmp6v:
 
 
-
+alias dellnvme-btest-forever='/home/qa/btest/btest -D  -t 0 -l 10m -b 4k   R 30 /dev/nvme0n1'
+alias dellnvme-btest-10s='/home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/nvme0n1'
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/nvme0n1
@@ -1554,14 +1563,21 @@ core-servicemode ()
 # ip addr add 10.219.157.167/20 dev p2p1.1713
 # sudo ip link set p2p1.1713 up
 
-# triage 
+##############################################################
+#                  triage on host file /var/log/messages
 # search for these in the nodes journalctl
 # allocate.*ctrl|allocate.*cont|alloc_target_queu|kernel|nvmet|pnvmet
-
-# triage search for this string in host logs /var/log/messages
+#
+# search for this string in host logs /var/log/messages
 # doexit|worker_get_duration|usable|nvme.*succ|nvme.*error\ reco|running.*btest|fail.*btest
-# and for this for the connect log
+#
+# and for this (in host log) for the connect tcp log
 # new ctrl
+#
+alias dellnvmehost-grep-connect-tcp-to-node="grep 'new ctrl' messages"
+alias dellnvmehost-grep-connect-fc-to-node-a="grep 'nvme.*create assoc.*904a' messages|grep -v discovery"
+alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984a' messages|grep -v discovery"
+##############################################################
 
 # copy files between nodes 
 # scp <file> peer:~/
