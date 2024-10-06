@@ -1334,6 +1334,7 @@ dellcdcyclonescripts ()
 }
 
 export _dellclusterruntimeenvset=0
+alias rdd='dellclusterruntimeenvset'
 dellclusterruntimeenvset ()
 {
     local cluster=${1};
