@@ -451,6 +451,16 @@
     # smstatus = !git-smstatus.sh
     # smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
     smstatus = "!f()  { git sm foreach git hh; }; f"
+#   smstatus = "!f() {\
+#       for s in source/* ; do\
+#       cd $s ;\
+#       if [ $(ls |wc -l ) -eq 0 ] ; then \
+#               echo "-$(git hh) $s" ;\
+#            else \
+#               echo -e "\033[0;32m+$(git hh) $s\033[0m" ;\
+#            fi; \
+#       cd - 2>&1 1>/dev/null ;\
+#       done; }; f"
     smremove = submodule deinit
 #
 #   sm-resetall = submodule foreach --recursive git reset --hard; 

@@ -10,6 +10,7 @@ __pd	bashrc_bookmarks.sh	/^__pd () $/;"	f
 _add_cluster_to_list	bashrc_dell.sh	/^_add_cluster_to_list ()$/;"	f
 _bugs	folder_name_complete.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
+_cluster_owner	bashrc_dell.sh	/^_cluster_owner ()$/;"	f
 _code	folder_name_complete.sh	/^_code ()$/;"	f
 _dellclusterget	bashrc_dell.sh	/^_dellclusterget ()$/;"	f
 _dellclusterlease	bashrc_dell.sh	/^_dellclusterlease ()$/;"	f
@@ -137,7 +138,9 @@ dellclusterleaseReRelease	bashrc_dell.sh	/^dellclusterleaseReRelease ()$/;"	f
 dellclusterleaseRelease	bashrc_dell.sh	/^dellclusterleaseRelease ()$/;"	f
 dellclusterleaseUpdateUser	bashrc_dell.sh	/^dellclusterleaseUpdateUser ()$/;"	f
 dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
+dellclusterleaseinfo	bashrc_dell.sh	/^dellclusterleaseinfo ()$/;"	f
 dellclusterlgipget	bashrc_dell.sh	/^dellclusterlgipget ()$/;"	f
+dellclusterowner	bashrc_dell.sh	/^dellclusterowner ()$/;"	f
 dellclusterping	bashrc_dell.sh	/^dellclusterping ()$/;"	f
 dellclusterruntimeenvget	bashrc_dell.sh	/^dellclusterruntimeenvget ()  $/;"	f
 dellclusterruntimeenvset	bashrc_dell.sh	/^dellclusterruntimeenvset ()$/;"	f
