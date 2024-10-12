@@ -898,6 +898,7 @@ alias dellclusterlist-user='          _dellclusterlistuser'
 alias dellclusterlist-trident='       _dellclusterlist ~/docs/dell-cluster-list-trident.txt         Trident-kernel-IL'
 alias dellclusterlist-pm-il='         _dellclusterlist ~/docs/dell-cluster-list-pm.txt              PM-IL'
 alias dellclusterlist-platformio-fe=' _dellclusterlist ~/docs/dell-cluster-list-fe.txt              PlatformIO-FE'
+alias dellclusterlist-oboe='dellclusterlist-platformio-fe'
 alias dellclusterlist-platformio-be=' _dellclusterlist ~/docs/dell-cluster-list-be.txt              PlatformIO-BE'
 alias dellclusterlist-xblock='        _dellclusterlist ~/docs/dell-cluster-list-xblock.txt          Xblock-NDU'
 alias dellclusterlist-shared='        _dellclusterlist ~/docs/dell-cluster-list-shared.txt          Core-Dev-Shared'
@@ -953,6 +954,7 @@ _dellclusterlease ()
     fi;
 
     cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+    _add_cluster_to_list ${cluster};
 
     echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
     /home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster};
@@ -1830,20 +1832,18 @@ ssh2bsc ()
 
 _getlastusedcluster ()
 {
-    local cluster=${1};
+    local cluster=;
+
+    if [ -e ~/.dellssh2cluster.bkp ] ; then 
+        cluster=$(cat ~/.dellssh2cluster.bkp);
+    fi;
+    if [ -n "${cluster}" ] ; then 
+        ask_user_default_yes "use ${cluster} again ?";
+        if [ $? -eq 0 ] ; then cluster=; fi;
+    fi;
 
     if [ -z "${cluster}" ] ; then 
-        if [ -e ~/.dellssh2cluster.bkp ] ; then 
-            cluster=$(cat ~/.dellssh2cluster.bkp);
-        fi;
-        if [ -n "${cluster}" ] ; then 
-            ask_user_default_yes "use ${cluster} again ?";
-            if [ $? -eq 0 ] ; then cluster=; fi;
-        fi;
-
-        if [ -z "${cluster}" ] ; then 
-            cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-        fi;
+        cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
     fi;
 
     if [ -z "${cluster}" ] ; then
@@ -2754,8 +2754,8 @@ dellclusteryonienvupdate ()
     local cluster=${1};
 
     if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then 
             echo "${FUNCNAME} <cluster>"; 
             return -1;
         fi;
