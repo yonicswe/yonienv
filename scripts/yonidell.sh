@@ -445,6 +445,8 @@ bsclistfcports ()
 }
 
 alias dellnvme-list-fcports='bsclistfcports'
+alias dellnvme-list-controllers-node-a='nvme list-subsys| grep 904'
+alias dellnvme-list-controllers-node-b='nvme list-subsys| grep 984'
 
 alias bscshowfctable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
 alias bsclistqlaports='ls -l /sys/class/nvme_qla2xxx/'
@@ -1616,8 +1618,8 @@ alias dellnvme-btest-10s='_dellnvme_btest 10'
 # new ctrl
 #
 alias dellnvmehost-grep-connect-tcp-to-node="grep 'new ctrl' messages"
-alias dellnvmehost-grep-connect-fc-to-node-a="grep 'nvme.*create assoc.*904a' messages|grep -v discovery"
-alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984a' messages|grep -v discovery"
+alias dellnvmehost-grep-connect-fc-to-node-a="grep 'nvme.*create assoc.*904' messages|grep -v discovery"
+alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984' messages|grep -v discovery"
 ##############################################################
 
 # copy files between nodes 
