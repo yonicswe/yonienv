@@ -228,6 +228,22 @@ lld ()
 
 alias coregettopology='less /cyc_var/cyc-topo.txt'
 
+core-qla-fw-dump ()
+{
+    host=$1;
+    if [ -z ${host} ] ; then
+        echo "usage : core-qla-fw-dump <host#>";
+        return -1;
+    fi;
+
+    echo "echo 3 | sudo tee > /sys/class/fc_host/host${host}/device/fw_dump";
+    echo 3 | sudo tee /sys/class/fc_host/host${host}/device/fw_dump;
+
+    # cat /sys/class/fc_host/host${host}/device/fw_dump > fw-dump.txt 
+    # see the file size to make sure that the fw-dump was triggered
+    # the fw-dump file name is "*qla*fw*dump*"
+}
+
 coregetversion ()
 {
     local version_file=/working/cyc_host/.version
