@@ -403,7 +403,7 @@
 
 
 # ───────r──────────────────────────────────────────────────────────────────────
-    reusecommit = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
+    reusecommitmessage = "!f() { git commit -n --reuse-message=$(cat reuse_commit.txt); }; f"
     recommit = "!f() { git cherry-pick $(cat reuse_commit.txt); }; f"
 
 
