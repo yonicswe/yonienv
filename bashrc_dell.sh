@@ -2121,6 +2121,51 @@ _verify_cluster_config ()
     diff     ${cluster}.labjungle.cfg ${CYC_CONFIG} |grep -v "+++\|---" | grep "^-\|^+" | grep -v pdu
 }
 
+_dellcluster_stack_down_up ()
+{
+    local up_or_down=${1}
+    local node=${2};
+    local cmd=;
+
+    _dellclusterruntimeenvvalidate;
+    if [[ $? -ne 0 ]] ; then
+        return -1;
+    fi;
+
+    dellcdclusterscripts;
+
+    if [ -z "${node}" ] ; then
+        read -p "node-a or node-b [a|b] ? " node;
+    fi;
+
+    if [ "${node}" == "b" ] ; then 
+        node=b;
+    else
+        node=a;
+    fi;
+
+    if [ "${up_or_down}" == "down" ] ; then
+        cmd="./stack_down_hard_only_${node}.sh";
+    else
+        cmd="./stack_up_only_${node}.sh";
+    fi;
+
+    if ! [ -e ${cmd} ] ; then
+        echo "file : ${cmd} not found";
+        return -1;
+    fi 
+
+    echo "===================================================";
+    ls -l ${cmd};
+    echo "===================================================";
+    eval ${cmd};
+
+    return 0;
+}
+
+alias dellcluster-stack-up='_dellcluster_stack_down_up up'
+alias dellcluster-stack-down='_dellcluster_stack_down_up down'
+
 dellclusterinstall ()
 {
     local cluster=${1};
