@@ -1546,8 +1546,33 @@ core-servicemode ()
 # nvme connect -t tcp -a 10.181.193.11 -n nqn.1988-11.com.dell:powerstore:00:133a0e05d77e9473A5F6 -s 4420  -S DHHC-1:01:C7XNT6VDFTFfbGtrSimOlLFg7BAdH+UwUgkLTuSA5gcd+7/H: -C DHHC-1:01:97vgjyw8YRnwFPn0LYjeGW5/ClRhS5YuVnwTNIwUNHUWmp6v:
 
 
-alias dellnvme-btest-forever='/home/qa/btest/btest -D  -t 0 -l 10m -b 4k   R 30 /dev/nvme0n1'
-alias dellnvme-btest-10s='/home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/nvme0n1'
+_dellnvme_btest ()
+{
+    local duration=${1};
+    local device=${2};
+
+    if [ -z "${device}" ] ; then
+        device='/dev/nvme0n1';
+    else
+        device="/dev/${device}";
+    fi;
+
+    if ! [ -e ${device} ] ; then
+        echo "${device} not found";
+        return -1;
+    fi;
+
+    echo "---------------------------------------------------------------------"
+    echo "/home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k   R 30 ${device}";
+    echo "---------------------------------------------------------------------"
+    /home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k   R 30 ${device};
+
+    return 0;
+}
+
+alias dellnvme-btest-forever='_dellnvme_btest 0'
+alias dellnvme-btest-10s='_dellnvme_btest 10'
+
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/nvme0n1
