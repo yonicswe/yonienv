@@ -12,6 +12,7 @@ _bugs	folder_name_complete.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
 _cluster_owner	bashrc_dell.sh	/^_cluster_owner ()$/;"	f
 _code	folder_name_complete.sh	/^_code ()$/;"	f
+_dellcluster_stack_down_up	bashrc_dell.sh	/^_dellcluster_stack_down_up ()$/;"	f
 _dellclusterget	bashrc_dell.sh	/^_dellclusterget ()$/;"	f
 _dellclusterlease	bashrc_dell.sh	/^_dellclusterlease ()$/;"	f
 _dellclusterlist	bashrc_dell.sh	/^_dellclusterlist ()$/;"	f
@@ -41,6 +42,8 @@ _hex2bin	bashrc_devel.sh	/^_hex2bin ()$/;"	f
 _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
 _regression	regression_complete.sh	/^_regression ()$/;"	f
 _share	folder_name_complete.sh	/^_share ()$/;"	f
+_ssh_2_dev_vm_for_user	bashrc_dell.sh	/^_ssh_2_dev_vm_for_user ()$/;"	f
+_ssh_set_passwordless_cyc_for_devvm	bashrc_dell.sh	/^_ssh_set_passwordless_cyc_for_devvm ()$/;"	f
 _tasks	folder_name_complete.sh	/^_tasks ()$/;"	f
 _tmp	folder_name_complete.sh	/^_tmp ()$/;"	f
 _trident_cluster_list_nodes_init	bashrc_dell.sh	/^_trident_cluster_list_nodes_init ()$/;"	f
