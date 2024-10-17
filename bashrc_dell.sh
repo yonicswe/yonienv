@@ -1,14 +1,68 @@
 #!/bin/bash
 
 alias editbashdell='v ${yonienv}/bashrc_dell.sh'
-alias ssh2amitvm='echo cycpass; ssh cyc@10.227.212.159'
-alias ssh2eladvm='echo cycpass; ssh cyc@10.227.204.131'
-alias ssh2iritvm='echo cycpass; ssh cyc@10.207.132.158'
+
+
+declare -A user_to_devvm;
+user_to_devvm["amit"]="10.227.212.159"
+user_to_devvm["elad"]="10.227.204.131"
+user_to_devvm["irit"]="10.207.132.158"
+user_to_devvm["dord"]="10.207.132.21" 
+user_to_devvm["yoni1"]="10.227.212.155"
+user_to_devvm["yoni2"]="10.227.212.133"
+complete -W "amit elad irit dord yoni1 yoni2" ssh2devvm ssh2devvmsetup
+
 # yonivmipaddress="10.244.196.235"
-yonivmipaddress="10.227.212.155"
-yonivm2ipaddress="10.227.212.133"
-alias ssh2yonivm="sshpass -p cycpass ssh cyc@${yonivmipaddress}"
-alias ssh2yonivm2="sshpass -p cycpass ssh cyc@${yonivm2ipaddress}"
+#yonivmipaddress="10.227.212.155"
+#yonivm2ipaddress="10.227.212.133"
+#alias ssh2yonivm="sshpass -p cycpass ssh cyc@${yonivmipaddress}"
+#alias ssh2yonivm2="sshpass -p cycpass ssh cyc@${yonivm2ipaddress}"
+
+_ssh_set_passwordless_cyc_for_devvm ()
+{
+    local user=${1};
+    local devvm_ip_address=;
+
+    if [ -z "${user}" ] ; then
+        echo "error: missing user";
+        return -1;
+    fi;
+
+    devvm_ip_address=${user_to_devvm["${user}"]};
+    if [[ -z "${devvm_ip_address}" ]] ; then
+        echo "unkonwn user: ${user}";
+        return -1;
+    fi;
+
+    echo "ssh-copy-id -i ~/.ssh/id_rsa.pub cyc@${devvm_ip_address}";
+    ssh-copy-id -i ~/.ssh/id_rsa.pub cyc@${devvm_ip_address};
+    return 0;
+}
+
+_ssh_2_dev_vm_for_user ()
+{
+    local user=${1};
+    local devvm_ip_address=;
+
+    if [ -z "${user}" ] ; then
+        echo "error: missing user";
+        return -1;
+    fi;
+
+    devvm_ip_address=${user_to_devvm["${user}"]};
+    if [[ -z "${devvm_ip_address}" ]] ; then
+        echo "unkonwn user: ${user}";
+        return -1;
+    fi;
+
+    echo "sshpass -p cycpass ssh cyc@${devvm_ip_address}";
+    sshpass -p cycpass ssh cyc@${devvm_ip_address};
+    return 0;
+}
+
+alias ssh2devvmsetup='_ssh_set_passwordless_cyc_for_devvm'
+alias ssh2devvm='_ssh_2_dev_vm_for_user'
+
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
