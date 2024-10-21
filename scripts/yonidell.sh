@@ -1618,6 +1618,7 @@ alias dellnvme-btest-10s='_dellnvme_btest 10'
 # new ctrl
 #
 alias dellnvmehost-grep-connect-tcp-to-node="grep 'new ctrl' messages"
+alias dellnvmehost-grep-connect-fc="grep 'nvme.*create assoc' messages|grep -v discovery"
 alias dellnvmehost-grep-connect-fc-to-node-a="grep 'nvme.*create assoc.*904' messages|grep -v discovery"
 alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984' messages|grep -v discovery"
 ##############################################################

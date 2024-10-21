@@ -3778,6 +3778,7 @@ alias delltriage-grep-nt-kernel-a='delltriage-all-logs-node-a |grep "\[nt\]\|ker
 alias delltriage-grep-nt-kernel-a-r='delltriage-all-logs-node-a-r |grep "\[nt\]\|kernel"|less -I'
 alias delltriage-grep-nt-kernel-b='delltriage-all-logs-node-b |grep "\[nt\]\|kernel"|less -I'
 alias delltriage-grep-nt-kernel-b-r='delltriage-all-logs-node-b-r |grep "\[nt\]\|kernel"|less -I'
+alias delltriage-host-grep-connect-fc='grep "nvme.*create assoc" messages|grep -v discovery'
 
 # howto
 # journalctl SUBCOMPONENT=nt
