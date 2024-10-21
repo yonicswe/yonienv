@@ -1249,17 +1249,20 @@ _dellclusteruserchoicesget ()
 #alias gdd='_dellclusteruserchoicesget'
 gdd ()
 {
+    local bkp_file=$(echo $cyclone_folder |sed 's/\//-/g');
+
+    if [[ ${1} == "ls" ]] ; then
+        ls -tr ~/.*install_build_choices_bkp.*|xargs cat | grep "install_pdr\|_date\|_time";
+        return;
+    fi;
+
     if [[ -z ${cyclone_folder} ]] ; then
         _dellclusteruserchoicesget;
         return;
     fi;
 
-    if [[ ${1} == "ls" ]] ; then
-        ls -tr ${cyclone_folder}/.install_build_choices_bkp.*|xargs cat | grep "_date\|_time";
-        return;
-    fi;
+    _dellclusteruserchoicesget | tee ~/.${bkp_file}.install_build_choices_bkp.$(date +"%d_%m_%y");
 
-    _dellclusteruserchoicesget | tee ${cyclone_folder}/.install_build_choices_bkp.$(date +"%d_%m_%y");
 }
 
 dellenvrebash ()
