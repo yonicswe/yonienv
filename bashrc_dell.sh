@@ -45,8 +45,11 @@ _ssh_2_dev_vm_for_user ()
     local devvm_ip_address=;
 
     if [ -z "${user}" ] ; then
-        echo "error: missing user";
-        return -1;
+        user="$(printf "%s\n" $(echo ${!user_to_devvm[@]}) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        if [ -z "${user}" ] ; then
+            echo "error: missing user";
+            return -1;
+        fi;
     fi;
 
     devvm_ip_address=${user_to_devvm["${user}"]};
