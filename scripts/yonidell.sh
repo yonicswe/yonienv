@@ -143,15 +143,15 @@ yonidellupdate ()
     source ~/yonidell.sh;
     1>/dev/null popd;
      
-    if [ $(grep "alias y=" ~/.bashrc | wc -l) -eq 1 ] ; then
+    if [ $(grep "alias yy=" ~/.bashrc | wc -l) -eq 1 ] ; then
         return 0;
     fi;
 
-    echo "alias y='source ~/yonidell.sh'" >> ~/.bashrc;
+    echo "alias yy='source ~/yonidell.sh'" >> ~/.bashrc;
     return 0;
 }
-alias yy='yonidellupdate'
-alias yyy='yonidellsshkeyset'
+alias yyupdate='yonidellupdate'
+alias yysshkeyset='yonidellsshkeyset'
 
 yonidelldelete ()
 {
