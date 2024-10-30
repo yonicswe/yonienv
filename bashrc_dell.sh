@@ -2194,20 +2194,30 @@ _dellcluster_stack_down_up ()
 
     dellcdclusterscripts;
 
-    if [ -z "${node}" ] ; then
-        read -p "node-a or node-b [a|b] ? " node;
-    fi;
-
-    if [ "${node}" == "b" ] ; then 
-        node=b;
-    else
-        node=a;
-    fi;
+    # this section is commented as the scripts 
+    # stack_down_hard_only_a and stack_up_only_a and b dont work
+#   if [ -z "${node}" ] ; then
+#       read -p "node-a or node-b [a|b] (none for both) ? " node;
+#   fi;
+#
+#   if [ "${node}" == "b" ] ; then 
+#       node=b;
+#   elif [ "${node}" == "a" ] ; then
+#       node=a;
+#   fi;
+#
+#   if [ -n "${node}" ] ; then
+#      if [ "${up_or_down}" == "down" ] ; then
+#          cmd="./stack_down_hard_only_${node}.sh";
+#      else
+#          cmd="./stack_up_only_${node}.sh";
+#      fi;
+#   else
 
     if [ "${up_or_down}" == "down" ] ; then
-        cmd="./stack_down_hard_only_${node}.sh";
+        cmd="./stack_down_hard.sh";
     else
-        cmd="./stack_up_only_${node}.sh";
+        cmd="./stack_up.sh";
     fi;
 
     if ! [ -e ${cmd} ] ; then
@@ -3437,6 +3447,10 @@ dellcdmdt ()
     fi;
     cd $(cat ${mdt_file} | grep jiraproduction);
 }
+
+alias dellcdvdamit='cd ~/amite'
+alias dellcdvdamit='cd ~/grupie'
+alias dellcdvdamit='cd ~/eldadz'
 
 dellcyclonekernelshaupdate ()
 {
