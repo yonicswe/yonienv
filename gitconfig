@@ -658,5 +658,6 @@
 #
 # abort merge or rebase changes done to file
 # quit vimdiff with :cq
-# or do git checkout --conflict=merge {file}
+# or do
+#    git checkout --conflict=merge {file}
 # and then you can run git mergetool again
