@@ -3418,6 +3418,7 @@ dellcyclonekernelshaget ()
     fi;
     
     if [[ -f ${mfile} ]] ; then
+        echo -e "sed -n \"/Set.*PNVMET_GIT_TAG.*/p\" $mfile";
         sed -n "/Set.*PNVMET_GIT_TAG.*/p" $mfile;
     else
         echo "${mfile} not found";
