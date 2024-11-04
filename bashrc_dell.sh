@@ -3572,6 +3572,31 @@ dellibid2commit ()
 
 }
 
+dellibidgitcheckout ()
+{
+    local ibid=${1};
+    local pdr_git_index=;
+    local cmd=;
+    # checkout pdr of git hash pertaining ibid
+    pdr_git_index=$(phlibid --getCommit --ibid ${ibid}  |grep "Commit ID" | sed 's/\ //g' | cut -d ':' -f 2);
+    if [ -z "${pdr_git_index}" ] ; then
+        echo "failed to get git index for ibid ${ibid}";
+        return -1;
+    fi;
+
+    echo "git checkout -b dev/ycohen/ibid-${ibid} ${pdr_git_index}";
+    ask_user_default_yes "continue ?";
+    if [ $? -eq 0 ] ; then
+        return 0;
+    fi;
+
+    echo $pdr_git_index > x 
+    truncate -s -2 x
+    git checkout -b dev/ycohen/ibid-$ibid $(cat x)
+    2>&1 1>/dev/null rm -f x;
+    return 0;
+}
+
 _dellrebootnode ()
 {
     node=${1:-a};
