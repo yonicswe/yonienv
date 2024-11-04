@@ -967,7 +967,7 @@ alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-
 
 # PlatformIO-FE:adamh
 xpool_users=(y_cohen grupie amite eldadz levyi2 adamh joseph_karner labmaintenance);
-complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterleaseUpdateUser dellclusterleaseReRelease;
+complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterleaseUpdateUser dellclusterleaseReRelease dellcdvduser; 
 
 dellclusterleaseRelease ()
 {
@@ -3448,9 +3448,16 @@ dellcdmdt ()
     cd $(cat ${mdt_file} | grep jiraproduction);
 }
 
-alias dellcdvdamit='cd ~/amite'
-alias dellcdvdamit='cd ~/grupie'
-alias dellcdvdamit='cd ~/eldadz'
+
+dellcdvduser ()
+{
+    local user=${1};
+    cd /home/${user};
+}
+
+alias dellcdvdamite='dellcdvduser amite'
+alias dellcdvdgrupie='dellcdvduser grupie'
+alias dellcdvdeldadz='dellcdvduser eldadz'
 
 dellcyclonekernelshaupdate ()
 {
