@@ -2483,6 +2483,7 @@ dellclusterinstall ()
                 create_cluster_cmd="./create_cluster_centos8.sh -sys ${cluster}-BM -admin -stdout -y -post";
 
                 echo -e "\n${BLUE}\t\t\t${create_cluster_cmd} ${NC}\n";
+                cmd_start_time=${SECONDS};
                 eval ${create_cluster_cmd};
 
                 if [[ $? -ne 0 ]] ; then
@@ -2494,16 +2495,16 @@ dellclusterinstall ()
                 fi;
 
             done;
-        else
-            create_cluster_time=$(( (${SECONDS} - ${cmd_start_time}) ));
-            create_cluster_time="$(date -u -d @"${create_cluster_time}" +'%-Mm %-Ss')";
-            echo -e "create_cluster_time=\"${create_cluster_time}\"" >> ${cyclone_folder}/.install_choices_bkp;
-            echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} )${NC}";
         fi;
 
         if [ 1 -eq ${create_cluster_failed} ] ; then
             return -1;
         fi;
+
+        create_cluster_time=$(( (${SECONDS} - ${cmd_start_time}) ));
+        create_cluster_time="$(date -u -d @"${create_cluster_time}" +'%-Mm %-Ss')";
+        echo -e "create_cluster_time=\"${create_cluster_time}\"" >> ${cyclone_folder}/.install_choices_bkp;
+        echo -e "\n${GREEN}\t\t\tcreate_cluster succeeded ( after ${create_cluster_time} )${NC}";
     fi;
 
     echo -e "\t${CYAN}deploy         : ${deploy_time} ${NC}";
