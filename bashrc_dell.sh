@@ -3557,6 +3557,24 @@ dellcyclonebackup ()
     return 0;
 }
 
+dellibid2commitpnvmet ()
+{
+    local ibid=${1};
+    local third_party_commitid=;
+
+
+    pushd ~/devel/third_party 2>&1 1>/dev/null;
+    phlibid --getCommit --ibid ${ibid} | grep third_party | cut -f 2 -d ":" > x;
+    truncate -s -2 x;
+    third_party_commitid=$(cat x);
+    rm -f x 2>&1 1>/dev/null;
+    git fetch 2>&1 1>/dev/null;
+    echo "$(pwd) : git checkout $third_party_commitid";
+    (2>/dev/null git checkout $third_party_commitid) 
+    grep "Set.*PNVMET_GIT_TAG"  cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    popd 2>&1 1>/dev/null;
+}
+
 
 dellibid2commit ()
 {
@@ -3568,7 +3586,7 @@ dellibid2commit ()
     # phlibid.pl --ibid ${ibid} | grep --color -i commit
     echo "phlibid --getCommit --ibid ${ibid}";
     echo "---------------------------------------------------------------"
-    phlibid --getCommit --ibid ${ibid} | grep "Commit ID\|nt-nvmeof";
+    phlibid --getCommit --ibid ${ibid} | grep "Commit ID\|nt-nvmeof\|third_party";
 
 }
 
