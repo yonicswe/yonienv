@@ -651,11 +651,11 @@ _dellcyclonebuild_validate_build_machine ()
     fi;
 
     # ok to build in dev-vm
-    if (( 0 !=  $(hostname -i | grep ${yonivmipaddress}  | wc -l ) )) ; then
+    if (( 0 !=  $(hostname -i | grep ${user_to_devvm["yoni1"]}  | wc -l ) )) ; then
         return 0;
     fi;
 
-    if (( 0 !=  $(hostname -i | grep ${yonivm2ipaddress}  | wc -l ) )) ; then
+    if (( 0 !=  $(hostname -i | grep ${user_to_devvm["yoni2"]}  | wc -l ) )) ; then
         return 0;
     fi;
 
