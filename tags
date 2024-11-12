@@ -127,6 +127,7 @@ dellcdpnvmetfolder	bashrc_dell.sh	/^dellcdpnvmetfolder ()$/;"	f
 dellcdqlasources	bashrc_dell.sh	/^dellcdqlasources ()$/;"	f
 dellcdthirdparty	bashrc_dell.sh	/^dellcdthirdparty ()$/;"	f
 dellcdthirdpartyobjects	bashrc_dell.sh	/^dellcdthirdpartyobjects ()$/;"	f
+dellcdvduser	bashrc_dell.sh	/^dellcdvduser ()$/;"	f
 dellclusteraddtolist	bashrc_dell.sh	/^dellclusteraddtolist ()$/;"	f
 dellclusterconfigupdate	bashrc_dell.sh	/^dellclusterconfigupdate ()$/;"	f
 dellclustereditcycconfig	bashrc_dell.sh	/^dellclustereditcycconfig ()$/;"	f
@@ -165,6 +166,11 @@ dellcyclonetagsupdate	bashrc_dell.sh	/^dellcyclonetagsupdate ()$/;"	f
 delldeletebroadcomsources	bashrc_dell.sh	/^delldeletebroadcomsources ()$/;"	f
 dellenvrebash	bashrc_dell.sh	/^dellenvrebash ()$/;"	f
 dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
+dellibid2commitpnvmet	bashrc_dell.sh	/^dellibid2commitpnvmet ()$/;"	f
+dellibidgitcheckout	bashrc_dell.sh	/^dellibidgitcheckout ()$/;"	f
+dellibidofficial	bashrc_dell.sh	/^dellibidofficial ()$/;"	f
+delllgyonienvupdate	bashrc_dell.sh	/^delllgyonienvupdate ()$/;"	f
+dellpnvmettagsupdate	bashrc_dell.sh	/^dellpnvmettagsupdate ()$/;"	f
 dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
 dellrbatracedump	bashrc_dell.sh	/^dellrbatracedump ()$/;"	f
 dellrbatraceenable	bashrc_dell.sh	/^dellrbatraceenable ()$/;"	f
