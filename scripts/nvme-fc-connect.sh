@@ -30,7 +30,7 @@ for (( c=1, h=0; h<${#host_arr[@]} ; h++)) ; do
         if [[ $x == n ]] ; then
             exit 1;
         fi;
-	eval $cmd;
+        eval $cmd;
         ((c++));
     done;
 done;

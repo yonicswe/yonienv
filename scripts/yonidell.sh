@@ -156,7 +156,7 @@ alias yysshkeyset='yonidellsshkeyset'
 yonidelldelete ()
 {
     rm -f ~/yonidell.sh ~/vimrcyoni.vim ~/.vimrc
-    sed -i '/alias y=.*/d' ~/.bashrc;
+    sed -i '/alias yy=.*/d' ~/.bashrc;
 }
 
 probe_topology ()
@@ -367,6 +367,7 @@ bsclistnvmeportsfcc ()
             continue;
         fi;
         echo "$(cat $i/addr_traddr)" >> powerstore_file;
+        echo "use bscscptohost to create a scp command to copy the powerstore_file"
     done;
 }
 
@@ -1566,11 +1567,11 @@ coreid ()
     echo ${system_name}-${system_node};
     echo debuc_node : ${debuc_node};
 
-    if [ $(grep "alias y=" ~/.bashrc | wc -l) -eq 1 ] ; then
+    if [ $(grep "alias yy=" ~/.bashrc | wc -l) -eq 1 ] ; then
         return 0;
     fi;
 
-    echo "alias y='source ~/yonidell.sh'" >> ~/.bashrc;
+    echo "alias yy='source ~/yonidell.sh'" >> ~/.bashrc;
 }
 
 coreid;
