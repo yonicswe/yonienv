@@ -304,6 +304,7 @@ corecdkernelmodules ()
     fi;
 }
 
+alias corecdbscmountpoint="echo /var/lib/docker/overlay2/"
 alias corecdcrashdumps='cd /cyc_var/cyc_dumps'
 alias corecrash-reassemble-crash-dump-file='/usr/sbin/makedumpfile -D --message-level 31 --reassemble vmcore* kdump'
 alias corecrash-crash-py='/triage_analysis/node_a/cyc_bsc/utils/cyc_crash.py --store_with_dump --crashcmds /tmp/RwWTbPQHO9 --vmlinux ./triage_analysis/node_a/2024-09-05-10:50/vmlinux-5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f-default.gz triage_analysis/node_a/2024-09-05-10-50.kdump'
@@ -353,7 +354,21 @@ bsclistsubsystem ()
 }
 
 alias bsclistnvmeportsfc='bsclistnvmeports|grep \|fc'
+#alias bsclistnvmeportsfcc="bsclistnvmeports|grep \|fc | awk '{print $3}'|sed 's/|//g' | tee powerstore_file"
 alias bsclistnvmeportstcp='bsclistnvmeports|grep \|tcp'
+
+bsclistnvmeportsfcc ()
+{
+    local type=;
+    echo > powerstore_file;
+    for i in /sys/kernel/config/nvmet/ports/* ; do
+        type=$(cat $i/addr_trtype);
+        if [[ ${type} != "fc" ]] ; then
+            continue;
+        fi;
+        echo "$(cat $i/addr_traddr)" >> powerstore_file;
+    done;
+}
 
 bsclistnvmeports ()
 {
@@ -1353,6 +1368,42 @@ dellibdev2netdev ()
     done  | column -t;
 }
 
+_bscscptohost_usage ()
+{
+    echo "bscscptohost <file> <host> <user> [password]"
+}
+
+bscscptohost ()
+{
+    local file=${1};
+    local host=${2};
+    local user=${3};
+    local password=${4};
+
+    if [[ -z ${file} ]] ; then
+        echo -e "${RED}missing file name${NC}";
+        _bscscptohost_usage;
+        return -1;
+    fi;
+    if [[ -z ${host} ]] ; then
+        echo -e "${RED}missing host${NC}";
+        _bscscptohost_usage;
+        return -1;
+    fi;
+    if [[ -z ${user} ]] ; then
+        echo -e "${RED}missing user${NC}";
+        _bscscptohost_usage;
+        return -1;
+    fi;
+
+    file=$(readlink -f ${file});
+    if [ -z ${password} ] ; then
+        echo "scp ${file} ${user}@${host}:~/";
+    else
+        echo -e "sshpass -p \"${password}\" scp ${file} ${user}@${host}:~/";
+    fi;
+}
+
 scpcommandforfile ()
 {
     local file=${1};
@@ -1433,7 +1484,9 @@ dellnvme-fc-host-nodename-portname ()
         echo -e "${RED}!! no fc driver is loaded !!${NC}";
     fi;
 
+    echo > host_file;
     for h in /sys/class/fc_host/* ; do
+        echo "nn-$(cat $h/node_name):pn-$(cat $h/port_name)" >> host_file;
         echo -n "$(basename $h) : nn-$(cat $h/node_name):pn-$(cat $h/port_name)";
         echo    " | $(cat $h/port_state)";
     done;
