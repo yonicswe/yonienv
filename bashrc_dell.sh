@@ -229,6 +229,51 @@ dellcyclonedevelenvsetup ()
 	git reset --hard origin/int/foothills-prime/main-pl
 }
 
+dellpnvmettagsupdate ()
+{
+    if [ -z ${cyclone_folder} ] ; then
+        echo "cyclone folder not defined";
+        return -1;
+    fi;
+
+    if ! [ -d ${cyclone_folder} ] ; then
+        echo "${cyclone_folder} does not exist";
+        return -1;
+    fi;
+
+    build_choices=($(whiptail --checklist "pnvmet tags" 13 30 4\
+                   linux "" off\
+                   cyc_core "" off  \
+                   third_party "" off \
+                   nt-nvmeof-frontend "" off 3>&1 1>&2 2>&3));
+
+
+    echo "cs a cscope.out" > tags.vim;
+    echo "set tags=tags" >> tags.vim;
+ 
+    if [[ ${build_choices[@]} =~ nt-nvmeof-frontend ]] ; then
+        dst_folder=source/nt-nvmeof-frontend;
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
+    fi;
+    if [[ ${build_choices[@]} =~ cyc_core ]] ; then
+        dst_folder=source/cyc_core;
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
+    fi;
+    if [[ ${build_choices[@]} =~ third_party ]] ; then
+        dst_folder=source/third_party;
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
+    fi;
+    if [[ ${build_choices[@]} =~ linux ]] ; then
+        dst_folder=/home/y_cohen/devel/linux/centos8/t/linux-4.18.0-80.1.2.el8_0;
+        echo "cs a ${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${dst_folder}/tags" >> tags.vim;
+    fi;
+
+}
+
 dellcyclonetagsupdate ()
 {
     local sed_cyclone_folder=;
