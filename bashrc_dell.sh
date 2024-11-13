@@ -3856,8 +3856,8 @@ alias delltriage-sym-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t xt
 alias delltriage-grep-panic-a='delltriage-all-logs-node-a | grep --color "PANIC\|log_backtrace_backend\|panic-\|signal_handler"'
 alias delltriage-grep-panic-b='delltriage-all-logs-node-b | grep --color "PANIC\|log_backtrace_backend\|panic-\|signal_handler"'
 
-alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep --color "nvme.*alloc"'
-alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep --color "nvme.*alloc"'
+alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep --color "nvme controller.*alloc"'
+alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep --color "nvme controller.*alloc"'
 
 alias delltriage-grep-connect-queue-a='delltriage-all-logs-node-a | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
 alias delltriage-grep-connect-queue-b='delltriage-all-logs-node-b | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
