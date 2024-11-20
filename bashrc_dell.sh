@@ -3687,6 +3687,29 @@ dellcyclonebackup ()
     return 0;
 }
 
+dellibidofficial ()
+{
+    local ibid=${1};
+    local cyclone_commit_id=;
+
+    cyclone_commit_id=$(phlibid --getCommit --ibid ${ibid} | grep "Commit ID" | cut -f 2 -d ":");
+    echo "cyclone commit id: ${cyclone_commit_id}";
+    if [ -z "${cyclone_commit_id}" ] ; then
+        echo "bad ibid :  ${ibid}";
+        return -1;
+    fi;
+    2>&1 1>/dev/null pushd ~/devel/cyclones/cyclone.tmp
+    2>/dev/null git fetch
+    echo ${cyclone_commit_id} > x;
+    truncate -s -2 x;
+    cyclone_commit_id=$(cat x);
+    2>&1 1>/dev/null rm -f x;
+    #git log -1 ${cyclone_commit_id}
+    echo "git show ${cyclone_commit_id}"
+    git show ${cyclone_commit_id}
+    2>&1 1>/dev/null popd;
+}
+
 dellibid2commitpnvmet ()
 {
     local ibid=${1};
