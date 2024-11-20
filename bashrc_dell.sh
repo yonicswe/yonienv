@@ -959,9 +959,9 @@ _dellclusterlist ()
         dell_group="-a -f -g ${dell_group}";
     fi;
 
-    echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label}";
+    #echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label}";
     # /home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} --sort lessee | tee ${list_file}; 
-    echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt"
+    echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee ${list_file}"
     /home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt
 
     ask_user_default_yes "open with vim ${list_file} ?";
@@ -1009,9 +1009,10 @@ alias dellclusterlist-shared-indus='  _dellclusterlist ~/docs/dell-cluster-list-
 alias dellclusterlist-qa-app-lab='    _dellclusterlist ~/docs/dell-cluster-list-qa-app-lab.txt      QA-AppLab'
 alias dellclusterlist-trident-roce='  _dellclusterlist ~/docs/dell-cluster-list-trident-roce.txt    Trident-kernel-IL NVMeOF-RoCE'
 alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt   Trident-kernel-IL indus'
+alias dellclusterlist-qa-performance='_dellclusterlist ~/docs/dell-cluster-list-qa-performance.txt   QA-Performance'
 
 # PlatformIO-FE:adamh
-xpool_users=(y_cohen grupie amite eldadz levyi2 adamh joseph_karner labmaintenance);
+xpool_users=(y_cohen grupie amite eldadz levyi2 dor_deri adamh joseph_karner labmaintenance);
 complete -W "$(echo ${xpool_users[@]})" dellclusterlist-user dellclusterleaseUpdateUser dellclusterleaseReRelease dellcdvduser; 
 
 dellclusterleaseRelease ()
@@ -1101,21 +1102,21 @@ dellclusterleaseinfo ()
     2>/dev/null xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease";
 }
 
-dellclusterowner ()
-{
-    local cluster=${1};
+#dellclusterowner ()
+#{
+    #local cluster=${1};
 
-    if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
-            return -1;
-        fi;
-    fi;
+    #if [ -z "${cluster}" ] ; then 
+        #cluster=$(_dellclusterget);
+        #if [ -z ${cluster} ] ; then
+            #echo "${FUNCNAME} <cluster>"; 
+            #return -1;
+        #fi;
+    #fi;
 
-    echo -e "${BLUE}xxlabjungle cluster \"name:${cluster}\" | jq -r \".objects[].lease.user.username\"${NC}";
-    2>/dev/null xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username";
-}
+    #echo -e "${BLUE}xxlabjungle cluster \"name:${cluster}\" | jq -r \".objects[].lease.user.username\"${NC}";
+    #2>/dev/null xxlabjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username, .objects[].lease.expires_on";
+#}
 
 _cluster_owner ()
 {
@@ -3166,6 +3167,28 @@ dellclusterconfigupdate ()
 
     /bin/cp -v ${cluster_config_source_folder}/* .
     c - ;
+}
+
+dellclusterowner ()
+{
+    local cluster=${1};
+    local current_user=;
+    local expires_on=;
+    local group=;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    current_user=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username" | xargs);
+    expires_on=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].lease.expires_on" | xargs);
+    group=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].owner.group.name" | xargs);
+    echo -e "${current_user} owns ${cluster}@${group} till ${expires_on}";
+    return 0;
 }
 
 dellclusterinfo ()
