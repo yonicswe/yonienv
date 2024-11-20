@@ -218,13 +218,21 @@ k () {
 export yonienvjobsfile=${yonienv}/jobs.$$
 jj ()
 {
-    local -a job_array=( $(jobs | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g') );
+    #local -a job_array=( $(jobs | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g') );
+    local -a job_array=( $(jobs | sed  's/\].*//g'|sed 's/\[//g') );
     local -a job_array_bkp;
 
-    #echo ${job_array[@]};
+    if [[ ${#job_array[@]} -eq 0 ]] ; then
+        echo "no jobs";
+        if [[ -e ${yonienvjobsfile} ]] ; then
+            rm -f ${yonienvjobsfile};
+        fi;
+        return 0;
+    fi;
 
     if ! [ -e ${yonienvjobsfile} ] ; then
-        j | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g' > ${yonienvjobsfile}
+        #jobs | sed -E  's/(\[.*\])(.*)/\1/g'| sed -e 's/\[//g' -e 's/\]//g' > ${yonienvjobsfile}
+        printf "%s\n" $(echo ${job_array[@]}) > ${yonienvjobsfile}
     else
         # compare current jobs array with ${yonienvjobsfile}
         job_array_bkp=$(cat ${yonienvjobsfile} | cut -f 1 -d ' ' | xargs);
