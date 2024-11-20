@@ -348,9 +348,17 @@ alias bsclistscsiports='_bsclistscsiports| column -t'
 bsclistsubsystem ()
 {
     local subsystem=;
+    local f=;
 
     subsystem=$(ls /sys/kernel/config/nvmet/subsystems);
     echo "subsystem = ${subsystem}";
+    #for f in $(ls /sys/kernel/config/nvmet/subsystems/${subsystem}/*) ; do
+        #echo -e "$(basename ${f}) : $(cat ${f})";
+    #done;
+    echo -e "\tattr_serial : $(cat /sys/kernel/config/nvmet/subsystems/${subsystem}/attr_serial)";
+    echo -e "\tattr_model_number : $(cat /sys/kernel/config/nvmet/subsystems/${subsystem}/attr_model_number)";
+    echo -e "\tattr_firmware_revision : $(cat /sys/kernel/config/nvmet/subsystems/${subsystem}/attr_firmware_revision)";
+
 }
 
 alias bsclistnvmeportsfc='bsclistnvmeports|grep \|fc'
@@ -367,8 +375,9 @@ bsclistnvmeportsfcc ()
             continue;
         fi;
         echo "$(cat $i/addr_traddr)" >> powerstore_file;
-        echo "use bscscptohost to create a scp command to copy the powerstore_file"
     done;
+    echo "created the file powerstore_file";
+    echo "use bscscptohost to create a scp command to copy the powerstore_file";
 }
 
 bsclistnvmeports ()
@@ -723,8 +732,8 @@ alias delltriage-sym-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t xt
 alias delltriage-grep-panic-a='delltriage-all-logs-node-a | grep "PANIC\|log_backtrace_backend"'
 alias delltriage-grep-panic-b='delltriage-all-logs-node-b | grep "PANIC\|log_backtrace_backend"'
 
-alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep "nvme.*allocate"'
-alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep "nvme.*allocate"'
+alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep "nvme controller.*allocate"'
+alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep "nvme controller.*allocate"'
 
 alias delltriage-grep-add-port-a='delltriage-nt-logs-node-a | grep "add_ports.*is_local true"'
 alias delltriage-grep-add-port-b='delltriage-nt-logs-node-b | grep "add_ports.*is_local true"'
@@ -742,6 +751,34 @@ alias delltriage-node-a-grep-cluster-name='delltriage-all-logs-node-a | grep -i 
 alias delltriage-node-b-grep-cluster-name='delltriage-all-logs-node-b | grep -i "cyc_config.*creating cluster"'
 
 alias dellnvme='nvme list -v'
+dellnvme-get-feature-keep-alive ()
+{
+    local device=${1};
+
+    if [[ -z "${device}" ]] ; then
+        echo "usage: dellnvme-get-feature-keep-alive <nvme0>"
+        return -1;
+    fi;
+
+    echo "nvme get-feature -H -f 0xf /dev/${device}";
+    nvme get-feature -H -f 0xf /dev/${device};
+    return 0;
+}
+
+dellnvme-set-feature-keep-alive ()
+{
+    local device=${1};
+    local kato=${2:-0};
+
+    if [[ -z "${device}" ]] ; then
+        echo "usage: dellnvme-get-feature-keep-alive <nvme0>"
+        return -1;
+    fi;
+
+    echo "nvme get-feature --feature-id=0x0f -v ${2} /dev/${device}";
+    nvme get-feature --feature-id=0x0f -v ${2} /dev/${device};
+    return 0;
+}
 
 dellnvme-show-timeout ()
 {
@@ -1267,7 +1304,7 @@ prdebug-add-method ()
         return -1;
     fi;
     
-    echo "func ${method} +pfl" |sudo tee /sys/kerenl/debug/dynamic_debug/control;
+    echo "func ${method} +pfl" |sudo tee /sys/kernel/debug/dynamic_debug/control;
     
 }
 
@@ -1683,6 +1720,7 @@ alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984' mes
 # get cluser name from within the cluster
 # grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini
 
+# tcpdump -i feData0 port 4420 -w nvme.cap
 
 unset PROMPT_COMMAND
 # PS1="[\D{%H:%M %d.%m}][\u@\h:\w]\n==> "
