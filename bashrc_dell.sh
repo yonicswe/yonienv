@@ -2866,6 +2866,49 @@ scp2bsc ()
     xxbsc_scp ${cluster}${node} ${file} :/home/cyc/
 }
 
+delllgyonienvupdate ()
+{
+    local lg_name=${1};
+    local use_backup=0;
+
+    if [[ -z ${lg_name} ]]; then 
+        if [ -e ${delllastusedlgbkpfile} ] ; then
+            lg_name=$(cat ${delllastusedlgbkpfile});
+            ask_user_default_yes "use ${lg_name} again ";
+            if [ $? -eq 0 ] ; then
+                lg_name=;
+            else
+                use_backup=1;
+            fi;
+        fi;
+    fi;
+
+    if [[ -z ${lg_name} ]]; then 
+        lg_name="$(printf "%s\n" ${lg_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    fi;
+
+    if [[ -z ${lg_name} ]]; then 
+        echo "missing LG_NAME param" 
+        return -1;
+    fi;
+
+    if [[ ${use_backup} == 0 ]] ; then
+        ask_user_default_yes "ssh2lg ${lg_name} ? ";
+        if [[ $? -eq 0 ]] ; then return 0 ; fi;
+    fi;
+
+    if ! [[ ${lg_list[@]} =~ ${lg_name} ]] ; then
+        echo ${lg_name} >> ${lg_list_file};
+        lg_list+=" ${lg_name}";
+        echo -e "${RED}added ${lg_name} to saved lgs${NC}";
+    fi;
+
+    echo ${lg_name} > ${delllastusedlgbkpfile};
+
+    #echo "sshpass -p Password123! scp -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  ~/yonienv/scripts/*yoni* root@${lg_name}:~/"
+    sshpass -p Password123! scp -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  ~/yonienv/scripts/*yoni* root@${lg_name}:~/;
+}
+
 dellclusteryonienvupdate ()
 {
     local cluster=${1};
@@ -2947,6 +2990,23 @@ alias dellclusterrestartbscnode-b="_dellclusterrestartbsc b";
 #     dellclusterkernelspaceupdate ${cluster};
 # }
 
+_add_lg_to_list ()
+{
+    local lg=${1};
+
+    #lg_list_file=~/yonienv/bashrc_dell_lg_list_file
+    #lg_list=( $(cat ${lg_list_file} ));
+
+    if ! [[ ${lg_list[@]} =~ ${lg} ]] ; then
+        ask_user_default_no "add ${lg} to list";
+        if [ $? -eq 0 ] ; then return ; fi;
+        echo ${lg} >> ${lg_list_file};
+        lg_list+=" ${lg}";
+        echo -e "${RED}added ${lg} to saved LGs${NC}";
+    fi;
+
+}
+
 delllastusedlgbkpfile=~/.delllastusedlgbkpfile;
 ssh2lg ()
 {
@@ -2974,16 +3034,18 @@ ssh2lg ()
         return -1;
     fi;
 
+    _add_lg_to_list ${lg_name};
+
     if [[ ${use_backup} == 0 ]] ; then
         ask_user_default_yes "ssh2lg ${lg_name} ? ";
         if [[ $? -eq 0 ]] ; then return 0 ; fi;
     fi;
 
-    if ! [[ ${lg_list[@]} =~ ${lg_name} ]] ; then
-        echo ${lg_name} >> ${lg_list_file};
-        lg_list+=" ${lg_name}";
-        echo -e "${RED}added ${lg_name} to saved lgs${NC}";
-    fi;
+    #if ! [[ ${lg_list[@]} =~ ${lg_name} ]] ; then
+        #echo ${lg_name} >> ${lg_list_file};
+        #lg_list+=" ${lg_name}";
+        #echo -e "${RED}added ${lg_name} to saved lgs${NC}";
+    #fi;
 
     echo ${lg_name} > ${delllastusedlgbkpfile};
 
