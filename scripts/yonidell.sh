@@ -1023,6 +1023,10 @@ alias debuc-list-controllers='debuc-command "log controllers all"';
 alias debuc-list-controllers-io='debuc-command "log controllers io"';
 alias debuc-list-controllers-discovery='debuc-command "log controllers discovery"';
 alias debuc-list-subsystem='debuc-command "log subsystem"';
+alias debuc-nullio-enable='debuc-command "set namespace_type_override nullio"';
+alias debuc-nullio-disable='debuc-command "set namespace_type_override disable"';
+alias debuc-nullio-read-zero-enable='debuc-command "nullio read zero true"';
+alias debuc-nullio-read-zero-disable='debuc-command "nullio read zero false"';
 
 alias bsclist-hosts=debuc-list-hosts
 alias bsclist-host-groups=debuc-list-host-groups
