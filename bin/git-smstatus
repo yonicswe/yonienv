@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#git sm foreach echo "$(git hh) $(git bb)"
+#for s in source/* ; do
+    #cd $s ;
+        #if [ $(ls |wc -l ) -eq 0 ] ; then
+            #echo -e "\033[0;34m-             $s\033[0m" ;
+        #else
+            #if [[ "$(git bb)" == "HEAD" ]] ; then
+                #echo -e "\033[0;32m+$(git hh | awk '{printf "%.12s",$0}') $s\033[0m" ;
+            #else
+                #echo -e "\033[0;32m+$(git hh| awk '{printf "%.12s",$0}') $s\033[0m ($(git bb))" ;
+            #fi;
+        #fi;
+        #cd - 2>&1 1>/dev/null ;
+    #done;
+#BLUE=""
+
+source ~/yonienv/bashrc_fs.sh
+git sm foreach |tr -d "'"|cut -f 2 -d' ' | while read s ; do
+        cd $s ;
+        if [[ "$(git bb)" == "HEAD" ]] ; then
+            #echo -e "\033[0;32m$(git hh | awk '{printf "%.12s",$0}') $s\033[0m" ;
+            echo -e "${BLUE}$(git hh | awk '{printf "%.12s",$0}')${NC} $s" ;
+        else
+            #echo -e "\033[0;32m$(git hh| awk '{printf "%.12s",$0}') $s\033[0m ($(git bb))" ;
+            echo -e "${BLUE}$(git hh| awk '{printf "%.12s",$0}')${NC} $s ${BROWN}($(git bb))${NC}" ;
+        fi;
+        cd - 2>&1 1>/dev/null ;
+    done | column -t

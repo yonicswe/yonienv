@@ -450,7 +450,7 @@
     smupdateinit = submodule update --init
     # smstatus = !git-smstatus.sh
     # smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
-    smstatus = "!f()  { git sm foreach git hh; }; f"
+    # smstatus = "!f()  { git sm foreach git hh; }; f"
 #   smstatus = "!f() {\
 #       for s in source/* ; do\
 #       cd $s ;\
