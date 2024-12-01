@@ -439,6 +439,19 @@ _bsclistbroadcomnvmeports ()
 }
 alias bsclistbroadcomnvmeports='_bsclistbroadcomnvmeports | column -t'
 
+bsclistbroadcomports-links ()
+{
+    link_up=(`bscshowfctable |grep FCI | tail -n +4|sort -k 4 | sudo awk '{if ($6 == "SCSI") {file="/sys/kernel/scst_tgt/targets/ocs_xe201/"$9"/link_up"; print file } }'|while read a ; do cat $a ; done `);
+    nvme_ports=(`bscshowfctable |grep FCI | tail -n +4|sort -k 4 | sudo awk '{if ($6 == "NVME") print "|--"$2"--|--"$3"--|"$9}'`);
+
+    echo " slot | port|  nvme pn               | link";
+    echo "------+-----+------------------------+-----";
+         #58:cc:f0:98:4a:a8:00:ff
+    for ((i=0; i<${#link_up[@]} ; i++)) ; do
+        echo -e "${nvme_ports[$i]} | ${link_up[$i]}" | sed 's/-/\ /g';
+    done;
+}
+
 bsclistbroadcomports ()
 {
     bsclistbroadcomscsiports;
