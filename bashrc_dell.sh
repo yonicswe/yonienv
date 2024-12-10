@@ -1021,6 +1021,7 @@ alias dellclusterlist-shared-indus='  _dellclusterlist ~/docs/dell-cluster-list-
 alias dellclusterlist-qa-app-lab='    _dellclusterlist ~/docs/dell-cluster-list-qa-app-lab.txt      QA-AppLab'
 alias dellclusterlist-trident-roce='  _dellclusterlist ~/docs/dell-cluster-list-trident-roce.txt    Trident-kernel-IL NVMeOF-RoCE'
 alias dellclusterlist-trident-indus=' _dellclusterlist ~/docs/dell-cluster-list-trident-indus.txt   Trident-kernel-IL indus'
+alias dellclusterlist-trident-advanced-tech=' _dellclusterlist ~/docs/dell-cluster-list-trident-advanced-tech.txt   Trident-Advanced-Tech'
 alias dellclusterlist-qa-performance='_dellclusterlist ~/docs/dell-cluster-list-qa-performance.txt   QA-Performance'
 
 # PlatformIO-FE:adamh
