@@ -596,7 +596,7 @@ _dellpdr_git_sync_submodules ()
     #ask_user_default_no "update source/linux ?";
     #[ $? -eq 1 ] && linux=1;
 
-    read -p "[c]heckout or create new [b]ranch ? [C|b]" ans;
+    read -p "[c]heckout or create new [B]ranch ? [c|B]" ans;
     if [[  ${ans} == c ]] ; then
         checkout_cmd=c;
     fi;
