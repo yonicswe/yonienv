@@ -2370,11 +2370,14 @@ dellclusterinstall ()
                            release "uncheck for debug" on \
                            feature_flag "add feature flag" off  3>&1 1>&2 2>&3));
 
-            if [[ ${reinit_choices} =~ release ]] ; then
+            if [[ ${reinit_choices[@]} =~ release ]] ; then
                 reinit_cmd+=" -F Retail";
             else
                 reinit_cmd+=" -F Debug";
             fi;
+             
+            echo "debug : reinit_choices ${reinit_choices[@]}"
+            echo "debug : reinit_cmd ${reinit_cmd}"
 
             if [[ ${reinit_choices} =~ block ]] ; then
                 reinit_cmd+=" sys_mode=block";
