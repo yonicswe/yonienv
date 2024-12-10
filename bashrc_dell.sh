@@ -248,7 +248,8 @@ dellpnvmettagsupdate ()
                    nt-nvmeof-frontend "" off 3>&1 1>&2 2>&3));
 
 
-    echo "cs a cscope.out" > tags.vim;
+    echo "set noexpandtab" > tags.vim;
+    echo "cs a cscope.out" >> tags.vim;
     echo "set tags=tags" >> tags.vim;
  
     if [[ ${build_choices[@]} =~ nt-nvmeof-frontend ]] ; then
