@@ -205,10 +205,11 @@ pr_debug ()
     local func="";
     local delete=0;
     local show_enabled=0;
+    local show_all=0;
     local usage=0;
 
     OPTIND=0;
-    while getopts "f:d:eh" opt; do
+    while getopts "f:d:eha" opt; do
         case $opt in 
         f)
             func=${OPTARG}
@@ -220,6 +221,9 @@ pr_debug ()
         e)
             show_enabled=1;                
             ;;
+        a)
+            show_all=1;
+            ;;
         h)  
             usage=1;                
             ;;
@@ -230,6 +234,12 @@ pr_debug ()
         pr_debug_usage;
         return;
     fi
+
+    if [ ${show_all} -eq 1 ] ; then 
+        sudo cat /sys/kernel/debug/dynamic_debug/control;
+        return;
+    fi; 
+
 
     if [ ${show_enabled} -eq 1 ] ; then 
         sudo cat /sys/kernel/debug/dynamic_debug/control |awk '/.*=pfl/{print $0}';
