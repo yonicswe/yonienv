@@ -1309,9 +1309,10 @@ _dellclusteruserchoicesget ()
 gdd ()
 {
     local bkp_file=$(echo $cyclone_folder |sed 's/\//-/g');
-
+    # TODO - in case user asked 'ls' then make sure that bkp file is up to date before doing the ls
     if [[ ${1} == "ls" ]] ; then
         ls -tr ~/.*install_build_choices_bkp.*|xargs cat | grep "install_pdr\|_date\|_time";
+        echo -e "make sure you run 'gdd' before running 'gdd ls' to get up-to-date info"
         return;
     fi;
 
@@ -3726,6 +3727,29 @@ dellibidofficial ()
     2>&1 1>/dev/null popd;
 }
 
+dellpnvmetgetshaindexfrombranch ()
+{
+    local branch=${1};
+
+    if [ -z ${branch} ] ; then
+        echo "missing branch : dellpnvmetgetshaindexfrombranch <branch>";
+        return -1;
+    fi;
+
+    read -p "cd to cyclone.tmp ?" x;
+    pushd ~/devel/cyclones/cyclone.tmp 2>&1 1>/dev/null;
+    read -p "git fetch ?" x;
+
+    git fetch;
+    read -p "git checkout ${branch} ?" x;
+    git checkout ${branch};
+    read -p "git sm update third_parth ?" x;
+    git sm update source/third_party
+    grep "Set.*PNVMET_GIT_TAG"  source/third_party/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    popd 2>&1 1>/dev/null;
+
+}
+
 dellibid2commitpnvmet ()
 {
     local ibid=${1};
@@ -3994,8 +4018,10 @@ alias delltriage-grep-disconnect-queue-b='delltriage-all-logs-node-b | grep --co
 
 alias delltriage-grep-add-port-a='delltriage-nt-logs-node-a | grep --color "add_ports.*is_local true"'
 alias delltriage-grep-add-port-fc-a='delltriage-nt-logs-node-a | grep --color "add_ports.*trtype fc.*is_local true"'
+alias delltriage-grep-add-port-tcp-a='delltriage-nt-logs-node-a | grep --color "add_ports.*trtype tcp.*is_local true"'
 alias delltriage-grep-add-port-b='delltriage-nt-logs-node-b | grep --color "add_ports.*is_local true"'
 alias delltriage-grep-add-port-fc-b='delltriage-nt-logs-node-b | grep --color "add_ports.*trtype fc.*is_local true"'
+alias delltriage-grep-add-port-tcp-b='delltriage-nt-logs-node-b | grep --color "add_ports.*trtype tcp.*is_local true"'
 
 alias delltriage-grep-nt-start-a='delltriage-nt-logs-node-a | grep --color "nt_start"'
 alias delltriage-grep-nt-start-b='delltriage-nt-logs-node-b | grep --color "nt_start"'
