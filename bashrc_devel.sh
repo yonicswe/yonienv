@@ -1,5 +1,6 @@
 #!/bin/bash
 
+alias vscode='code'
 alias editbashdevel='v ${yonienv}/bashrc_devel.sh'
 
 #   ___  ___   ___ 
