@@ -12,8 +12,22 @@ tagcompleteme ()
 }
 
 alias tagcpp='ctags -uR --sort=yes --c++-kinds=+p --fields=+niaS --extra=+q --extra=+f $(find -regex ".*\.c\|.*\.cpp\|.*\.h\|.*\.hpp")'
-alias tagpython='ctags -R --python-kinds=-i'
 alias tagbash='ctags --language-force=sh *sh'
+tagpython ()
+{
+    if [ -e cscope.files ] ; then
+        ask_user_default_no "rescan files " 
+        if [ $? -eq 1 ] ; then
+            fd -e py > cscope.files
+        fi;
+    else
+        fd -e py > cscope.files
+    fi;
+    echo "cscope -vqb"
+    cscope -vqb
+    echo "ctags -R --python-kinds=-i -L cscope.files"
+    ctags -R --python-kinds=-i -L cscope.files
+}
 
 tagcscope ()
 {
@@ -83,8 +97,16 @@ tagme_base ()
 #       source_files=($( find ${includeTagdir[@]} -type f -regex ".*\.c\|.*\.h" -exec readlink -f {} \; ) ) 
 #       source_files=($( find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; ) )
 
-#       echo "find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files" 
-        find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files;
+        #echo "find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files" 
+        #find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files;
+        echo "fd --full-path ${includeTagdir[@]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f > cscope.files";
+        fd --full-path ${includeTagdir[0]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f > cscope.files;
+        if (( ${#includeTagdir[@]} > 1 )) ; then
+            for (( d=1 ; d < ${#includeTagdir[@]} ; d++ )); do
+                echo "fd --full-path ${includeTagdir[$d]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f >> cscope.files";
+                fd --full-path ${includeTagdir[$d]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f >> cscope.files;
+            done
+        fi;
 
 #=================================================================================================
 #       echo "Building ctags file...";
