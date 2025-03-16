@@ -264,6 +264,8 @@ je ()
     local job=${1};
     local comment=${2};
 
+    jj > /dev/null;
+
     if [[ -n "${job}" && -n "${comment}" ]] ; then
         if [ $(grep "^${job}" ${yonienvjobsfile} | wc -l ) -gt 0 ] ; then 
             sed -i "s/^${job}.*/${job} ${comment}/" ${yonienvjobsfile};
@@ -287,6 +289,8 @@ alias ls='/usr/bin/ls --group-directories-first --color -F'
 alias lt='/usr/bin/ls --group-directories-first -lt --color -F'
 alias ltr='/usr/bin/ls --group-directories-first -ltr --color -F'
 alias lessin='/usr/bin/less -IN'
+alias ll='eza -l --icons=always -s modified --group-directories-first'
+alias catt=bat
 
 alias c='cd'
 alias ..='cd ../ ; pwd -P'
@@ -327,14 +331,19 @@ scpcommandforfile ()
     local file=${1};
     local host=$(hostname -i|cut -f 1 -d ' ');
     local user=$(id -un);
+    local scpcmd='scp';
 
     if [[ -z ${file} ]] ; then
         echo -e "${RED}missing file name${NC}";
         return -1;
     fi;
 
+    if [[  $(file ${file}) =~ "directory" ]] ; then
+        scpcmd+=" -r";
+    fi;
+
     file=$(readlink -f ${file});
-    echo "scp ${user}@${host}:${file} .";
+    echo "${scpcmd} ${user}@${host}:${file} .";
 }
 
 # list only directories 
