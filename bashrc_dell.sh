@@ -66,6 +66,13 @@ _ssh_2_dev_vm_for_user ()
 alias ssh2devvmsetup='_ssh_set_passwordless_cyc_for_devvm'
 alias ssh2devvm='_ssh_2_dev_vm_for_user'
 
+_ssh_2_jnode ()
+{
+    ssh cyc@$1;
+}
+complete -W "jnode-fw1 jnode-fw10 jnode-fw36 jnode-fw40 jnode-fw43 jnode-fw56 jnode-fw57" ssh2jnode
+alias ssh2jnode='_ssh_2_jnode'
+
 export YONI_CLUSTER=;
 export CYC_CONFIG=;
 
@@ -268,7 +275,8 @@ dellpnvmettagsupdate ()
         echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
     fi;
     if [[ ${build_choices[@]} =~ linux ]] ; then
-        dst_folder=/home/y_cohen/devel/linux/centos8/t/linux-4.18.0-80.1.2.el8_0;
+        # dst_folder=/home/y_cohen/devel/linux/centos8/t/linux-4.18.0-80.1.2.el8_0;
+        dst_folder=/home/y_cohen/devel/cyclones/cyclone.full/source/linux;
         echo "cs a ${dst_folder}/cscope.out" >> tags.vim;
         echo "set tags+=${dst_folder}/tags" >> tags.vim;
     fi;
@@ -1602,17 +1610,8 @@ dellclustergeneratecfg ()
 dellclusterleaseextend () 
 {
     local cluster=${1};
-    local extend=${2:-14};
+    local extend=${2:-28};
     local user_extend_choice=;
-
-    if [ "${cluster}" == "ask" ] ; then
-        cluster=;
-    fi;
-
-    # offer to extend a leased cluster
-    if [ -z ${cluster} ] ; then
-        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
-    fi;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -1621,6 +1620,11 @@ dellclusterleaseextend ()
             echo "usage : ${FUNCNAME} <cluster>"; 
             return -1;
         fi;
+    fi;
+
+    group=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].owner.group.name" | xargs);
+    if [[ "${group}" =~ "shared" ]] ; then
+        extend=72h;
     fi;
 
     read -p "extend ${cluster} ${extend} days ? Enter/or choose a different value: " user_extend_choice;
@@ -1635,7 +1639,7 @@ dellclusterleaseextend ()
 
 }
 
-alias dellclusterleaseextendshared='dellclusterleaseextend ask 72h';
+#alias dellclusterleaseextendshared='dellclusterleaseextend ask 72h';
 
 # complete -W "$(echo ${trident_cluster_list[@]})" dellclusterruntimeenvset dellclusterleaseRelease dellclusterdeploy dellclusterleasewithforce
 # complete -W "$(echo ${trident_cluster_list_nodes[@]})" xxssh xxbsc dellclusterguiipget dellclusterinfo dellclusterlease dellclusterleaseextend 
@@ -3608,6 +3612,8 @@ alias dellcdvdamite='dellcdvduser amite'
 alias dellcdvdgrupie='dellcdvduser grupie'
 alias dellcdvdeldadz='dellcdvduser eldadz'
 
+alias dellcd-qa-tests='cd /home/trqa-dev/tests/connectivity_and_protocols/nvmeof'
+
 dellcyclonekernelshaupdate ()
 {
     local sha=${1};
@@ -3731,21 +3737,30 @@ dellpnvmetgetshaindexfrombranch ()
 {
     local branch=${1};
 
+    #read -p "cd to cyclone.tmp ?" x;
+    pushd ~/devel/cyclones/cyclone.tmp 2>&1 1>/dev/null;
+    #read -p "git fetch ?" x;
+
+    echo -e "${BLUE}$(pwd) : git fetch${NC}";
+    git fetch;
+
     if [ -z ${branch} ] ; then
-        echo "missing branch : dellpnvmetgetshaindexfrombranch <branch>";
-        return -1;
+        branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        if [ -z ${branch} ] ; then
+            echo "missing branch : dellpnvmetgetshaindexfrombranch <branch>";
+            return -1;
+        fi;
     fi;
 
-    read -p "cd to cyclone.tmp ?" x;
-    pushd ~/devel/cyclones/cyclone.tmp 2>&1 1>/dev/null;
-    read -p "git fetch ?" x;
-
-    git fetch;
-    read -p "git checkout ${branch} ?" x;
+    #read -p "git checkout ${branch} ?" x;
+    echo -e "${BLUE}$(pwd) : git checkout ${branch}${NC}";
     git checkout ${branch};
-    read -p "git sm update third_parth ?" x;
+    #read -p "git sm update third_parth ?" x;
+    echo -e "${BLUE}$(pwd) : git sm update source/third_party${NC}";
     git sm update source/third_party
+    echo -e "${YELLOW}";
     grep "Set.*PNVMET_GIT_TAG"  source/third_party/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
+    echo -e "${NC}";
     popd 2>&1 1>/dev/null;
 
 }
