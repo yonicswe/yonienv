@@ -555,6 +555,7 @@ _dellpdr_git_sync_submodules ()
     local third_party=0;
     local pdr_branch=;
     local checkout_cmd=cb;
+    local sync_all=false;
     local ans=;
 
     ask_user_default_no "are you in a pdr ? ";
@@ -567,42 +568,38 @@ _dellpdr_git_sync_submodules ()
     [ $? -eq 1 ] && dellpdr-reset;
 
     pdr_branch=$(git bb);
+
+    ask_user_default_no "sync all submodules ?";
+    if [ $? -eq 1 ] ; then
+        sync_all=true;
+    fi;
+
     #--------------------------------------
     #            ask user
     #--------------------------------------
-    build_choices=($(whiptail --checklist "sync submodules" 11 30 6\
-                   nt "" on \
-                   cyc_core "" on  \
-                   third_party "" off  \
-                   linux "" off 3>&1 1>&2 2>&3));
+    if [ ${sync_all} == false ] ; then 
+        build_choices=($(whiptail --checklist "sync submodules" 11 30 6\
+                       nt "" on \
+                       cyc_core "" on  \
+                       third_party "" off  \
+                       linux "" off 3>&1 1>&2 2>&3));
 
-    if [[ ${build_choices[@]} =~ cyc_core ]] ; then
-        cyc_core=1;
+        if [[ ${build_choices[@]} =~ cyc_core ]] ; then
+            cyc_core=1;
+        fi;
+
+        if [[ ${build_choices[@]} =~ nt ]] ; then
+            nt_nvmeof_frontend=1;
+        fi;
+
+        if [[ ${build_choices[@]} =~ third_party ]] ; then
+            third_party=1;
+        fi;
+
+        if [[ ${build_choices[@]} =~ linux ]] ; then
+            linux=1;
+        fi;
     fi;
-
-    if [[ ${build_choices[@]} =~ nt ]] ; then
-        nt_nvmeof_frontend=1;
-    fi;
-
-    if [[ ${build_choices[@]} =~ third_party ]] ; then
-        third_party=1;
-    fi;
-
-    if [[ ${build_choices[@]} =~ linux ]] ; then
-        linux=1;
-    fi;
-
-    #ask_user_default_yes "update source/cyc_core ?";
-    #[ $? -eq 1 ] && cyc_core=1;
-
-    #ask_user_default_yes "update source/nt-nvmeof-frontend ?";
-    #[ $? -eq 1 ] && nt_nvmeof_frontend=1;
-
-    #ask_user_default_no "update source/third_party ?";
-    #[ $? -eq 1 ] && third_party=1;
-
-    #ask_user_default_no "update source/linux ?";
-    #[ $? -eq 1 ] && linux=1;
 
     read -p "[c]heckout or create new [B]ranch ? [c|B]" ans;
     if [[  ${ans} == c ]] ; then
@@ -614,6 +611,20 @@ _dellpdr_git_sync_submodules ()
     #--------------------------------------
     #            do it
     #--------------------------------------
+    if [ ${sync_all} == true ] ; then
+        for m in source/* ; do
+
+            echo -e "${BLUE}---->update ${m}${NC}";           
+            echo -e "${YELLOW}cd ${m}${NC}";
+            cd ${m};
+            echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+            git ${checkout_cmd} ${pdr_branch};
+            cd - 1>/dev/null;
+
+        done;
+        return;
+    fi;
+
     if (( ${cyc_core} == 1 )) ; then 
         echo -e "${BLUE}---->update cyc_core${NC}";           
         echo -e "${YELLOW}cd source/cyc_core${NC}";
