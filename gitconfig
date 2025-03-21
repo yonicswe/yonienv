@@ -150,6 +150,7 @@
     switchremotebranch = !git_checkoutremotebranch.sh
     checkoutbranch = !git_checkoutbranch.sh
     switchbranch = !git_checkoutbranch.sh
+    swb = switchbranch
 #   cmn = checkout master_next
     commitfilelist = show --stat --oneline
     checkoutmaster = "!f() { \
@@ -183,7 +184,8 @@
 #          git cherry-pick $1^..$1 ;          \
 #       fi;                                  \
 #   }; f"
-
+ 
+    cherrypick = !git_cherrypick.sh
     cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
 
 # ───────d──────────────────────────────────────────────────────────────────────
@@ -261,6 +263,11 @@
 	git dt $branchA $branchB -- $file; \
     }; f"
 
+    dell-sm-purge = "!f(){\
+            git smclean;\
+            docker system prune -af;\
+            }; f"
+
 # ───────f──────────────────────────────────────────────────────────────────────
     format-patch-commit = "!f() {              \
 	if [ $# -eq 0 ] ; then                 \
@@ -328,6 +335,10 @@
 
 # ───────i──────────────────────────────────────────────────────────────────────
     info = logstat -1 --pretty=fuller
+    ignoretrackedfile = update-index --skip-worktree
+    ignoretrackedfileundo = update-index --no-skip-worktree
+    # ignoretrackedfile = update-index --assume-unchanged
+    # ignoretrackedfileundo = update-index --no-assume-unchanged
 
 # ───────l──────────────────────────────────────────────────────────────────────
 #                                   SHA          date                   name             msg
@@ -377,11 +388,19 @@
 
     pushthisbranchtoremote = "!f() {                               \
                 remote=${1:-origin};                               \
+                echo "git push ${remote} $(git rev-parse --abbrev-ref HEAD)"; \
+                git push ${remote} $(git rev-parse --abbrev-ref HEAD); \
+                }; f"
+
+    pushthisbranchtoremoteupdate = "!f() {                               \
+                remote=${1:-origin};                               \
+                echo "git push -u ${remote} $(git rev-parse --abbrev-ref HEAD)"; \
                 git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
                 }; f"
 
     pushthisbranchtoremotewithforce = "!f() {                                 \
                 remote=${1:-origin};                               \
+                echo "git push --force ${remote} $(git rev-parse --abbrev-ref HEAD)"; \
                 git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
                 }; f"
 
@@ -448,6 +467,10 @@
     smgrep = grep --recurse-submodules
     smupdate = submodule update
     smupdateinit = submodule update --init
+    smclean = "!f(){\
+            git clean -Xdff .;\
+            git submodule foreach git clean -Xdff .;\
+            }; f"
     # smstatus = !git-smstatus.sh
     # smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
     # smstatus = "!f()  { git sm foreach git hh; }; f"
