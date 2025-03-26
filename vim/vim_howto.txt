@@ -1,0 +1,143 @@
+Keyboard Shortcuts:
+
+====== vimdiff ========
+do - [O]ther window : Get changes from other window into the current window.
+dp - [P]ut the changes from current window into the other window.
+]c - Jump to the next change.  
+[c - Jump to the previous change.  
+Ctrl W + Ctrl W - Switch to the other split window.
+Ctrl a/Ctrl x - increment/decrement the number cursor is on
+:diffupdate - will recalc the diff after making some changes to either files.
+:vertical diffsplit <file>  - vsplit and diff specified fil
+===================================================================
+
+ignore whitespace 
+- from command line : vimdiff -c 'set diffopt+=iwhite'
+- from .vimrc : set diffopt+=iwhite
+- from vim : 
+
+==== Folding ============
+za - fold/unfold fold under curser
+zi - open/close all folds
+zf - create fold    15
+zd - delete fold
+zE - delete all folds
+
+folding all functions 
+   :%g/^{/normal! zf%
+   :g command - selects lines according to given pattern and executes ex 
+   commands (herer normal! to play normal key strokes)      
+
+   another way to do this 
+      :set foldmethod=syntax
+      :set foldnestmax=1
+
+============================================================
+
+
+==== Tabs ============
+<Ctrl+y> gf - opens the filename under the cursor in a new tab
+
+== saving view and session ====
+mkview - creates a script with the view's attribs
+mksession - creates a script with the session's attribs
+vim -S Session.vim - will open vim with this session
+
+
+== windows =====
+[ctrl] o : close all windows execpt the selected.
+[ctrl] + : move split border up
+[ctrl] - : move split border down
+[ctrl] < : move vsplit border left
+[ctrl] > : move vsplit border right
+
+[ctrl] w, J : rearrange window to vertical split
+[ctrl] w, H : rearrange window to horizontal split
+[ctrl] w, X : rearrange window to be last vertical split
+
+
+==== editing ========
+yik - yank a word the cursor is on.
+vik - select a word the cursor is on. ( and change to visual mode ) 
+ciw - change a word the cursor is on.
+
+yank append > 
+use it's corresponding upper case character. i.e. In your example:
+"ayy
+"Ayy
+
+
+
+==== spelling ====
+to start spell check do :set spelllang=en_us
+to fix a word ( find suggestions ) 
+in INSERT mode press [CTRL-x],s 
+
+to add a new word to   the dictionry place the curser on the word and press z,g
+to remove a  word from the dictionry place the curser on the word and press z,u,g
+
+
+===== search ==========
+search whole word with \v<word>
+or with /\<word\>
+
+===== grep ==========
+cn/cp - jump to next/prev grep result
+colder/cnewer - to the older/newer results LIST
+
+
+======= reading output from shell =========
+:r !ls -ltr
+
+
+
+========== tags ===================
+open tag in new tab 
+
+nnoremap <C-]> :tabnew %<CR>g<C-]>
+vnoremap <C-]> <Esc>:tabnew %<CR>gvg<C-]>
+
+First we open current buffer in a new tab; 
+then we try to jump to a tag under cursor (g<C-]>, which is equal to :tjump, 
+jumps to the tag directly if there's only one match, or provides a list of matches if there are many.
+
+=========== browsing files ===========================
+when you edit a directory you get netrw buffer to open files.
+[ctrl-h] - to set (comma, seperated) hiding list
+           e.g. \.[ch]$ 
+           will un/hide source files 
+           by pressing "a" you cycle between 3 hiding filters
+
+========== tricks ===============
+paste file name : in insert mode do <C-R>%
+indentation fix : select the code you want fixed click ==
+
+in insert mode click on [ctrl]+y and see how each click 
+copies the char above the curser
+great for coding switch-case
+
+save file to a different location
+:w /different/location//%:t
+
+============= jumps ================
+[ctrl]-i/[ctrl-o] - jump prev/next to visited locations
+:jumps - list visited places.
+
+how to jump to column 30 ? 
+30|
+
+
+========== word wrapping ===================
+of selected text 
+:set textwidth=80
+select the text (visual mode) and click gq
+
+you can also use the bash command fold, like so 
+select text and click [:] then [!] then write "fold -w 80"
+
+
+
+======= rename symbol across many files ======== 
+search the symbol with cs or ggrep
+then in the quickfix window do 
+cdo s/<current symbol name>/<new symbol name>/gc | update
