@@ -1132,6 +1132,26 @@ dellclusterleaseUpdateUser ()
     /home/public/scripts/xpool_trident/prd/xpool update --force -u ${user} ${cluster};
 }
 
+dellclusterleasehistory ()
+{
+
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    else
+        cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+    fi;
+
+    echo -e "${BLUE}/home/public/scripts/xpool_trident/prd/xpool history -c ${cluster}${NC}";
+    /home/public/scripts/xpool_trident/prd/xpool history -c ${cluster};
+    return 0;
+}
+
 dellclusterleaseinfo ()
 {
 
