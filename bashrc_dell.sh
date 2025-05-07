@@ -1013,19 +1013,24 @@ _dellclusterlist ()
 
 _dellclusterlistuser ()
 {
-    local user=${1};
+    local user=${1:-y_cohen};
 
     [ -z ${user} ] && return;
 
     if [ -e ~/docs/dell-cluster-list-${user}.txt ] ; then
-        ask_user_default_no "open last user cluster leased list ? ";
+        ask_user_default_no "open ~/docs/dell-cluster-list-${user}.txt ? ";
         if [ $? -eq 1 ] ; then
             less ~/docs/dell-cluster-list-${user}.txt;
             return;
         fi;
     fi;
 
+    echo "/home/public/scripts/xpool_trident/prd/xpool list -u ${user} ";
     /home/public/scripts/xpool_trident/prd/xpool list -u ${user} | tee ~/docs/dell-cluster-list-${user}.txt;
+
+    if [[ "${user}" == "y_cohen" ]] ; then
+        cat ~/docs/dell-cluster-list-y_cohen.txt |sed '1,7{/.*/d}' | sed -n '/^[0123456789]/p' | awk '{print $2}' > ~/.dell_leased_clusters
+    fi;
 }
 
 # alias dellclusterlistall='/home/public/scripts/xpool_trident/prd/xpool list -a -f'
