@@ -150,8 +150,19 @@ vscript ()
 # gsessls () 
 vsl () 
 {
+    local v;
+    local s;
+
     session_ls=$(find -maxdepth 1 -name "vimsess*" -printf "%f\n");
-    find -maxdepth 1 -name "vimsess*" -printf "%f\n";
+    a=( $(echo ${session_ls[@]}) );
+    if [ ${#a[@]} -eq 0 ] ; then
+        return;
+    fi;
+
+    ls vimsess* | while read v ; do
+        s=$(echo ${v} | sed -e 's/vimsess\.//g' -e 's/\.vim//g')
+        echo "${v} [${s}]";
+    done | column -t;
     complete -W "${session_ls}" vs;
 #     complete -W "${session_ls}" gsess vs;
 }
@@ -167,7 +178,7 @@ alias ns='nvim -S Session.vim'
 # gsess () 
 vs () 
 {
-    complete -W "$(vsl)" vs
+    #complete -W "$(vsl)" vs
     local vimSession=${1}
 #     local vim_or_gvim=${2:-g};
 
