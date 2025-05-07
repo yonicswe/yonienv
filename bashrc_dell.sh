@@ -561,6 +561,13 @@ _dellpdr_git_sync_submodules ()
     local sync_all=false;
     local ans=;
 
+    echo "---------------------------------------------------";
+    echo "sync submodules branch according to pdr branch";
+    echo "by either creating a new branch with the same name";
+    echo "as the pdr or checking out an existing one with the same"
+    echo "name as the pdr branch"
+    echo "---------------------------------------------------";
+
     ask_user_default_no "are you in a pdr ? ";
     if [ $? -eq 0 ] ; then
         echo "bailing out";
