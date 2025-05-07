@@ -3805,8 +3805,11 @@ dellpnvmetgetshaindexfrombranch ()
     pushd ~/devel/cyclones/cyclone.tmp 2>&1 1>/dev/null;
     #read -p "git fetch ?" x;
 
-    echo -e "${BLUE}$(pwd) : git fetch${NC}";
-    git fetch;
+    ask_user_default_no "do git fetch before ?"
+    if [ $? -eq 1 ] ; then
+        echo -e "${BLUE}$(pwd) : git fetch${NC}";
+        git fetch;
+    fi;
 
     if [ -z ${branch} ] ; then
         branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
@@ -3822,7 +3825,7 @@ dellpnvmetgetshaindexfrombranch ()
     #read -p "git sm update third_parth ?" x;
     echo -e "${BLUE}$(pwd) : git sm update source/third_party${NC}";
     git sm update source/third_party
-    echo -e "${YELLOW}";
+    echo -e "${YELLOW}[${branch}]";
     grep "Set.*PNVMET_GIT_TAG"  source/third_party/cyc_platform/src/third_party/PNVMeT/CMakeLists.txt
     echo -e "${NC}";
     popd 2>&1 1>/dev/null;
