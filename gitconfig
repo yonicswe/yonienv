@@ -74,7 +74,12 @@
     bdescriptionedit = branch --edit-description
     bgrep = "!f() { \
        word=$1;\
-		git b | grep $word; \
+		git b | grep --color $word; \
+    };f "
+
+    bgrepremote = "!f() { \
+       word=$1;\
+		git br | grep -i --color $word; \
     };f "
 
 #   if branch name is posixed with v<number> 
@@ -386,19 +391,19 @@
 #          }; f"
 #
 
-    pushthisbranchtoremote = "!f() {                               \
+    pushtothisremotebranch = "!f() {                               \
                 remote=${1:-origin};                               \
                 echo "git push ${remote} $(git rev-parse --abbrev-ref HEAD)"; \
                 git push ${remote} $(git rev-parse --abbrev-ref HEAD); \
                 }; f"
 
-    pushthisbranchtoremoteupdate = "!f() {                               \
+    pushtothisremotebranchandtrackit = "!f() {                               \
                 remote=${1:-origin};                               \
                 echo "git push -u ${remote} $(git rev-parse --abbrev-ref HEAD)"; \
                 git push -u ${remote} $(git rev-parse --abbrev-ref HEAD); \
                 }; f"
 
-    pushthisbranchtoremotewithforce = "!f() {                                 \
+    pushtothisremotebranchwithforce = "!f() {                                 \
                 remote=${1:-origin};                               \
                 echo "git push --force ${remote} $(git rev-parse --abbrev-ref HEAD)"; \
                 git push --force ${remote} $(git rev-parse --abbrev-ref HEAD); \
