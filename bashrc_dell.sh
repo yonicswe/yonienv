@@ -320,6 +320,21 @@ dellcyclonetagsupdate ()
     echo > tags.vim;
 
     ######################################################################################
+    if [[ ${build_choices[@]} =~ nt-nvmeof-frontend ]] ; then
+        dst_folder=source/nt-nvmeof-frontend;
+        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
+        \cp ${yonienv}/dell-tags/tagme-nt.sh ${dst_folder}/tagme.sh;
+        #\cp tags.vim ${dst_folder};
+
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
+
+        cd ${dst_folder}; tttt; cd -;
+    else
+        echo -e "${RED}you must specify NT${NC}";
+        return -1;
+    fi;
+    ######################################################################################
     if [[ ${build_choices[@]} =~ cyc_core ]] ; then
         dst_folder=source/cyc_core;
         #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
@@ -370,18 +385,6 @@ dellcyclonetagsupdate ()
         dst_folder=source/cyc_core;
         echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         cat  ${yonienv}/bin/tagme.sh >> ${dst_folder}/tagme.sh ;
-
-        cd ${dst_folder}; tttt; cd -;
-    fi;
-    ######################################################################################
-    if [[ ${build_choices[@]} =~ nt-nvmeof-frontend ]] ; then
-        dst_folder=source/nt-nvmeof-frontend;
-        echo -e "${BLUE}Tagging ${dst_folder}${NC}";
-        \cp ${yonienv}/dell-tags/tagme-nt.sh ${dst_folder}/tagme.sh;
-        #\cp tags.vim ${dst_folder};
-
-        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
-        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
 
         cd ${dst_folder}; tttt; cd -;
     fi;
