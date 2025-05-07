@@ -3324,10 +3324,17 @@ dellclusterowner ()
         fi;
     fi;
 
-    current_user=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].lease.user.username" | xargs);
-    expires_on=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].lease.expires_on" | xargs);
-    group=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].owner.group.name" | xargs);
-    echo -e "${current_user} owns ${cluster}@${group} till ${expires_on}";
+    2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" > x.tmp
+    current_user=$(cat x.tmp | jq -r ".objects[].lease.user.username" | xargs);
+    if [ -z "${current_user}" ]  ; then
+        echo "${cluster} is free";
+        return 0;
+    fi;
+    current_user_email=$(cat x.tmp | jq -r ".objects[].lease.user.email" | xargs);
+    expires_on=$(cat x.tmp | jq -r ".objects[].lease.expires_on" | xargs);
+    group=$(cat x.tmp | jq -r ".objects[].owner.group.name" | xargs);
+    2>&1 1>/dev/null rm -f x.tmp;
+    echo -e "${current_user} (${current_user_email}) owns ${cluster}@${group} till ${expires_on}";
     return 0;
 }
 
