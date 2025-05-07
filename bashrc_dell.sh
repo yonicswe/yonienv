@@ -3204,7 +3204,19 @@ dellclusterlgipget ()
 ssh2lgofcluster ()
 {
     local cluster=${1};
+    local use_backup=0;
     local lg;
+
+    if [ -e ${delllastusedlgbkpfile} ] ; then
+        lg=$(cat ${delllastusedlgbkpfile});
+        ask_user_default_yes "use ${lg} again ";
+        if [ $? -eq 0 ] ; then
+            lg=;
+        else
+            ssh2lg ${lg};
+            return 0;
+        fi;
+    fi;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
