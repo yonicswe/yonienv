@@ -4,6 +4,7 @@ alias editbashgit='${v_or_g} ${yonienv}/bashrc_git.sh'
 
 # alias gitdiff="git difftool --tool=${v_or_g} --no-prompt"
 alias gitdiff='git d'
+alias gitdifft='git dt'
 alias gitdiffkdiff3='git difftool --tool=kdiff3 --no-prompt'
 alias gitdiffstat='git --no-pager diff --stat'
 alias gitlog='git log --name-status'
@@ -27,7 +28,7 @@ gitd ()
         git status -uno;
     fi;
 
-    complete -W "$(echo ${modified_file_list[@]})" gitd gitdiff;
+    complete -W "$(echo ${modified_file_list[@]})" gitd gitdifft gitdiff;
 
 }
 # alias gitdiscardunstaged='git checkout -- .'
@@ -245,6 +246,30 @@ gitrebaseremotebranch ()
     git rebase FETCH_HEAD;
 }
 
+gitpushtoremotebranch ()
+{
+    ask_user_default_no "git fetch before we start ? ";
+    if [ $? -eq 1 ] ; then
+        git fetch origin;
+    fi;
+
+    branch="$(git br | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+
+    if [ -z "${branch}" ] ; then
+        return;
+    fi;
+
+    branch=$(echo ${branch} | sed 's/origin\///g');
+
+    echo -e "\t${BLUE}git push origin ${GREEN}${branch}${NC}";
+    ask_user_default_no  "continue ?";
+    if [ $? -eq 0 ] ; then
+        return;
+    fi;
+
+    git push ${remote} ${branch};
+}
+
 gitcheckoutbranch ()
 {
     branch="$(git b | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
@@ -431,7 +456,7 @@ git-deleteremotebranch ()
 gitcommitfixup ()
 {
     local index=$1;
-    git commit -m "fixup: ${index}"
+    git commit -n -m "fixup: ${index}"
 }
 
 alias gitconfignopasswd='git config --global credential.helper cache'
