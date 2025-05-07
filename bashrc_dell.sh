@@ -1661,15 +1661,14 @@ dellclusterleaseextend ()
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
-        # if [ -z "${cluster}" ] ; then
-        if [ $? -eq 1 ] ; then
+        if [ -z "${cluster}" ] ; then
             echo "usage : ${FUNCNAME} <cluster>"; 
             return -1;
         fi;
     fi;
 
     group=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].owner.group.name" | xargs);
-    if [[ "${group}" =~ "shared" ]] ; then
+    if [[ "${group}" =~ "Shared" ]] ; then
         extend=72h;
     fi;
 
