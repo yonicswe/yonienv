@@ -676,7 +676,7 @@ endfunc
 map mmm :call TagmeInBackground_func()<cr>
 map mm :cs reset<cr>
 
-map tt 
+map tt  zz
 
 function! TagmeAgain_func ()
    execute "!./tagme.sh 1"
@@ -1034,6 +1034,7 @@ let g:ctrlp_max_depth=40
 "  gitgrep addOn
 "  ---------------------------------
 "  ,gw does gitgrep on word under curser
+"  ctrl-r,ctrl-w : paste word undre curser to command line
 "
 
 " ----------------------------------

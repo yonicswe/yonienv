@@ -66,7 +66,9 @@ use it's corresponding upper case character. i.e. In your example:
 "ayy
 "Ayy
 
-
+==== command mode ====
+while in command mode if you click <ctrl>rw
+the word under curser is pasted to command line.
 
 ==== spelling ====
 to start spell check do :set spelllang=en_us
