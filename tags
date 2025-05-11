@@ -8,6 +8,7 @@ Ethlist	bashrc_fs.sh	/^Ethlist () $/;"	f
 __kernel_version_in_given_path	bashrc_mlx.sh	/^__kernel_version_in_given_path ()$/;"	f
 __pd	bashrc_bookmarks.sh	/^__pd () $/;"	f
 _add_cluster_to_list	bashrc_dell.sh	/^_add_cluster_to_list ()$/;"	f
+_add_lg_to_list	bashrc_dell.sh	/^_add_lg_to_list ()$/;"	f
 _bugs	folder_name_complete.sh	/^_bugs ()$/;"	f
 _checkpatchcomplete	bashrc_mlx.sh	/^_checkpatchcomplete ()$/;"	f
 _cluster_owner	bashrc_dell.sh	/^_cluster_owner ()$/;"	f
@@ -43,6 +44,7 @@ _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
 _regression	regression_complete.sh	/^_regression ()$/;"	f
 _share	folder_name_complete.sh	/^_share ()$/;"	f
 _ssh_2_dev_vm_for_user	bashrc_dell.sh	/^_ssh_2_dev_vm_for_user ()$/;"	f
+_ssh_2_jnode	bashrc_dell.sh	/^_ssh_2_jnode ()$/;"	f
 _ssh_set_passwordless_cyc_for_devvm	bashrc_dell.sh	/^_ssh_set_passwordless_cyc_for_devvm ()$/;"	f
 _tasks	folder_name_complete.sh	/^_tasks ()$/;"	f
 _tmp	folder_name_complete.sh	/^_tmp ()$/;"	f
@@ -142,6 +144,7 @@ dellclusterleaseReRelease	bashrc_dell.sh	/^dellclusterleaseReRelease ()$/;"	f
 dellclusterleaseRelease	bashrc_dell.sh	/^dellclusterleaseRelease ()$/;"	f
 dellclusterleaseUpdateUser	bashrc_dell.sh	/^dellclusterleaseUpdateUser ()$/;"	f
 dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
+dellclusterleasehistory	bashrc_dell.sh	/^dellclusterleasehistory ()$/;"	f
 dellclusterleaseinfo	bashrc_dell.sh	/^dellclusterleaseinfo ()$/;"	f
 dellclusterlgipget	bashrc_dell.sh	/^dellclusterlgipget ()$/;"	f
 dellclusterowner	bashrc_dell.sh	/^dellclusterowner ()$/;"	f
@@ -170,6 +173,7 @@ dellibid2commitpnvmet	bashrc_dell.sh	/^dellibid2commitpnvmet ()$/;"	f
 dellibidgitcheckout	bashrc_dell.sh	/^dellibidgitcheckout ()$/;"	f
 dellibidofficial	bashrc_dell.sh	/^dellibidofficial ()$/;"	f
 delllgyonienvupdate	bashrc_dell.sh	/^delllgyonienvupdate ()$/;"	f
+dellpnvmetgetshaindexfrombranch	bashrc_dell.sh	/^dellpnvmetgetshaindexfrombranch ()$/;"	f
 dellpnvmettagsupdate	bashrc_dell.sh	/^dellpnvmettagsupdate ()$/;"	f
 dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
 dellrbatracedump	bashrc_dell.sh	/^dellrbatracedump ()$/;"	f
@@ -235,6 +239,7 @@ gitdiscardcached	bashrc_git.sh	/^gitdiscardcached () $/;"	f
 gitdiscardmodified	bashrc_git.sh	/^gitdiscardmodified () $/;"	f
 gitpushtogerrit	bashrc_mlx.sh	/^gitpushtogerrit ()$/;"	f
 gitpushtogerritcomplete	bashrc_mlx.sh	/^gitpushtogerritcomplete ()$/;"	f
+gitpushtoremotebranch	bashrc_git.sh	/^gitpushtoremotebranch ()$/;"	f
 gitrebaseremotebranch	bashrc_git.sh	/^gitrebaseremotebranch ()$/;"	f
 gitshowfilefromindex	bashrc_git.sh	/^gitshowfilefromindex ()$/;"	f
 gitsmlist	bashrc_git.sh	/^gitsmlist ()$/;"	f
@@ -503,6 +508,7 @@ tagmeofakernel	bashrc_mlx.sh	/^tagmeofakernel ()$/;"	f
 tagmeofedlibs	bashrc_mlx.sh	/^tagmeofedlibs ()$/;"	f
 tagmerdmacore	bashrc_mlx.sh	/^tagmerdmacore () $/;"	f
 tagmeupstreamkernel	bashrc_mlx.sh	/^tagmeupstreamkernel ()$/;"	f
+tagpython	bashrc_tags.sh	/^tagpython ()$/;"	f
 tailstatistics	bashrc_nice.sh	/^tailstatistics () $/;"	f
 task_list	bashrc_nice.sh	/^task_list () $/;"	f
 tl	bashrc_devel.sh	/^tl ()$/;"	f
