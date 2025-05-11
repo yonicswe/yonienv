@@ -86,6 +86,7 @@ tagcscope ()
     source_path=${1:-.};
     find ${source_path} -regex ".*\.c\|.*\.h"  -type f > cscope.files;
     cscope -vqb;
+    ctags -u --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f -L cscope.files
 }
 
 dmesg-level-get () 
@@ -452,6 +453,19 @@ bsclistbroadcomports-links ()
     done;
 }
 
+bsclistqlogicports-links ()
+{
+    link_up=(`bscshowfctable |grep FCI | tail -n +5| sudo awk '{if ($6 == "NVME") {file="/sys/class/fc_host/"$5"/port_state"; print file } }'|while read a ; do cat $a ; done `);
+    nvme_ports=(`bscshowfctable |grep FCI | tail -n +5| sudo awk '{if ($6 == "NVME") print "|--"$2"--|--"$3"--|"$7}'`);
+
+    echo " slot | port|  nvme pn               | link";
+    echo "------+-----+------------------------+-----";
+         #58:cc:f0:98:4a:a8:00:ff
+    for ((i=0; i<${#link_up[@]} ; i++)) ; do
+        echo -e "${nvme_ports[$i]} | ${link_up[$i]}" | sed 's/-/\ /g';
+    done;
+}
+
 bsclistbroadcomports ()
 {
     bsclistbroadcomscsiports;
@@ -488,6 +502,23 @@ alias dellnvme-list-controllers-node-b='nvme list-subsys| grep 984'
 
 alias bscshowfctable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
 alias bsclistqlaports='ls -l /sys/class/nvme_qla2xxx/'
+bsc-qla-enable-port ()
+{
+    local host=$1;
+
+    if [[ -z "${host}" ]] ; then
+        echo "missing host number";
+        bsclistqlaports;
+        return -1;
+    fi;
+
+    echo -n "cat /sys/class/nvme_qla2xxx/${host}/enable ";
+    cat /sys/class/nvme_qla2xxx/${host}/enable;
+    echo "echo 1 | sudo tee /sys/class/nvme_qla2xxx/${host}/enable";
+    echo 1 | sudo tee /sys/class/nvme_qla2xxx/${host}/enable;
+
+    return 0;
+}
 
 bsclistindusdevices ()
 {
@@ -531,11 +562,18 @@ corelist-fc-devices ()
     fi;
 }
 alias bsclist-fc-devices='corelist-fc-devices'
-alias delllist-fc-devices='corelist-fc-devices'
+alias dellnvme-list-fc-devices='corelist-fc-devices'
 
 corelist-fc-devices-with-fcc-script ()
 {
     sudo /working/cyc_host/cyc_bsc/scripts/fcc.sh
+}
+
+corelist-fc-devices-with-systool ()
+{
+    for i in  /sys/class/fc_host/* ; do 
+        systool -c fc_host -v `basename $i`
+    done
 }
 
 _bsclist-xtremapp ()
@@ -662,6 +700,10 @@ alias delljournalctl-nt-logs-node-b='_delljournalctl b nt'
 alias journal-grep-panic='journalctl | grep --color "PANIC\|log_backtrace_backend\|panic-\|signal_handler\|called with signal"'
 alias journal-grep-connect='journalnt | grep  --color "nvme.*allocate"'
 alias journal-grep-connect-queue='journalall | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
+alias journal-grep-connect-queue-tcp='journalkernel | grep --color "tcp_install_queue"'
+alias journal-grep-connect-queue-fc='journalkernel | grep --color "fc_alloc_target_queue"'
+alias journal-grep-connect-queue-tcp-last-hour='journalkernel --since "1 hour ago" | grep --color "tcp_install_queue"'
+alias journal-grep-connect-queue-fc-last-hour='journalkernel --since "1 hour ago" | grep --color "fc_alloc_target_queue"'
 alias journal-grep-discover='journalnt | grep  --color "discover.*allocate"'
 alias journal-grep-nt-start='journalnt | grep --color "nt_start"'
 alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*driver.*start"'
@@ -677,7 +719,8 @@ alias journal-grep-nt-remote-tcp-ports='echo "====> use debuc-list-ports" ; jour
 alias journal-grep-nt-remote-fc-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype fc.*is_local false"'
 alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
 alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
-alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel|less -I"'
+alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel"'
+alias journal-grep-nt-kernel-last-hour='journalall --since "1 hour ago" |grep "\[nt\]\|kernel"'
 
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
@@ -747,6 +790,11 @@ alias delltriage-grep-panic-b='delltriage-all-logs-node-b | grep "PANIC\|log_bac
 
 alias delltriage-grep-connect-a='delltriage-nt-logs-node-a | grep "nvme controller.*allocate"'
 alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep "nvme controller.*allocate"'
+alias delltriage-grep-connect-kernel-a='delltriage-all-logs-node-a | grep "creating.*controller"'
+alias delltriage-grep-connect-kernel-b='delltriage-all-logs-node-b | grep "creating.*controller"'
+
+alias delltriage-grep-connect-disconnect-log-a='delltriage-nt-logs-node-a | grep "log_new_ctrl\|log_io_ctrl.*disconnect.*host_address\|log_disc_ctrl.*disconnect"'
+alias delltriage-grep-connect-disconnect-log-b='delltriage-nt-logs-node-b | grep "log_new_ctrl\|log_io_ctrl.*disconnect.*host_address\|log_disc_ctrl.*disconnect"'
 
 alias delltriage-grep-add-port-a='delltriage-nt-logs-node-a | grep "add_ports.*is_local true"'
 alias delltriage-grep-add-port-b='delltriage-nt-logs-node-b | grep "add_ports.*is_local true"'
@@ -763,7 +811,14 @@ alias delltriage-grep-pnvmet-start-b='delltriage-kernel-log-node-b | grep --colo
 alias delltriage-node-a-grep-cluster-name='delltriage-all-logs-node-a | grep -i "cyc_config.*creating cluster"'
 alias delltriage-node-b-grep-cluster-name='delltriage-all-logs-node-b | grep -i "cyc_config.*creating cluster"'
 
-alias dellnvme='nvme list -v'
+dellnvme ()
+{
+    echo "=============================================================================";
+    nvme list-subsys; 
+    echo "=============================================================================";
+    nvme list
+}
+
 dellnvme-get-feature-keep-alive ()
 {
     local device=${1};
@@ -784,12 +839,26 @@ dellnvme-set-feature-keep-alive ()
     local kato=${2:-0};
 
     if [[ -z "${device}" ]] ; then
-        echo "usage: dellnvme-get-feature-keep-alive <nvme0>"
+        echo "usage: dellnvme-set-feature-keep-alive <nvme0>"
         return -1;
     fi;
 
-    echo "nvme get-feature --feature-id=0x0f -v ${2} /dev/${device}";
-    nvme get-feature --feature-id=0x0f -v ${2} /dev/${device};
+    echo "nvme set-feature --feature-id=0x0f -v ${2} /dev/${device}";
+    nvme set-feature --feature-id=0x0f -v ${2} /dev/${device};
+    return 0;
+}
+
+dellnvme-identify-controller ()
+{
+    local device=${1};
+
+    if [[ -z "${device}" ]] ; then
+        echo "usage: dellnvme-identify-controller <nvme0>"
+        return -1;
+    fi;
+
+    echo "nvme id-ctrl /dev/${device}";
+    nvme id-ctrl /dev/${device};
     return 0;
 }
 
@@ -798,7 +867,7 @@ dellnvme-show-timeout ()
     echo "/sys/module/nvme_core/parameters/io_timeout";
     cat /sys/module/nvme_core/parameters/io_timeout;
     echo "/sys/module/nvme_core/parameters/admin_timeout";
-    echo /sys/module/nvme_core/parameters/admin_timeout;
+    cat /sys/module/nvme_core/parameters/admin_timeout;
 }
 
 _delldc-node-x ()
@@ -1126,7 +1195,15 @@ bsc-fc-log-queues ()
     echo 1 | sudo tee /sys/module/nvmet_fc/parameters/nr_associations;
 }
 
-alias bsc-count-controllers='cat /sys/module/nvmet/parameters/nr_ctrls'
+bsc-count-controllers ()
+{
+    echo "number of controllers"
+    echo "cat /sys/module/nvmet/parameters/nr_ctrls";
+    cat /sys/module/nvmet/parameters/nr_ctrls
+    echo "echo 1 | sudo tee /sys/module/nvmet/parameters/nr_ctrls"; 
+    echo "check kernel logs for details"
+    echo 1 | sudo tee /sys/module/nvmet/parameters/nr_ctrls; 
+}
 
 _debuc_port_add ()
 {
@@ -1305,12 +1382,27 @@ m ()
 prdebug-list-methods ()
 {
     local method=${1:-rdma}
-    sudo cat /sys/kernel/debug/dynamic_debug/control  | sed 's/.*]//g' |awk '{print $1} ' |grep ${method}
+    sudo cat /sys/kernel/debug/dynamic_debug/control  | sed 's/.*]//' |awk '{print $1} ' |grep ${method}
 }
+
 
 prdebug-list-all ()
 {
 	sudo cat /sys/kernel/debug/dynamic_debug/control
+}
+
+alias prdebug-list-nvme-all='prdebug-list-all|grep nvme'
+alias prdebug-list-nvme-enabled='prdebug -e | grep nvme'
+
+prdebug-remove-method ()
+{
+    local method=${1};
+    if [[ -z ${method} ]] ; then
+        echo "usage $FUNCNAME <method>"
+        return -1;
+    fi;
+    
+    echo "func ${method} =_" |sudo tee /sys/kernel/debug/dynamic_debug/control;
 }
 
 prdebug-add-method ()
@@ -1465,6 +1557,7 @@ scpcommandforfile ()
     local password=${2};
     local host=$(hostname -i|cut -f 1 -d ' ');
     local user=$(id -un);
+    local scpcmd='scp';
 
     if [[ -z ${file} ]] ; then
         echo -e "${RED}missing file name${NC}";
@@ -1472,9 +1565,13 @@ scpcommandforfile ()
         return -1;
     fi;
 
+    if [[  $(file ${file}) =~ "directory" ]] ; then
+        scpcmd+=" -r";
+    fi;
+
     file=$(readlink -f ${file});
     if [ -z ${password} ] ; then
-        echo "scp ${user}@${host}:${file} .";
+        echo "${scpcmd} ${user}@${host}:${file} .";
     else
         echo -e "sshpass -p \"${password}\" scp ${user}@${host}:${file} .";
     fi;
@@ -1658,13 +1755,14 @@ core-servicemode ()
 
 _dellnvme_btest ()
 {
-    local duration=${1};
+    local duration=${1:-0};
     local device=${2};
+    local device_list=( $(nvme list -o json | jq  -r ".Devices[].DevicePath") );
 
     if [ -z "${device}" ] ; then
-        device='/dev/nvme0n1';
-    else
-        device="/dev/${device}";
+        echo "missing device : ${device_list[@]}";
+        complete -W "$(echo ${device_list[@]})" dellnvme-btest-forever dellnvme-btest-10s
+        return -1;
     fi;
 
     if ! [ -e ${device} ] ; then
@@ -1673,15 +1771,24 @@ _dellnvme_btest ()
     fi;
 
     echo "---------------------------------------------------------------------"
-    echo "/home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k   R 30 ${device}";
+    #echo "/home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k R 30 ${device}";
+    echo "/home/qa/btest/btest -D  -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device}";
     echo "---------------------------------------------------------------------"
-    /home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k   R 30 ${device};
+    ask_user_default_yes "continue ?";
+    [[ $? -eq 0 ]] && return -1;
+
+    #/home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k R 30 ${device};
+    #
+    # stressful with more threads and workers
+    #/home/qa/btest/btest     -t 12000 -q -B 240000 -b 1m -w 100 S W ${device};
+    /home/qa/btest/btest -D  -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device};
 
     return 0;
 }
 
 alias dellnvme-btest-forever='_dellnvme_btest 0'
 alias dellnvme-btest-10s='_dellnvme_btest 10'
+alias dellnvme-btest-1m='_dellnvme_btest 60'
 
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
@@ -1715,17 +1822,36 @@ alias dellnvme-btest-10s='_dellnvme_btest 10'
 # sudo ip link set p2p1.1713 up
 
 ##############################################################
-#                  triage on host file /var/log/messages
+#                  triage on node
 # search for these in the nodes journalctl
+# log_new_ctrl|log_disc_ctrl|log_new_ctrl
 # allocate.*ctrl|allocate.*cont|alloc_target_queu|kernel|nvmet|pnvmet
 #
-# search for this string in host logs /var/log/messages
-# doexit|worker_get_duration|usable|nvme.*succ|nvme.*error\ reco|running.*btest|fail.*btest
+#                  triage on host
+#            ----------------------------------- 
+#            search for these in /var/log/messages
+#            ----------------------------------- 
+# -->  doexit|worker_get_duration|usable|nvme.*succ|nvme.*error\ reco|running.*btest|fail.*btest|vdbench
+# -->  fail.*bte|start.*btest|new ctrl|lsscsi|nvme.*fail|nvme.*erro|usable|nvme.*succ|qa:|clean_lgs|iscsi_config
+
+# -->  nvme.*fail|nvme.*erro|usable|nvme.*succ|nvme.*avail
+# -->  nvme0.*fail|nvme0.*erro|usable|nvme0.*succ|nvme0.*avail
+# -->  nvme1.*fail|nvme1.*erro|usable|nvme1.*succ|nvme1.*avail
+
+# -->  nvme.*new|nvme.*creat|nvme.*remov.*c|multipath\ |lsscsi
+# -->  nvme0.*new|nvme0.*creat|nvme0.*remov.*c|multipath\ |lsscsi
+# -->  nvme1.*new|nvme1.*creat|nvme1.*remov.*c|multipath\ |lsscsi
+
+# -->  fail.*bte|start.*btest|doexit|worker_get_duration
+# -->  qa:|clean_lgs|iscsi_config
 #
-# and for this (in host log) for the connect tcp log
-# new ctrl
+# for system info
+# lsscsi|multipath|vmlinuz
 #
-alias dellnvmehost-grep-connect-tcp-to-node="grep 'new ctrl' messages"
+# for connection establishments
+# new ctrl|create \assoc
+#
+alias dellnvmehost-grep-connect-to-node="grep 'new ctrl' messages"
 alias dellnvmehost-grep-connect-fc="grep 'nvme.*create assoc' messages|grep -v discovery"
 alias dellnvmehost-grep-connect-fc-to-node-a="grep 'nvme.*create assoc.*904' messages|grep -v discovery"
 alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984' messages|grep -v discovery"
