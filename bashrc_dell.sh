@@ -4092,6 +4092,13 @@ alias delltriage-grep-connect-b='delltriage-nt-logs-node-b | grep --color "nvme 
 alias delltriage-grep-connect-queue-a='delltriage-all-logs-node-a | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
 alias delltriage-grep-connect-queue-b='delltriage-all-logs-node-b | grep --color "process_connec.*sq_id\|install.*queu\|fc_.*alloc.*queue\|fc_.*create_association\|nvme.*allocate\|discover.*allocate"'
 
+alias delltriage-grep-disconnect-host-a='delltriage-nt-logs-node-a | grep --color "io_ctrl.*disconnect.*host"'
+alias delltriage-grep-disconnect-host-b='delltriage-nt-logs-node-b | grep --color "io_ctrl.*disconnect.*host"'
+alias delltriage-grep-disconnect-host-tcp-a='delltriage-nt-logs-node-a | grep --color "io_ctrl.*disconnect.*trtype tcp.*host"'
+alias delltriage-grep-disconnect-host-tcp-b='delltriage-nt-logs-node-b | grep --color "io_ctrl.*disconnect.*trtype tcp.*host"'
+alias delltriage-grep-disconnect-host-fc-a='delltriage-nt-logs-node-a | grep --color "io_ctrl.*disconnect.*trtype fc.*host"'
+alias delltriage-grep-disconnect-host-fc-b='delltriage-nt-logs-node-b | grep --color "io_ctrl.*disconnect.*trtype fc.*host"'
+
 alias delltriage-grep-disconnect-a='delltriage-all-logs-node-a | grep --color "io_ctrl.*disconnect\|tcp_state_change"'
 alias delltriage-grep-disconnect-b='delltriage-all-logs-node-b | grep --color "io_ctrl.*disconnect\|tcp_state_change"'
 
