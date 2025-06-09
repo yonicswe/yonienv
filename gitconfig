@@ -74,7 +74,7 @@
     bdescriptionedit = branch --edit-description
     bgrep = "!f() { \
        word=$1;\
-		git b | grep --color $word; \
+		git b | grep -i --color $word; \
     };f "
 
     bgrepremote = "!f() { \
@@ -495,10 +495,10 @@
 #   sm-resetall = checkout -f --recurse-submodules
     sm-resetall = "!f() {\
         for s in source/* ; do\
-           echo "------$s reset modified content------";\
+	   echo "------[$s] reset modified content------";\
            cd $s ; git c -f . ;\
            cd - ;\
-           echo "------$s reset new commits-----------";\
+	   echo "------[$s] reset new commits-----------";\
            git smupdate $s;\
         done; }; f"
 
