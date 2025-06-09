@@ -151,7 +151,7 @@
     cc = checkout -
     cb = checkout -b
     checkoutremotebranch = !git_checkoutremotebranch.sh
-    sw = switch -
+    sw = c -
     switchremotebranch = !git_checkoutremotebranch.sh
     checkoutbranch = !git_checkoutbranch.sh
     switchbranch = !git_checkoutbranch.sh
