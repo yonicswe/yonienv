@@ -191,6 +191,11 @@
 #   }; f"
  
     cherrypick = !git_cherrypick.sh
+	cherrypickstatus = "!f(){ \
+		echo "if in the middle of a sequence cat the sequencer/todo file"; \
+		echo "if in pdr submodule then try this e.g. for nt"; \
+		echo "cat ../../.git/modules/source/nt-nvmeof-frontend/sequencer/todo"; \
+		}; f"
     cleanuntracked = "!f() { git ls-files --others | xargs rm --interactive=once;}; f"
 
 # ───────d──────────────────────────────────────────────────────────────────────
