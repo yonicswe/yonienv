@@ -248,10 +248,19 @@ dellpnvmettagsupdate ()
         return -1;
     fi;
 
-    build_choices=($(whiptail --checklist "pnvmet tags" 13 30 4\
+    if [[ -e ${pnvmet_folder} ]] ; then
+        cd ${pnvmet_folder};
+    else
+        echo -e "${RED}missing pnvmet_folder (do rd)${NC}";
+        return -1;
+    fi;
+
+    build_choices=($(whiptail --checklist "pnvmet tags" 13 30 6\
                    linux "" off\
                    cyc_core "" off  \
                    third_party "" off \
+                   broadcom "" off \
+                   qlogic "" off \
                    nt-nvmeof-frontend "" off 3>&1 1>&2 2>&3));
 
 
@@ -280,7 +289,33 @@ dellpnvmettagsupdate ()
         echo "cs a ${dst_folder}/cscope.out" >> tags.vim;
         echo "set tags+=${dst_folder}/tags" >> tags.vim;
     fi;
+    if [[ ${build_choices[@]} =~ broadcom ]] ; then
+        
+        #if ! [ -d ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS ] ; then
+            #echo -e "${RED}missing broadcom folder : ${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS${NC}";
+            #echo -e "${RED}using : /home/y_cohen/devel/cyclones/cyclone.broadcom/source/third_party/cyc_platform/src/third_party/BRCM_OCS${NC}";
+            #dst_folder=/home/y_cohen/devel/cyclones/cyclone.broadcom/source/third_party/cyc_platform/src/third_party/BRCM_OCS;
+        #else
+            #dst_folder=${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS;
+        #fi;
+        dst_folder=$(_dellgetbroadcomsourcespath);
 
+        c ${dst_folder};
+        #echo "tagging broadcom in $(pwd)"
+        tagme;
+        #ls
+        tttt;
+        c - ;
+
+        echo "cs a ${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${dst_folder}/tags" >> tags.vim;
+    fi;
+    if [[ ${build_choices[@]} =~ qlogic ]] ; then
+        #echo -e "${RED}missing qla folder${NC}";
+        echo -e "${RED}qlogic is built when setting third-party in dellcyclonetagsupdate${NC}";
+    fi;
+
+    tttt;
 }
 
 dellcyclonetagsupdate ()
@@ -1656,7 +1691,7 @@ dellclustergeneratecfg ()
 dellclusterleaseextend () 
 {
     local cluster=${1};
-    local extend=${2:-28};
+    local extend=${2:-28d};
     local user_extend_choice=;
 
     if [ -z "${cluster}" ] ; then 
@@ -1674,7 +1709,7 @@ dellclusterleaseextend ()
 
     read -p "extend ${cluster} ${extend} days ? Enter/or choose a different value: " user_extend_choice;
     if [ -z "${user_extend_choice}" ] ; then
-        extend="${extend}d";
+        extend="${extend}";
     else
         extend=${user_extend_choice}d;
     fi;
@@ -3226,6 +3261,7 @@ ssh2lgofcluster ()
         fi;
     fi;
 
+    echo "using ${cluster}"
     lg_arr=( $(dellclusterlgipget ${cluster}) );
 
     #echo "lg_arr: ${lg_arr[@]}";
@@ -3237,7 +3273,13 @@ ssh2lgofcluster ()
         lg=${lg_arr[0]};
     fi;
 
+    if [[ -z "${lg}" ]] ; then
+        echo -e "${RED}must specify lg name${NC}";
+        return -1;
+    fi;
+    
     ssh2lg ${lg};
+    return 0;
 }
 
 dellclusterguiipget ()
@@ -3530,6 +3572,50 @@ dellcdthirdpartyobjects ()
         echo "missing folder ${thirdpartyobjects}";
         return -1;
     fi;
+    return 0;
+}
+
+_dellgetbroadcomsourcespath ()
+{
+    local platform_debug=source/third_party/cyc_platform/obj_Debug;
+    local platform_release=source/third_party/cyc_platform/obj_Release;
+    local broadcom_src=third_party/BRCM_OCS/src/BRCM_OCS;
+    local broadcom=;
+
+    if [ -z ${cyclone_folder} ] ; then
+        echo -e "${RED}cyclone_folder empty! using ~/devel/cyclones/cyclone.broadcom/${NC}"; 
+        cyclone_folder=~/devel/cyclones/cyclone.broadcom/;
+    fi;
+
+    if ! [ -d ${cyclone_folder} ] ; then
+        echo -e "${RED}${cyclone_folder} does not exist! using ~/devel/cyclones/cyclone.broadcom/${NC}"; 
+        cyclone_folder=~/devel/cyclones/cyclone.broadcom/;
+    fi;
+
+    broadcom=${cyclone_folder}
+    if [ -e ${broadcom}/${platform_debug} ] ; then
+        broadcom=${broadcom}/${platform_debug};
+    elif [ -e ${broadcom}/${platform_release} ] ; then
+        broadcom=${broadcom}/${platform_release};
+    else
+        echo "missing : "
+        echo "${cyclone_folder}/${platform_debug}";
+        echo "${cyclone_folder}/${platform_release}";
+        echo "you should : make third_party force=yes flavor=<DEBUG|RELEASE>";
+        return -1;
+    fi;
+
+    broadcom=${broadcom}/${broadcom_src};
+
+    if [ -d ${broadcom} ] ; then
+        echo ${broadcom};
+        return 0;
+    else
+        echo "missing folder ${broadcom}";
+        echo -e "${RED}missing broadcom folder. try the feature branch feature//pl-trif-2474-brcm-fc-64gb${NC}";
+        return -1;
+    fi;
+
     return 0;
 }
 
@@ -4137,6 +4223,7 @@ alias delltriage-grep-nt-kernel-a-r='delltriage-all-logs-node-a-r |grep "\[nt\]\
 alias delltriage-grep-nt-kernel-b='delltriage-all-logs-node-b |grep "\[nt\]\|kernel"|less -I'
 alias delltriage-grep-nt-kernel-b-r='delltriage-all-logs-node-b-r |grep "\[nt\]\|kernel"|less -I'
 alias delltriage-host-grep-connect-fc='grep "nvme.*create assoc" messages|grep -v discovery'
+alias delltriage-host-grep-connect='grep "nvme.*new ctrl" messages|grep -v discovery'
 
 # howto
 # journalctl SUBCOMPONENT=nt

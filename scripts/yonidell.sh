@@ -850,15 +850,20 @@ dellnvme-set-feature-keep-alive ()
 
 dellnvme-identify-controller ()
 {
-    local device=${1};
+    local device=${1:-nvme0};
 
-    if [[ -z "${device}" ]] ; then
-        echo "usage: dellnvme-identify-controller <nvme0>"
-        return -1;
-    fi;
+    #if [[ -z "${device}" ]] ; then
+        #echo "usage: dellnvme-identify-controller <nvme0>"
+        #return -1;
+    #fi;
 
-    echo "nvme id-ctrl /dev/${device}";
-    nvme id-ctrl /dev/${device};
+    echo "nvme id-ctrl -H /dev/${device}";
+    echo "===========================;"
+    nvme id-ctrl -H /dev/${device};
+
+    echo -e "\nnvme nvm-id-ctrl /dev/${device}";
+    echo "===========================;"
+    nvme nvm-id-ctrl /dev/${device};
     return 0;
 }
 
@@ -1088,6 +1093,9 @@ alias debuc-log-commands-enable='debuc-command "log commands enable"';
 alias debuc-log-commands-disable='debuc-command "log commands disable"';
 alias debuc-log-page-enable='debuc-command "log logpage enable"';
 alias debuc-log-page-disable='debuc-command "log logpage disable"';
+alias debuc-log-stat-enable='debuc-command "log stat 10"';
+alias debuc-log-stat-disable='debuc-command "log stat 0"';
+alias debuc-log-stat='debuc-log-stat-enable;sleep 3 ; debuc-log-stat-disable';
 
 alias debuc-host-add='debuc-command "add hostgroup"';
 alias debuc-host-add-secret='debuc-command "add hostgroup grp_idx=1 host_name=nqn.2014-08.org.nvmexpress:uuid:4c4c4544-005a-3710-8051-b1c04f445732 host_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: subsys_secret=DHHC-1:00:TATezKzRaxSMwvxnSwtvCD9XMxK9tM2bZLkjkM2qeu/d+5VC: "'
@@ -1551,6 +1559,14 @@ bscscptohost ()
     fi;
 }
 
+bsc-xtrace-dump-node-a ()
+{
+    sudo /xtremapp/utils/tlogger dump /dev/shm/traces_10
+    echo -e "${GREEN}===============================================${NC}";
+    echo -e "${GREEN}run morty with : /xtremapp/utils/housemd/morty_node${NC}";
+    echo -e "${GREEN}in morty prompt do : platform_cmds.grep_nt_traces(node_a.traces_volatile.dir_1_shm)${NC}";
+}
+
 scpcommandforfile ()
 {
     local file=${1};
@@ -1753,15 +1769,15 @@ core-servicemode ()
 # nvme connect -t tcp -a 10.181.193.11 -n nqn.1988-11.com.dell:powerstore:00:133a0e05d77e9473A5F6 -s 4420  -S DHHC-1:01:C7XNT6VDFTFfbGtrSimOlLFg7BAdH+UwUgkLTuSA5gcd+7/H: -C DHHC-1:01:97vgjyw8YRnwFPn0LYjeGW5/ClRhS5YuVnwTNIwUNHUWmp6v:
 
 
-_dellnvme_btest ()
+_dell_btest ()
 {
     local duration=${1:-0};
     local device=${2};
     local device_list=( $(nvme list -o json | jq  -r ".Devices[].DevicePath") );
 
     if [ -z "${device}" ] ; then
-        echo "missing device : ${device_list[@]}";
-        complete -W "$(echo ${device_list[@]})" dellnvme-btest-forever dellnvme-btest-10s
+        echo "!!missing device!! try again with : ${device_list[@]}";
+        complete -W "$(echo ${device_list[@]})" dell-btest-forever dell-btest-10s
         return -1;
     fi;
 
@@ -1772,7 +1788,7 @@ _dellnvme_btest ()
 
     echo "---------------------------------------------------------------------"
     #echo "/home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k R 30 ${device}";
-    echo "/home/qa/btest/btest -D  -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device}";
+    echo "/home/qa/btest/btest -D -B 240000 -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device}";
     echo "---------------------------------------------------------------------"
     ask_user_default_yes "continue ?";
     [[ $? -eq 0 ]] && return -1;
@@ -1781,14 +1797,45 @@ _dellnvme_btest ()
     #
     # stressful with more threads and workers
     #/home/qa/btest/btest     -t 12000 -q -B 240000 -b 1m -w 100 S W ${device};
-    /home/qa/btest/btest -D  -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device};
+    /home/qa/btest/btest -D -B 240000 -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device};
 
     return 0;
 }
+ 
+_dell_btest_size ()
+{
+    local size=${1};
+    local duration=${2};
+    local device=${3};
+    local device_list=( $(nvme list -o json | jq  -r ".Devices[].DevicePath") );
 
-alias dellnvme-btest-forever='_dellnvme_btest 0'
-alias dellnvme-btest-10s='_dellnvme_btest 10'
-alias dellnvme-btest-1m='_dellnvme_btest 60'
+    if [ -z "${device}" ] ; then
+        echo "!!missing device!! try again with : ${device_list[@]}";
+        complete -W "$(echo ${device_list[@]})" `echo ${dell_btest_aliases[@]}`
+        return -1;
+    fi;
+
+    if ! [ -e ${device} ] ; then
+        echo "${device} not found";
+        return -1;
+    fi;
+
+    echo -e "${RED}btest -t ${duration} -T 1 -B 240000 -b ${size} -w 10 S R ${device}${NC}";
+    ask_user_default_yes "continue ?";
+    if [[ $? -eq 0 ]] ; then return 0 ; fi;
+    btest -t ${duration} -T 1 -B 240000 -b ${size} -w 10 S R ${device};
+}
+
+alias dell-btest-forever='_dell_btest 0'
+alias dell-btest-10seconds='_dell_btest 10'
+alias dell-btest-1minute='_dell_btest 60'
+alias dell-btest-small-reads-1minute='_dell_btest_size 512 60'
+alias dell-btest-small-reads-forever='_dell_btest_size 512 0'
+alias dell-btest-big-reads-1minute='_dell_btest_size 1M 60'
+alias dell-btest-big-reads-forever='_dell_btest_size 1M 0'
+dell_btest_aliases=(dell-btest-forever dell-btest-10seconds
+    dell-btest-1minute dell-btest-small-reads-1minute dell-btest-small-reads-forever dell-btest-big-reads-1minute dell-btest-big-reads-forever)
+
 
 # btest examples
 # /home/qa/btest/btest -D  -t 10 -l 10m -b 4k   R 30 /dev/dm-0
@@ -1843,7 +1890,7 @@ alias dellnvme-btest-1m='_dellnvme_btest 60'
 # -->  nvme1.*new|nvme1.*creat|nvme1.*remov.*c|multipath\ |lsscsi
 
 # -->  fail.*bte|start.*btest|doexit|worker_get_duration
-# -->  qa:|clean_lgs|iscsi_config
+# -->  qa:|clean_lgs|iscsi_config|linux\ ver
 #
 # for system info
 # lsscsi|multipath|vmlinuz
@@ -1863,7 +1910,21 @@ alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984' mes
 # get cluser name from within the cluster
 # grep SYM_SYSTEM_NAME /dev/shm/xenv_1.ini
 
-# tcpdump -i feData0 port 4420 -w nvme.cap
+coretcpdump ()
+{
+    ask_user_default_no "tcpdump to file ?";
+    if [[ $? -eq 1 ]] ; then
+        echo -e "${RED}tcpdump -i feData0 port 4420 -w nvme.cap${NC}";
+        ask_user_default_yes "continue ?"
+        if [[ $? -eq 0 ]] ; then return 0 ; fi;
+        sudo tcpdump -i feData0 port 4420 -w nvme.cap
+    else
+        echo -e "${RED}tcpdump -i feData0 port 4420 -v${NC}";
+        ask_user_default_yes "continue ?"
+        if [[ $? -eq 0 ]] ; then return 0 ; fi;
+        sudo tcpdump -i feData0 port 4420 -v;
+    fi;
+}
 
 unset PROMPT_COMMAND
 # PS1="[\D{%H:%M %d.%m}][\u@\h:\w]\n==> "

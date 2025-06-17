@@ -1393,3 +1393,10 @@ deletefast ()
 # pkill -t pts/<number>
 #
 # stty -echo // will turn off terminal echo
+killuser ()
+{
+    echo "to kill a user session"
+    echo "use w to find his pts/<number>"
+    echo "pkill -t pts/<number>"
+}
+
