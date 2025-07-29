@@ -273,11 +273,6 @@ subtitlenamesync ()
 
     movie_name=$(basename $movie_name);
 
-#   sanity check
-    if [ -z "$(ls *srt 2>/dev/null)" ] ; then
-        echo "No SRT files found";
-    fi; 
-
     extract_srt_files_from_archive ${output_path}; 
     if [ $? -ne 0 ] ; then echo "failed to extract" ; return -1; fi;
     if [ $( ls -l ${output_path}/*zip 2>/dev/null | wc -l ) -ne 0 ] ; then 
@@ -294,8 +289,12 @@ subtitlenamesync ()
         output_path=.;
     fi
 
-    cp *.srt ${output_path};
-
+    if [ -z "$(ls *srt 2>/dev/null)" ] ; then
+        echo "No SRT files found";
+    else
+        cp *srt ${output_path};
+    fi;
+ 
     j=1; 
     for i in ${output_path}/*srt ; do 
         echo -e "install -D \"$i\" `pwd`/subs/${movie_name}.$j.srt" ; 
@@ -385,7 +384,36 @@ subtitle-series-sort-directories ()
 
 }
 
+unzip_all_files ()
+{
+    zip_files=$(ls *zip | wc -l);
+    while (( $zip_files != 0 )) ; do
 
+        echo "zip_files : $zip_files";
+        for f in *zip ; do
+            7za x $f;
+            rm -f $f;
+        done;
+
+        zip_files=$(ls *zip | wc -l);
+    done;
+}
+
+format_video_filename ()
+{
+    local filename="$1";
+    local newFileName;
+
+    if [ -z "${filename}" ] ; then
+        for i  in * ; do 
+            newFileName=$(echo "$i" | sed -e 's/\ /_/g' -e 's/(/_/g' -e 's/)/_/g')
+            mv -i -v "$i" $newFileName 
+        done
+    else
+        newFileName=$(echo "${filename}" | sed -e 's/\ /_/g' -e 's/(/_/g' -e 's/)/_/g')
+        mv -i -v ${filename} ${newFileName};
+    fi;
+} 
 #_subtitleseriesnamesync_usage ()
 #{
 
