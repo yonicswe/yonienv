@@ -451,7 +451,7 @@
                        fi; \
                        git rebase -i $1^; }; f"
 
-    rebaseremotebranch = !git_rebaseremotebranch.sh
+    rebaseremotebranch = !git-rebaseremotebranch.sh
 
 
 
@@ -498,14 +498,17 @@
 #
 #   sm-resetall = submodule foreach --recursive git reset --hard; 
 #   sm-resetall = checkout -f --recurse-submodules
-    sm-resetall = "!f() {\
-        for s in source/* ; do\
-	   echo "------[$s] reset modified content------";\
-           cd $s ; git c -f . ;\
-           cd - ;\
-	   echo "------[$s] reset new commits-----------";\
-           git smupdate $s;\
-        done; }; f"
+#
+#   use git smreset.sh
+# 
+#   sm-resetall = "!f() {\
+#       for s in source/* ; do\
+#          echo "------[$s] reset modified content------";\
+#          cd $s ; git c -f . ;\
+#          cd - ;\
+#          echo "------[$s] reset new commits-----------";\
+#          git smupdate $s;\
+#       done; }; f"
 
     sm-update-all = submodule update --recursive
     sm-updateinit-all = submodule update --init --recursive
