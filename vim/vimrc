@@ -983,6 +983,17 @@ endfun
 map f :call ShowFuncName() <CR>
 " can also do :normal [[<cr>
 
+fun! ShowFuncNameCurser()
+  let lnum = line(".")
+  let col = col(".")
+  echohl ModeMsg
+  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW'))
+  echohl None
+  call search("\\%" . lnum . "l" . "\\%" . col . "c")
+endfun
+
+" put curser on func name
+map ff :call search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')<cr>w
 
 let g:termdebug_wide=1
 
