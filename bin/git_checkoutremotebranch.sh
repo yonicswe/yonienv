@@ -5,12 +5,21 @@ source ${yonienv}/bashrc_fs.sh
 remote_branch=;
 local_branch=;
 
-ask_user_default_no "git fetch before we start ? ";
-if [ $? -eq 1 ] ; then
-    git fetch -p;
+if [[ $(git br|wc -l) -eq 0 ]] ; then
+    echo "you probably just cloned linux repo you must also do git fetch" 
+    ask_user_default_no "continue with fetch ?";
+    if [[ $? -eq 0 ]] ; then
+        exit;
+    fi;
+    git fetch origin
+else
+    ask_user_default_no "git fetch before we start ? ";
+    if [ $? -eq 1 ] ; then
+        git fetch -p;
+    fi;
 fi;
 
-remote_branch="$(git b -r |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+remote_branch="$(git br |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
 
 if [[ -z ${remote_branch} ]] ; then
     echo "you must specify a valid branch";
