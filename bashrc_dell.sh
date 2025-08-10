@@ -10,7 +10,9 @@ user_to_devvm["irit"]="10.207.132.158"
 user_to_devvm["dord"]="10.207.132.21" 
 user_to_devvm["yoni1"]="10.227.212.155"
 user_to_devvm["yoni2"]="10.227.212.133"
-complete -W "amit elad irit dord yoni1 yoni2" ssh2devvm ssh2devvmsetup
+user_to_devvm["brown"]="10.244.126.135"
+#complete -W "amit elad irit dord yoni1 yoni2" ssh2devvm ssh2devvmsetup
+complete -W "$(echo ${!user_to_devvm[@]})" ssh2devvm ssh2devvmsetup
 
 # yonivmipaddress="10.244.196.235"
 #yonivmipaddress="10.227.212.155"
