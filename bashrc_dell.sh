@@ -81,7 +81,8 @@ export CYC_CONFIG=;
 dell_clusters_file=${yonienv}/bashrc_dell_clusters.sh;
 dell_cluster_list_file=${yonienv}/bashrc_dell_cluster_list_file.sh;
 alias delleditclusterlist="v ${dell_clusters_file}";
-alias delleditleasedclusters='v ~/.dell_leased_clusters'
+export dell_leased_clusters=~/.dell_leased_clusters
+alias delleditleasedclusters="v ${dell_leased_clusters}"
 # trident_cluster_list=(RT-G0082 RT-D3082 WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list=( $(cat ${dell_clusters_file}) );
 # trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
@@ -1690,23 +1691,40 @@ dellclustergeneratecfg ()
 }
 
 
+dellclusterleaselist ()
+{
+    /home/public/scripts/xpool_trident/prd/xpool list -json -u y_cohen  |
+        sed 's/+--/#/g' | 
+        awk 'BEGIN{RS="#"} {if (NR == 4) print $0 }' | 
+        awk '{getline ; print $0 } ' | jq  -r ".[].nodes" | sed -e 's/\[//g' -e 's/\]//g' -e 's/\"//g' -e 's/-a//g' -e 's/-b//g' -e 's/,//g' |sort -u
+}
+
 dellclusterleaseextend () 
 {
     local cluster=${1};
     local extend=${2:-28d};
     local user_extend_choice=;
 
+    echo -e "${RED}use dellclusterleaselist to refresh leased list${NC}";
+
     if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
+        echo "cluster : ${cluster}";
+        cluster="$(cat ${dell_leased_clusters} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
         if [ -z "${cluster}" ] ; then
-            echo "usage : ${FUNCNAME} <cluster>"; 
-            return -1;
+            cluster=$(_dellclusterget);
+            if [ -z "${cluster}" ] ; then
+                echo "usage : ${FUNCNAME} <cluster>"; 
+                return -1;
+            fi;
         fi;
     fi;
 
+    echo "checking group for ${cluster}";
+    echo -e "/home/build/xscripts/xxutil.py labjungle cluster \"name:${cluster}\" | jq -r \".objects[].owner.group.name\"";
     group=$(2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" | jq -r ".objects[].owner.group.name" | xargs);
     if [[ "${group}" =~ "Shared" ]] ; then
         extend=72h;
+        echo "${cluster} is from ${group}. max extend is : ${extend}";
     fi;
 
     read -p "extend ${cluster} ${extend} days ? Enter/or choose a different value: " user_extend_choice;
@@ -2007,7 +2025,6 @@ if [[ -e ~/.dell_leased_clusters ]] ; then
     complete -W "$(cat ~/.dell_leased_clusters)" ssh2coreleased ssh2bscleased
 fi;
 
-delleditleasedclusters='v ~/.dell_leased_clusters'
 
 ssh2bsc ()
 {
