@@ -4314,6 +4314,27 @@ alias delldc-nt-node-b='_delldc-node-x node_b SUB_COMPONENT=nt'
 alias delldc-nt-node-a-r='_delldc-node-x node_a "SUB_COMPONENT=nt -r"'
 alias delldc-nt-node-b-r='_delldc-node-x node_b "SUB_COMPONENT=nt -r"'
 
+delldc-list-files ()
+{
+    echo "TIMELINE"
+    echo "show_volumes_print_type__csv_.txt"
+    echo "show_lun_mappings_print_type__csv_.txt"
+    echo "show_initiator_groups_print_type__csv_.txt – Note that “nvme_maps” is always 0 even if there are NVME mappings, from what I’ve seen"
+    echo "show_initiators_print_type__csv_.txt"
+    echo "show_initiators_connectivity_print_type__csv_.txt – This is for SCSI connections from registered initiators (ie. initiators in initiator groups).  If an initiator is not logged in at all, it won’t be in the file.  "
+    echo "show_discovered_initiators_connectivity_print_type__csv_.txt – This is for SCSI connections from unregistered initiators"
+    echo "show_nvme_host_connectivity_print_type__csv_.txt "
+    echo "show_nvme_discover_host_connectivity_print_type__csv_.txt "
+    echo
+    echo "Show_ioms"
+    echo "Show_feports"
+    echo "Show_sfps"
+    echo "Show_scsi_targets"
+    echo "Show_target_port_groups "
+    echo "Show_scsi_registrations – This has an entry for every volume regardless of whether it has a registration or not.  There is an NVME version too."
+    echo "Show_scsi_reservations "
+}
+
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
 alias yyy='yonidellsshkeyset'
 
