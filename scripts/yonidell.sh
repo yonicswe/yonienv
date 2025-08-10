@@ -73,7 +73,12 @@ k ()
 alias lessin='less -IN'
 alias r='source ~/yonidell.sh'
 
-alias yonidellcptobsc='docker cp ~/yonidell.sh  cyc_bsc_docker:/home/cyc/ ; docker cp ~/vimrcyoni.vim cyc_bsc_docker:/home/cyc/'
+yonidellcptobsc ()
+{
+    echo 'docker cp ~/yonidell.sh  cyc_bsc_docker:/home/cyc/ ; docker cp ~/vimrcyoni.vim cyc_bsc_docker:/home/cyc/'
+    docker cp ~/yonidell.sh  cyc_bsc_docker:/home/cyc/ ; docker cp ~/vimrcyoni.vim cyc_bsc_docker:/home/cyc/;
+}
+
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
 alias delllistdc='find . -maxdepth 1 -regex ".*service-data\|.*dump-data"'
 alias d='sudo dmesg --color -HxP'
@@ -172,6 +177,7 @@ alias tt='probe_topology'
 
 yonidellcptopeer ()
 {
+    echo "scp yonidell.sh vimrcyoni.vim peer:~/";
     scp yonidell.sh vimrcyoni.vim peer:~/;
 }
 
@@ -273,6 +279,12 @@ coregetkernelversion ()
    cat /sys/module/nvmet_power/parameters/githash;
 }
 
+coreget-memory-consumption ()
+{
+    echo -e "${PURPLE}sudo cat /sys/module/nvmet_power/parameters/has_inflight_pages${NC}";
+    sudo cat /sys/module/nvmet_power/parameters/has_inflight_pages;
+}
+
 bsclist-tcp-controllers ()
 {
     echo 1 | sudo tee  /sys/module/nvmet_tcp/parameters/nr_tcp_queues
@@ -312,7 +324,7 @@ alias corecrash-crash-py='/triage_analysis/node_a/cyc_bsc/utils/cyc_crash.py --s
 alias corecrash-crash='crash ./triage_analysis/node_a/2024-09-05-10:50/vmlinux-5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f-default.gz ./triage_analysis/node_a/5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f/usr/lib/debug/boot/vmlinux* triage_analysis/node_a/2024-
 09-05-10-50.kdump'
 
-corelistkernelmodules ()
+core-listkernelmodules ()
 {
     local kernel_modules_folder_0=/cyc_software_0/cyc_host/cyc_common/modules/;
     local kernel_modules_folder_1=/cyc_software_1/cyc_host/cyc_common/modules/;
@@ -440,10 +452,66 @@ _bsclistbroadcomnvmeports ()
 }
 alias bsclistbroadcomnvmeports='_bsclistbroadcomnvmeports | column -t'
 
+bsclistbroadcomaliases ()
+{
+
+    declare -A alias_list;
+    declare -A wwpn_list;
+    declare -A ocs_list;
+    declare -A port_state_list;
+
+    eval_alias_list=$(
+        /cyc_host/cyc_bin/cyc_wwn_initializer -d | grep SCSI | awk '{print $4" "$5}' | while read pci alias ; do 
+            pci=$(echo $pci|sed -e 's/://g' -e  's/\.//g');
+            echo "alias_list[$pci]=$alias"; 
+        done);
+
+    eval_wwpn_list=$(
+        /cyc_host/cyc_bin/cyc_wwn_initializer -d | grep NVME | awk '{print $4" "$9}' | while read pci wwpn ; do 
+            pci=$(echo $pci|sed -e 's/://g' -e  's/\.//g');
+            wwpn=$(echo $wwpn|sed -e 's/://g' -e  's/\.//g');
+            echo "wwpn_list[$pci]=$wwpn"; 
+        done);
+
+    p=/sys/kernel/debug/ocs_fc_scst/;
+    eval_ocs_list=$(
+        sudo find ${p} -maxdepth 1 -type d | sed '1d' | while read h; do
+            echo -n "$(basename ${h}) $(sudo cat ${h}/vport_spec0/wwpn|head -1)";
+            echo;
+        done | while read ocs wwpn ; do 
+            wwpn=$(echo ${wwpn} | awk '{ print tolower($0) }');
+            echo "ocs_list[$wwpn]=${ocs}";
+        done);
+
+    eval_port_state_list=$(
+        ls /sys/class/fc_host/ | while read f ; do 
+            echo "port_state_list[$f]=$(cat /sys/class/fc_host/$f/port_state)";
+        done)
+
+    eval ${eval_port_state_list}
+
+    eval ${eval_ocs_list};
+    #echo "ocs_list : ${ocs_list[@]}" ; 
+    #echo "ocs_list : ${!ocs_list[@]}" ; 
+
+    eval ${eval_alias_list};
+    #echo "alias_list : ${alias_list[@]}" ; 
+    #echo "alias_list : ${!alias_list[@]}" ; 
+
+    eval ${eval_wwpn_list};
+    #echo "wwpn_list : ${wwpn_list[@]}" ; 
+    #echo "wwpn_list : ${!wwpn_list[@]}" ; 
+
+    for k in ${!alias_list[@]} ; do
+        echo "$k ${alias_list[$k]} ${wwpn_list[$k]} ${ocs_list[${wwpn_list[$k]}]} ${port_state_list[${alias_list[$k]}]}";
+    done
+
+}
+
 bsclistbroadcomports-links ()
 {
-    link_up=(`bscshowfctable |grep FCI | tail -n +4|sort -k 4 | sudo awk '{if ($6 == "SCSI") {file="/sys/kernel/scst_tgt/targets/ocs_xe201/"$9"/link_up"; print file } }'|while read a ; do cat $a ; done `);
-    nvme_ports=(`bscshowfctable |grep FCI | tail -n +4|sort -k 4 | sudo awk '{if ($6 == "NVME") print "|--"$2"--|--"$3"--|"$9}'`);
+    link_up=(`bsc-fc-showtable |grep FCI | tail -n +4|sort -k 4 | sudo awk '{if ($6 == "SCSI") {file="/sys/kernel/scst_tgt/targets/ocs_xe201/"$9"/link_up"; print file } }'|while read a ; do cat $a ; done `);
+    nvme_ports=(`bsc-fc-showtable |grep FCI | tail -n +4|sort -k 4 | sudo awk '{if ($6 == "NVME") print "|--"$2"--|--"$3"--|"$9}'`);
 
     echo " slot | port|  nvme pn               | link";
     echo "------+-----+------------------------+-----";
@@ -455,8 +523,8 @@ bsclistbroadcomports-links ()
 
 bsclistqlogicports-links ()
 {
-    link_up=(`bscshowfctable |grep FCI | tail -n +5| sudo awk '{if ($6 == "NVME") {file="/sys/class/fc_host/"$5"/port_state"; print file } }'|while read a ; do cat $a ; done `);
-    nvme_ports=(`bscshowfctable |grep FCI | tail -n +5| sudo awk '{if ($6 == "NVME") print "|--"$2"--|--"$3"--|"$7}'`);
+    link_up=(`bsc-fc-showtable |grep FCI | tail -n +5| sudo awk '{if ($6 == "NVME") {file="/sys/class/fc_host/"$5"/port_state"; print file } }'|while read a ; do cat $a ; done `);
+    nvme_ports=(`bsc-fc-showtable |grep FCI | tail -n +5| sudo awk '{if ($6 == "NVME") print "|--"$2"--|--"$3"--|"$7}'`);
 
     echo " slot | port|  nvme pn               | link";
     echo "------+-----+------------------------+-----";
@@ -500,7 +568,10 @@ alias dellnvme-list-fcports='bsclistfcports'
 alias dellnvme-list-controllers-node-a='nvme list-subsys| grep 904'
 alias dellnvme-list-controllers-node-b='nvme list-subsys| grep 984'
 
-alias bscshowfctable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
+alias bsc-fc-showtable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
+alias bsc-fc-showtable-nvme='bsc-fc-showtable | grep "NVME\|Slot Port\|---"'
+alias bsc-fc-showtable-scsi='bsc-fc-showtable | grep "SCSI\|Slot Port\|---"'
+
 alias bsclistqlaports='ls -l /sys/class/nvme_qla2xxx/'
 bsc-qla-enable-port ()
 {
@@ -536,9 +607,59 @@ bsclistfeatureflags ()
         awk '/\"name\"/{printf $0; getline; print $0 }' ${feature_flags_file}  | sed -e 's/\"\|\,\|\://g' -e 's/default_state\|name//g' | column -t | grep ${feature};
     fi;
 }
-alias corelistfeatureflags='bsclistfeatureflags';
+alias core-listfeatureflags='bsclistfeatureflags';
 
-corelist-fc-devices ()
+alias bsc-housemd='sudo /xtremapp/utils/housemd/housemd'
+
+
+bsc-toggle-tcp-port ()
+{
+    echo "sudo ip link set dev feData0 down";
+    echo "sudo ip link set dev feData0 up";
+}
+
+bsc-toggle-fc-port ()
+{
+    local host=${1};
+    local enable=${2};
+    local d="disable";
+    local r;
+
+    if [ -z "${host}" ] ; then 
+        echo "disable fc port : ${FUNC_NAME} <host#> 0";
+        echo "enable fc port : ${FUNC_NAME} <host#> 1";
+        return -1;
+    fi;
+
+    if ! [ -e /sys/class/fc_host/${host}/issue_lip ] ; then
+        echo "cannot find : /sys/class/fc_host/${host}/issue_lip";
+        return -1;
+    fi;
+
+    # if use did not specify enable/disable then find port state
+    if [ -z ${2} ] ; then
+        if [ 1 -eq $(cat /sys/class/fc_host/${host}/port_state | grep -i "linkdown" | wc -l) ] ; then
+            echo "${host} is down"
+            enable=1;
+        else
+            echo "${host} is up"
+            enable=0;
+        fi;
+    fi;
+
+    [ ${enable} -eq 1 ] && d="enable";
+    ask_user_default_no "${d} ${host}";
+    if [ $? -eq 0 ] ; then
+        return 0;
+    fi;
+
+    echo "echo ${enable} | sudo tee /sys/class/fc_host/${host}/issue_lip";
+    echo ${enable} | sudo tee /sys/class/fc_host/${host}/issue_lip;
+
+    return 0;
+}
+
+core-list-fc-devices ()
 {
     echo "ls -l /sys/class/fc_host";
     if [ -d /sys/class/fc_host ] ; then
@@ -561,15 +682,17 @@ corelist-fc-devices ()
         echo "NO!! fc devices found on pci bus";
     fi;
 }
-alias bsclist-fc-devices='corelist-fc-devices'
-alias dellnvme-list-fc-devices='corelist-fc-devices'
+alias bsclist-fc-devices='core-list-fc-devices'
+alias dellnvme-list-fc-devices='core-list-fc-devices'
 
-corelist-fc-devices-with-fcc-script ()
+core-list-fc-devices-with-fcc-script ()
 {
+    echo "sudo /working/cyc_host/cyc_bsc/scripts/fcc.sh";
+    echo "=============================================";
     sudo /working/cyc_host/cyc_bsc/scripts/fcc.sh
 }
 
-corelist-fc-devices-with-systool ()
+core-list-fc-devices-with-systool ()
 {
     for i in  /sys/class/fc_host/* ; do 
         systool -c fc_host -v `basename $i`
@@ -1807,9 +1930,10 @@ _dell_btest_size ()
     local size=${1};
     local duration=${2};
     local device=${3};
-    local device_list=( $(nvme list -o json | jq  -r ".Devices[].DevicePath") );
+    local -a device_list;
 
     if [ -z "${device}" ] ; then
+        device_list=( $(nvme list -o json | jq  -r ".Devices[].DevicePath") );
         echo "!!missing device!! try again with : ${device_list[@]}";
         complete -W "$(echo ${device_list[@]})" `echo ${dell_btest_aliases[@]}`
         return -1;
