@@ -3255,6 +3255,29 @@ dellclusterlgipget ()
     xxlabjungle cluster "name:${cluster}" | jq -r '.objects[].lgs[]';
 }
 
+dellclusterlabjungle ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
+    # xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
+
+    # num_of_lgs=$(xxlabjungle cluster "name:${cluster}" |  jq ".objects[0].lgs | length"
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
+    # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
+    echo -e "${GREEN}xxlabjungle cluster \"name:${cluster}\"${NC}";
+    ask_user_default_yes "continue";
+    if [ $? -eq 0 ] ; then return 0 ; fi;
+    xxlabjungle cluster "name:${cluster}" | less;
+}
 ssh2lgofcluster ()
 {
     local cluster=${1};
