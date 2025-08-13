@@ -1067,7 +1067,7 @@ _dellclusterlistuser ()
     /home/public/scripts/xpool_trident/prd/xpool list -u ${user} | tee ~/docs/dell-cluster-list-${user}.txt;
 
     if [[ "${user}" == "y_cohen" ]] ; then
-        cat ~/docs/dell-cluster-list-y_cohen.txt |sed '1,7{/.*/d}' | sed -n '/^[0123456789]/p' | awk '{print $2}' > ~/.dell_leased_clusters
+        cat ~/docs/dell-cluster-list-y_cohen.txt |sed '1,7{/.*/d}' | sed -n '/^[0123456789]/p' | awk '{print $2}' > ${dell_leased_clusters};
     fi;
 }
 
@@ -1105,7 +1105,7 @@ dellclusterleaseRelease ()
     local cluster=${1};
 
     if [ -z "${cluster}" ] ; then 
-        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        cluster="$(printf "%s\n" $(cat ${dell_leased_clusters}) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
         if [[ -z "${cluster}" ]] ; then
             cluster=$(_dellclusterget);
         fi;
@@ -1121,8 +1121,8 @@ dellclusterleaseRelease ()
     ask_user_default_no "are you sure ? ";
     [[ $? -eq 0 ]] && return;
 
-    if [[ $(grep ${cluster} ~/.dell_leased_clusters | wc -l) -gt 0 ]] ; then
-        sed -i "/${cluster}/d" ~/.dell_leased_clusters;
+    if [[ $(grep ${cluster} ${dell_leased_clusters} | wc -l) -gt 0 ]] ; then
+        sed -i "/${cluster}/d" ${dell_leased_clusters};
     fi;
 
     /home/public/scripts/xpool_trident/prd/xpool release ${cluster};
@@ -1147,7 +1147,7 @@ _dellclusterlease ()
     echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
     /home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster};
     echo "/home/public/scripts/xpool_trident/prd/xpool lease ${lease_time} -c ${cluster}";
-    echo ${cluster} >> ~/.dell_leased_clusters
+    echo ${cluster} >> ${dell_leased_clusters};
 }
 
 dellclusterleaseUpdateUser ()
@@ -1696,7 +1696,7 @@ dellclusterleaselist ()
     /home/public/scripts/xpool_trident/prd/xpool list -json -u y_cohen  |
         sed 's/+--/#/g' | 
         awk 'BEGIN{RS="#"} {if (NR == 4) print $0 }' | 
-        awk '{getline ; print $0 } ' | jq  -r ".[].nodes" | sed -e 's/\[//g' -e 's/\]//g' -e 's/\"//g' -e 's/-a//g' -e 's/-b//g' -e 's/,//g' |sort -u
+        awk '{getline ; print $0 } ' | jq  -r ".[].nodes" | sed -e 's/\[//g' -e 's/\]//g' -e 's/\"//g' -e 's/-a//g' -e 's/-b//g' -e 's/,//g' |sort -u | sed 's/ //g' | tee ${dell_leased_clusters};
 }
 
 dellclusterleaseextend () 
@@ -1977,7 +1977,7 @@ ssh2coreleased ()
     local node=BOTH;
 
     if [ -z "${cluster}" ] ; then 
-        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        cluster="$(printf "%s\n" $(cat ${dell_leased_clusters}) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
         if [ -z "${cluster}" ] ; then
             return -1;
         fi;
@@ -2002,7 +2002,7 @@ ssh2bscleased ()
     local node=BOTH;
 
     if [ -z "${cluster}" ] ; then 
-        cluster="$(printf "%s\n" $(cat ~/.dell_leased_clusters) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        cluster="$(printf "%s\n" $(cat ${dell_leased_clusters}) | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
         if [ -z "${cluster}" ] ; then
             return -1;
         fi;
@@ -2021,8 +2021,8 @@ ssh2bscleased ()
     xxbsc ${cluster};
 }
 
-if [[ -e ~/.dell_leased_clusters ]] ; then
-    complete -W "$(cat ~/.dell_leased_clusters)" ssh2coreleased ssh2bscleased
+if [[ -e ${dell_leased_clusters} ]] ; then
+    complete -W "$(cat ${dell_leased_clusters})" ssh2coreleased ssh2bscleased
 fi;
 
 
