@@ -902,12 +902,18 @@ dellcyclonebuild ()
 
         if [[ -n "${prune_cmd}" ]] ; then
             _dellcyclonebackupuserchoices backup;
+            echo -e "${PURPLE}=========================${NC}";
+            echo -e "${PURPLE}eval ${prune_cmd}${NC}";
+            echo -e "${PURPLE}=========================${NC}";
             eval ${prune_cmd};
             _dellcyclonebackupuserchoices restore;
         fi;
 
         start_time=$SECONDS;
         # build_cmd="time ${build_cmd}";
+        echo -e "${PURPLE}=========================${NC}";
+        echo -e "${PURPLE}eval ${build_cmd}${NC}";
+        echo -e "${PURPLE}=========================${NC}";
         eval ${build_cmd} | tee dellcyclonebuild.log;
         # $(set -x; ls -ltr source/cyc_core/cyc_platform/obj_Release/main/xtremapp);
         end_time=$SECONDS;
@@ -937,9 +943,15 @@ dellcyclonebuild ()
         if [ $r -eq 1 ] ; then
             if [[ -n "${prune_cmd}" && -z "${build_cmd}" ]] ; then
                 _dellcyclonebackupuserchoices backup;
+                echo -e "${PURPLE}=========================${NC}";
+                echo -e "${PURPLE}eval ${prune_cmd}${NC}";
+                echo -e "${PURPLE}=========================${NC}";
                 eval ${prune_cmd};
                 _dellcyclonebackupuserchoices restore;
             fi;
+            echo -e "${PURPLE}=========================${NC}";
+            echo -e "${PURPLE}eval ${build_third_party_cmd}${NC}";
+            echo -e "${PURPLE}=========================${NC}";
             eval ${build_third_party_cmd};
         fi;
     fi;
