@@ -220,12 +220,16 @@ gitcommitmetadata ()
 
 gitrebaseremotebranch ()
 {
+    local remote_branch=${1};
+
     ask_user_default_no "git fetch before we start ? ";
     if [ $? -eq 1 ] ; then
         git fetch origin;
     fi;
 
-    branch="$(git br | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    if [[ -z "${remote_branch}" ]] ; then
+        branch="$(git br | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+    fi;
 
     if [ -z "${branch}" ] ; then
         return;
