@@ -2430,6 +2430,7 @@ dellclusterinstall ()
     local reinit_choices=;
     local add_feature=;
     local repeat_last_choice=0;
+    local warn_user_oboe_support_only_unified=false;
 
     if [ -z "${cluster}" ] ; then 
         cluster=$(_dellclusterget);
@@ -2497,6 +2498,9 @@ dellclusterinstall ()
 
             if [[ ${reinit_choices} =~ block ]] ; then
                 reinit_cmd+=" sys_mode=block";
+                if [[ ${cluster} =~ "OO-" ]] || [[ ${cluster} =~ "OD-" ]] ; then
+                    warn_user_oboe_support_only_unified=true;
+                fi;
             else
                 reinit_cmd+=" sys_mode=unified";
             fi;
@@ -2534,6 +2538,14 @@ dellclusterinstall ()
     if [[ "${YONI_CLUSTER}" != "${cluster}" ]] ; then
         echo -e "${RED}cannot install ${clutster} while CYC_CONFIG points to ${YONI_CLUSTER}${NC}";
         return -1;
+    fi;
+
+    if [[ ${warn_user_oboe_support_only_unified} == true ]] ; then
+        echo "${cluster} is oboe and does not support block mode";
+        ask_user_default_no "continue ";
+        if [ $? -eq 0 ] ; then
+            return;
+        fi;
     fi;
 
     if [ ${repeat_last_choice} -eq 0 ] ; then
