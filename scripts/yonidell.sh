@@ -257,6 +257,7 @@ coregetversion ()
     grep program_name ${version_file};
     grep branch ${version_file};
     grep -w flavor ${version_file};
+    echo "ibid : $(grep build_version_build_id ${version_file} | awk '{print $2}')";
     echo "--------------------------------------------"
     echo "nt_nvmeof_frontend $(grep -A 2 nt_nvmeof_frontend ${version_file} | awk '/hash/{print $2}')";
     echo "pnvmet $(grep -A 2 pnvmet ${version_file} | awk '/hash/{print $2}' )";
