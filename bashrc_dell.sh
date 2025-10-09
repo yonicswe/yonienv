@@ -411,6 +411,7 @@ dellcyclonetagsupdate ()
         echo 'includeTagdir+=(cyc_app/cyclone/datapath_api/)' >> ${dst_folder}/tagme.sh
         echo 'includeTagdir+=(cyc_app/cyclone/include/)' >> ${dst_folder}/tagme.sh
         echo 'includeTagdir+=(cyc_app/cyclone/system/)' >> ${dst_folder}/tagme.sh
+        echo 'includeTagdir+=(cyc_app/cyclone/LayeredService/)' >> ${dst_folder}/tagme.sh
         #\cp tags.vim ${dst_folder};
     fi;
     ######################################################################################
