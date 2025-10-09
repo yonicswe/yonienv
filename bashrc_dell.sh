@@ -860,7 +860,7 @@ dellcyclonebuild ()
             build_cmd="nice -20 make cyc_core force=yes flavor=${flavor}";
 
             if [[ ${build_choices[@]} =~ cache ]] ; then
-                build_cmd+=" acache=no mcache=no dcache=no";
+                build_cmd+=" acache=no mcache=no dcache=no auto_checkout=yes";
             fi;
 
             if [[ ${build_choices[@]} =~ verbose ]] ; then
