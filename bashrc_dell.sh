@@ -316,6 +316,9 @@ dellpnvmettagsupdate ()
     if [[ ${build_choices[@]} =~ qlogic ]] ; then
         #echo -e "${RED}missing qla folder${NC}";
         echo -e "${RED}qlogic is built when setting third-party in dellcyclonetagsupdate${NC}";
+        dst_folder=source/third_party;
+        echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
+        echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
     fi;
 
     tttt;
