@@ -28,8 +28,10 @@ pu ()
    p=$1
 
    if [ -n "$p" ] ; then 
-      cd "$p"
-   fi 
+      if [ -e "$(readlink -f ${p})" ] ; then 
+         cd "$p"
+      fi; 
+   fi;
    pushd $(pwd) 1>/dev/null
    __pd
    pdf_complete
