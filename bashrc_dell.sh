@@ -3439,6 +3439,8 @@ dellclusterowner ()
         fi;
     fi;
 
+    _add_cluster_to_list ${cluster};
+
     2>/dev/null /home/build/xscripts/xxutil.py labjungle cluster "name:${cluster}" > x.tmp
     current_user=$(cat x.tmp | jq -r ".objects[].lease.user.username" | xargs);
     if [ -z "${current_user}" ]  ; then
@@ -3474,6 +3476,8 @@ dellclusterinfo ()
             return -1;
         fi;
     fi;
+
+    _add_cluster_to_list ${cluster};
 
     print_underline_size "_" 80	 
     echo "/home/public/devutils/bin/swarm -ping ${cluster}";
