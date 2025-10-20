@@ -6,7 +6,6 @@ alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 declare -A user_to_devvm;
 user_to_devvm["amit"]="10.227.212.159"
 user_to_devvm["elad"]="10.227.204.131"
-user_to_devvm["irit"]="10.207.132.158"
 user_to_devvm["dord"]="10.207.132.21" 
 user_to_devvm["yoni1"]="10.227.212.155"
 user_to_devvm["yoni2"]="10.227.212.133"
@@ -380,6 +379,7 @@ dellcyclonetagsupdate ()
         dst_folder=source/cyc_core;
         #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         \cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
+        echo 'includeTagdir+=(cyc_platform/src/include/)' >> ${dst_folder}/tagme.sh
 
         echo "cs a ${cyclone_folder}/${dst_folder}/cscope.out" >> tags.vim;
         echo "set tags+=${cyclone_folder}/${dst_folder}/tags" >> tags.vim;
@@ -392,7 +392,6 @@ dellcyclonetagsupdate ()
         #echo -e "${BLUE}Tagging ${dst_folder}${NC}";
         #\cp ${yonienv}/dell-tags/tagme-cyc_core.sh ${dst_folder}/tagme.sh;
         echo 'includeTagdir+=(cyc_platform/src/xios/)' >> ${dst_folder}/tagme.sh
-        echo 'includeTagdir+=(cyc_platform/src/include/)' >> ${dst_folder}/tagme.sh
         #\cp tags.vim ${dst_folder};
     fi;
     ######################################################################################
