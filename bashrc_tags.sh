@@ -99,12 +99,12 @@ tagme_base ()
 
         #echo "find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files" 
         #find ${includeTagdir[@]} -type f -regex ${filetypes} -exec readlink -f {} \; > cscope.files;
-        echo "fd --full-path ${includeTagdir[@]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f > cscope.files";
-        fd --full-path ${includeTagdir[0]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f > cscope.files;
+        echo "fd --full-path ${includeTagdir[@]} -IH -t f -e c -e cc -e h -e hh -e cpp -e cxx -x readlink -f > cscope.files";
+              fd --full-path ${includeTagdir[0]} -IH -t f -e c -e cc -e h -e hh -e cpp -e cxx -x readlink -f > cscope.files;
         if (( ${#includeTagdir[@]} > 1 )) ; then
             for (( d=1 ; d < ${#includeTagdir[@]} ; d++ )); do
-                echo "fd --full-path ${includeTagdir[$d]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f >> cscope.files";
-                fd --full-path ${includeTagdir[$d]} -t f -e c -e cc -e h -e hh -e cpp -x readlink -f >> cscope.files;
+                echo "fd --full-path ${includeTagdir[$d]} -IH -t f -e c -e cc -e h -e hh -e cpp -e cxx -x readlink -f >> cscope.files";
+                      fd --full-path ${includeTagdir[$d]} -IH -t f -e c -e cc -e h -e hh -e cpp -e cxx -x readlink -f >> cscope.files;
             done
         fi;
 
