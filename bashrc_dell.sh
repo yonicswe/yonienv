@@ -82,6 +82,7 @@ dell_cluster_list_file=${yonienv}/bashrc_dell_cluster_list_file.sh;
 alias delleditclusterlist="v ${dell_clusters_file}";
 export dell_leased_clusters=~/.dell_leased_clusters
 alias delleditleasedclusters="v ${dell_leased_clusters}"
+alias dellleasedclusters="cat ${dell_leased_clusters}"
 # trident_cluster_list=(RT-G0082 RT-D3082 WX-D0902 WX-D0910 WX-G4033 WX-D0909 WX-D0733 WX-G4011 WX-D0896 WX-D1116 WX-D1111 WX-D1126 RT-G0015 RT-G0017 WK-D0675 WK-D0677 WK-D0666 WX-D1140 RT-G0060 RT-G0068 RT-G0069 RT-G0074 RT-G0072 RT-D0196 RT-D0042 RT-D0064 RT-G0037 WX-H7060 WK-D0023 );
 trident_cluster_list=( $(cat ${dell_clusters_file}) );
 # trident_cluster_list_nodes=$(for c in ${trident_cluster_list[@]} ; do echo $(echo $c|awk '{print tolower($0)}' ) $c $c-A $c-B $c-a $c-b ; done)
