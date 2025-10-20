@@ -1094,12 +1094,14 @@ dellclusterlist-all ()
     /home/public/scripts/xpool_trident/prd/xpool list -a -x -f;
 }
 
-alias dellclusterlist-yoni='          _dellclusterlist ~/docs/dell-cluster-list-yoni.txt'
+#alias dellclusterlist-yoni='          _dellclusterlist ~/docs/dell-cluster-list-yoni.txt'
+alias dellclusterlist-yoni='          _dellclusterlistuser y_cohen'
 alias dellclusterlist-user='          _dellclusterlistuser'
 alias dellclusterlist-trident='       _dellclusterlist ~/docs/dell-cluster-list-trident.txt         Trident-kernel-IL'
 alias dellclusterlist-pm-il='         _dellclusterlist ~/docs/dell-cluster-list-pm.txt              PM-IL'
 alias dellclusterlist-platformio-fe=' _dellclusterlist ~/docs/dell-cluster-list-fe.txt              PlatformIO-FE'
 alias dellclusterlist-oboe='dellclusterlist-platformio-fe'
+alias dellclusterlist-oboe-fe='        _dellclusterlist ~/docs/dell-cluster-list-oboe-fe            PlatformIO-FE OBOE'
 alias dellclusterlist-platformio-be=' _dellclusterlist ~/docs/dell-cluster-list-be.txt              PlatformIO-BE'
 alias dellclusterlist-xblock='        _dellclusterlist ~/docs/dell-cluster-list-xblock.txt          Xblock-NDU'
 alias dellclusterlist-shared='        _dellclusterlist ~/docs/dell-cluster-list-shared.txt          Core-Dev-Shared'
