@@ -537,6 +537,7 @@
 #   trackmasternext = branch --set-upstream-to=origin/master_next
 #   tm = trackmaster
 #   tmn = trackmasternext
+    trackremotebranch = !git_trackremotebranch.sh
 
 # ───────u──────────────────────────────────────────────────────────────────────
 
