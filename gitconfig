@@ -477,6 +477,7 @@
     smgrep = grep --recurse-submodules
     smupdate = submodule update
     smupdateinit = submodule update --init
+    smupdateinitallsubmodules = submodule update --init --recursive
     smclean = "!f(){\
             git clean -Xdff .;\
             git submodule foreach git clean -Xdff .;\
