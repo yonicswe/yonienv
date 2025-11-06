@@ -153,6 +153,7 @@
     checkoutremotebranch = !git_checkoutremotebranch.sh
     sw = c -
     switchremotebranch = !git_checkoutremotebranch.sh
+    swbremote = !git_checkoutremotebranch.sh
     checkoutbranch = !git_checkoutbranch.sh
     switchbranch = !git_checkoutbranch.sh
     swb = switchbranch
@@ -511,8 +512,6 @@
 #          git smupdate $s;\
 #       done; }; f"
 
-    sm-update-all = submodule update --recursive
-    sm-updateinit-all = submodule update --init --recursive
 #   cleanuntracked = clean -df	
 
 #     branch-upstream-kernel-rdma-next-mlx = "!f() { git fetch origin rdma-next-mlx ; git c -b $1@rdma-next-mlx FETCH_HEAD ; }; f"
