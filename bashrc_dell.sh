@@ -10,6 +10,8 @@ user_to_devvm["dord"]="10.207.132.21"
 user_to_devvm["yoni1"]="10.227.212.155"
 user_to_devvm["yoni2"]="10.227.212.133"
 user_to_devvm["brown"]="10.244.126.135"
+user_to_devvm["yonic"]="10.227.209.251"
+user_to_devvm["chuck"]="10.244.232.75"
 #complete -W "amit elad irit dord yoni1 yoni2" ssh2devvm ssh2devvmsetup
 complete -W "$(echo ${!user_to_devvm[@]})" ssh2devvm ssh2devvmsetup
 
@@ -1101,6 +1103,7 @@ alias dellclusterlist-user='          _dellclusterlistuser'
 alias dellclusterlist-trident='       _dellclusterlist ~/docs/dell-cluster-list-trident.txt         Trident-kernel-IL'
 alias dellclusterlist-pm-il='         _dellclusterlist ~/docs/dell-cluster-list-pm.txt              PM-IL'
 alias dellclusterlist-platformio-fe=' _dellclusterlist ~/docs/dell-cluster-list-fe.txt              PlatformIO-FE'
+alias dellclusterlist-platform-fe-nvme-stability=' _dellclusterlist ~/docs/dell-cluster-list-fe-nvme-stabiliy.txt              Platform-FE-NVME-Stability'
 alias dellclusterlist-oboe='dellclusterlist-platformio-fe'
 alias dellclusterlist-oboe-fe='        _dellclusterlist ~/docs/dell-cluster-list-oboe-fe            PlatformIO-FE OBOE'
 alias dellclusterlist-platformio-be=' _dellclusterlist ~/docs/dell-cluster-list-be.txt              PlatformIO-BE'
@@ -3315,24 +3318,16 @@ ssh2lgofcluster ()
     local use_backup=0;
     local lg;
 
-    #if [ -e ${delllastusedlgbkpfile} ] ; then
-        #lg=$(cat ${delllastusedlgbkpfile});
-        #ask_user_default_yes "use ${lg} again ";
-        #if [ $? -eq 0 ] ; then
-            #lg=;
-        #else
-            #ssh2lg ${lg};
-            #return 0;
-        #fi;
-    #fi;
-
     if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
             return -1;
         fi;
     fi;
+
+    _add_cluster_to_list ${cluster};
+
+    echo ${cluster} > ~/.dellssh2cluster.bkp
 
     echo "using ${cluster}"
     lg_arr=( $(dellclusterlgipget ${cluster}) );
