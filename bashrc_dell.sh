@@ -3836,6 +3836,31 @@ alias dellcdvdeldadz='dellcdvduser eldadz'
 
 alias dellcd-qa-tests='cd /home/trqa-dev/tests/connectivity_and_protocols/nvmeof'
 
+dellpnvmetfolderset ()
+{
+    local p=$(pwd);
+    ask_user_default_yes "set pnvmet folder to : ${p}";
+    [ $? -eq 0 ] && return;
+
+    export pnvmet_folder=${p};
+
+    if [ -n "${cyclone_folder}" ] && [ -e "${cyclone_folder}/.dellclusterruntimeenvbkpfile" ] ; then
+        if [ $(grep pnvmet_folder ${cyclone_folder}/.dellclusterruntimeenvbkpfile | wc -l ) -gt 0 ] ; then
+            p=$(echo $pnvmet_folder |sed 's/\//\\\//g');
+            sed -i "s/pnvmet_folder=.*/pnvmet_folder=${p}/g" ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+        else
+            echo "export pnvmet_folder=${pnvmet_folder}" >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
+        fi;
+
+        if [ $(grep pnvmet_folder ${dellclusterglobalruntimeenvbkpfile} | wc -l ) -gt 0 ] ; then
+            p=$(echo $pnvmet_folder |sed 's/\//\\\//g');
+            sed -i "s/pnvmet_folder=.*/pnvmet_folder=${p}/g" ${dellclusterglobalruntimeenvbkpfile};
+        else
+            echo "export pnvmet_folder=${pnvmet_folder}" >> ${dellclusterglobalruntimeenvbkpfile};
+        fi;
+    fi;
+}
+
 dellcyclonekernelshaupdate ()
 {
     local sha=${1};
@@ -3877,27 +3902,8 @@ dellcyclonekernelshaupdate ()
         sha=$(cat .git/refs/heads/$(git bb));
         echo -e "you did not supply commit sha. using HEAD \033[1;35m${sha}\033[0m";
         #dellcyclonebuildhistorylog $(pwd) $(git bb) $(git h);
-        export pnvmet_folder=$(pwd);
-        if [[ -n "${cyclone_folder}/.dellclusterruntimeenvbkpfile" ]] ; then
-            if [ $(grep pnvmet_folder ${cyclone_folder}/.dellclusterruntimeenvbkpfile | wc -l ) -gt 0 ] ; then
-                p=$(echo $pnvmet_folder |sed 's/\//\\\//g');
-                sed -i "s/pnvmet_folder=.*/pnvmet_folder=${p}/g" ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
-            else
-                echo "export pnvmet_folder=${pnvmet_folder}" >> ${cyclone_folder}/.dellclusterruntimeenvbkpfile;
-            fi;
 
-            #echo "updated pnvmet_folder in ${cyclone_folder}/.dellclusterruntimeenvbkpfile";
-
-            #ask_user_default_yes "also update global runtime env file ?"
-            #if [ $? -eq 1 ] ; then
-                if [ $(grep pnvmet_folder ${dellclusterglobalruntimeenvbkpfile} | wc -l ) -gt 0 ] ; then
-                    p=$(echo $pnvmet_folder |sed 's/\//\\\//g');
-                    sed -i "s/pnvmet_folder=.*/pnvmet_folder=${p}/g" ${dellclusterglobalruntimeenvbkpfile};
-                else
-                    echo "export pnvmet_folder=${pnvmet_folder}" >> ${dellclusterglobalruntimeenvbkpfile};
-                fi;
-            #fi;
-        fi;
+        dellpnvmetfolderset;
     fi
     
     echo -e "update ${RED}${mfile}${NC} with ${GREEN}${sha}${NC}";
