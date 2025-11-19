@@ -218,27 +218,60 @@ dellcyclonedevelreset ()
     git c . 
 }
 
-dellcyclonedevelenvsetup ()
+dellcyclonechekcout ()
 {
     local pdr_folder_name=${1:-cyclone};
+    local branch=${2:-pub/int-pl};
+    local update_all=0;
 
 	echo "git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git ${pdr_folder_name}";
-    ask_user_default_no "continue";
+    ask_user_default_no "continue with ${pdr_folder_name}";
+    if [ $? -eq 0 ] ; then return; fi;
+
+    ask_user_default_yes "checkout ${branch} ?";
+    if [ $? -eq 0 ] ; then
+        read  -p "which branch to checkout ? : " branch;
+    fi;
+
+    ask_user_default_no "update all submodules ? ";
+    if [ $? -eq 1 ] ; then
+        update_all=1;
+    fi;
+
+    echo "about to do the following : ";
+    echo "===============================";
+    echo "git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git ${pdr_folder_name}";
+    echo "cd ${pdr_folder_name}";
+    echo "git checkout -b ${branch} origin/${branch}";
+
+    if [ ${update_all} -eq 1 ] ; then
+            echo "git smupdateinitallsubmodules";
+    else
+       #echo "git submodule update --init source/cyc_core";
+       echo "git submodule update --init source/nt-nvmeof-frontend";
+    fi;
+
+    ask_user_default_no "continue ?"
     if [ $? -eq 0 ] ; then return; fi;
 
 	git clone git@eos2git.cec.lab.emc.com:cyclone/cyclone.git ${pdr_folder_name};
 	cd ${pdr_folder_name};
-	git submodule update --init source/cyc_core
-	git submodule update --init source/devops-scripts
-	git submodule update --init source/bedrock
-	git submodule update --init source/stack
-	git submodule update --init source/cyclone-controlpath
-	git submodule update --init source/nt-nvmeof-frontend
-	git submodule update --init source/third-party
-	git c int/victory-plus/main
-	git submodule update
-	git fetch origin
-	git reset --hard origin/int/foothills-prime/main-pl
+    git checkout -b ${branch} origin/${branch};
+
+    if [ ${update_all} -eq 1 ] ; then
+        ask_user_default_no "about to update all submodules which will take a while. continue ?";
+        if [ $? -eq 1 ] ; then
+            git smupdateinitallsubmodules;
+        else
+            update_all=0;
+        fi;
+    fi;
+
+    if [ ${update_all} -eq 0 ] ; then
+        #git submodule update --init source/cyc_core
+        git submodule update --init source/nt-nvmeof-frontend
+    fi;
+
 }
 
 dellpnvmettagsupdate ()
@@ -4352,7 +4385,13 @@ alias delldc-nt-node-b-r='_delldc-node-x node_b "SUB_COMPONENT=nt -r"'
 
 delldc-list-files ()
 {
-    echo "TIMELINE"
+    echo "on the root directory of the DC"
+    echo "<test name>.log.core.debug"
+    echo "<test name>.log.debug: e.g CP_HA_MSTP_TEST-wk-d5206-251113-082750.log.core.debug"
+    echo;
+    echo "servie-data/triage_analysis/TIMELINE"
+    echo "service-data/node_a/command_output/housemd";
+    echo "==========================================";
     echo "show_volumes_print_type__csv_.txt"
     echo "show_lun_mappings_print_type__csv_.txt"
     echo "show_initiator_groups_print_type__csv_.txt – Note that “nvme_maps” is always 0 even if there are NVME mappings, from what I’ve seen"
