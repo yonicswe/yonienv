@@ -483,9 +483,9 @@
             git clean -Xdff .;\
             git submodule foreach git clean -Xdff .;\
             }; f"
-    # smstatus = !git-smstatus.sh
-    # smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
-    # smstatus = "!f()  { git sm foreach git hh; }; f"
+#   smstatus = !git-smstatus.sh
+#   smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
+#   smstatus = "!f()  { git sm foreach git hh; }; f"
 #   smstatus = "!f() {\
 #       for s in source/* ; do\
 #       cd $s ;\
