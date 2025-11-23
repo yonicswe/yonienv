@@ -3426,6 +3426,242 @@ dellclusterguiipget ()
 
 }
  
+dellcyclonegrepconfig ()
+{
+    local p=${1:-pdu};
+
+    _dellclusterruntimeenvvalidate;
+    [ $? -ne 0 ] && return;
+
+    grep -i $p ${CYC_CONFIG};
+}
+
+alias delleditclusterconfig='v ${CYC_CONFIG}'
+alias delleditlglist="v ${lg_list_file}";
+lg_list_file=~/yonienv/bashrc_dell_lg_list_file
+lg_list=( $(cat ${lg_list_file} ));
+complete -W "$(echo ${lg_list[@]})" ssh2lg;
+
+dellclusteraddtolist ()
+{ 
+    local cluster=${1};
+
+    if [[ -z "${cluster}" ]] ; then
+        return -1;
+    fi;
+
+     _add_cluster_to_list ${cluster};
+}
+
+dellclusterping ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    _dellclusterlistaddcluster ${cluster};
+
+    echo "swarm ${cluster} -ping --showallips";
+    swarm  ${cluster} -ping --showallips;
+}
+
+dellclusteripget ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    echo "swarm --showipinfo ${cluster}";
+    swarm --showipinfo ${cluster};
+}
+
+dellclusterlgipget ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
+    # xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
+
+    # num_of_lgs=$(xxlabjungle cluster "name:${cluster}" |  jq ".objects[0].lgs | length"
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
+    # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
+    xxlabjungle cluster "name:${cluster}" | jq -r '.objects[].lgs[]';
+}
+
+dellclusterlabjungle ()
+{
+    local cluster=${1};
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
+    # xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
+
+    # num_of_lgs=$(xxlabjungle cluster "name:${cluster}" |  jq ".objects[0].lgs | length"
+    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
+    # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
+    echo -e "${GREEN}xxlabjungle cluster \"name:${cluster}\"${NC}";
+    ask_user_default_yes "continue";
+    if [ $? -eq 0 ] ; then return 0 ; fi;
+    xxlabjungle cluster "name:${cluster}" | less;
+}
+
+ssh2lgofcluster ()
+{
+    local cluster=${1};
+    local use_backup=0;
+    local lg;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
+    fi;
+
+    _add_cluster_to_list ${cluster};
+
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+
+    echo "using ${cluster}"
+    lg_arr=( $(dellclusterlgipget ${cluster}) );
+
+    #echo "lg_arr: ${lg_arr[@]}";
+
+    if [[ ${#lg_arr[@]} -gt 1 ]] ; then
+        echo "more than lg : ${lg_arr[@]}";
+        lg="$(printf "%s\n" ${lg_arr[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    else
+        lg=${lg_arr[0]};
+    fi;
+
+    if [[ -z "${lg}" ]] ; then
+        echo -e "${RED}must specify lg name${NC}";
+        return -1;
+    fi;
+    
+    ssh2lg ${lg};
+    return 0;
+}
+
+dellclusterguiipget ()
+{
+    local cluster=${1};
+    # local config_file_folder=/home/y_cohen/devel/cyclone/source/cyc_core/cyc_platform/src/package/cyc_configs;
+    local config_file_folder=${cyc_configs_folder};
+    local config_file_prefix="cyc-cfg.txt.";
+    local config_file_postfix="-BM";
+    local config_file=;
+
+    if [[ -z ${cluster} ]] ; then
+        cluster=$(_dellclusterget);
+    fi
+
+    echo "${FUNCNAME} : cluster : ${cluster}";
+     
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}');
+
+    config_file=${config_file_folder}/${config_file_prefix}${cluster}${config_file_postfix};
+
+    if [[ -e ${config_file} ]] ; then
+        echo "grep cluster_ip ${config_file}";
+        grep cluster_ip ${config_file};
+    else
+        echo "not found : ${config_file}";
+    fi
+
+	if ! [ -e /home/public/devutils/bin/swarm ] ; then 
+		echo "/home/public/devutils/bin/swarm not found";
+		return;
+	fi;
+
+    ask_user_default_no "use swarm to list all IPs ?";
+    if [[ $? -eq 0 ]] ; then
+        return;
+    fi;
+
+    print_underline_size "_" 80	 
+    echo "/home/public/devutils/bin/swarm -ping -showall ${cluster}";
+    print_underline_size "_" 80	 
+    /home/public/devutils/bin/swarm -ping -showall ${cluster};
+
+}
+ 
+_ssh2lg_with_tmux ()
+{
+    local lg=${1};
+    local win_number=${2};
+    local session_name=lgs;
+
+
+
+    if tmux has-session -t "${session_name}" 2>/dev/null; then
+        tmux new-window -t "${session_name}":${win_number} -n "${lg}" "ssh2lg ${lg}"
+    fi;
+}
+
+_ssh2lg_nopass ()
+{
+    local lg_ip_addr=${1};
+
+    yelp "lg_ip_addr=${lg_ip_addr}";
+
+    sshpass -p Password123! ssh -o 'PubkeyAuthentication no' -o LogLevel=ERROR -F /dev/null -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null  root@${lg_ip_addr};
+}
+
+_ssh2lg_with_tmux ()
+{
+    local lg=${1};
+    local session_name=lgs;
+
+    if tmux has-session -t "${session_name}" 2>/dev/null; then
+        tmux new-window -t "${session_name}" -n "${lg}";
+        tmux send-keys -t "${session_name}:${lg}" "y" C-m;
+        tmux send-keys -t "${session_name}:${lg}" "_ssh2lg_nopass ${lg}" C-m;
+    else
+        tmux new-session -d -s "${session_name}" -n "${lg}";
+        tmux send-keys -t "${session_name}:${lg}" "y" C-m;
+        tmux send-keys -t "${session_name}:${lg}" "_ssh2lg_nopass ${lg}" C-m;
+    fi;
+}
+
+ssh2lgs ()
+{
+    local cluster=${1}; 
+    local lg=;
+
+    lg_arr=( $(dellclusterlgipget ${cluster}) );
+    for lg in ${lg_arr[@]} ; do
+        _ssh2lg_with_tmux  ${lg};
+    done;
+}
+
 dellclustereditcycconfig ()
 {
     _dellclusterruntimeenvvalidate
@@ -4408,6 +4644,11 @@ delldc-list-files ()
     echo "Show_target_port_groups "
     echo "Show_scsi_registrations – This has an entry for every volume regardless of whether it has a registration or not.  There is an NVME version too."
     echo "Show_scsi_reservations "
+}
+
+delldc-xtrace-morty-datacollect ()
+{
+    echo "on the service-data folder invoke : morty_datacollect"
 }
 
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
