@@ -3651,10 +3651,33 @@ ssh2lgs ()
     local cluster=${1}; 
     local lg=;
 
+
+
+    if tmux has-session -t "lgs" 2>/dev/null; then
+        echo -e "Session \'lgs\' already exists. Attaching..."
+        tmux attach -t "lgs" 
+        return;
+    fi;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_getlastusedcluster);
+        if [ -z "${cluster}" ] ; then
+            return -1;
+        fi;
+    fi;
+
+    cluster=$(echo ${cluster} | awk '{print toupper($0)}' )
+
+    _add_cluster_to_list ${cluster};
+
+    echo ${cluster} > ~/.dellssh2cluster.bkp
+
     lg_arr=( $(dellclusterlgipget ${cluster}) );
     for lg in ${lg_arr[@]} ; do
         _ssh2lg_with_tmux  ${lg};
     done;
+
+    tmux attach -t "lgs" 
 }
 
 dellclustereditcycconfig ()
