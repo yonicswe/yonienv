@@ -4,13 +4,8 @@ alias editbashdell='v ${yonienv}/bashrc_dell.sh'
 
 
 declare -A user_to_devvm;
-user_to_devvm["amit"]="10.227.212.159"
-user_to_devvm["elad"]="10.227.204.131"
-user_to_devvm["dord"]="10.207.132.21" 
-user_to_devvm["yoni1"]="10.227.212.155"
-user_to_devvm["yoni2"]="10.227.212.133"
-user_to_devvm["brown"]="10.244.126.135"
 user_to_devvm["yonic"]="10.227.209.251"
+user_to_devvm["yonic2"]="10.227.227.201"
 user_to_devvm["chuck"]="10.244.232.75"
 #complete -W "amit elad irit dord yoni1 yoni2" ssh2devvm ssh2devvmsetup
 complete -W "$(echo ${!user_to_devvm[@]})" ssh2devvm ssh2devvmsetup
