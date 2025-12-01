@@ -257,7 +257,9 @@ coregetversion ()
     grep program_name ${version_file};
     grep branch ${version_file};
     grep -w flavor ${version_file};
-    echo "ibid : $(grep build_version_build_id ${version_file} | awk '{print $2}')";
+    echo -n "ibid : $(grep build_version_build_id ${version_file} | awk '{print $2}')";
+    echo -n " ($(grep build_version_version ${version_file} | awk '{print $2}')";
+    echo " $(grep build_version_date_time ${version_file} | sed -n "s/.*'\(.*\)'.*/\1/p"))";
     echo "--------------------------------------------"
     echo "nt_nvmeof_frontend $(grep -A 2 nt_nvmeof_frontend ${version_file} | awk '/hash/{print $2}')";
     echo "pnvmet $(grep -A 2 pnvmet ${version_file} | awk '/hash/{print $2}' )";
@@ -834,6 +836,7 @@ alias journal-grep-pnvmet-start='journalkernel | grep --color "nvmet_power.*driv
 alias journal-grep-nt-set-active='journalnt | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
 alias journal-grep-nt-add-ports='journalnt | grep --color "add_ports.*is_local true"'
 alias journal-grep-nt-add-subsys='journalnt | grep --color "add_subsystem"'
+alias journal-grep-nt-add-host='journalnt | grep --color "add_host\|set_host"'
 alias journal-grep-nt-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port"'
 alias journal-grep-nt-local-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*is_local true"'
 alias journal-grep-nt-local-tcp-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype tcp.*is_local true"'
@@ -1100,7 +1103,7 @@ dellnvme-list-modules ()
 
 }
 
-dellnvmemodulesload ()
+dellnvme-load-modules ()
 {
     loadmoduleifnotloaded nvme_core
     loadmoduleifnotloaded nvme_fabrics
@@ -1109,7 +1112,7 @@ dellnvmemodulesload ()
     loadmoduleifnotloaded qla2xxx
 }
 
-dellnvmemodulesunload ()
+dellnvme-unload-modules ()
 {
     # systemctl stop multipathd
     # systemctl stop multipathd.socket
@@ -1998,6 +2001,9 @@ dell_btest_aliases=(dell-btest-forever dell-btest-10seconds
 # search for these in the nodes journalctl
 # log_new_ctrl|log_disc_ctrl|log_new_ctrl
 # allocate.*ctrl|allocate.*cont|alloc_target_queu|kernel|nvmet|pnvmet
+
+#   lost fc link due to lab issue
+#   ocs_dev_loss_tmo|RSCN
 #
 #                  triage on host
 #            ----------------------------------- 
