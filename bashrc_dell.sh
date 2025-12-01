@@ -821,6 +821,16 @@ _dellcyclonebuild_validate_build_machine ()
     return -1;
 }
 
+dellcyclonebuildoutputlist ()
+{
+
+    echo "xtremapp"
+    fd -l -I -t f ".*xtremapp$" source/cyc_core;
+    echo;
+    echo "pnvmet";
+    fd -l -IH -t f -e ko nvmet-power source/third_party/;
+}
+
 dellcyclonebuild ()
 {
     local build_third_party_cmd=;
@@ -956,8 +966,8 @@ dellcyclonebuild ()
 
         echo;
         p;
-        fd -I -t f ".*xtremapp$";
-        fd -IH -t f -e ko nvmet-power source/third_party/;
+        fd -l -I -t f ".*xtremapp$";
+        fd -l -IH -t f -e ko nvmet-power source/third_party/;
         # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
         # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
     fi;
