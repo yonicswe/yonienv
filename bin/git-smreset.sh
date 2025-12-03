@@ -39,5 +39,11 @@ for s in source/* ; do
     cd - 2>&1 1>/dev/null ;
     echo -e "${PURPLE}------[$s] ${RED}reset new commits${NC}-----------";
     git smupdate $s;
+    if [[ $s =~ "devops-scripts" ]] ; then 
+        echo -e "${RED}------[$s] devops-scripts is multi-module repo diving into it${NC}-----------";
+        cd $s;
+        git smupdate;
+        cd - 2>&1 1>/dev/null ;
+    fi;
 done;
 BLUE=""
