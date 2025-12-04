@@ -1831,6 +1831,25 @@ core-attach-bsc ()
     docker exec -it cyc_bsc_docker bash
 }
 
+core-ssh2bsc ()
+{
+    ssh cyc@self -p 23
+}
+
+core-ssh2-service-docker ()
+{
+    ssh root@self -p 26
+}
+
+core-help-dc-commands ()
+{
+    echo "core-ssh2-service-docker"
+    echo "ssh root@self -p 26"
+    echo "svc_dc run"
+    echo "svc_dc list"
+    echo "svc_dc download f045cfef-1efc-47ef-a864-523fbc017e5f --ip 10.227.209.251 --username cyc --password cycpass --path /home/cyc/tmp"
+}
+
 core-list-kernel-configs ()
 {
     #echo "ls -ltr /sys/kernel/config/nvmet/ports/";
