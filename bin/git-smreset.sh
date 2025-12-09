@@ -23,7 +23,7 @@ if [ $? -eq 0 ] ; then
     for s in ${submodules[@]}; do
         ss=source/$s;
         echo -e "${PURPLE}------[$s] ${RED}reset modified content${NC}------";
-        cd $ss ; git reset  HEAD ; git c -f . ;
+        cd $s ; git reset  HEAD ; git c -f . ; git clean -f;
         cd - 2>&1 1>/dev/null ;
         echo -e "${PURPLE}------[$s] ${RED}reset new commits${NC}-----------";
         git smupdate $ss;
@@ -35,7 +35,7 @@ fi;
 
 for s in source/* ; do
     echo -e "${PURPLE}------[$s] ${RED}reset modified content${NC}------";
-    cd $s ; git reset  HEAD ; git c -f . ;
+    cd $s ; git reset  HEAD ; git c -f . ; git clean -f;
     cd - 2>&1 1>/dev/null ;
     echo -e "${PURPLE}------[$s] ${RED}reset new commits${NC}-----------";
     git smupdate $s;
