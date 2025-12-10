@@ -29,8 +29,9 @@ fi;
 
 echo -e  "about to : ${GREEN}git push -d origin ${YELLOW}${remote_branch}${NC}";
 ask_user_default_no "delete the remote branch ? ";
+[ $? -eq 0 ] && exit;
 
-git push -d remote branch;
+git push -d origin ${remote_branch};
 
 # check if remote branch is also checkout already
 for b in $(git b |grep -v HEAD ) ; do
