@@ -483,6 +483,12 @@
             git clean -Xdff .;\
             git submodule foreach git clean -Xdff .;\
             }; f"
+#   show the original sha index of each module as it should be 
+#   not the actual index that a submodule is currently checkout on
+    smlistoriginalmodules = "!f(){\
+	             git ls-tree -r HEAD | grep source; \
+		}; f"
+
 #   smstatus = !git-smstatus.sh
 #   smstatus = "!f()  { git sm status | awk '{if (NF > 2) {print $2 " " $3} }' | column -t; }; f"
 #   smstatus = "!f()  { git sm foreach git hh; }; f"
