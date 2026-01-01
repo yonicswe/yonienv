@@ -274,6 +274,9 @@
 	git dt $branchA $branchB -- $file; \
     }; f"
 
+    dell-pdr-status = status source/cyc_core source/nt-nvmeof-frontend
+    dell-pdr-status-summary = sm summary source/cyc_core source/nt-nvmeof-frontend
+
     dell-sm-purge = "!f(){\
             git smclean;\
             docker system prune -af;\
