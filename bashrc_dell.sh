@@ -1499,19 +1499,30 @@ dellenvrebash ()
     # cluster=$(awk '/YONI_CLUSTER/{print $2}' cluster_runtime_env.txt);
     # cd - ;
 
+    # is this a cyclone folder ?
     if [[ "cyclone" == "$(basename $(git remote get-url origin 2>/dev/null) .git)" ]] ; then
         if [[ -e ./.dellclusterruntimeenvbkpfile ]] ; then
             bkp_file=./.dellclusterruntimeenvbkpfile;
+            echo -e "${GREEN}found cyclone backup file : ${bkp_file}"
+            cat ${bkp_file} | grep "YONI_CLUSTER\|YONI_PDR" | while read l ; do echo -e "\t${l}" ; done
+            echo -e "${NC}"
+        else
+            echo -e "${RED} no backfile in pdr${NC}"
         fi;
     fi;
 
     if [ -z "${bkp_file}" ] ; then
         if  [[ -e ${dellclusterglobalruntimeenvbkpfile} ]] ; then
             bkp_file=${dellclusterglobalruntimeenvbkpfile};
+            echo -e "${GREEN}found global backup file : ${bkp_file}"
+            cat ${bkp_file} | grep "YONI_CLUSTER\|YONI_PDR" | while read l ; do echo -e "\t${l}" ; done
+            echo -e "${NC}"
+        else
+            echo -e "${RED} no backfile${NC}"
         fi;
     fi;
 
-    echo "bkp_file=${bkp_file}";
+    #echo "bkp_file=${bkp_file}";
 
     if [ -n "${bkp_file}" ] ; then
         pdr_folder=$(awk -F '='  '/YONI_PDR/{print $2}' ${bkp_file});
