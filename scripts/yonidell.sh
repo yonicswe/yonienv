@@ -2022,7 +2022,7 @@ dell_btest_aliases=(dell-btest-forever dell-btest-10seconds
 # allocate.*ctrl|allocate.*cont|alloc_target_queu|kernel|nvmet|pnvmet
 
 #   lost fc link due to lab issue
-#   ocs_dev_loss_tmo|RSCN
+#   ocs_dev_loss_tmo|RSCN|Emulex
 #
 #                  triage on host
 #            ----------------------------------- 
