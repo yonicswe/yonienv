@@ -206,6 +206,7 @@ k () {
         kill_str=$(jobs | sed 's/\].*//g'  | sed 's/\[//g' | while read j ; do echo -n "kill %${j}; " ; done; );
         echo -e "eval \"${kill_str}\"";        
         eval "${kill_str}";        
+        jj;
         return;
     fi;
 
