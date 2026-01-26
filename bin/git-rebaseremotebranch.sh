@@ -3,14 +3,19 @@
 source ${yonienv}/bashrc_common.sh
 source ${yonienv}/bashrc_fs.sh
 
-rebase_remote_branch_bkp_file=.rebase_remote_branch;
+rebase_remote_branch_bkp_file=~/.rebase_remote_branch;
+if [ -e ${rebase_remote_branch_bkp_file} ] ; then
+    last_used_branch=$(cat ${rebase_remote_branch_bkp_file})
+fi;
 
 branch=$1;
 
-#if [ -e ${rebase_remote_branch_bkp_file} ] ; then
-    #branch=${rebase_remote_branch_bkp_file};
-    #ask_user_default_yes "use ${branch} again ?"; 
-    #if [ ]
+if [[ -z "${branch}" && -n "${last_used_branch}" ]] ; then
+    ask_user_default_no "use again ?  ${last_used_branch}" 
+    if [ $? -eq 1 ] ; then
+        branch=${last_used_branch};
+    fi;
+fi;
 
 if [ -z "${branch}" ] ; then
     if [[ $(git br|wc -l) -eq 0 ]] ; then
@@ -38,6 +43,7 @@ if [ -z "${branch}" ] ; then
     exit;
 fi;
 
+echo ${branch} > ${rebase_remote_branch_bkp_file};
 echo -e "\t${BLUE}git fetch origin ${GREEN}${branch}${NC}";
 echo -e "\t${BLUE}git rebase ${GREEN}FETCH_HEAD${NC}";
 ask_user_default_no  "continue ?";
@@ -49,4 +55,3 @@ echo "git fetch origin ${branch};";
 git fetch origin ${branch};
 echo "git rebase FETCH_HEAD;";
 git rebase FETCH_HEAD;
-echo ${branch} > ${rebase_remote_branch_bkp_file};
