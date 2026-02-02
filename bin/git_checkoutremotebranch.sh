@@ -5,8 +5,26 @@ source ${yonienv}/bashrc_fs.sh
 remote_branch=$1;
 local_branch=;
 
+remote_branch_bkp_file=~/.remote_branch;
+if [ -e ${remote_branch_bkp_file} ] ; then
+    last_used_branch=$(cat ${remote_branch_bkp_file})
+    #complete -W "$(echo ${last_used_branch})" git
+fi;
+
+if [[ -z "${remote_branch}" && -n "${last_used_branch}" ]] ; then
+    ask_user_default_no "use again ?  ${last_used_branch}" 
+    if [ $? -eq 1 ] ; then
+        remote_branch=${last_used_branch};
+    fi;
+fi;
+
 if [[ -z "${remote_branch}" ]] ; then
-    if [[ $(git br|wc -l) -eq 0 ]] ; then
+    if [ -e .old_cyclone_pdr ] ; then
+        ask_user_default_no "git fetch before we start ? ";
+        if [ $? -eq 1 ] ; then
+            git fetch -p;
+        fi;
+    elif [[ $(git br|wc -l) -eq 0 ]] ; then
         echo "you probably just cloned linux repo you must also do git fetch" 
         ask_user_default_no "continue with fetch ?";
         if [[ $? -eq 0 ]] ; then
@@ -14,12 +32,8 @@ if [[ -z "${remote_branch}" ]] ; then
         fi;
         git fetch origin
     else
-        ask_user_default_no "git fetch before we start ? ";
-        if [ $? -eq 1 ] ; then
-            git fetch -p;
-        fi;
+        touch .old_cyclone_pdr
     fi;
-
     remote_branch="$(git br |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
 fi;
 
@@ -37,6 +51,8 @@ else
     local_branch=${remote_branch};
 fi;
 
+echo ${remote_branch} > ${remote_branch_bkp_file};
+
 for b in $(git b |grep -v HEAD ) ; do
     if [[ ${b} == "${local_branch}" ]] ; then 
         echo "${local_branch} already checked out !! remove it and try again";
@@ -50,6 +66,7 @@ echo -e  "\t${GREEN}git checkout -b ${YELLOW}${local_branch}${GREEN} FETCH_HEAD$
 
 ask_user_default_no "continue";
 if [ $? -eq 0 ] ; then exit ; fi;
+
 
 git fetch origin ${remote_branch};
 git checkout -b ${local_branch} FETCH_HEAD;

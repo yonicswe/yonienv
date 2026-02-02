@@ -6,6 +6,7 @@ source ${yonienv}/bashrc_fs.sh
 rebase_remote_branch_bkp_file=~/.rebase_remote_branch;
 if [ -e ${rebase_remote_branch_bkp_file} ] ; then
     last_used_branch=$(cat ${rebase_remote_branch_bkp_file})
+    complete -W "$(echo ${last_used_branch})" git
 fi;
 
 branch=$1;
