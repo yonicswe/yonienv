@@ -4547,6 +4547,11 @@ alias delltriage-nt-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j SUB_COMPO
 alias delltriage-nt-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j SUB_COMPONENT=nt -r"
 alias delltriage-nt-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j SUB_COMPONENT=nt -r"
 
+alias delltriage-mber-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j SUB_COMPONENT=mbe_r"
+alias delltriage-mber-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j SUB_COMPONENT=mbe_r"
+alias delltriage-mber-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j SUB_COMPONENT=mbe_r -r"
+alias delltriage-mber-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j SUB_COMPONENT=mbe_r -r"
+
 alias delltriage-kernel-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t kernel"
 alias delltriage-kernel-logs-node-a-r="nice -20 ./cyc_triage.pl -b . -n a -j -- -t kernel -r"
 alias delltriage-kernel-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t kernel"
