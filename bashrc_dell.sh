@@ -56,6 +56,7 @@ _ssh_2_dev_vm_for_user ()
         return -1;
     fi;
 
+    echo -e "${PURPLE}ssh to ${user}${NC}";
     echo "sshpass -p cycpass ssh cyc@${devvm_ip_address}";
     sshpass -p cycpass ssh cyc@${devvm_ip_address};
     return 0;
@@ -4600,8 +4601,10 @@ alias delltriage-grep-pnvmet-start-b='delltriage-kernel-log-node-b | grep --colo
 
 alias delltriage-grep-cluster-name-a='delltriage-all-logs-node-a | grep -i --color "cyc_config.*creating cluster"'
 alias delltriage-grep-cluster-name-b='delltriage-all-logs-node-b | grep -i --color "cyc_config.*creating cluster"'
-alias delltriage-grep-appliance-name-a='delltriage-all-logs-node-a | grep "Service.*name : Appliance"'
-alias delltriage-grep-appliance-name-b='delltriage-all-logs-node-b | grep "Service.*name : Appliance"'
+#alias delltriage-grep-appliance-name-a='delltriage-all-logs-node-a | grep "Service.*name : Appliance"'
+#alias delltriage-grep-appliance-name-b='delltriage-all-logs-node-b | grep "Service.*name : Appliance"'
+alias delltriage-grep-appliance-name-a='delltriage-nt-logs-node-a | grep -i "log_subsys"' | grep --color name
+alias delltriage-grep-appliance-name-b='delltriage-nt-logs-node-b | grep -i "log_subsys"' | grep --color name
 
 alias delltriage-grep-add-remove-device-a='delltriage-nt-logs-node-a | grep -i --color "add_device\|add_namespace\|remove_device\|remove_nsid\|remove_namespace"'
 alias delltriage-grep-add-remove-device-b='delltriage-nt-logs-node-b | grep -i --color "add_device\|add_namespace\|remove_device\|remove_nsid\|remove_namespace"'
