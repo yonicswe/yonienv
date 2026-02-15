@@ -4603,8 +4603,8 @@ alias delltriage-grep-cluster-name-a='delltriage-all-logs-node-a | grep -i --col
 alias delltriage-grep-cluster-name-b='delltriage-all-logs-node-b | grep -i --color "cyc_config.*creating cluster"'
 #alias delltriage-grep-appliance-name-a='delltriage-all-logs-node-a | grep "Service.*name : Appliance"'
 #alias delltriage-grep-appliance-name-b='delltriage-all-logs-node-b | grep "Service.*name : Appliance"'
-alias delltriage-grep-appliance-name-a='delltriage-nt-logs-node-a | grep -i "log_subsys"' | grep --color name
-alias delltriage-grep-appliance-name-b='delltriage-nt-logs-node-b | grep -i "log_subsys"' | grep --color name
+alias delltriage-grep-appliance-name-a='delltriage-nt-logs-node-a | grep -i "log_subsys" | grep --color name'
+alias delltriage-grep-appliance-name-b='delltriage-nt-logs-node-b | grep -i "log_subsys" | grep --color name'
 
 alias delltriage-grep-add-remove-device-a='delltriage-nt-logs-node-a | grep -i --color "add_device\|add_namespace\|remove_device\|remove_nsid\|remove_namespace"'
 alias delltriage-grep-add-remove-device-b='delltriage-nt-logs-node-b | grep -i --color "add_device\|add_namespace\|remove_device\|remove_nsid\|remove_namespace"'
@@ -4618,6 +4618,11 @@ alias delltriage-grep-nt-kernel-b='delltriage-all-logs-node-b |grep "\[nt\]\|ker
 alias delltriage-grep-nt-kernel-b-r='delltriage-all-logs-node-b-r |grep "\[nt\]\|kernel"|less -I'
 alias delltriage-host-grep-connect-fc='grep "nvme.*create assoc" messages|grep -v discovery'
 alias delltriage-host-grep-connect='grep "nvme.*new ctrl" messages|grep -v discovery'
+delltriage-host-grep-traddr ()
+{
+    traddr_file=$1;
+    grep -o "nvme.*traddr=[^ ]*" ${traddr_file};
+}
 
 # howto
 # journalctl SUBCOMPONENT=nt
