@@ -4596,8 +4596,8 @@ alias delltriage-grep-nt-start-b='delltriage-nt-logs-node-b | grep --color "nt_s
 alias delltriage-grep-set-active-a='delltriage-nt-logs-node-a | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
 alias delltriage-grep-set-active-b='delltriage-nt-logs-node-b | grep --color "nt_disc_set_active\|nt_disc_set_inactive"'
 
-alias delltriage-grep-pnvmet-start-a='delltriage-kernel-log-node-a | grep --color "nvmet_power.*driver.*start"'
-alias delltriage-grep-pnvmet-start-b='delltriage-kernel-log-node-b | grep --color "nvmet_power.*driver.*start"'
+alias delltriage-grep-pnvmet-start-a='delltriage-kernel-logs-node-a | grep --color "nvmet_power.*driver.*start"'
+alias delltriage-grep-pnvmet-start-b='delltriage-kernel-logs-node-b | grep --color "nvmet_power.*driver.*start"'
 
 alias delltriage-grep-cluster-name-a='delltriage-all-logs-node-a | grep -i --color "cyc_config.*creating cluster"'
 alias delltriage-grep-cluster-name-b='delltriage-all-logs-node-b | grep -i --color "cyc_config.*creating cluster"'
