@@ -4671,7 +4671,7 @@ alias delldc-nt-node-b='_delldc-node-x node_b SUB_COMPONENT=nt'
 alias delldc-nt-node-a-r='_delldc-node-x node_a "SUB_COMPONENT=nt -r"'
 alias delldc-nt-node-b-r='_delldc-node-x node_b "SUB_COMPONENT=nt -r"'
 
-delldc-list-files ()
+delldc-file-list ()
 {
     echo "on the root directory of the DC"
     echo "<test name>.log.core.debug"
@@ -4689,13 +4689,14 @@ delldc-list-files ()
     echo "show_nvme_host_connectivity_print_type__csv_.txt "
     echo "show_nvme_discover_host_connectivity_print_type__csv_.txt "
     echo
-    echo "Show_ioms"
-    echo "Show_feports"
-    echo "Show_sfps"
-    echo "Show_scsi_targets"
-    echo "Show_target_port_groups "
-    echo "Show_scsi_registrations – This has an entry for every volume regardless of whether it has a registration or not.  There is an NVME version too."
-    echo "Show_scsi_reservations "
+    echo "show_ioms"
+    echo "show_feports"
+    echo "show_sfps"
+    echo "show_scsi_targets"
+    echo "show_target_port_groups "
+    echo "show_scsi_registrations – This has an entry for every volume regardless of whether it has a registration or not.  There is an NVME version too."
+    echo "show_scsi_reservations "
+    echo "fcc.sh_stats"
 }
 
 delldc-xtrace-morty-datacollect ()
