@@ -377,6 +377,14 @@ dellcyclonetagsupdate ()
     # fix tags file to match cyclone folder path
     # sed -i "s/cyclone-folder/${sed_cyclone_folder}/g" tags.vim;
 
+    if [[ -e tags.vim && $(grep cs tags.vim | wc -l) -gt 0 ]] ; then
+        ask_user_default_yes "retag ?"
+        if [ $? -eq 1 ] ; then
+            cat tags.vim |grep cs|awk '{print $3}' | while read s ; do c $(dirname $s)  ; ttt ; c -  ; done
+            return;
+        fi;
+    fi;
+
     # whiptail --checklist "subject" hight width num-of-items
     build_choices=($(whiptail --checklist "cyclone tags" 15 30 9\
                    nt-nvmeof-frontend "" on \
