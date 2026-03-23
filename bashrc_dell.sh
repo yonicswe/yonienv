@@ -4336,14 +4336,16 @@ dellibid2commitpnvmet ()
 dellibid2commit ()
 {
     local ibid=$1;
-    echo "phlibid.pl --ibid ${ibid}";
-    echo "---------------------------------------------------------------"
-    phlibid.pl --ibid ${ibid};
+    echo -e "${GREEN}phlibid.pl --ibid ${ibid}${NC}";
+    echo -e "${GREEN}---------------------------------------------------------------"${NC}
+    phlibid.pl --ibid ${ibid} | head -18;
     echo ===============================================================
     # phlibid.pl --ibid ${ibid} | grep --color -i commit
-    echo "phlibid --getCommit --ibid ${ibid}";
-    echo "---------------------------------------------------------------"
-    phlibid --getCommit --ibid ${ibid} | grep "Commit ID\|nt-nvmeof\|third_party";
+    echo -e "${GREEN}phlibid --getCommit --ibid ${ibid}${NC}";
+    echo -e "${GREEN}---------------------------------------------------------------${NC}"
+    phlibid --getCommit --ibid ${ibid} > .dellibid2commitid;
+    grep "nt-nvmeof\|third_party\|cyc_core\ \|Commit ID" .dellibid2commitid | sed -e "s/Commit ID/Commit-id/g" -e "s/\ //g" | sed "s/:/\ /g" | column -t ;
+    rm -f .dellibid2commitid > /dev/null;
 
 }
 
