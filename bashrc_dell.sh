@@ -1124,6 +1124,7 @@ _dellclusterlistuser ()
         ask_user_default_no "open ~/docs/dell-cluster-list-${user}.txt ? ";
         if [ $? -eq 1 ] ; then
             less ~/docs/dell-cluster-list-${user}.txt;
+            cat ~/docs/dell-cluster-list-${user}.txt;
             return;
         fi;
     fi;
