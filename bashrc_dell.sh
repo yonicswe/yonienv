@@ -4696,6 +4696,7 @@ delldc-file-list ()
     echo "show_discovered_initiators_connectivity_print_type__csv_.txt – This is for SCSI connections from unregistered initiators"
     echo "show_nvme_host_connectivity_print_type__csv_.txt "
     echo "show_nvme_discover_host_connectivity_print_type__csv_.txt "
+    echo "column -s, -t -N show_nvme_subsystem_ports_targets"
     echo
     echo "show_ioms"
     echo "show_feports"
@@ -4705,6 +4706,8 @@ delldc-file-list ()
     echo "show_scsi_registrations – This has an entry for every volume regardless of whether it has a registration or not.  There is an NVME version too."
     echo "show_scsi_reservations "
     echo "fcc.sh_stats"
+    echo "fabric_disruption"
+    echo "appliance.json : for multi appliance of federation will resolve powerstore names to their tags"
 }
 
 delldc-xtrace-morty-datacollect ()
