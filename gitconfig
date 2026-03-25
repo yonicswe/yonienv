@@ -480,6 +480,7 @@
     smdiff = diff --submodule
     smgrep = grep --recurse-submodules
     smupdate = submodule update
+    smupdatefe = submodule update source/nt-nvmeof-frontend source/cyc_core source/third_party
     smupdateinit = submodule update --init
     smupdateinitallsubmodules = submodule update --init --recursive
     smclean = "!f(){\
@@ -505,7 +506,7 @@
 #            fi; \
 #       cd - 2>&1 1>/dev/null ;\
 #       done; }; f"
-    smremove = submodule deinit
+    smremove = submodule deinit -f 
 #
 #   sm-resetall = submodule foreach --recursive git reset --hard; 
 #   sm-resetall = checkout -f --recurse-submodules
@@ -707,3 +708,6 @@
 # or do
 #    git checkout --conflict=merge {file}
 # and then you can run git mergetool again
+# 
+# disable pager for git branch
+# git config --global pager.branch false
