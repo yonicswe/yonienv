@@ -356,7 +356,7 @@
 
 # ───────l──────────────────────────────────────────────────────────────────────
 #                                   SHA          date                   name             msg
-    ls = log --pretty=format:'%C(yellow) %h %Cred%<(9,trunc)%aN %Cgreen%s %Creset' 
+    ls = !git --no-pager log --pretty=format:'%C(yellow) %h %Cred%<(9,trunc)%aN %Cgreen%s %Creset' 
     ll = ls -10
     ll20 = ls -20
     ll30 = ls -30
@@ -711,3 +711,4 @@
 # 
 # disable pager for git branch
 # git config --global pager.branch false
+# git config --global pager.log false
