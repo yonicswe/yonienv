@@ -4229,7 +4229,7 @@ dellcyclonekernelshaupdate ()
     sed -i "s/\(Set.*PNVMET_GIT_TAG.*\"\).*\(\".*\)/\1${sha}\2/g" $mfile;
     dellcdthirdparty;
     print_underline_size "_" 80;
-    git diff -U1;
+    git --no-pager diff -U1;
     cd -;
     
     # depict the kernel that was used.
