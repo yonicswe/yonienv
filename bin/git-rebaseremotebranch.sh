@@ -52,7 +52,7 @@ if [ $? -eq 0 ] ; then
     exit;
 fi;
 
-echo "git fetch origin ${branch};";
+echo -e "\t${BLUE}git fetch origin ${GREEN}${branch}${NC}";
 git fetch origin ${branch};
-echo "git rebase FETCH_HEAD;";
+echo -e "\t${BLUE}git rebase ${GREEN}FETCH_HEAD${NC}";
 git rebase FETCH_HEAD;
