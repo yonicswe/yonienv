@@ -594,6 +594,7 @@ alias d='dmesg --color -HxP'
 alias dp='dmesg --color -Hx'
 alias dw='dmesg --color -Hxw'
 alias dcc='sudo dmesg -C'
+alias dtail='dmesg |tail'
 dmesg-level-get () 
 {
     echo "current|default|minimum|boot-time-default";
