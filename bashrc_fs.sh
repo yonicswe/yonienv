@@ -237,18 +237,24 @@ jj ()
     else
         # compare current jobs array with ${yonienvjobsfile}
         job_array_bkp=$(cat ${yonienvjobsfile} | cut -f 1 -d ' ' | xargs);
-        #echo "job_array_bkp: ${job_array_bkp[@]}";
         for j in ${job_array[@]}  ; do
-            if [[  ${job_array_bkp[@]} =~ $j ]] ; then
+            #echo "is $j in bkp[${job_array_bkp[@]}]";
+            if [[  $(echo ${job_array_bkp[@]} | grep -w $j | wc -l ) -gt 0  ]] ; then
+                #echo "found $j in [${job_array_bkp[@]}]";
                 continue;
             fi;
+            #echo "adding $j to ${yonienvjobsfile}";
             echo "$j" >> ${yonienvjobsfile};
         done;
 
         for j in ${job_array_bkp[@]}  ; do
-            if [[  ${job_array[@]} =~ $j ]] ; then
+            #echo "is bkp[$j] in jobs[${job_array}]";
+            if [[ $(echo ${job_array[@]} | grep -w $j | wc -l) -gt 0 ]] ; then
+            #if [[  ${job_array[@]} =~ $j ]] ; then
+                #echo "found $j in [${job_array[@]}]";
                 continue;
             fi;
+            #echo "delete $j from ${yonienvjobsfile}";
             sed -i "/$j.*/d" ${yonienvjobsfile};
         done;
 
