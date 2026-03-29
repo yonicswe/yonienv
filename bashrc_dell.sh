@@ -4572,6 +4572,9 @@ alias delltriage-kernel-logs-node-b-r="nice -20 ./cyc_triage.pl -b . -n b -j -- 
 alias delltriage-sym-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t xtremapp"
 alias delltriage-sym-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t xtremapp"
 
+alias delltriage-cycbsc-logs-node-a="nice -20 ./cyc_triage.pl -b . -n a -j -- -t cyc_bsc"
+alias delltriage-cycbsc-logs-node-b="nice -20 ./cyc_triage.pl -b . -n b -j -- -t cyc_bsc"
+
 alias delltriage-grep-panic-a='delltriage-all-logs-node-a | grep --color "PANIC\|log_backtrace_backend\|panic-\|signal_handler"'
 alias delltriage-grep-panic-b='delltriage-all-logs-node-b | grep --color "PANIC\|log_backtrace_backend\|panic-\|signal_handler"'
 
@@ -4711,6 +4714,16 @@ delldc-file-list ()
     echo "fcc.sh_stats"
     echo "fabric_disruption"
     echo "appliance.json : for multi appliance of federation will resolve powerstore names to their tags"
+    echo "TIMELINE - use delldc-grep-chipthompson-TIMELINE"
+}
+
+delldc-grep-chipthompson-TIMELINE ()
+{ 
+    if [ -e TIMELINE  ] ; then
+        grep -e FAULT -e QA -e PYTEST -e PANIC -e PUHC_ERROR -e FLOW_ERR -e NDU.REBOOT -e ndu_prepare -e ndu_perpare -e NDU_RESULT_UPGRADE_FAILED -e NDU_RESULT_UPGRADE_SUCCEEDED -e NDU_RESULT_ROLLBACK_SUCCEEDED -e BSC.starting -e PM.Start -e PKILL -e _PM TIMELINE
+    else
+        echo "missing file TIMELINE";
+    fi;
 }
 
 delldc-xtrace-morty-datacollect ()
