@@ -3881,7 +3881,7 @@ dellcdbroadcommakefiles ()
 
 }
 
-delldeletebroadcomsources ()
+dellbroadcomdeltesources ()
 {
     local platform_debug=source/third_party/cyc_platform/obj_Debug;
     local platform_release=source/third_party/cyc_platform/obj_Release;
