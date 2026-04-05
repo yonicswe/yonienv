@@ -721,6 +721,10 @@ _dellpdr_git_sync_submodules ()
         echo -e "${YELLOW}cd source/cyc_core${NC}";
         cd source/cyc_core;
         echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
+            echo -e "branch \'${pdr_branch}\' already exist"
+            return;
+        fi;
         git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
@@ -838,6 +842,48 @@ dellcyclonebuildoutputlist ()
     echo;
     echo "pnvmet";
     fd -l -IH -t f -e ko nvmet-power source/third_party/;
+}
+
+dellcyclonebuildthirdparty ()
+{
+    local build_third_party_cmd=;
+    local flavor=RETAIL;
+
+    if [ -z "${cyclone_folder}" ]  ; then
+        echo "cyclone_folder not set! use dellclusterruntimeenvset";
+        return -1;
+    fi;
+
+	dellcdcyclonefolder;
+	[[ $? -ne 0 ]] && return -1;
+	
+    dellclusterruntimeenvget
+    ask_user_default_yes "continue ?"
+    [[ $? -eq 0 ]] && return -1;
+
+    if [ -e ${cyclone_folder}/.build_choices_bkp ] ; then
+        source ${cyclone_folder}/.build_choices_bkp;
+
+        if [ -n "${build_third_party_cmd}" ] ; then
+            echo "====== last command choices =============";
+            echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
+            ask_user_default_no "repeat your last choices ? ";
+            if [ $? -eq 1 ] ; then
+                repeat_last_choice=1;
+                eval ${build_third_party_cmd};
+                return;
+            fi;
+        fi;
+    fi;
+
+    ask_user_default_yes "yes to build RETAIL, no for debug";
+    if [[ $? -eq 0 ]] ; then
+        flavor=DEBUG;
+    fi;
+
+    build_third_party_cmd="make third_party force=yes flavor=${flavor}";
+
+    eval ${build_third_party_cmd};
 }
 
 dellcyclonebuild ()
@@ -3371,43 +3417,44 @@ dellclusterlabjungle ()
     xxlabjungle cluster "name:${cluster}" | less;
 }
 
-ssh2lgofcluster ()
-{
-    local cluster=${1};
-    local use_backup=0;
-    local lg;
+#ssh2lgofcluster ()
+#{
+    #local cluster=${1};
+    #local use_backup=0;
+    #local lg;
 
-    if [ -z "${cluster}" ] ; then 
-        cluster=$(_getlastusedcluster);
-        if [ -z "${cluster}" ] ; then
-            return -1;
-        fi;
-    fi;
+    #if [ -z "${cluster}" ] ; then 
+        #cluster=$(_getlastusedcluster);
+        #if [ -z "${cluster}" ] ; then
+            #return -1;
+        #fi;
+    #fi;
 
-    _add_cluster_to_list ${cluster};
+    #_add_cluster_to_list ${cluster};
 
-    echo ${cluster} > ~/.dellssh2cluster.bkp
+    #echo ${cluster} > ~/.dellssh2cluster.bkp
 
-    echo "using ${cluster}"
-    lg_arr=( $(dellclusterlgipget ${cluster}) );
+    #echo "using ${cluster}"
+    #lg_arr=( $(dellclusterlgipget ${cluster}) );
 
     #echo "lg_arr: ${lg_arr[@]}";
+    #return;
 
-    if [[ ${#lg_arr[@]} -gt 1 ]] ; then
-        echo "more than lg : ${lg_arr[@]}";
-        lg="$(printf "%s\n" ${lg_arr[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
-    else
-        lg=${lg_arr[0]};
-    fi;
+    #if [[ ${#lg_arr[@]} -gt 1 ]] ; then
+        #echo "more than lg : ${lg_arr[@]}";
+        #lg="$(printf "%s\n" ${lg_arr[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')";
+    #else
+        #lg=${lg_arr[0]};
+    #fi;
 
-    if [[ -z "${lg}" ]] ; then
-        echo -e "${RED}must specify lg name${NC}";
-        return -1;
-    fi;
+    #if [[ -z "${lg}" ]] ; then
+        #echo -e "${RED}must specify lg name${NC}";
+        #return -1;
+    #fi;
     
-    ssh2lg ${lg};
-    return 0;
-}
+    #ssh2lg ${lg};
+    #return 0;
+#}
 
 dellclusterguiipget ()
 {
