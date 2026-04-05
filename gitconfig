@@ -59,7 +59,7 @@
 
 # ───────b──────────────────────────────────────────────────────────────────────
 
-    b = branch --sort=committerdate
+    b = !git --no-pager branch --sort=committerdate
     bt = branch -vv --sort=committerdate
     ba = branch -a
     br = branch -r
@@ -696,7 +696,7 @@
 #
 # how to git pull only one file ? 
 #    git fetch
-#    git checkout <remote>/<branch -- <path-to-file/filename>
+#    git checkout <remote>/<branch> -- <path-to-file/filename>
 #    now that file will appear as staged.
 #    you can commit it here but its original  commit will not show in the logs.
 #
