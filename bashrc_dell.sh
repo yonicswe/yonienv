@@ -1662,6 +1662,7 @@ alias dddthird-party='[ -n "${cyclone_folder}" ] && c ${cyclone_folder}/source/t
 alias dddthird-party-objects='dellcdthirdpartyobjects'
 alias dddbroadcomsources='dellcdbroadcomsources'
 alias dddbroadcommakefiles='dellcdbroadcommakefiles'
+alias dddqlasources='dellcdqlasources'
 alias dddpnvmet='[ -n "${pnvmet_folder}" ] && c ${pnvmet_folder} || echo "!!!pnvmet_folder empty!!!"'
 dellcdcyclonescripts ()
 {
@@ -3767,6 +3768,12 @@ dellclustereditcycconfig ()
 
     v ${CYC_CONFIG};
 }
+
+dellclusteredit-cyc_bsc_control ()
+{
+    v cyc_platform/src/package/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh
+}
+
 
 dellclusterconfigupdate ()
 {
