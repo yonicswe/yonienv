@@ -481,6 +481,7 @@
     smgrep = grep --recurse-submodules
     smupdate = submodule update
     smupdatefe = submodule update source/nt-nvmeof-frontend source/cyc_core source/third_party
+    smupdateinitfe = submodule update --init source/nt-nvmeof-frontend source/cyc_core source/third_party
     smupdateinit = submodule update --init
     smupdateinitallsubmodules = submodule update --init --recursive
     smclean = "!f(){\
