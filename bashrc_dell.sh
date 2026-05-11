@@ -4760,7 +4760,7 @@ delldc-file-list ()
     echo "column -s, -t -N show_nvme_subsystem_ports_targets"
     echo
     echo "show_ioms"
-    echo "show_feports"
+    echo "show_feports - link issues"
     echo "show_sfps"
     echo "show_scsi_targets"
     echo "show_target_port_groups "
