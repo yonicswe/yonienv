@@ -3392,6 +3392,7 @@ dellclusterlgipget ()
     # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
     # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
     xxlabjungle cluster "name:${cluster}" | jq -r '.objects[].lgs[]';
+    #dri asset od-h5046 --format json |jq -r ".hosts[]"
 }
 
 dellclusterlabjungle ()
