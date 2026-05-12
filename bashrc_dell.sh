@@ -4772,6 +4772,45 @@ delldc-file-list ()
     echo "TIMELINE - use delldc-grep-chipthompson-TIMELINE"
 }
 
+delldc-show-connectivity ()
+{
+    local housemd_file=;
+
+    echo > show_connectivity.txt;
+
+    echo "searching for [show_ioms_print_type__csv_.txt]"
+    housemd_file=$(fd -t f show_ioms_print_type__csv_.txt);
+    echo -e  "found : ${housemd_file}";
+    ask_user_default_yes "continue";
+    if [ $? -eq 1 ] ; then
+        echo "===> show_ioms_print_type__csv_.txt <====" >> show_connectivity.txt
+        cat ${housemd_file} | column -s, -t -o " | "  >> show_connectivity.txt
+    fi;
+
+    echo -e "searching for [show_feport_print_type__csv_.txt]";
+    housemd_file=$(fd -t f show_feport_print_type__csv_.txt);
+    echo -e  "found : ${housemd_file}";
+    ask_user_default_yes "continue";
+    if [ $? -eq 1 ] ; then
+        echo -e "\n\n===> show_feport_print_type__csv_.txt <====" >> show_connectivity.txt
+        cat ${housemd_file} | column -s, -t -o " | "  >> show_connectivity.txt
+    fi;
+
+    echo "searching for [show_nvme_host_connectivity_print_type__csv_.txt]";
+    housemd_file=$(fd -t f show_nvme_host_connectivity_print_type__csv_.txt);
+    echo -e  "found : ${housemd_file}";
+    ask_user_default_yes "continue";
+    if [ $? -eq 1 ] ; then
+        echo -e "\n\n===> show_nvme_host_connectivity_print_type__csv_.txt <====" >> show_connectivity.txt
+        cat ${housemd_file} | column -s, -t -o " | "  >> show_connectivity.txt
+    fi;
+
+    echo -e "\n\ncreated file : show_connectivity.txt";
+    ask_user_default_yes "open the file and search for link_down_in_use? "
+    if [ $? -eq 0 ] ; then return ; fi; 
+    v show_connectivity.txt
+}
+
 delldc-grep-chipthompson-TIMELINE ()
 { 
     if [ -e TIMELINE  ] ; then
