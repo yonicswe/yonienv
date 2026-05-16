@@ -886,6 +886,12 @@ dellcyclonebuildthirdparty ()
     eval ${build_third_party_cmd};
 }
 
+dellcyclone-get-build-status ()
+{
+    fd -l -I -t f ".*xtremapp$";
+    fd -l -IH -t f -e ko nvmet-power source/third_party/;
+}
+
 dellcyclonebuild ()
 {
     local build_third_party_cmd=;
@@ -1021,8 +1027,7 @@ dellcyclonebuild ()
 
         echo;
         p;
-        fd -l -I -t f ".*xtremapp$";
-        fd -l -IH -t f -e ko nvmet-power source/third_party/;
+        dellcyclone-get-build-status;
         # source/cyc_core/cyc_platform/obj_Release/main/xtremapp
         # source/cyc_core/cyc_platform/obj_Release/package/top_bsc/cyc_bsc/bin/xtremapp
     fi;
