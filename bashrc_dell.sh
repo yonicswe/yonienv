@@ -2853,11 +2853,6 @@ dellclusteruserspaceupdate ()
 	ask_user_default_yes "continue ?";
 	[ $? -eq 0 ] && return 1;
 	
-    echo "about to copy nt-nvmeof-frontend to node-a";
-	echo "./fast_code_loader.sh 10 -o -w ${cyc_core_folder}";
-	ask_user_default_yes "continue ?"
-	[ $? -eq 0 ] && return 1;
-
 	dellcdclusterscripts;
 	if ! [ -e fast_code_loader.sh ] ; then
 		echo "fast_code_loader.sh !!! script not found";
@@ -2867,22 +2862,21 @@ dellclusteruserspaceupdate ()
 
     # for cyc_core changes add "sym"
 	# time ./fast_code_loader.sh sym -r 10 -o -w ${cyc_core_folder};
-    #
-	time ./fast_code_loader.sh 10 -o -w ${cyc_core_folder};
-	
-    echo "about to copy nt-nvmeof-frontend to node-b";
-	echo "./fast_code_loader.sh 11 -o -w ${cyc_core_folder}";
-	ask_user_default_yes "continue ?"
-	if [ $? -eq 0 ] ; then
-        dellcdcyclonefolder;
-        return 0;
+
+    read -p "[a|b|default BOTH] : " node;
+    if [ "${node}" = 'a' ] ; then
+        echo -e "${RED}time ./fast_code_loader.sh 10 -o -w ${cyc_core_folder}${NC}";
+        time ./fast_code_loader.sh 10 -o -w ${cyc_core_folder};
+    elif [ "${node}" = 'b' ] ; then
+        echo -e "${RED}time ./fast_code_loader.sh 11 -o -w ${cyc_core_folder}${NC}";
+        time ./fast_code_loader.sh 11 -o -w ${cyc_core_folder};
+    else
+        echo -e "${RED}time ./fast_code_loader.sh 10 -o -w ${cyc_core_folder}${NC}";
+        echo -e "${RED}time ./fast_code_loader.sh 11 -o -w ${cyc_core_folder}${NC}";
+        time ./fast_code_loader.sh 10 -o -w ${cyc_core_folder};
+        time ./fast_code_loader.sh 11 -o -w ${cyc_core_folder};
     fi;
 
-    # for cyc_core changes add "sym"
-	# time ./fast_code_loader.sh sym -r 11 -o -w ${cyc_core_folder};
-    #
-
-	time ./fast_code_loader.sh 11 -o -w ${cyc_core_folder};
     dellcdcyclonefolder;
 
 	return 0;
