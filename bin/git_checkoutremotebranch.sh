@@ -19,25 +19,14 @@ if [[ -z "${remote_branch}" && -n "${last_used_branch}" ]] ; then
 fi;
 
 if [[ -z "${remote_branch}" ]] ; then
-    if [ -e .old_cyclone_pdr ] ; then
+    if [[ $(git b|wc -l) -eq 0 ]] ; then
+        echo "you probably just cloned linux repo doing git fetch" 
+        git fetch -p;
+    else
         ask_user_default_no "git fetch before we start ? ";
         if [ $? -eq 1 ] ; then
             git fetch -p;
         fi;
-    elif [[ $(git br|wc -l) -eq 0 ]] ; then
-        echo "you probably just cloned linux repo you must also do git fetch" 
-        ask_user_default_no "continue with fetch ?";
-        if [[ $? -eq 0 ]] ; then
-            exit;
-        fi;
-        git fetch origin
-    else
-        touch .old_cyclone_pdr
-    fi;
-
-    ask_user_default_no "git fetch before we start ? ";
-    if [ $? -eq 1 ] ; then
-        git fetch -p;
     fi;
     remote_branch="$(git br |sed 's/.*origin\///g'| fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
 fi;
