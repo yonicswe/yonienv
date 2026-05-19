@@ -597,6 +597,14 @@ bsclistfcports ()
 alias dellnvme-list-fcports='bsclistfcports'
 alias dellnvme-list-controllers-node-a='nvme list-subsys| grep 904'
 alias dellnvme-list-controllers-node-b='nvme list-subsys| grep 984'
+dellnvme-list-pci-addressses ()
+{
+    echo "only active drivers will have pci addresses"
+    echo "ls /sys/bus/pci/drivers/lpfc"
+    ls -l /sys/bus/pci/drivers/lpfc
+    echo "ls /sys/bus/pci/drivers/qla2xxx"
+    ls -l /sys/bus/pci/drivers/qla2xxx
+}
 
 alias bsc-fc-showtable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
 alias bsc-fc-showtable-nvme='bsc-fc-showtable | grep "NVME\|Slot Port\|---"'
@@ -1947,6 +1955,7 @@ _dell_btest ()
     local duration=${1:-0};
     local device=${2};
     local device_list=( $(nvme list -o json | jq  -r ".Devices[].DevicePath") );
+    local btest_app=;
 
     if [ -z "${device}" ] ; then
         echo "!!missing device!! try again with : ${device_list[@]}";
@@ -1959,9 +1968,24 @@ _dell_btest ()
         return -1;
     fi;
 
+    if [ -e /usr/bin/btest ] ; then
+        btest_app=/usr/bin/btest
+    fi;
+     
+    if [ -z "${btest_app}" ] ; then
+        if [ /home/qa/btest/btest ] ; then
+            btest_app=/home/qa/btest/btest
+        fi;
+    fi;
+    
+    if [ -z "${btest_app}" ] ; then
+        echo "btest no instlalled and not on /home/qa/btest";
+        return -1;
+    fi;
+
     echo "---------------------------------------------------------------------"
     #echo "/home/qa/btest/btest -D  -t ${duration} -l 10m -b 4k R 30 ${device}";
-    echo "/home/qa/btest/btest -D -B 240000 -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device}";
+    echo "${btest_app} -D -B 240000 -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device}";
     echo "---------------------------------------------------------------------"
     ask_user_default_yes "continue ?";
     [[ $? -eq 0 ]] && return -1;
@@ -1970,7 +1994,7 @@ _dell_btest ()
     #
     # stressful with more threads and workers
     #/home/qa/btest/btest     -t 12000 -q -B 240000 -b 1m -w 100 S W ${device};
-    /home/qa/btest/btest -D -B 240000 -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device};
+    ${btest_app} -D -B 240000 -t ${duration} -l 10g -b 4k  -T 4 -w 16 -q R 30 ${device};
 
     return 0;
 }
@@ -1979,8 +2003,25 @@ _dell_btest_size ()
 {
     local size=${1};
     local duration=${2};
-    local device=${3};
+    local read_or_write=${3:-R};
+    local device=${4};
     local -a device_list;
+    local btest_app="";
+
+    if [ -e /usr/bin/btest ] ; then
+        btest_app=/usr/bin/btest
+    fi;
+     
+    if [ -z "${btest_app}" ] ; then
+        if [ /home/qa/btest/btest ] ; then
+            btest_app=/home/qa/btest/btest
+        fi;
+    fi;
+    
+    if [ -z "${btest_app}" ] ; then
+        echo "btest no instlalled and not on /home/qa/btest";
+        return -1;
+    fi;
 
     if [ -z "${device}" ] ; then
         device_list=( $(nvme list -o json | jq  -r ".Devices[].DevicePath") );
@@ -1994,19 +2035,23 @@ _dell_btest_size ()
         return -1;
     fi;
 
-    echo -e "${RED}btest -t ${duration} -T 1 -B 240000 -b ${size} -w 10 S R ${device}${NC}";
+    echo -e "${RED}${btest_app} -t ${duration} -T 1 -B 240000 -b ${size} -w 10 S ${read_or_write} ${device}${NC}";
     ask_user_default_yes "continue ?";
     if [[ $? -eq 0 ]] ; then return 0 ; fi;
-    btest -t ${duration} -T 1 -B 240000 -b ${size} -w 10 S R ${device};
+    ${btest_app} -t ${duration} -T 1 -B 240000 -b ${size} -w 10 S ${read_or_write} ${device};
 }
 
 alias dell-btest-forever='_dell_btest 0'
 alias dell-btest-10seconds='_dell_btest 10'
 alias dell-btest-1minute='_dell_btest 60'
-alias dell-btest-small-reads-1minute='_dell_btest_size 512 60'
-alias dell-btest-small-reads-forever='_dell_btest_size 512 0'
-alias dell-btest-big-reads-1minute='_dell_btest_size 1M 60'
-alias dell-btest-big-reads-forever='_dell_btest_size 1M 0'
+alias dell-btest-small-reads-1minute='_dell_btest_size 512 60 R'
+alias dell-btest-small-reads-forever='_dell_btest_size 512 0 R'
+alias dell-btest-big-reads-1minute='_dell_btest_size 1M 60 R'
+alias dell-btest-big-reads-forever='_dell_btest_size 1M 0 R'
+alias dell-btest-small-writes-1minute='_dell_btest_size 512 60 W'
+alias dell-btest-small-writes-forever='_dell_btest_size 512 0 W'
+alias dell-btest-big-writes-1minute='_dell_btest_size 1M 60 W'
+alias dell-btest-big-writes-forever='_dell_btest_size 1M 0 W'
 dell_btest_aliases=(dell-btest-forever dell-btest-10seconds
     dell-btest-1minute dell-btest-small-reads-1minute dell-btest-small-reads-forever dell-btest-big-reads-1minute dell-btest-big-reads-forever)
 
@@ -2079,6 +2124,20 @@ alias dellnvmehost-grep-connect-to-node="grep 'new ctrl' messages"
 alias dellnvmehost-grep-connect-fc="grep 'nvme.*create assoc' messages|grep -v discovery"
 alias dellnvmehost-grep-connect-fc-to-node-a="grep 'nvme.*create assoc.*904' messages|grep -v discovery"
 alias dellnvmehost-grep-connect-fc-to-node-b="grep 'nvme.*create assoc.*984' messages|grep -v discovery"
+
+dellnvmehost-discover ()
+{
+    local controller_ip_addr=${1};
+
+    if [[ -z "${controller_ip_addr}" ]] ; then
+        echo "$FUNCNAME <controller ip addres>";
+        return -1;
+    fi;
+
+    echo "nvme discover -t tcp -a ${controller_ip_addr}";
+    nvme discover -t tcp -a ${controller_ip_addr};
+}
+
 ##############################################################
 
 # copy files between nodes 
