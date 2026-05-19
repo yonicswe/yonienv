@@ -1394,6 +1394,14 @@ deletefast ()
     rmdir $1;
 }
 
+deletecorefiles()
+{
+    echo -e "fd \"core\.\d+$\" -t f -x sh -c 'echo \"found {}\" ; rm -- {}'";
+    ask_user_default_no "continue";
+    if [ $? -eq 0 ] ; then return ; fi;
+    fd "core\.\d+$"  -t f -x sh -c 'echo "found {}" ; rm -- -i {}'
+}
+
 # howto
 # to kill a user session
 # use w to find his pts/<number>
