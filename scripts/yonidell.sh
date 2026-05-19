@@ -746,6 +746,21 @@ _bsclist-xtremapp ()
     
 }
 alias bsclist-xtremapp='_bsclist-xtremapp | column -t; echo "sudo kill $(pgrep -x xtremapp)";'
+bsclist-trucks ()
+{
+    /cyc_bsc/scripts/cyc-show-nbtruck-util.sh > bsclist-trucks.txt;
+    echo "--------------------------------"       >> bsclist-trucks.txt;
+    for t in /xtremapp/debuc/127.0.0.1\:31010/rdyqg/* ; do
+        echo $t;
+        echo "--------------------------------";
+        cat $t | grep _nt ;
+    done >> bsclist-trucks.txt;
+    less bsclist-trucks.txt;
+    echo "saved output in bsclist-trucks.txt"
+
+    echo "also look in /cyc_var/cyc-topo.txt file and grep for_fe";
+    echo "also look in /dev/shm/xenv_10.ini file and grep for affinity";
+}
 
 _delljournalctl ()
 {
