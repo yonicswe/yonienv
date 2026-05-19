@@ -7,6 +7,7 @@ declare -A user_to_devvm;
 user_to_devvm["yonic"]="10.227.209.251"
 user_to_devvm["yonic2"]="10.227.227.201"
 user_to_devvm["chuck"]="10.244.232.75"
+user_to_devvm["elad"]="drmcyc-s-drmcyc-grupie.cec.delllabs.net"
 #complete -W "amit elad irit dord yoni1 yoni2" ssh2devvm ssh2devvmsetup
 complete -W "$(echo ${!user_to_devvm[@]})" ssh2devvm ssh2devvmsetup
 
@@ -3356,22 +3357,6 @@ dellclusterping ()
     swarm  ${cluster} -ping --showallips;
 }
 
-dellclusteripget ()
-{
-    local cluster=${1};
-
-    if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
-            return -1;
-        fi;
-    fi;
-
-    echo "swarm --showipinfo ${cluster}";
-    swarm --showipinfo ${cluster};
-}
-
 dellclusterlgipget ()
 {
     local cluster=${1};
@@ -3392,30 +3377,6 @@ dellclusterlgipget ()
     # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
     xxlabjungle cluster "name:${cluster}" | jq -r '.objects[].lgs[]';
     #dri asset od-h5046 --format json |jq -r ".hosts[]"
-}
-
-dellclusterlabjungle ()
-{
-    local cluster=${1};
-
-    if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
-            return -1;
-        fi;
-    fi;
-
-    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
-    # xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
-
-    # num_of_lgs=$(xxlabjungle cluster "name:${cluster}" |  jq ".objects[0].lgs | length"
-    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
-    # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
-    echo -e "${GREEN}xxlabjungle cluster \"name:${cluster}\"${NC}";
-    ask_user_default_yes "continue";
-    if [ $? -eq 0 ] ; then return 0 ; fi;
-    xxlabjungle cluster "name:${cluster}" | less;
 }
 
 #ssh2lgofcluster ()
@@ -3527,24 +3488,6 @@ dellclusteraddtolist ()
      _add_cluster_to_list ${cluster};
 }
 
-dellclusterping ()
-{
-    local cluster=${1};
-
-    if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
-            return -1;
-        fi;
-    fi;
-
-    _dellclusterlistaddcluster ${cluster};
-
-    echo "swarm ${cluster} -ping --showallips";
-    swarm  ${cluster} -ping --showallips;
-}
-
 dellclusteripget ()
 {
     local cluster=${1};
@@ -3559,27 +3502,6 @@ dellclusteripget ()
 
     echo "swarm --showipinfo ${cluster}";
     swarm --showipinfo ${cluster};
-}
-
-dellclusterlgipget ()
-{
-    local cluster=${1};
-
-    if [ -z "${cluster}" ] ; then 
-        cluster=$(_dellclusterget);
-        if [ -z ${cluster} ] ; then
-            echo "${FUNCNAME} <cluster>"; 
-            return -1;
-        fi;
-    fi;
-
-    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq -r '.objects[0].lgs[0]'";
-    # xxlabjungle cluster "name:${cluster}" |  jq -r '.objects[0].lgs[0]';
-
-    # num_of_lgs=$(xxlabjungle cluster "name:${cluster}" |  jq ".objects[0].lgs | length"
-    # echo -e "xxlabjungle cluster \"name:${cluster}\" |  jq | grep -A 3 lgs";
-    # xxlabjungle cluster "name:${cluster}" |  jq | grep -A 3 lgs;
-    xxlabjungle cluster "name:${cluster}" | jq -r '.objects[].lgs[]';
 }
 
 dellclusterlabjungle ()
