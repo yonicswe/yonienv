@@ -127,13 +127,14 @@ dmesg-level-set ()
     sudo dmesg -n ${level};
 }
 
-alias dellcdcore-dumps='cd /cyc_var/cyc_dumps/processed/cyc_dumps/'
-alias dellcdcore-kernelmodules='cd /cyc_software_0/cyc_host/cyc_common/modules'
-alias dellcdbsc-kernelmodules='cd /cyc_host/cyc_common/modules'
-alias dellcdcore-scripts='cd /cyc_software_0/cyc_host/cyc_bsc/scripts'
-alias dellcdbsc-scripts='cd /cyc_host/cyc_bsc/scripts'
-alias dellcdcore-bin='cd /cyc_software_0/cyc_host/cyc_bin'
-alias dellcdbsc-bin='cd /cyc_host/cyc_bin'
+alias dellcorecd-dumps='cd /cyc_var/cyc_dumps/processed/cyc_dumps/'
+alias dellcorecd-kernelmodules='cd /cyc_software_0/cyc_host/cyc_common/modules'
+alias dellcorecd-scripts='cd /cyc_software_0/cyc_host/cyc_bsc/scripts'
+alias dellcorecd-bin='cd /cyc_software_0/cyc_host/cyc_bin'
+
+alias dellbsccd-kernelmodules='cd /cyc_host/cyc_common/modules'
+alias dellbsccd-scripts='cd /cyc_host/cyc_bsc/scripts'
+alias dellbsccd-bin='cd /cyc_host/cyc_bin'
 alias dellcd-datacollectlogs='cd /disks/jiraproduction2'
 
 if [ -e ~/vimrcyoni.vim ] ; then
