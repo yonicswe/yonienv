@@ -262,7 +262,8 @@ coregetversion ()
     echo -n " ($(grep build_version_version ${version_file} | awk '{print $2}')";
     echo " $(grep build_version_date_time ${version_file} | sed -n "s/.*'\(.*\)'.*/\1/p"))";
     echo "--------------------------------------------"
-    echo "nt_nvmeof_frontend $(grep -A 2 nt_nvmeof_frontend ${version_file} | awk '/hash/{print $2}')";
+    echo "pdr $(grep -A 2 pdr ${version_file} | awk '/hash/{print $2}')";
+    echo "nt_nvmeof_frontend $(grep -A 2 nt-nvmeof-frontend ${version_file} | awk '/hash/{print $2}')";
     echo "pnvmet $(grep -A 2 pnvmet ${version_file} | awk '/hash/{print $2}' )";
     echo "cyc_core : $(awk '/git-hash/{print $2}' ${version_file} )";
     grep core-version ${version_file};
