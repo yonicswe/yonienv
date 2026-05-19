@@ -539,7 +539,7 @@ bsclistqlogicports-links ()
     done;
 }
 
-bsclistbroadcomports ()
+bsclist-broadcom-ports ()
 {
     bsclistbroadcomscsiports;
     echo;
@@ -548,11 +548,36 @@ bsclistbroadcomports ()
     echo -e "try also :\ndellcdbsc-bin ; ./cyc_wwn_initializer -d";
 }
 
-bsclistbroadcomvports ()
+bsclist-broadcom-loginsessions ()
+{
+    # In this output, /ocs/domain/sport[2] 
+    # represents the first NPIV port (where sport[1] is the physical port) 
+    # and node[x] represents the remote node.
+    if [ -e /cyc_host/cyc_bin/elxsdkutil ] ; then
+        echo "sudo /cyc_host/cyc_bin/elxsdkutil mgmt-info";
+        sudo /cyc_host/cyc_bin/elxsdkutil mgmt-info  -d 0
+        return 0;
+    fi;
+    echo "/cyc_host/cyc_bin/elxsdkutil is missing";
+    return -1;
+}
+
+bsclist-broadcom-vports ()
 {
     if [ -e /cyc_host/cyc_bin/elxsdkutil ] ; then
         echo "sudo /cyc_host/cyc_bin/elxsdkutil list";
         sudo /cyc_host/cyc_bin/elxsdkutil list;
+        return 0;
+    fi;
+    echo "/cyc_host/cyc_bin/elxsdkutil is missing";
+    return -1;
+}
+
+bsc-broadcom-set-link-online ()
+{
+    if [ -e /cyc_host/cyc_bin/elxsdkutil ] ; then
+        echo "sudo /cyc_host/cyc_bin/elxsdkutil  --config-linkstate --linkstate 1";
+        sudo /cyc_host/cyc_bin/elxsdkutil --config-linkstate --linkstate 1;
         return 0;
     fi;
     echo "/cyc_host/cyc_bin/elxsdkutil is missing";
