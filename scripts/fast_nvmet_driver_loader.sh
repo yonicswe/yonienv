@@ -48,7 +48,9 @@ if [[ -v VERBOSE ]]; then
 
 	ls -ltr $new_driver/nvmet*.ko
 
-	read -p "About to copy the driver from $new_driver to the nodes. Press enter to continue"
+    echo "============================================";
+	echo -e "About to copy the driver from $new_driver to the nodes. \nPress [ENTER] to continue";
+	read;
 fi;
 
 
