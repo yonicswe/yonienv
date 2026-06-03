@@ -4661,6 +4661,11 @@ alias delldc-nt-node-b='_delldc-node-x node_b SUB_COMPONENT=nt'
 alias delldc-nt-node-a-r='_delldc-node-x node_a "SUB_COMPONENT=nt -r"'
 alias delldc-nt-node-b-r='_delldc-node-x node_b "SUB_COMPONENT=nt -r"'
 
+alias delldc-xtremapp-node-a='_delldc-node-x node_a "-t xtremapp"'
+alias delldc-xtremapp-node-b='_delldc-node-x node_b "-t xtremapp"'
+alias delldc-xtremapp-node-a-r='_delldc-node-x node_a "-t xtremapp -r"'
+alias delldc-xtremapp-node-b-r='_delldc-node-x node_b "-t xtremapp -r"'
+
 delldc-file-list ()
 {
     echo "on the root directory of the DC"
