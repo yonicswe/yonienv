@@ -4666,6 +4666,23 @@ alias delldc-xtremapp-node-b='_delldc-node-x node_b "-t xtremapp"'
 alias delldc-xtremapp-node-a-r='_delldc-node-x node_a "-t xtremapp -r"'
 alias delldc-xtremapp-node-b-r='_delldc-node-x node_b "-t xtremapp -r"'
 
+alias delldc-grep-connect-a='delldc-nt-node-a | grep --color  "nvme control.*alloc"'
+alias delldc-grep-connect-b='delldc-nt-node-b | grep --color  "nvme control.*alloc"'
+alias delldc-grep-connect-disconnect-a='delldc-nt-node-a | grep --color  "nvme control.*alloc\|log_io.*discon"'
+alias delldc-grep-connect-disconnect-b='delldc-nt-node-b | grep --color  "nvme control.*alloc\|log_io.*discon"'
+
+alias delldc-grep-connect-tcp-a='delldc-nt-node-a | grep --color  "nvme control.*alloc.*trtype tcp"'
+alias delldc-grep-connect-tcp-b='delldc-nt-node-b | grep --color  "nvme control.*alloc.*trtype tcp"'
+alias delldc-grep-connect-disconnect-tcp-a='delldc-nt-node-a | grep --color  "nvme control.*alloc.*trtype tcp\|log_io.*discon.*trtype tcp"'
+alias delldc-grep-connect-disconnect-tcp-b='delldc-nt-node-b | grep --color  "nvme control.*alloc.*trtype tcp\|log_io.*discon.*trtype tcp"'
+
+alias delldc-grep-add-port-a='delldc-nt-node-a | grep --color "add_ports.*is_local true"'
+alias delldc-grep-add-port-fc-a='delldc-nt-node-a | grep --color "add_ports.*trtype fc.*is_local true"'
+alias delldc-grep-add-port-tcp-a='delldc-nt-node-a | grep --color "add_ports.*trtype tcp.*is_local true"'
+alias delldc-grep-add-port-b='delldc-nt-node-b | grep --color "add_ports.*is_local true"'
+alias delldc-grep-add-port-fc-b='delldc-nt-node-b | grep --color "add_ports.*trtype fc.*is_local true"'
+alias delldc-grep-add-port-tcp-b='delldc-nt-node-b | grep --color "add_ports.*trtype tcp.*is_local true"'
+
 delldc-file-list ()
 {
     echo "on the root directory of the DC"
