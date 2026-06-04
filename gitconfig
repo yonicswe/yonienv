@@ -250,29 +250,8 @@
       fi ;                                                  \
     }; f"
 
-    diffcommitfile = "!f() {                                \
-	if [ $# -eq 1 ] ; then                              \
-	   git difftool HEAD^..HEAD  -y $1 ; \
-	else                                                \
-    	   git difftool $1^..$1  -y $2;      \
-	fi;                                                 \
-    }; f"
-
-    difffilebetweenbranches = "!f() {  \
-	if [ $# -eq 0 ] ; then \
-		echo 'difffilebetweenbranches <branch> <branch> <file>'; \
-		return; \
-	fi; \
-	if [ $# -eq 2 ] ; then \
-		branchA=HEAD; \
-		file=$2; \
-	else \
-		branchA=$1; \
-		branchB=$2; \
-		file=$3; \
-	fi; \
-	git dt $branchA $branchB -- $file; \
-    }; f"
+    diffcommitfile = !git-diffcommitfile
+    difffilebetweenbranches = !git-difffilebetweenbranches
 
     dell-pdr-status = status source/cyc_core source/nt-nvmeof-frontend
     dell-pdr-status-summary = sm summary source/cyc_core source/nt-nvmeof-frontend

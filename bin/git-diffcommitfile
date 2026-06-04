@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ $# -eq 1 ]; then
+    git difftool HEAD^..HEAD -- "$1"
+else
+    git difftool "$1"^.."$1" -- "$2"
+fi

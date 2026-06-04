@@ -1,0 +1,16 @@
+#!/bin/bash
+if [ $# -eq 0 ] ; then
+    echo 'difffilebetweenbranches <branch> <branch> <file>'; 
+    return; 
+fi; 
+if [ $# -eq 2 ] ; then 
+    branchA=HEAD; 
+    branchB=$1;
+    file=$2; 
+else
+    branchA=$1;
+    branchB=$2;
+    file=$3;
+fi;
+set -x
+git dt $branchA $branchB -- $file;
