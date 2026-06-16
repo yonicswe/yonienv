@@ -1129,6 +1129,14 @@ dellcyclonebuildhistoryreset ()
     popd 1>/dev/null;
 }
 
+if [[ -e /home/public/scripts/xpool_trident/prd/xpool ]] ; then
+    xpool_app='/home/public/scripts/xpool_trident/prd/xpool';
+elif [[ -e /net/c4shares.sspg.lab.emc.com/c4shares/auto/devutils/bin/xpool ]] ; then 
+    xpool_app='/net/c4shares.sspg.lab.emc.com/c4shares/auto/devutils/bin/xpool';
+else
+    xpool_app=;
+fi;
+
 _dellclusterlist ()
 {
     local list_file=${1};
@@ -1157,8 +1165,13 @@ _dellclusterlist ()
 
     #echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label}";
     # /home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} --sort lessee | tee ${list_file}; 
-    echo "/home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee ${list_file}"
-    /home/public/scripts/xpool_trident/prd/xpool list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt
+    if [ -z "${xpool_app}" ] ; then
+        echo "cannot find xpool tool";
+        return -1;
+    fi;
+
+    echo "${xpool_app} list ${dell_group} ${dell_group_label} | tee ${list_file}"
+    ${xpool_app} list ${dell_group} ${dell_group_label} | tee /tmp/cluster-list-file.txt
 
     ask_user_default_yes "open with vim ${list_file} ?";
     [ $? -eq 0 ] && return;
@@ -1181,8 +1194,13 @@ _dellclusterlistuser ()
         fi;
     fi;
 
-    echo "/home/public/scripts/xpool_trident/prd/xpool list -u ${user} ";
-    /home/public/scripts/xpool_trident/prd/xpool list -u ${user} | tee ~/docs/dell-cluster-list-${user}.txt;
+    if [ -z "${xpool_app}" ] ; then
+        echo "cannot find xpool tool";
+        return -1;
+    fi;
+
+    echo "${xpool_app} list -u ${user} ";
+    ${xpool_app} list -u ${user} | tee ~/docs/dell-cluster-list-${user}.txt;
 
     if [[ "${user}" == "y_cohen" ]] ; then
         cat ~/docs/dell-cluster-list-y_cohen.txt |sed '1,7{/.*/d}' | sed -n '/^[0123456789]/p' | awk '{print $2}' > ${dell_leased_clusters};
@@ -1194,7 +1212,13 @@ dellclusterlist-all ()
 {
     ask_user_default_no "are you sure ? it might take a while..."
     [ $? -eq 0 ] && return;
-    /home/public/scripts/xpool_trident/prd/xpool list -a -x -f;
+
+    if [ -z "${xpool_appl}" ] ; then
+        echo "cannot find xpool tool";
+        return -1;
+    fi;
+
+    ${xpool_app} list -a -x -f;
 }
 
 #alias dellclusterlist-yoni='          _dellclusterlist ~/docs/dell-cluster-list-yoni.txt'
