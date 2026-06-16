@@ -855,9 +855,9 @@ dellcyclonebuildthirdparty ()
         return -1;
     fi;
 
-	dellcdcyclonefolder;
-	[[ $? -ne 0 ]] && return -1;
-	
+    dellcdcyclonefolder;
+    [[ $? -ne 0 ]] && return -1;
+
     dellclusterruntimeenvget
     ask_user_default_yes "continue ?"
     [[ $? -eq 0 ]] && return -1;
@@ -882,7 +882,11 @@ dellcyclonebuildthirdparty ()
         flavor=DEBUG;
     fi;
 
-    build_third_party_cmd="make third_party force=yes flavor=${flavor}";
+    build_third_party_cmd="make third_party force=yes flavor=${flavor}";                                                                                                                                                              
+
+    echo ${build_third_party_cmd};                                                                                                                                                                                                    
+    ask_user_default_yes "continue";                                                                                                                                                                                                  
+    [[ $? -eq 0 ]] && return -1;   
 
     eval ${build_third_party_cmd};
 }
