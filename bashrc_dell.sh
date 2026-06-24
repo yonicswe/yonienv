@@ -68,9 +68,9 @@ alias ssh2devvm='_ssh_2_dev_vm_for_user'
 
 _ssh_2_jnode ()
 {
-    ssh cyc@$1;
+    sshpass -p cycpass ssh cyc@$1;
 }
-complete -W "jnode-fw1 jnode-fw10 jnode-fw36 jnode-fw40 jnode-fw43 jnode-fw56 jnode-fw57" ssh2jnode
+complete -W "jnode-fw1 jnode-fw10 jnode-fw36 jnode-fw40 jnode-fw43 jnode-fw56 jnode-fw57 jnode-fw39" ssh2jnode
 alias ssh2jnode='_ssh_2_jnode'
 
 export YONI_CLUSTER=;
@@ -3721,9 +3721,25 @@ dellclustereditcycconfig ()
 
 dellclusteredit-cyc_bsc_control ()
 {
-    v cyc_platform/src/package/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh
+    if [ -z ${cyclone_folder} ] ; then
+        echo "cyclone_folder not defined. run dellclusterruntimeenvset or rdd";
+        return -1;
+    fi;
+
+    v ${cyclone_folder}/source/cyc_core/cyc_platform/src/package/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh
+    return 0;
 }
 
+dellclusteredit-ini-file ()
+{
+    if [ -z ${cyclone_folder} ] ; then
+        echo "cyclone_folder not defined. run dellclusterruntimeenvset or rdd";
+        return -1;
+    fi;
+
+    v ${cyclone_folder}/source/cyc_core/cyc_platform/src/pm/template.ini
+    return 0;
+}
 
 dellclusterconfigupdate ()
 {
