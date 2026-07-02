@@ -1,14 +1,41 @@
 #!/bin/bash
 # Script to extract base OCS code and apply patches without building
-# Usage: ./apply_patches.sh <output_dir>
+# Usage: ./ocs_apply_patches.sh <output_dir> [patches_dir] [cmakelists_path]
+#
+# Parameters:
+#   output_dir      - Directory where patched code will be extracted (default: ./ocs_patched)
+#   patches_dir     - Directory containing patch files (default: derived from CMakeLists.txt location)
+#   cmakelists_path - Path to CMakeLists.txt to read patches from (default: /home/cyc/devel/cyclone/source/third_party/cyc_platform/src/third_party/BRCM_OCS/CMakeLists.txt)
 
+RED="\033[1;31m"
+REDBLINK="\033[1;5;31m"
+REDITALIC="\033[1;3;31m"
+REDREVERSE="\033[1;7;31m"
+BLUE="\033[0;34m"
+GREEN="\033[0;32m"
+CYAN="\033[0;36m"
+PURPLE="\033[0;35m"
+BROWN="\033[0;33m"
+YELLOW="\033[1;33m"
+NC="\033[0m"
 set -e
 
 OUTPUT_DIR=${1:-./ocs_patched}
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PATCH_DIR="${SCRIPT_DIR}/patches"
+CMAKELISTS_PATH=${3:-/home/cyc/devel/cyclone/source/third_party/cyc_platform/src/third_party/BRCM_OCS/CMakeLists.txt}
+
+# If patches_dir is provided, use it; otherwise derive it from CMakeLists.txt location
+if [ -n "$2" ]; then
+    PATCH_DIR="$2"
+else
+    # Derive patches directory from CMakeLists.txt location
+    CMAKELISTS_DIR="$(dirname "$CMAKELISTS_PATH")"
+    PATCH_DIR="${CMAKELISTS_DIR}/patches"
+fi
+
 OCS_ARCHIVE="/home/cyc/devel/cyclone/source/third_party/binaries/key_val/ocs/ocs_sdk_pkg_14.4.792.0.tgz"
 
+echo "Using CMakeLists.txt from: ${CMAKELISTS_PATH}"
+echo "Using patches directory: ${PATCH_DIR}"
 echo "Extracting base OCS code to ${OUTPUT_DIR}..."
 mkdir -p "${OUTPUT_DIR}"
 tar -xzf "${OCS_ARCHIVE}" -C "${OUTPUT_DIR}"
@@ -18,31 +45,31 @@ cd "${OUTPUT_DIR}"
 OCS_SRC_DIR="."
 echo "Applying patches to ${OUTPUT_DIR}..."
 
-# Apply patches in the same order as CMakeLists.txt
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__build-env.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__build-params.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__enable_fw_upgrade.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__sfp.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__fw_dump.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__nvme_targetport2.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__nvmet_fc_rcv_ls_req_ext.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__multithreaded_init_done.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__ocs_cq_limits.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__trigger-dump-on-failure.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__ocs-nvme-ls-fix.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__max_sectors.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__add_node_cnt.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__debugfs_on_all_sports.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__fpin_rcv_api_compat.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Dell__sync_thread_affinity-v3.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__cpu_mask_string_param.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__loglevel_parameter_writeable.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__lun-trunk-fix_pssldf-57228.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__no_sleep_on_panic.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Dell__PSSL14I-269.patch"
-patch -F0 -E -p1 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__ocs_sport_logo_fix.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__ocs_nvme_wait_bcknd_rport_rel.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__ocs_nvme_release_xri.patch"
-patch -F0 -E -p0 --backup-if-mismatch -i "${PATCH_DIR}/Broadcom__ocs-gffid-whitelist-bypass.patch"
+# Extract and apply patches from CMakeLists.txt
+# Parse the PATCH_COMMAND lines and execute them
+PATCH_COMMANDS=$(sed -n '/PATCH_COMMAND patch/,/CONFIGURE_COMMAND/p' "$CMAKELISTS_PATH" | grep 'patch' | sed 's/^[ \t]*//' | sed 's/^PATCH_COMMAND //' | tr '\n' ' ')
+
+if [ -z "$PATCH_COMMANDS" ]; then
+    echo "Error: No patch commands found in CMakeLists.txt"
+    exit 1
+fi
+
+# Split by '&&' and apply each patch command
+IFS='&&' read -ra PATCH_ARRAY <<< "$PATCH_COMMANDS"
+for patch_cmd in "${PATCH_ARRAY[@]}"; do
+    # Trim whitespace
+    cmd=$(echo "$patch_cmd" | sed 's/^[ \t]*//' | sed 's/[ \t]*$//')
+    
+    # Skip empty commands
+    if [ -z "$cmd" ]; then
+        continue
+    fi
+    
+    # Replace ${PATCH_DIR} with actual patches directory
+    cmd=$(echo "$cmd" | sed "s|\${PATCH_DIR}|${PATCH_DIR}|g")
+    
+    echo -e "${RED}Executing: $cmd${NC}"
+    eval $cmd
+done
 
 echo "Done! Patched code is in ${OUTPUT_DIR}"
