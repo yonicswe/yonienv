@@ -290,6 +290,14 @@ dellpnvmettagsupdate ()
         return -1;
     fi;
 
+    if [[ -e tags.vim && $(grep cs tags.vim | wc -l) -gt 0 ]] ; then
+        ask_user_default_yes "retag ?"
+        if [ $? -eq 1 ] ; then
+            cat tags.vim |grep cs|awk '{print $3}' | while read s ; do c $(dirname $s)  ; ttt ; c -  ; done
+            return;
+        fi;
+    fi;
+
     build_choices=($(whiptail --checklist "pnvmet tags" 13 30 6\
                    linux "" off\
                    cyc_core "" off  \
