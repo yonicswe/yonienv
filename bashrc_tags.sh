@@ -78,7 +78,7 @@ tagme_base ()
 
     if [ -e cscope.files ] ; then 
         echo "cscope.files has $(wc -l cscope.files|cut -f 1 -d ' ') files (size: $(ls -sh cscope.files|cut -f 1 -d ' '))"
-        echo -e "\033[0;33mRe-Tagging ctags...\033[0m";
+        echo -e "\033[0;33mRe-Tagging $(pwd)/ctags...\033[0m";
 #       ctags -uR --sort=yes --fields=+niaS --c-kinds=+p --c++-kinds=+p --extra=+q --extra=+f $(cat cscope.files) &
             set -x
         ctags -u --fields=+niaS --c-kinds=+cdefglmpstuvx --c++-kinds=+p --extra=+q --extra=+f -L cscope.files
