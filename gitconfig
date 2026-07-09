@@ -454,6 +454,8 @@
 
     # showuser = "!f() { me=${1-:*} ; git config --get-regex alias.* | sed 's/alias\.//g' | grep -w --color $me;}; f"
     showuser = "!f() { me=${1-:*} ; git config --get-regex alias.$me | grep --color $me;}; f"
+    showtoplevel = rev-parse --show-toplevel
+    showpdr = rev-parse --show-superproject-working-tree
 
     sm = submodule
     smdiff = diff --submodule
