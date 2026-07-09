@@ -584,6 +584,10 @@ bsc-broadcom-set-link-online ()
     return -1;
 }
 
+alias bsc-broadcom-elxsdkutil='sudo /cyc_host/cyc_bin/elxsdkutil'
+alias core-broadcom-elxsdkutil='sudo /cyc_software_0/cyc_host/cyc_bin/elxsdkutil'
+alias core-broadcom-elxsdkutil-list='core-broadcom-elxsdkutil list |grep  -i "\[\|pci\|wwpn"'
+
 bsclistfcports ()
 {
     for f in /sys/class/fc_host/* ; do 
