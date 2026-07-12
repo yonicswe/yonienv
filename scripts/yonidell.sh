@@ -903,9 +903,14 @@ alias journal-grep-version='journalcycconfig | grep --color -i "package version"
 alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel"'
 alias journal-grep-nt-kernel-last-hour='journalall --since "1 hour ago" |grep "\[nt\]\|kernel"'
 
+alias journallistsubcomponents='journalctl -F SUB_COMPONENT'
+
+alias journalinfo='journalctl SUB_COMPONENT=info'
+
 alias journalall='journalctl'
 alias journalalllast3minutes='journalctl --since="3 minutes ago"'
 alias journalallf='journalctl -f'
+
 
 alias journalnt='journalctl SUB_COMPONENT=nt'
 alias journalntf='journalctl -f SUB_COMPONENT=nt'
@@ -1393,6 +1398,8 @@ bsc-count-controllers ()
     echo "check kernel logs for details"
     echo 1 | sudo tee /sys/module/nvmet/parameters/nr_ctrls; 
 }
+
+alias bsc-crm='sudo crm'
 
 _debuc_port_add ()
 {
