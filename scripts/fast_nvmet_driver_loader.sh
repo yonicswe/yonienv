@@ -1,112 +1,107 @@
 #!/bin/sh
 
-
-
 . ./cyc_helpers_common.sh
 
-VERBOSE=1;
-verbose_log() {
-	if [[ -v VERBOSE ]]; then
-		echo $1
-	fi
-}
+RED="\033[1;31m"
+REDBLINK="\033[1;5;31m"
+REDITALIC="\033[1;3;31m"
+REDREVERSE="\033[1;7;31m"
+BLUE="\033[0;34m"
+GREEN="\033[0;32m"
+CYAN="\033[0;36m"
+PURPLE="\033[0;35m"
+BROWN="\033[0;33m"
+YELLOW="\033[1;33m"
+NC="\033[0m"
 
-if [ -v TTT ]; then
-    echo "V"
-fi
+cyclone_folder=${1};
 
-if [ -z "$TTT" ]; then
-    echo "N"
-fi
-
-if [ -z "$ONLY_B" ]; then
-    echo "Working on node A"
-    drivers_a=`./run_core_a.sh sudo find /cyc_software_0/ /cyc_software_1/ -name modules`
-    verbose_log "Existing drivers on Node A are on $drivers_a"
-fi
-
-if [ -z "$ONLY_A" ]; then
-    echo "Working on node B"
-    drivers_b=`./run_core_b.sh sudo find /cyc_software_0/ /cyc_software_1/ -name modules`
-    verbose_log "Existing drivers on Node A are on $drivers_b"
-fi
-
-new_driver="../../../$CYC_OBJ_DIR/package/final/top_host/cyc_host/cyc_common/modules"
-#new_driver=`fin`d ../../../$CYC_OBJ_DIR/ -name PNVMeT | tail -1`
-new_qla_driver="../../../$CYC_OBJ_DIR/package/final/top_host/cyc_host/cyc_common/modules/qla2xxx.ko"
-
-if [[ -v VERBOSE ]]; then
-	echo "Old driver on node A"
-
-	./run_core_a.sh ls -ltr $drivers_a/nvmet*
-
-	echo "Old driver on node B"
-
-	./run_core_b.sh ls -ltr $drivers_a/nvmet*
-
-	echo "New driver in $new_driver"
-
-	ls -ltr $new_driver/nvmet*.ko
-
-    echo "============================================";
-	echo -e "About to copy the driver from $new_driver to the nodes. \nPress [ENTER] to continue";
-	read;
+if [ -z ${cyclone_folder} ] ; then
+    echo "cyclone folder not set"
+    exit;
 fi;
 
+old_drivers_path=/cyc_software_0/cyc_host/cyc_common/modules/
+new_drivers_release_path=${cyclone_folder}/source/cyc_core/cyc_platform/obj_Release/package/final/top_host/cyc_host/cyc_common/modules;
+new_drivers_debug_path=${cyclone_folder}/source/cyc_core/cyc_platform/obj_Debug/package/final/top_host/cyc_host/cyc_common/modules;
 
-files=`find $new_driver/nvmet*.ko`
+found_release=false;
+found_debug=false;
+if [ -d ${new_drivers_release_path} ] ; then
+    echo -e "${BLUE}found drivers in ${new_drivers_release_path}${NC}";
+    found_release=true;
+fi;
 
-if [ -z "$ONLY_B" ]; then
-    echo "Copy QLA driver to node A"
-	./scp_core_to_a.sh $new_qla_driver
-	./run_core_a.sh sudo cp -v $drivers_a/qla2xxx.ko qla2xxx.ko.old
-	./run_core_a.sh sudo cp -v qla2xxx.ko $drivers_a/
-fi
+if [ -d ${new_drivers_debug_path} ] ; then
+    echo -e "${BLUE}found drivers in ${new_drivers_debug_path}${NC}";
+    found_debug=true;
+fi;
 
-if [ -z "$ONLY_A" ]; then
-    echo "Copy QLA driver to node B"
-    ./scp_core_to_b.sh $new_qla_driver
-    ./run_core_b.sh sudo cp -v $drivers_b/qla2xxx.ko qla2xxx.ko.old
-    ./run_core_b.sh sudo cp -v qla2xxx.ko $drivers_a/
-fi
+if [[ ${found_release} == false && ${found_debug} == false ]] ; then
+    echo -e "${RED}new drivers were not found${NC}";
+    exit -1;
+fi;
 
-if [[ -v SKIP_NVMET ]]; then
-	echo "Skipping nvmet drivers"
-	exit 0
-fi
+read -p "install (R)etail or (d)ebug [R/d]" ans;
+if [[ ${ans} =~ d ]] ; then
+    if [[ ${found_debug} == false ]] ; then
+        echo -e "${RED}new debug drivers were not found${NC}";
+        exit -1;
+    fi;
+    echo -e "${BLUE}you chose to install debug drivers${NC}";
+    new_driver_path=${new_drivers_debug_path};
+else
+    if [[ ${found_release} == false ]] ; then
+        echo -e "${RED}new release drivers were not found${NC}";
+        exit -1;
+    fi;
+    echo -e "${BLUE}you chose to install Retail drivers${NC}";
+    new_driver_path=${new_drivers_release_path};
+fi;
 
-for i in ${files} ; do
+echo -e "${GREEN}zipping new drivers${NC}";
+find ${new_driver_path} -type f -name "*ko" -print0 | tar --null -T - -cf new_drivers.tar --transform='s|.*/||'
 
-	filename=`echo $i | rev | cut -f1 -d '/' | rev`;
-    echo "Copy $filename driver";
+# backup original drivers on node-a
+if [[ $(./run_core_a.sh ls /home/core/  | grep modules.orig | wc -l  ) == 0 ]] ; then
+    echo -e "${RED}backup original drivers to node-a://home/core/modules.orig${NC}";
+    ./run_core_a.sh mkdir /home/core/modules.orig
+    ./run_core_a.sh cp ${old_drivers_path}/*.ko /home/core/modules.orig;
+else
+    echo -e "${BLUE}found backup of original drivers in node-a://home/core/modules.new ! skipping backup${NC}";
+fi;
 
-	if [ -z "$ONLY_B" ]; then
-		./scp_core_to_a.sh $i
-		./run_core_a.sh sudo cp -v $drivers_a/$filename $filename.old
-		./run_core_a.sh sudo cp -v $filename $drivers_a/
-	fi
+# backup original drivres on node-b
+if [[ $(./run_core_b.sh ls /home/core/  | grep modules.orig | wc -l  ) == 0 ]] ; then
+    echo -e "${RED}backup original drivers to node-b://home/core/modules.orig${NC}";
+    ./run_core_b.sh mkdir /home/core/modules.orig
+    ./run_core_b.sh cp ${old_drivers_path}/*.ko /home/core/modules.orig;
+else
+    echo -e "${BLUE}found backup of original drivers in node-b://core/modules.new ! skipping backup${NC}";
+fi;
 
-	if [ -z "$ONLY_A" ]; then
-		./scp_core_to_b.sh $i
-		./run_core_b.sh sudo cp -v $drivers_b/$filename $filename.old
-		./run_core_b.sh sudo cp -v $filename $drivers_b/
-	fi
-done
+# install drivers to node-a
+echo -e "${GREEN}./scp_core_to_a.sh new_drivers.tar${NC}";
+./scp_core_to_a.sh new_drivers.tar
 
-if [ -z "$RELOAD_DRIVERS" ]; then
-	echo "Skip driver reload"
-fi
+echo -e "${GREEN}./run_core_a.sh tar xvf new_drivers.tar -C ${old_drivers_path}${NC}";
+./run_core_a.sh sudo tar xvf new_drivers.tar -C ${old_drivers_path};
 
+# install drivers to node-b
+echo -e "${GREEN}./scp_core_to_b.sh new_drivers.tar${NC}";
+./scp_core_to_b.sh new_drivers.tar
 
-echo "Reloading drivers on the cluster"
+echo -e "${GREEN}./run_core_b.sh tar xvf new_drivers.tar -C ${old_drivers_path}${NC}";
+./run_core_b.sh sudo tar xvf new_drivers.tar -C ${old_drivers_path};
 
-if [ -z "$ONLY_B" ]; then
-	./stack_down_hard_only_a.sh
-	./stack_up_only_a.sh
-fi
+read -p  "about to restart both nodes [Enter]"
 
-if [ -z "$ONLY_A" ]; then
-	./stack_down_hard_only_b.sh
-	./stack_up_only_b.sh
-fi
+echo -e "${GREEN}Reloading drivers on the node-a${NC}";
+./stack_down_hard_only_a.sh
+./stack_up_only_a.sh
 
+echo -e "${GREEN}Reloading drivers on the node-b${NC}";
+./stack_down_hard_only_b.sh
+./stack_up_only_b.sh
+
+exit 0;
