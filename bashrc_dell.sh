@@ -3042,7 +3042,7 @@ dellclusterkernelspaceupdate ()
 	# fi
 
     /bin/cp ${yonienv}/scripts/fast_nvmet_driver_loader.sh .;
-    time ./fast_nvmet_driver_loader.sh;
+    time ./fast_nvmet_driver_loader.sh ${cyclone_folder};
 
 	return 0;
 }
@@ -4136,6 +4136,40 @@ dellcdkernelobjects ()
 
     /devel/cyclone/source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT
     /devel/cyclone/source/cyc_core/cyc_platform/obj_Release/third_party/PNVMeT/src/PNVMeT
+}
+
+dellcyclonelistkernelmodules ()
+{
+    new_drivers_release_path=${cyclone_folder}/source/cyc_core/cyc_platform/obj_Release/package/final/top_host/cyc_host/cyc_common/modules;
+    new_drivers_debug_path=${cyclone_folder}/source/cyc_core/cyc_platform/obj_Debug/package/final/top_host/cyc_host/cyc_common/modules;
+
+    found_release=false;
+    found_debug=false;
+    if [ -d ${new_drivers_release_path} ] ; then
+        echo -e "${BLUE}found drivers in ${new_drivers_release_path}${NC}";
+        found_release=true;
+    else
+        echo "no drivers in ${new_drivers_release_path}"
+    fi;
+
+    if [ -d ${new_drivers_debug_path} ] ; then
+        echo -e "${BLUE}found drivers in ${new_drivers_debug_path}${NC}";
+        found_debug=true;
+    else
+        echo "no drivers in ${new_drivers_debug_path}"
+    fi;
+ 
+    if [[ ${found_release} == true ]] ; then
+        find ${new_drivers_release_path} -type f -regex ".*nvme.*ko\|.*qla.*ko\|.*ocs.*ko" | while read m ; do 
+            md5sum $m;
+        done;
+    fi;
+
+    if [[ ${found_debug} == true ]] ; then
+        find ${new_drivers_debug_path} -type f -regex ".*nvme.*ko\|.*qla.*ko\|.*ocs.*ko" | while read m ; do 
+            md5sum $m;
+        done;
+    fi;
 }
 
 dellcyclonekernelshaget ()
