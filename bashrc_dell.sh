@@ -718,6 +718,9 @@ _dellpdr_git_sync_submodules ()
             echo -e "${YELLOW}cd ${m}${NC}";
             cd ${m};
             echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+            if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
+                echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
+            fi;
             git ${checkout_cmd} ${pdr_branch};
             cd - 1>/dev/null;
 
@@ -731,8 +734,7 @@ _dellpdr_git_sync_submodules ()
         cd source/cyc_core;
         echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
         if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
-            echo -e "branch \'${pdr_branch}\' already exist"
-            return;
+            echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
         fi;
         git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
@@ -742,6 +744,9 @@ _dellpdr_git_sync_submodules ()
         echo -e "${YELLOW}cd source/nt-nvmeof-frontend${NC}";
         cd source/nt-nvmeof-frontend;
         echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
+            echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
+        fi;
         git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
@@ -750,6 +755,9 @@ _dellpdr_git_sync_submodules ()
         echo -e "${YELLOW}cd source/linux${NC}";
         cd source/linux;
         echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
+            echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
+        fi;
         git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
@@ -758,6 +766,9 @@ _dellpdr_git_sync_submodules ()
         echo -e "${YELLOW}cd source/third_party${NC}";
         cd source/third_party;
         echo -e "${YELLOW}git ${checkout_cmd} ${pdr_branch}${NC}";
+        if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
+            echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
+        fi;
         git ${checkout_cmd} ${pdr_branch};
         cd - 1>/dev/null;
     fi;
