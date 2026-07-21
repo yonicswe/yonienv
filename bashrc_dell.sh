@@ -3019,6 +3019,44 @@ dellrbatracedump ()
     ./rba_sort -f bin -p ${rba_file} -o ${rba_file}.ktr
 }
 
+dellcluster-restartnode ()
+{
+    local node=${1};
+
+	if [ -z $CYC_CONFIG ] ; then
+		echo "CYC_CONFIG not defined. use dellclusterruntimeenvset";
+		return -1;
+	fi
+
+	ask_user_default_yes "restart ${YONI_CLUSTER} ?";
+	[ $? -eq 0 ] && return -1;
+
+	dellcdclusterscripts;
+
+    if [[ -z "${node}" ]] ; then
+        read -p "[a|b|default BOTH] : " node;
+        if [ "${node}" = 'a' ] ; then
+            node=a;
+        elif [ "${node}" = 'b' ] ; then
+            node=b;
+        fi;
+    fi;
+
+    if [[ -z ${node} || "${node}" == 'a' ]] ; then
+        echo -e "${GREEN}Reloading drivers on ${YONI_CLUSTER} node-a${NC}";
+        ./stack_down_hard_only_a.sh
+        ./stack_up_only_a.sh
+    fi;
+
+    if [[ -z ${node} || "${node}" == 'b' ]] ; then
+        echo -e "${GREEN}Reloading drivers on ${YONI_CLUSTER} node-b${NC}";
+        ./stack_down_hard_only_b.sh
+        ./stack_up_only_b.sh
+    fi;
+
+    return 0;
+}
+
 dellclusterkernelspaceupdate ()
 {
 	if [ -z $CYC_CONFIG ] ; then
