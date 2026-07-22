@@ -171,6 +171,7 @@
              echo 'gitcheckoutremotebranch <branch> <path-to-file/file>'; \
              return; \
         fi; \
+	set -x; \
         git checkout origin/$branch -- $file; \
         git s; \
        }; f"
@@ -245,7 +246,9 @@
     diffcommit =  "!f() {                                   \
       if [ -z $1 ] ; then                                   \
          git difftool HEAD^..HEAD --prompt; \
-      else                                                  \
+    elif [ $# -eq 2 ] ; then \
+         git difftool $1^..$2 --prompt;     \
+    else                                                  \
          git difftool $1^..$1 --prompt;     \
       fi ;                                                  \
     }; f"
@@ -368,6 +371,7 @@
 
     lauthor = "!f() { git log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short --author="$1"; }; f"
     llb = !git_log_branch.sh
+    llbremote = !git_log_branch_remote.sh
 
 # ───────p──────────────────────────────────────────────────────────────────────
 #   push-commit = "!f() {                 \
