@@ -329,7 +329,7 @@ alias corecrash-crash-py='/triage_analysis/node_a/cyc_bsc/utils/cyc_crash.py --s
 alias corecrash-crash='crash ./triage_analysis/node_a/2024-09-05-10:50/vmlinux-5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f-default.gz ./triage_analysis/node_a/5.14.21-150400.24.125.1.8adb30a5bfb1ed67dd2c9a8f78776b7f/usr/lib/debug/boot/vmlinux* triage_analysis/node_a/2024-
 09-05-10-50.kdump'
 
-core-listkernelmodules ()
+core-list-kernelmodules ()
 {
     local kernel_modules_folder_0=/cyc_software_0/cyc_host/cyc_common/modules/;
     local kernel_modules_folder_1=/cyc_software_1/cyc_host/cyc_common/modules/;
@@ -345,7 +345,10 @@ core-listkernelmodules ()
     fi;
 
     if [ -d ${kernel_modules_folder} ] ; then
-        (set -x ; ls -ltr ${kernel_modules_folder};);
+        #(set -x ; ls -ltr ${kernel_modules_folder};);
+        find ${kernel_modules_folder} -type f -regex ".*nvme.*ko\|.*qla.*ko\|.*ocs.*ko" | while read m ; do 
+            md5sum $m;
+        done;
     fi;
     #bsclistkernelmodules;
 }
@@ -585,8 +588,54 @@ bsc-broadcom-set-link-online ()
 }
 
 alias bsc-broadcom-elxsdkutil='sudo /cyc_host/cyc_bin/elxsdkutil'
-alias core-broadcom-elxsdkutil='sudo /cyc_software_0/cyc_host/cyc_bin/elxsdkutil'
-alias core-broadcom-elxsdkutil-list='core-broadcom-elxsdkutil list |grep  -i "\[\|pci\|wwpn"'
+if [ -e /cyc_software_0/cyc_host/cyc_bin/elxsdkutil ] ; then
+    alias core-broadcom-elxsdkutil='sudo /cyc_software_0/cyc_host/cyc_bin/elxsdkutil'
+else
+    alias core-broadcom-elxsdkutil='sudo /cyc_software_1/cyc_host/cyc_bin/elxsdkutil'
+fi
+alias core-broadcom-elxsdkutil-list-devices='core-broadcom-elxsdkutil list |grep  -i "\[\|pci\|wwpn"'
+
+core-broadcom-elxsdkutil-edif-sessions ()
+{
+    local d=${1};
+    if [ -z $d ] ; then
+        echo -e "${RED}you forgot to specify device id (use core-broadcome-elxsdkutil-list-devices)${NC}";
+        echo -e "${RED}usage : core-broadcom-elxsdkutil-edif-sessions <#>"
+        echo -e "${RED}using device id 0${NC}";
+        d=0;
+    fi;
+
+    echo -e "${BLUE}core-broadcom-elxsdkutil edif-sessions -d $d${NC}";
+    core-broadcom-elxsdkutil edif-sessions -d $d
+}
+
+core-broadcom-elxsdkutil-edif-enable-disable ()
+{
+    local op=${1};
+    local d=$2;
+    if [ -z $d ] ; then
+        echo -e "${RED}you forgot to specify device id (use core-broadcome-elxsdkutil-list-devices)${NC}";
+        if [[ ${op} =~ "enable" ]] ; then
+            echo -e "${RED}usage : core-broadcom-elxsdkutil-edif-enable <#>"
+        else
+            echo -e "${RED}usage : core-broadcom-elxsdkutil-edif-disable <#>"
+        fi;
+        return -1;
+    fi;
+
+    if [[ ${op} =~ "enable" ]] ; then
+        echo -e "${BLUE}core-broadcom-elxsdkutil edif-sessions -d $d${NC} --mode 1";
+        core-broadcom-elxsdkutil edif -d $d --mode 1;
+    elif [[ ${op} =~ "disable" ]] ; then
+        echo -e "${BLUE}core-broadcom-elxsdkutil edif -d $d${NC} --mode 0";
+        core-broadcom-elxsdkutil edif -d $d --mode 0;
+    else
+        echo -e "unknown op \'${op}\'";
+    fi;
+}
+
+alias core-broadcom-elxsdkutil-edif-enable="core-broadcom-elxsdkutil-edif-enable-disable enable"
+alias core-broadcom-elxsdkutil-edif-disable="core-broadcom-elxsdkutil-edif-enable-disable disable"
 
 bsclistfcports ()
 {
@@ -649,7 +698,7 @@ bsclistfeatureflags ()
         awk '/\"name\"/{printf $0; getline; print $0 }' ${feature_flags_file}  | sed -e 's/\"\|\,\|\://g' -e 's/default_state\|name//g' | column -t | grep ${feature};
     fi;
 }
-alias core-listfeatureflags='bsclistfeatureflags';
+alias core-list-featureflags='bsclistfeatureflags';
 
 alias bsc-housemd='sudo /xtremapp/utils/housemd/housemd'
 
@@ -714,7 +763,7 @@ core-list-fc-devices ()
     echo "sudo lspci |grep -i fibre";
     if [ $(sudo lspci | grep -i fibre | grep -i emulex| wc -l ) -gt 0 ] ; then
         sudo lspci | grep -i fibre | grep -i emulex;
-        echo -e "found emulex/marvell card installed on pci bus, you need to \"modprobe lpfc or modprobe ocs_fc_scst\"";
+        echo -e "found emulex/broadcome card installed on pci bus, you need to \"modprobe lpfc or modprobe ocs_fc_scst\"";
     elif [ $(sudo lspci | grep -i fibre | grep -i qlogic| wc -l ) -gt 0 ] ; then
         sudo lspci | grep -i fibre | grep -i qlogic;
         echo -e "found qlogic card installed on pci bus, you need to \"modprobe qla2xxx\"";
@@ -1919,6 +1968,17 @@ core-list-kernel-configs ()
     ls -ltrR /sys/kernel/config/nvmet/subsystems/;
     #echo "ls -ltr /sys/kernel/config/nvmet/hosts/";
     ls -ltrR /sys/kernel/config/nvmet/hosts/;
+}
+
+core-edit-cyc_bsc_control.sh ()
+{
+    if [ -e /cyc_software_0/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh ] ; then
+        echo "found : /cyc_software_0/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh";
+        v /cyc_software_0/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh;
+    else
+        echo "found : /cyc_software_1/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh";
+        v /cyc_software_1/cyc_host/cyc_bsc/scripts/cyc_bsc_control.sh;
+    fi;
 }
 
 coreid ()
