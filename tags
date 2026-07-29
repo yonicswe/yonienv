@@ -26,6 +26,7 @@ _dellclusterruntimeenvvalidate	bashrc_dell.sh	/^_dellclusterruntimeenvvalidate (
 _dellclusteruserchoicesget	bashrc_dell.sh	/^_dellclusteruserchoicesget ()$/;"	f
 _dellcyclonebackupuserchoices	bashrc_dell.sh	/^_dellcyclonebackupuserchoices ()$/;"	f
 _dellcyclonebuild_validate_build_machine	bashrc_dell.sh	/^_dellcyclonebuild_validate_build_machine ()$/;"	f
+_dellgetbroadcomsourcespath	bashrc_dell.sh	/^_dellgetbroadcomsourcespath ()$/;"	f
 _delljournalctl	bashrc_dell.sh	/^_delljournalctl ()$/;"	f
 _dellpdr_git_sync_submodules	bashrc_dell.sh	/^_dellpdr_git_sync_submodules ()$/;"	f
 _dellpdr_gitsmup	bashrc_dell.sh	/^_dellpdr_gitsmup ()$/;"	f
@@ -43,6 +44,8 @@ _hex2bin	bashrc_devel.sh	/^_hex2bin ()$/;"	f
 _ofed	ofed_complete_dir.sh	/^_ofed ()$/;"	f
 _regression	regression_complete.sh	/^_regression ()$/;"	f
 _share	folder_name_complete.sh	/^_share ()$/;"	f
+_ssh2lg_nopass	bashrc_dell.sh	/^_ssh2lg_nopass ()$/;"	f
+_ssh2lg_with_tmux	bashrc_dell.sh	/^_ssh2lg_with_tmux ()$/;"	f
 _ssh_2_dev_vm_for_user	bashrc_dell.sh	/^_ssh_2_dev_vm_for_user ()$/;"	f
 _ssh_2_jnode	bashrc_dell.sh	/^_ssh_2_jnode ()$/;"	f
 _ssh_set_passwordless_cyc_for_devvm	bashrc_dell.sh	/^_ssh_set_passwordless_cyc_for_devvm ()$/;"	f
@@ -115,7 +118,9 @@ debug	bashrc_bookmarks.sh	/^debug()$/;"	f
 debuglibs	bashrc_devel.sh	/^debuglibs ()$/;"	f
 define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
+deletecorefiles	bashrc_fs.sh	/^deletecorefiles()$/;"	f
 deletefast	bashrc_fs.sh	/^deletefast ()$/;"	f
+dellbroadcomdeletesources	bashrc_dell.sh	/^dellbroadcomdeletesources ()$/;"	f
 dellcdbroadcommakefiles	bashrc_dell.sh	/^dellcdbroadcommakefiles ()$/;"	f
 dellcdbroadcomsources	bashrc_dell.sh	/^dellcdbroadcomsources ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
@@ -140,12 +145,14 @@ dellclusterinstall	bashrc_dell.sh	/^dellclusterinstall ()$/;"	f
 dellclusterinstallfeatureflag	bashrc_dell.sh	/^dellclusterinstallfeatureflag ()$/;"	f
 dellclusteripget	bashrc_dell.sh	/^dellclusteripget ()$/;"	f
 dellclusterkernelspaceupdate	bashrc_dell.sh	/^dellclusterkernelspaceupdate ()$/;"	f
+dellclusterlabjungle	bashrc_dell.sh	/^dellclusterlabjungle ()$/;"	f
 dellclusterleaseReRelease	bashrc_dell.sh	/^dellclusterleaseReRelease ()$/;"	f
 dellclusterleaseRelease	bashrc_dell.sh	/^dellclusterleaseRelease ()$/;"	f
 dellclusterleaseUpdateUser	bashrc_dell.sh	/^dellclusterleaseUpdateUser ()$/;"	f
 dellclusterleaseextend	bashrc_dell.sh	/^dellclusterleaseextend () $/;"	f
 dellclusterleasehistory	bashrc_dell.sh	/^dellclusterleasehistory ()$/;"	f
 dellclusterleaseinfo	bashrc_dell.sh	/^dellclusterleaseinfo ()$/;"	f
+dellclusterleaselist	bashrc_dell.sh	/^dellclusterleaselist ()$/;"	f
 dellclusterlgipget	bashrc_dell.sh	/^dellclusterlgipget ()$/;"	f
 dellclusterowner	bashrc_dell.sh	/^dellclusterowner ()$/;"	f
 dellclusterping	bashrc_dell.sh	/^dellclusterping ()$/;"	f
@@ -158,21 +165,24 @@ dellcyclonebuild	bashrc_dell.sh	/^dellcyclonebuild ()$/;"	f
 dellcyclonebuildhistorylog	bashrc_dell.sh	/^dellcyclonebuildhistorylog () $/;"	f
 dellcyclonebuildhistoryreset	bashrc_dell.sh	/^dellcyclonebuildhistoryreset ()$/;"	f
 dellcyclonebuildhistoryshow	bashrc_dell.sh	/^dellcyclonebuildhistoryshow ()$/;"	f
-dellcyclonedevelenvsetup	bashrc_dell.sh	/^dellcyclonedevelenvsetup ()$/;"	f
+dellcyclonebuildoutputlist	bashrc_dell.sh	/^dellcyclonebuildoutputlist ()$/;"	f
+dellcyclonebuildthirdparty	bashrc_dell.sh	/^dellcyclonebuildthirdparty ()$/;"	f
+dellcyclonechekcout	bashrc_dell.sh	/^dellcyclonechekcout ()$/;"	f
 dellcyclonedevelreset	bashrc_dell.sh	/^dellcyclonedevelreset ()$/;"	f
 dellcyclonefeatureflaglist	bashrc_dell.sh	/^dellcyclonefeatureflaglist ()$/;"	f
 dellcyclonegitdeinit	bashrc_dell.sh	/^dellcyclonegitdeinit ()$/;"	f
 dellcyclonegrepconfig	bashrc_dell.sh	/^dellcyclonegrepconfig ()$/;"	f
 dellcyclonekernelshaget	bashrc_dell.sh	/^dellcyclonekernelshaget ()$/;"	f
 dellcyclonekernelshaupdate	bashrc_dell.sh	/^dellcyclonekernelshaupdate ()$/;"	f
+dellcyclonelistkernelmodules	bashrc_dell.sh	/^dellcyclonelistkernelmodules ()$/;"	f
 dellcyclonetagsupdate	bashrc_dell.sh	/^dellcyclonetagsupdate ()$/;"	f
-delldeletebroadcomsources	bashrc_dell.sh	/^delldeletebroadcomsources ()$/;"	f
 dellenvrebash	bashrc_dell.sh	/^dellenvrebash ()$/;"	f
 dellibid2commit	bashrc_dell.sh	/^dellibid2commit ()$/;"	f
 dellibid2commitpnvmet	bashrc_dell.sh	/^dellibid2commitpnvmet ()$/;"	f
 dellibidgitcheckout	bashrc_dell.sh	/^dellibidgitcheckout ()$/;"	f
 dellibidofficial	bashrc_dell.sh	/^dellibidofficial ()$/;"	f
 delllgyonienvupdate	bashrc_dell.sh	/^delllgyonienvupdate ()$/;"	f
+dellpnvmetfolderset	bashrc_dell.sh	/^dellpnvmetfolderset ()$/;"	f
 dellpnvmetgetshaindexfrombranch	bashrc_dell.sh	/^dellpnvmetgetshaindexfrombranch ()$/;"	f
 dellpnvmettagsupdate	bashrc_dell.sh	/^dellpnvmettagsupdate ()$/;"	f
 dellrbatracedisable	bashrc_dell.sh	/^dellrbatracedisable ()$/;"	f
@@ -211,6 +221,7 @@ findreject	bashrc_devel.sh	/^findreject ()$/;"	f
 findvideofiles	bashrc_misc.sh	/^findvideofiles ()$/;"	f
 findyonialias	bashrc_common.sh	/^findyonialias () $/;"	f
 forcereboot	bashrc_fs.sh	/^forcereboot () $/;"	f
+format_video_filename	bashrc_misc.sh	/^format_video_filename ()$/;"	f
 freecachedmem	bashrc_fs.sh	/^freecachedmem ()$/;"	f
 ftrace	bashrc_devel.sh	/^ftrace ()$/;"	f
 ftraceoff	bashrc_devel.sh	/^ftraceoff ()$/;"	f
@@ -298,6 +309,7 @@ kernelinstall	bashrc_devel.sh	/^kernelinstall ()$/;"	f
 kernelinstallall	bashrc_devel.sh	/^kernelinstallall () $/;"	f
 kernelinstallmodules	bashrc_devel.sh	/^kernelinstallmodules ()$/;"	f
 kernelversion	bashrc_devel.sh	/^kernelversion ()$/;"	f
+killuser	bashrc_fs.sh	/^killuser ()$/;"	f
 killzombies	bashrc_devel.sh	/^killzombies ()$/;"	f
 kmsl	bashrc_habana.sh	/^kmsl () $/;"	f
 kmsrelease	bashrc_habana.sh	/^kmsrelease ()$/;"	f
@@ -469,6 +481,7 @@ ssh2core	bashrc_dell.sh	/^ssh2core ()$/;"	f
 ssh2coreleased	bashrc_dell.sh	/^ssh2coreleased ()$/;"	f
 ssh2lg	bashrc_dell.sh	/^ssh2lg ()$/;"	f
 ssh2lgofcluster	bashrc_dell.sh	/^ssh2lgofcluster ()$/;"	f
+ssh2lgs	bashrc_dell.sh	/^ssh2lgs ()$/;"	f
 startNotStopLan	bashrc_nice.sh	/^startNotStopLan () $/;"	f
 startNotStopWifi	bashrc_nice.sh	/^startNotStopWifi () $/;"	f
 subtitlenamesync	bashrc_misc.sh	/^subtitlenamesync ()$/;"	f
@@ -514,6 +527,7 @@ task_list	bashrc_nice.sh	/^task_list () $/;"	f
 tl	bashrc_devel.sh	/^tl ()$/;"	f
 tn	bashrc_devel.sh	/^tn () $/;"	f
 ucxbuild	bashrc_mlx.sh	/^ucxbuild ()$/;"	f
+unzip_all_files	bashrc_misc.sh	/^unzip_all_files ()$/;"	f
 up	bashrc_misc.sh	/^function up() {$/;"	f
 usage	commonyonienv.sh	/^usage () $/;"	f
 v	bashrc_vim.sh	/^v ()$/;"	f
