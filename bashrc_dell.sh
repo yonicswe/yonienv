@@ -2359,8 +2359,21 @@ dellclusterinstallibid-with-autoinstall ()
     local cluster=${2};
     local feature_flag=;
     local flavor=retail;
-    local autoinstall_cmd=/home/public/devutils/bin/autoInstall.pl
-   
+    local autoinstall_cmd=;
+
+    if command -v autoInstall.pl >/dev/null 2>&1; then 
+        echo "use autointall from path"
+        autoinstall_cmd=autoInstall.pl;
+    elif [ -e /home/public/devutils/bin/autoInstall.pl ] ; then
+        echo "using public"
+        autoinstall_cmd=/home/public/devutils/bin/autoInstall.pl;
+    elif [ -e /net/c4shares.sspg.lab.emc.com/c4shares/auto/devutils/bin/autoInstall.pl ] ; then
+        autoinstall_cmd=/net/c4shares.sspg.lab.emc.com/c4shares/auto/devutils/bin/autoInstall.pl; 
+    else
+        echo -e "${RED}cannot find autoInstall.pl script${NC}";
+        return -1;
+    fi;
+ 
     if [[ -z ${ibid} ]] ; then
         echo "missing ibid !!"
         _usage_dellclusterinstallibid_with_autoinstall;
