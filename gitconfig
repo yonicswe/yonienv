@@ -147,6 +147,15 @@
     commitempty = commit --allow-empty
     commityoni = !git-commit-yoni.sh
 #   commitdell = !git-commit-dell.sh
+
+    commitreusemessageedit = "!f() {                  \
+        if [ $# -eq 0 ] ; then   \
+             git commit --reuse-message=HEAD --edit ;  \
+        else                     \
+             git commit --reuse-message=$1 --edit ;  \
+        fi                       \
+       }; f"
+
     c = checkout
     cc = checkout -
     cb = checkout -b
