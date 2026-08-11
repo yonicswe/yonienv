@@ -3971,6 +3971,15 @@ dellcdbroadcommakefiles ()
 
 }
 
+dellbroadcombuilddriversourcetree ()                                                                                                                                                                                                  
+{                                                                                                                                                                                                                                     
+    dddbroadcommakefiles;                                                                                                                                                                                                             
+    if [ $? -ne 0 ] ; then                                                                                                                                                                                                            
+        return -1;                                                                                                                                                                                                                    
+    fi;                                                                                                                                                                                                                               
+    ~/yonienv/scripts/ocs_apply_patches.sh                                                                                                                                                                                            
+}  
+
 dellbroadcomdeletesources ()
 {
     local platform_debug=source/third_party/cyc_platform/obj_Debug;
