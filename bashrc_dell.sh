@@ -4916,6 +4916,39 @@ delldc-xtrace-morty-datacollect ()
     echo "on the service-data folder invoke : morty_datacollect"
 }
 
+powerstore-ai-skill-devin-update ()
+{
+    # check if this is a git repo at all
+    git b 2>/dev/null
+    if [ $? -ne 0 ] ; then
+        echo "this is not a git repo";
+        return -1;
+    fi;
+
+    # check that you are in the powerstore ai repo
+    if [ $(git r |grep PowerStore-AI | wc -l ) -eq 0 ] ; then 
+        echo "this is not PowerStore-AI repo";
+        return -1;
+    fi;
+
+    echo "about to do :";
+    echo "=============";
+    echo "(1) git pull";
+    echo "(2) ./helpers/configure-global-rules.sh --setup"
+    echo "(3) source ~/.bashrc"
+    echo "(4) ./sync_global_workflows.sh -y"
+
+    ask_user_default_no "continue ? ";
+    if [ $? -eq 0 ] ; then
+        return 0;
+    fi;
+
+    git pull;
+    ./helpers/configure-global-rules.sh --setup
+    source ~/.bashrc
+    ./sync_global_workflows.sh -y
+}
+
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
 alias yyy='yonidellsshkeyset'
 
