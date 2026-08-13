@@ -3971,6 +3971,24 @@ dellcdbroadcommakefiles ()
 
 }
 
+dellbroadcomsdk ()
+{
+    local ocs_archive="source/third_party/binaries/key_val/ocs/ocs_sdk_pkg_14.4.792.0.tgz"
+    if [ -z "${cyclone_folder}" ] || ! [ -d ${cyclone_folder} ] ; then
+        return -1;
+    fi;
+
+    ocs_archive=${cyclone_folder}/${ocs_archive};
+
+    if ! [ -e ${ocs_archive} ] ; then
+        return -1;
+    fi;
+
+    echo "${ocs_archive}";
+    export OCS_ARCHIVE=${OCS_ARCHIVE};
+    return 0;
+}
+
 dellbroadcombuilddriversourcetree ()                                                                                                                                                                                                  
 {                                                                                                                                                                                                                                     
     dddbroadcommakefiles;                                                                                                                                                                                                             
