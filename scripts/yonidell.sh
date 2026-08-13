@@ -783,6 +783,13 @@ core-list-fc-devices-with-fcc-script ()
     sudo /working/cyc_host/cyc_bsc/scripts/fcc.sh
 }
 
+bsc-list-fc-devices-with-fcc-script ()
+{
+    echo "sudo /cyc_host/cyc_bsc/scripts/fcc.sh";
+    echo "=============================================";
+    sudo /cyc_host/cyc_bsc/scripts/fcc.sh
+}
+
 core-list-fc-devices-with-systool ()
 {
     for i in  /sys/class/fc_host/* ; do 
@@ -1895,6 +1902,8 @@ dellnvme-fc-host-nodename-portname ()
         echo -n "$(basename $h) : nn-$(cat $h/node_name):pn-$(cat $h/port_name)";
         echo    " | $(cat $h/port_state)";
     done;
+    echo -e "${RED}created host_file${NC}";
+    ls -l host_file;
 }
 
 alias dellnvme-host-nqn='cat /etc/nvme/hostnqn'
