@@ -21,7 +21,12 @@ NC="\033[0m"
 set -e
 
 OUTPUT_DIR=${1:-./ocs_patched}
-CMAKELISTS_PATH=${3:-/home/cyc/devel/cyclone/source/third_party/cyc_platform/src/third_party/BRCM_OCS/CMakeLists.txt}
+if [ -z "${cyclone_folder}" ] ; then
+    echo "cyclone_folder not set !! use rd or dellclusterruntimeenvset and try again";
+    exit -1;
+fi;
+
+CMAKELISTS_PATH=${3:-${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS/CMakeLists.txt}
 
 # If patches_dir is provided, use it; otherwise derive it from CMakeLists.txt location
 if [ -n "$2" ]; then
@@ -32,11 +37,17 @@ else
     PATCH_DIR="${CMAKELISTS_DIR}/patches"
 fi
 
-OCS_ARCHIVE="/home/cyc/devel/cyclone/source/third_party/binaries/key_val/ocs/ocs_sdk_pkg_14.4.792.0.tgz"
+OCS_ARCHIVE="${cyclone_folder}/source/third_party/binaries/key_val/ocs/ocs_sdk_pkg_14.4.792.0.tgz"
+OUTPUT_DIR=$(readlink -f ${OUTPUT_DIR})
 
+echo "usage : dellbroadcombuilddriversourcetree <output_dir> <patch_dir> <cmakefile>";
+echo "==============================================================================";
 echo "Using CMakeLists.txt from: ${CMAKELISTS_PATH}"
 echo "Using patches directory: ${PATCH_DIR}"
-echo "Extracting base OCS code to ${OUTPUT_DIR}..."
+echo "Extracting base OCS code to ${OUTPUT_DIR}"
+
+read -p "continue ? " ans;
+
 mkdir -p "${OUTPUT_DIR}"
 tar -xzf "${OCS_ARCHIVE}" -C "${OUTPUT_DIR}"
 

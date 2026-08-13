@@ -3991,11 +3991,12 @@ dellbroadcomsdk ()
 
 dellbroadcombuilddriversourcetree ()                                                                                                                                                                                                  
 {                                                                                                                                                                                                                                     
-    dddbroadcommakefiles;                                                                                                                                                                                                             
+    #dddbroadcommakefiles;                                                                                                                                                                                                             
     if [ $? -ne 0 ] ; then                                                                                                                                                                                                            
         return -1;                                                                                                                                                                                                                    
     fi;                                                                                                                                                                                                                               
-    ~/yonienv/scripts/ocs_apply_patches.sh                                                                                                                                                                                            
+    export cyclone_folder=${cyclone_folder}
+    ~/yonienv/scripts/ocs_apply_patches.sh $@
 }  
 
 dellbroadcomdeletesources ()
