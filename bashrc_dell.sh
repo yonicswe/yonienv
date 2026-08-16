@@ -4784,6 +4784,9 @@ alias delltriage-grep-nt-kernel-b='delltriage-all-logs-node-b |grep "\[nt\]\|ker
 alias delltriage-grep-nt-kernel-b-r='delltriage-all-logs-node-b-r |grep "\[nt\]\|kernel"|less -I'
 alias delltriage-host-grep-connect-fc='grep "nvme.*create assoc" messages|grep -v discovery'
 alias delltriage-host-grep-connect='grep "nvme.*new ctrl" messages|grep -v discovery'
+
+alias delltriage-grep-version-a='delltriage-all-logs-node-a | grep -i --color "software revision"'
+alias delltriage-grep-version-b='delltriage-all-logs-node-b | grep -i --color "software revision"'
 delltriage-host-grep-traddr ()
 {
     traddr_file=$1;
