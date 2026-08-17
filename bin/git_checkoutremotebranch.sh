@@ -4,6 +4,7 @@ source ${yonienv}/bashrc_fs.sh
 
 remote_branch=$1;
 local_branch=;
+with_force=;
 
 remote_branch_bkp_file=~/.remote_branch;
 if [ -e ${remote_branch_bkp_file} ] ; then
@@ -55,15 +56,20 @@ for b in $(git b |grep -v HEAD ) ; do
     fi;
 done;
 
+read -p "with force ? [y/N]" ans;
+if [[ "${ans}" =~ "y" ]] ; then
+    with_force='-f';
+fi;
+
 echo -e  "\t${GREEN}git fetch origin ${YELLOW}${remote_branch}${NC}";
-echo -e  "\t${GREEN}git checkout -b ${YELLOW}${local_branch}${GREEN} FETCH_HEAD${NC}";
+echo -e  "\t${GREEN}git checkout ${with_force} -b ${YELLOW}${local_branch}${GREEN} FETCH_HEAD${NC}";
 
 ask_user_default_no "continue";
 if [ $? -eq 0 ] ; then exit ; fi;
 
 
 git fetch origin ${remote_branch};
-git checkout -b ${local_branch} FETCH_HEAD;
+git checkout ${with_force} -b ${local_branch} FETCH_HEAD;
 
 echo "would you like to set ${local_branch} to track upstream ${remote_branch}";
 ask_user_default_yes;
