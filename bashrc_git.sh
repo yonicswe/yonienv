@@ -142,7 +142,7 @@ gitapplyPatchList ()
 #     for i in $(printf "%04d " $(seq ${start_index} ${end_index}))  ; do echo "git am $( ls ${patch_path}/$i*patch)" ; done
 }
 
-alias gitconfig="vim ~/.gitconfig";
+alias gitconfig="vim +'set filetype=gitconfig' ${yonienv}/gitconfig";
 # {
 #     if [ -e /usr/bin/gvim ] ; then
 #         g ~/.gitconfig
