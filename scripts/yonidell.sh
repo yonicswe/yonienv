@@ -598,15 +598,23 @@ alias core-broadcom-elxsdkutil-list-devices='core-broadcom-elxsdkutil list |grep
 core-broadcom-elxsdkutil-edif-sessions ()
 {
     local d=${1};
+    local num_of_devices=;
+
+    num_of_devices=$(core-broadcom-elxsdkutil list| grep PCI | wc -l);
     if [ -z $d ] ; then
         echo -e "${RED}you forgot to specify device id (use core-broadcome-elxsdkutil-list-devices)${NC}";
         echo -e "${RED}usage : core-broadcom-elxsdkutil-edif-sessions <#>"
-        echo -e "${RED}using device id 0${NC}";
-        d=0;
+        echo -e "${RED}show all devices ${num_of_devices}${NC}";
+        for ((d=0 ; d < ${num_of_devices} ; d++)) ; do
+            echo -e "${BLUE}core-broadcom-elxsdkutil edif-sessions -d $d${NC}";
+            core-broadcom-elxsdkutil edif-sessions -d $d
+        done;
+        return 0;
     fi;
 
     echo -e "${BLUE}core-broadcom-elxsdkutil edif-sessions -d $d${NC}";
     core-broadcom-elxsdkutil edif-sessions -d $d
+    return 0;
 }
 
 core-broadcom-elxsdkutil-edif-enable-disable ()
@@ -955,7 +963,8 @@ alias journal-grep-nt-remote-ports='echo "====> use debuc-list-ports" ; journaln
 alias journal-grep-nt-remote-tcp-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype tcp.*is_local false"'
 alias journal-grep-nt-remote-fc-ports='echo "====> use debuc-list-ports" ; journalnt | grep --color "log_port.*trtype fc.*is_local false"'
 alias journal-grep-cluster-name='journalall | grep --color -i "cyc_config.*creating cluster"'
-alias journal-grep-version='journalcycconfig | grep --color -i "package version"'
+alias journal-grep-version-package='journalcycconfig | grep --color -i "package version"'
+alias journal-grep-version-software='journalall | grep -i --color "software revision"'
 alias journal-grep-nt-kernel='journalall |grep "\[nt\]\|kernel"'
 alias journal-grep-nt-kernel-last-hour='journalall --since "1 hour ago" |grep "\[nt\]\|kernel"'
 
