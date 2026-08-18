@@ -4947,7 +4947,14 @@ delldc-xtrace-morty-datacollect ()
     echo "on the service-data folder invoke : morty_datacollect"
 }
 
-powerstore-ai-skill-devin-update ()
+devin-mcp-server-config-file ()
+{
+    echo " ~/.config/devin/mcp_config.json";
+    echo "================================";
+    cat ~/.config/devin/mcp_config.json;
+}
+
+devin-powerstore-ai-skill-update ()
 {
     # check if this is a git repo at all
     git b 2>/dev/null
