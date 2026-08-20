@@ -4281,6 +4281,19 @@ dellcdpnvmetfolder ()
     cd ${pnvmet_folder};
 }
 
+dellcdpnvmetfolderinthirdparty ()
+{
+    local pnvmet_folder_in_third_party=${cyclone_folder}/source/third_party/cyc_platform/obj_Release/third_party/PNVMeT
+    
+    if [ ! -d ${pnvmet_folder_in_third_party} ] ; then
+        echo -e "${RED}${pnvmet_folder_in_third_party} not found${NC}";
+        return -1;
+    fi;
+
+    cd ${pnvmet_folder_in_third_party};
+    return 0;
+}
+
 complete -W "$(find -maxdepth 1 -type f -name "*mdt-*")" dellcdmdt;
 dellcdmdt ()
 {
