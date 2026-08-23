@@ -4960,6 +4960,13 @@ delldc-xtrace-morty-datacollect ()
     echo "on the service-data folder invoke : morty_datacollect"
 }
 
+devin-config-file ()
+{
+    echo " ~/.config/devin/config.json";
+    echo "================================";
+    cat ~/.config/devin/config.json;
+}
+
 devin-mcp-server-config-file ()
 {
     echo " ~/.config/devin/mcp_config.json";
