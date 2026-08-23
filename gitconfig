@@ -315,7 +315,7 @@
 
 # ───────h──────────────────────────────────────────────────────────────────────
 #   h = log -n1 --pretty=oneline
-    hhh = ! git ll -1 $(git bb)
+    hhh = ! git ll -1 origin/$(git bb)
     hh = "!f() { if [ -e .git ] ; then\
                     if [ -d .git ] ; then\
     	               if [ $( git bb ) == HEAD ] ; then\
