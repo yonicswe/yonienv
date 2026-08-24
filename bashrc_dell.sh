@@ -919,6 +919,7 @@ dellcyclone-get-build-status ()
 dellcyclonebuild ()
 {
     local build_third_party_cmd=;
+    local build_cyclone_image_cmd=;
     local repeat_last_choice=0;
     local build_choices=;
     local build_cmd=;
@@ -956,6 +957,7 @@ dellcyclonebuild ()
         echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
         echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
         echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
+        echo -e "${BLUE}build_cyclone_image_cmd${NC}=${build_cyclone_image_cmd}";
 
         ask_user_default_no "repeat your last choices ? ";
         if [ $? -eq 1 ] ; then
@@ -968,13 +970,15 @@ dellcyclonebuild ()
         prune_cmd=;
         build_cmd=;
         build_third_party_cmd=;
+        build_cyclone_image=;
 
-        build_choices=($(whiptail --checklist "cyclone build" 11 30 6\
+        build_choices=($(whiptail --checklist "cyclone build" 12 30 7\
                        prune "" off \
                        debug "" off  \
                        verbose "" off  \
                        disable-cache "" off \
                        cyc_core "" on \
+                       cyclone-image "" off \
                        third-party "" off 3>&1 1>&2 2>&3));
 
         if [[ ${build_choices[@]} =~ debug ]] ; then
@@ -1004,11 +1008,20 @@ dellcyclonebuild ()
                 prune_cmd="nice -20 make prune flavor=${flavor}";
             fi;
         fi;
+
+        if [[ ${build_choices[@]} =~ cyclone-image ]] ; then
+            build_cyclone_image_cmd="make cyclone-image flavor=${flavor}";
+
+            if [[ ${build_choices[@]} =~ prune ]] ; then
+                prune_cmd="nice -20 make prune flavor=${flavor}";
+            fi;
+        fi;
 	fi;
 
     echo -e "prune_cmd=\"${prune_cmd}\"" > ${cyclone_folder}/.build_choices_bkp;
     echo -e "build_cmd=\"${build_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp;
     echo -e "build_third_party_cmd=\"${build_third_party_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp
+    echo -e "build_cyclone_image_cmd=\"${build_cyclone_image_cmd}\"" >> ${cyclone_folder}/.build_choices_bkp
     echo "build_date=$(now)" >> ${cyclone_folder}/.build_choices_bkp;
     echo "build_branch=$(git bb)" >> ${cyclone_folder}/.build_choices_bkp;
     echo "build_pdr=${cyclone_folder}" >> ${cyclone_folder}/.build_choices_bkp;
@@ -1024,6 +1037,7 @@ dellcyclonebuild ()
             echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
             echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
             echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
+            echo -e "${BLUE}build_cyclone_image_cmd${NC}=${build_cyclone_image_cmd}";
             echo -e "\n========================================================";
             ask_user_default_yes "continue ?";
             [ $? -eq 0 ] && return 0;
@@ -1084,6 +1098,34 @@ dellcyclonebuild ()
         fi;
     fi;
 
+    if [ -n "${build_cyclone_image_cmd}" ] ; then
+        echo "===================================================";
+        echo -e "${BLUE}prune_cmd${NC}=${prune_cmd}";
+        echo -e "${BLUE}build_cmd${NC}=${build_cmd}";
+        echo -e "${BLUE}build_third_party_cmd${NC}=${build_third_party_cmd}";
+        echo -e "${BLUE}build_cyclone_image_cmd${NC}=${build_cyclone_image_cmd}";
+
+        r=1;
+        if [[  ${repeat_last_choice} == 0 ]] ; then
+            ask_user_default_no "build cyclone image ? ";
+            r=$?;
+        fi;
+
+        if [ $r -eq 1 ] ; then
+            if [[ -n "${prune_cmd}" && -z "${build_cmd}" ]] ; then
+                _dellcyclonebackupuserchoices backup;
+                echo -e "${PURPLE}=========================${NC}";
+                echo -e "${PURPLE}eval ${prune_cmd}${NC}";
+                echo -e "${PURPLE}=========================${NC}";
+                eval ${prune_cmd};
+                _dellcyclonebackupuserchoices restore;
+            fi;
+            echo -e "${PURPLE}=========================${NC}";
+            echo -e "${PURPLE}eval ${build_cyclone_image_cmd}${NC}";
+            echo -e "${PURPLE}=========================${NC}";
+            eval ${build_cyclone_image_cmd};
+        fi;
+    fi;
     echo -e "build_time=\"$(date -u -d @"$build_time" +'%-Mm %-Ss')\"" >> ${cyclone_folder}/.build_choices_bkp;
 }
 
