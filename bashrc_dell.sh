@@ -2461,6 +2461,99 @@ dellclusterinstallibid-with-autoinstall ()
     return 0;
 }
 
+_usage_dellclusterinstallimage_with_autoinstall ()
+{
+    echo "dellclusterinstallimage-with-autoinstall <image file> <cluster> [feature-flag]";
+}
+
+dellclusterinstallimage-with-autoinstall ()
+{
+    local image=${1};
+    local cluster=${2};
+    local feature_flag=;
+    local flavor=retail;
+    local autoinstall_cmd=;
+
+    if command -v autoInstall.pl >/dev/null 2>&1; then 
+        echo "use autointall from path"
+        autoinstall_cmd=autoInstall.pl;
+    elif [ -e /home/public/devutils/bin/autoInstall.pl ] ; then
+        echo "using public"
+        autoinstall_cmd=/home/public/devutils/bin/autoInstall.pl;
+    elif [ -e /net/c4shares.sspg.lab.emc.com/c4shares/auto/devutils/bin/autoInstall.pl ] ; then
+        autoinstall_cmd=/net/c4shares.sspg.lab.emc.com/c4shares/auto/devutils/bin/autoInstall.pl; 
+    else
+        echo -e "${RED}cannot find autoInstall.pl script${NC}";
+        return -1;
+    fi;
+ 
+    if [[ -z ${image} ]] ; then
+
+        if [ -z "${cyclone_folder}" ] ; then
+            echo "cyclone_folder not set ! cant backup user choices. use dellclusterruntimeenvset";
+            return -1;
+        fi;
+
+        image=$(fd --regex 'PowerStoreT-[0-9]+.*' -IH -e tgz.bin);
+        if [ -z "${image}" ] ; then
+            echo "missing image !!"
+            _usage_dellclusterinstallimage_with_autoinstall;
+            return -1;
+        fi;
+
+        echo "you did not specify image file";
+        echo "found : $image";
+        ask_user_default_no "use it ?";
+        if [ $? -eq 0 ] ; then
+           return 0;
+        fi;
+        image=$(readlink -f ${image});
+    fi;
+
+    if [ -z "${cluster}" ] ; then 
+        cluster=$(_dellclusterget);
+        if [ -z ${cluster} ] ; then
+            echo "${FUNCNAME} <cluster>"; 
+            return -1;
+        fi;
+    fi;
+
+    ask_user_default_no "flavor is debug ?"
+    if [ $? -eq 1 ] ; then
+        flavor=debug;
+    fi;
+
+    ask_user_default_no "would you like a feature flag ? ";
+    if [ $? -eq 0 ] ; then
+        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor ${flavor} -image ${image} ");
+    else
+        # read -p "enter feature : " feature_flag;
+        feature_flag=$(dellcyclonefeatureflaglist);
+        if [[ $? -ne 0 ]] ; then
+            echo "CYC_CONFIG not set. use dellclusterruntimeenvset <cluster>";
+            return;
+        fi;
+        autoinstall_cmd=$(echo -e "${autoinstall_cmd} -swarm ${cluster} -type san -flavor ${flavor} -image ${image} -feature ${feature_flag}");
+    fi;
+
+    ask_user_default_no "would you like a persona flag ? ";
+    if [ $? -eq 1 ] ; then
+        autoinstall_cmd=$(echo -e "${autoinstall_cmd} --persona hydra");
+    fi;
+    
+    echo ${autoinstall_cmd};
+
+    ask_user_default_no "continue ?";
+    if [ $? -eq 0 ] ; then
+        echo "Bye..";
+        return -1;
+    fi;
+
+    eval ${autoinstall_cmd};
+    
+    return 0;
+}
+
 dellclusterinstallfeatureflag ()
 {
     local feature=${1};
