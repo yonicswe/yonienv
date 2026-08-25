@@ -970,7 +970,7 @@ dellcyclonebuild ()
         prune_cmd=;
         build_cmd=;
         build_third_party_cmd=;
-        build_cyclone_image=;
+        build_cyclone_image_cmd=;
 
         build_choices=($(whiptail --checklist "cyclone build" 12 30 7\
                        prune "" off \
