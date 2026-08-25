@@ -4018,9 +4018,9 @@ dellclusterinfo ()
     _add_cluster_to_list ${cluster};
 
     print_underline_size "_" 80	 
-    echo "/home/public/devutils/bin/swarm -ping ${cluster}";
+    echo "/home/public/devutils/bin/swarm -ping ${cluster} --showallips";
     print_underline_size "_" 80	 
-    /home/public/devutils/bin/swarm -ping ${cluster};
+    /home/public/devutils/bin/swarm -ping ${cluster} --showallips;
     print_underline_size "_" 80	 
     echo "/home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster}";
     /home/public/scripts/xpool_trident/prd/xpool list -f -a -c ${cluster};
