@@ -553,6 +553,8 @@ _dellpdr_gitsmup ()
     local linux=0;
     local third_party=0;
     local -a build_choices=();
+    local pdr_branch=;
+    local -a pdr_submodules=();
 
     ask_user_default_no "are you in a pdr ? ";
     if [ $? -eq 0 ] ; then
@@ -560,8 +562,25 @@ _dellpdr_gitsmup ()
         return;
     fi;
 
-    ask_user_default_no "reset the pdr before we start ? ";
-    [ $? -eq 1 ] && dellpdr-reset;
+    pdr_branch=$(git bb);
+    pdr_submodules=( $(git lnameonly -1 | grep source | sed 's/.*source/source/g') );
+    
+    echo "${pdr_branch}";
+    for s in ${pdr_submodules[@]} ; do
+        echo "   +-- ${s}";
+    done;
+
+    #ask_user_default_no "reset the pdr before we start ? ";
+    #[ $? -eq 1 ] && dellpdr-reset;
+
+    ask_user_default_yes "update the listed submodules ?";
+    if [ $? -eq 1 ] ; then
+        for s in ${pdr_submodules[@]} ; do
+            echo "git smupdate ${s}";
+            git smupdate ${s};
+        done;
+        return 0;
+    fi;
 
     #--------------------------------------
     #            ask user
@@ -571,6 +590,10 @@ _dellpdr_gitsmup ()
                    cyc_core "" on  \
                    third_party "" off  \
                    linux "" off 3>&1 1>&2 2>&3));
+    if [ $? -eq 1 ] ; then
+        echo "cancelled !!";
+        return 0;
+    fi;
 
     if [[ ${build_choices[@]} =~ cyc_core ]] ; then
         cyc_core=1;
@@ -664,10 +687,33 @@ _dellpdr_git_sync_submodules ()
         return;
     fi;
 
-    ask_user_default_no "reset the pdr before we start ? ";
-    [ $? -eq 1 ] && dellpdr-reset;
 
     pdr_branch=$(git bb);
+    pdr_submodules=( $(git lnameonly -1 | grep source | sed 's/.*source/source/g') );
+    
+    #--------------------------------------
+    #  ask user to update only
+    #  submodule that this pdr include
+    #--------------------------------------
+    echo "${pdr_branch}";
+    for s in ${pdr_submodules[@]} ; do
+        echo "   +-- ${s}";
+    done;
+
+    ask_user_default_yes "checkout ${pdr_branch} in the listed submodules ?";
+    if [ $? -eq 1 ] ; then
+        for m in ${pdr_submodules[@]} ; do
+            cd ${m};
+            echo -e "${YELLOW}git checkout ${pdr_branch}${NC}";
+            if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
+                echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
+                echo -e "${RED}you might need to git pull it${NC}";
+            fi;
+            git checkout ${pdr_branch};
+            cd - 1>/dev/null;
+        done;
+        return 0;
+    fi;
 
     ask_user_default_no "sync all submodules ?";
     if [ $? -eq 1 ] ; then
@@ -704,6 +750,9 @@ _dellpdr_git_sync_submodules ()
     read -p "[c]heckout or create new [B]ranch ? [c|B]" ans;
     if [[  ${ans} == c ]] ; then
         checkout_cmd=c;
+    else
+        ask_user_default_no "align submodules to match pdr before we start ? ";
+        [ $? -eq 1 ] && dellpdr-reset;
     fi;
 
     ask_user_default_no "are you sure ?";
