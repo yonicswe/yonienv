@@ -1847,6 +1847,7 @@ dellclusterruntimeenvset ()
     export CYC_CONFIG=${cluster_config_file};
     cyclone_folder=$(pwd -P);
     export YONI_CLUSTER=${cluster};
+    export CYC_FOLDER=${cyclone_folder};
     _dellclusterruntimeenvvalidate;
     if [[ $? -ne 0 ]] ; then
         ask_user_default_no "set it anyways ? ";
@@ -1855,6 +1856,7 @@ dellclusterruntimeenvset ()
             export CYC_CONFIG=;
             cyclone_folder=;
             export YONI_CLUSTER=;
+            export CYC_FOLDER=;
             return 1;
         fi;
     fi;
@@ -4157,20 +4159,35 @@ dellcdbroadcommakefiles ()
 
 dellbroadcomsdk ()
 {
-    local ocs_archive="source/third_party/binaries/key_val/ocs/ocs_sdk_pkg_14.4.792.0.tgz"
+    local ocs_archive=;
     if [ -z "${cyclone_folder}" ] || ! [ -d ${cyclone_folder} ] ; then
         return -1;
     fi;
 
-    ocs_archive=${cyclone_folder}/${ocs_archive};
+    ocs_archive=$(\ls ${cyclone_folder}/source/third_party/binaries/key_val/ocs/ocs_sdk_* 2>/dev/null);
 
-    if ! [ -e ${ocs_archive} ] ; then
+    if [ -z "${ocs_archive}" ] ; then
         return -1;
     fi;
 
-    echo "${ocs_archive}";
-    export OCS_ARCHIVE=${OCS_ARCHIVE};
+    echo "OCS_ARCHIVE ${ocs_archive}";
+    export OCS_ARCHIVE=${ocs_archive};
     return 0;
+}
+
+dellbroadcomsdkappypatches ()
+{
+    local output_dir=./ocs_patched;
+    local cmakelist_path=${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS/CMakeLists.txt;
+    local patch_dir=${cyclone_folder}/source/third_party/cyc_platform/src/third_party/BRCM_OCS/patches;
+
+    dellbroadcomsdk;
+    if [ $? -ne 0 ] ; then
+        echo "sdk not found";
+        return -1;
+    fi;
+
+    ${yonienv}/scripts/ocs_apply_patches.sh ${output_dir} ${patch_dir} ${cmakelist_path} ${OCS_ARCHIVE}; 
 }
 
 dellbroadcombuilddriversourcetree ()                                                                                                                                                                                                  
