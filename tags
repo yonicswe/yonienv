@@ -55,6 +55,7 @@ _trident_cluster_list_nodes_init	bashrc_dell.sh	/^_trident_cluster_list_nodes_in
 _upstream	upstream_complete_dir.sh	/^_upstream ()$/;"	f
 _usage_dellclusterinstallibid	bashrc_dell.sh	/^_usage_dellclusterinstallibid ()$/;"	f
 _usage_dellclusterinstallibid_with_autoinstall	bashrc_dell.sh	/^_usage_dellclusterinstallibid_with_autoinstall ()$/;"	f
+_usage_dellclusterinstallimage_with_autoinstall	bashrc_dell.sh	/^_usage_dellclusterinstallimage_with_autoinstall ()$/;"	f
 _verify_cluster_config	bashrc_dell.sh	/^_verify_cluster_config ()$/;"	f
 _weather	bashrc_misc.sh	/^_weather(){ curl -s "wttr.in?m1" ;}$/;"	f
 _yonienv	folder_name_complete.sh	/^_yonienv ()$/;"	f
@@ -120,7 +121,10 @@ define	bashrc_fs.sh	/^define() { $/;"	f
 delete_executables	bashrc_fs.sh	/^delete_executables ()$/;"	f
 deletecorefiles	bashrc_fs.sh	/^deletecorefiles()$/;"	f
 deletefast	bashrc_fs.sh	/^deletefast ()$/;"	f
+dellbroadcombuilddriversourcetree	bashrc_dell.sh	/^dellbroadcombuilddriversourcetree ()                                                                                                                                                                                                  $/;"	f
 dellbroadcomdeletesources	bashrc_dell.sh	/^dellbroadcomdeletesources ()$/;"	f
+dellbroadcomsdk	bashrc_dell.sh	/^dellbroadcomsdk ()$/;"	f
+dellbroadcomsdkappypatches	bashrc_dell.sh	/^dellbroadcomsdkappypatches ()$/;"	f
 dellcdbroadcommakefiles	bashrc_dell.sh	/^dellcdbroadcommakefiles ()$/;"	f
 dellcdbroadcomsources	bashrc_dell.sh	/^dellcdbroadcomsources ()$/;"	f
 dellcdclusterconfigs	bashrc_dell.sh	/^dellcdclusterconfigs ()$/;"	f
@@ -131,6 +135,7 @@ dellcdkernelmodules	bashrc_dell.sh	/^dellcdkernelmodules ()$/;"	f
 dellcdkernelobjects	bashrc_dell.sh	/^dellcdkernelobjects ()$/;"	f
 dellcdmdt	bashrc_dell.sh	/^dellcdmdt ()$/;"	f
 dellcdpnvmetfolder	bashrc_dell.sh	/^dellcdpnvmetfolder ()$/;"	f
+dellcdpnvmetfolderinthirdparty	bashrc_dell.sh	/^dellcdpnvmetfolderinthirdparty ()$/;"	f
 dellcdqlasources	bashrc_dell.sh	/^dellcdqlasources ()$/;"	f
 dellcdthirdparty	bashrc_dell.sh	/^dellcdthirdparty ()$/;"	f
 dellcdthirdpartyobjects	bashrc_dell.sh	/^dellcdthirdpartyobjects ()$/;"	f
