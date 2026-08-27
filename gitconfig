@@ -213,7 +213,7 @@
 #       fi;                                  \
 #   }; f"
  
-    cherrypickfrombranch = !git_cherrypick.sh
+    cherrypickfrombranch = !git-cherrypick.sh
     cherrypickstatus = "!f(){ \
 		echo "if in the middle of a sequence cat the sequencer/todo file"; \
 		echo "if in pdr submodule then try this e.g. for nt"; \
@@ -316,6 +316,8 @@
 # ───────h──────────────────────────────────────────────────────────────────────
 #   h = log -n1 --pretty=oneline
     hhh = ! git ll -1 origin/$(git bb)
+    hhhpubintpl = ! git ll -1 origin/pub/int-pl
+    hhhpnvmetmain = ! git ll -1 origin/pnvmet/main
     hh = "!f() { if [ -e .git ] ; then\
                     if [ -d .git ] ; then\
     	               if [ $( git bb ) == HEAD ] ; then\
