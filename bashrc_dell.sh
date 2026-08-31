@@ -8,6 +8,8 @@ user_to_devvm["yonic"]="10.227.209.251"
 user_to_devvm["yonic2"]="10.227.227.201"
 user_to_devvm["chuck"]="10.244.232.75"
 user_to_devvm["elad"]="drmcyc-s-drmcyc-grupie.cec.delllabs.net"
+user_to_devvm["jim"]="10.244.234.33"
+user_to_devvm["yoni-hop"]="10.244.229.90"
 #complete -W "amit elad irit dord yoni1 yoni2" ssh2devvm ssh2devvmsetup
 complete -W "$(echo ${!user_to_devvm[@]})" ssh2devvm ssh2devvmsetup
 
