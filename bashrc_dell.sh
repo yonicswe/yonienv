@@ -5210,6 +5210,13 @@ devin-powerstore-ai-skill-update ()
     ./sync_global_workflows.sh -y
 }
 
+dellgit-sshkey ()
+{
+    ssh-keygen -o -t rsa -C "ssh@eos2git.cec.lab.emc.com"
+    cat ~/.ssh/id_rsa.pub
+    echo "register this key with github"
+}
+
 alias yonidellsshkeyset='ssh-copy-id -i ~/.ssh/id_rsa.pub y_cohen@10.55.226.121'
 alias yyy='yonidellsshkeyset'
 
