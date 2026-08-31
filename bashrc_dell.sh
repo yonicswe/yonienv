@@ -217,7 +217,7 @@ dellcyclonedevelreset ()
     git c . 
 }
 
-dellcyclonechekcout ()
+dellcyclonecheckcout ()
 {
     local pdr_folder_name=${1:-cyclone};
     local branch=${2:-pub/int-pl};
@@ -5163,6 +5163,11 @@ delldc-xtrace-morty-datacollect ()
     echo "on the service-data folder invoke : morty_datacollect"
 }
 
+devin-install ()
+{
+    curl -fsSL  https://cli.devin.ai/install.sh | bash
+}
+
 devin-config-file ()
 {
     echo " ~/.config/devin/config.json";
@@ -5177,7 +5182,7 @@ devin-mcp-server-config-file ()
     cat ~/.config/devin/mcp_config.json;
 }
 
-devin-powerstore-ai-skill-update ()
+devin-powerstoreai-skill-update ()
 {
     # check if this is a git repo at all
     git b 2>/dev/null
@@ -5208,6 +5213,37 @@ devin-powerstore-ai-skill-update ()
     ./helpers/configure-global-rules.sh --setup
     source ~/.bashrc
     ./sync_global_workflows.sh -y
+}
+
+devin-powerstoreai-install ()
+{
+    echo "git clone git@eos2git.cec.lab.emc.com:cyclone/PowerStore-AI.git"
+    print_underline_size "_" 80;
+
+    ask_user_default_yes "continue ? ";
+    if [ $? -eq 0 ] ; then return ; fi;
+    git clone git@eos2git.cec.lab.emc.com:cyclone/PowerStore-AI.git;
+    echo;
+
+    echo "about to : "
+    echo "(1) cd PowerStore-AI"
+    echo "(2) ./helpers/configure-global-rules.sh --setup"
+
+    ask_user_default_yes "continue ? ";
+    if [ $? -eq 0 ] ; then return ; fi;
+
+    echo "cd PowerStore-AI" 
+    print_underline_size "_" 80;
+    cd PowerStore-AI
+
+    echo "./helpers/configure-global-rules.sh --setup";
+    print_underline_size "_" 80;
+    ./helpers/configure-global-rules.sh --setup
+
+    echo "now do : "
+    echo "(1) source ~/.bashrc";
+    echo "(2) ./sync_global_workflows.sh -y";
+
 }
 
 dellgit-sshkey ()
