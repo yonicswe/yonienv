@@ -201,7 +201,26 @@ create_alias_for_host ()
     alias ${alias_name}ping="ping ${host_name}"
 }
 
-alias dellclonepnvmet='git clone --branch pnvmet/v3.5-medusa --single-branch git@eos2git.cec.lab.emc.com:cyclone/linux.git pnvmet'
+dellpnvmetclone ()
+{
+    local start_time=$SECONDS
+    git clone --branch pnvmet/main --single-branch git@eos2git.cec.lab.emc.com:cyclone/linux.git pnvmet
+    local clone_rc=$?
+    local elapsed=$((SECONDS - start_time))
+    echo "git clone took ${elapsed} seconds"
+    if [ $clone_rc -ne 0 ]; then
+        echo "git clone failed"
+        return $clone_rc
+    fi
+    cd pnvmet || return
+    git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    ask_user_default_no "fetch now ? it might take a while"
+    if [ $? -eq 0 ]; then
+        return
+    fi
+    git fetch origin --prune
+}
+
 dellcyclonedevelreset ()
 {
     # are you in cyclone folder ? 
