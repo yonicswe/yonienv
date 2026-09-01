@@ -1,0 +1,36 @@
+{
+  "shell": {
+    "setup_complete": true
+  },
+  "theme_mode": "dark",
+  "permissions": {
+    "allow": [
+      "Exec(git)",
+      "Exec(curl -s)",
+      "Exec(grep)",
+      "Exec(find)",
+      "Exec(cat)",
+      "Exec(ls)",
+      "Exec(head)",
+      "Exec(python3)",
+      "Exec(wc)",
+      "Write(skills/**)",
+      "Write(/disks/jirasupportmaterials/**)",
+      "Read(**)",
+      "Write(/dev/null)",
+      "Write(~/.codeium/windsurf/skills/triage-platform-fe/knowledge_base/case-studies)",
+      "Write(~/.codeium/windsurf/skills/triage-platform-fe/knowledge_base)",
+      "Write(/tmp)",
+      "mcp__confluence-cec__*",
+      "mcp__github-eos2git__*",
+      "Fetch(domain:*)",
+      "Exec(./github-helper.sh get-pr)",
+      "Exec(/home/cyc/.codeium/windsurf/skills/github-interaction/scripts/github-helper.sh get-pr)",
+      "Exec(xargs grep)"
+    ]
+  },
+  "agent": {
+    "model": "claude-sonnet-4-6"
+  },
+  "version": 1
+}

@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "confluence-cec": {
+      "disabled": false,
+      "headers": {
+        "X-Atlassian-Confluence-Personal-Token": "<token>"
+      },
+      "url": "https://mcp.cec.delllabs.net/confluence/cec"
+    },
+    "jira-cec": {
+      "headers": {
+        "X-Atlassian-Jira-Personal-Token": "<token>",
+        "X-Atlassian-Jira-Url": "https://jira.cec.lab.emc.com",
+        "x-tool-instance": "jira-cec",
+        "x-tool-name": "JiraMCP"
+      },
+      "url": "https://mcp.cec.delllabs.net/atlassian"
+    },
+    "github-eos2git": {
+      "url": "https://mcp.cec.delllabs.net/github/isg",
+      "transport": "http",
+      "headers": {
+              "Authorization": "Bearer <token>"
+      }
+    }
+  }
+}
