@@ -985,6 +985,7 @@ dellcyclone-get-build-status ()
 {
     fd -l -I -t f ".*xtremapp$";
     fd -l -IH -t f -e ko nvmet-power source/third_party/;
+    fd -l -IH -t f --regex 'PowerStoreT-[0-9]+.*' -e tgz.bin;
 }
 
 dellcyclonebuild ()
@@ -1177,7 +1178,7 @@ dellcyclonebuild ()
         echo -e "${BLUE}build_cyclone_image_cmd${NC}=${build_cyclone_image_cmd}";
 
         r=1;
-        if [[  ${repeat_last_choice} == 0 ]] ; then
+        if [[  ${repeat_last_choice} == 0 ]] && [[ -z "${build_cmd}" ]] ; then
             ask_user_default_no "build cyclone image ? ";
             r=$?;
         fi;
@@ -1194,7 +1195,13 @@ dellcyclonebuild ()
             echo -e "${PURPLE}=========================${NC}";
             echo -e "${PURPLE}eval ${build_cyclone_image_cmd}${NC}";
             echo -e "${PURPLE}=========================${NC}";
+
+            start_time=$SECONDS;
             eval ${build_cyclone_image_cmd};
+            end_time=$SECONDS;
+            build_time=$(( ${end_time} - ${start_time} ))
+            echo "build image took $(date -u -d @"$build_time" +'%-Mm %-Ss')";
+            dellcyclone-get-build-status;
         fi;
     fi;
     echo -e "build_time=\"$(date -u -d @"$build_time" +'%-Mm %-Ss')\"" >> ${cyclone_folder}/.build_choices_bkp;
