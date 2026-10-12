@@ -4,6 +4,7 @@ unalias -a;
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 unset SSH_ASKPASS
 
+# yelp debug print in bash
 yelp ()
 {
     local file=${BASH_SOURCE[1]##*/} func=${FUNCNAME[1]} line=${BASH_LINENO[0]};
