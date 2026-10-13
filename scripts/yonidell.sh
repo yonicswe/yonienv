@@ -667,6 +667,49 @@ dellnvme-list-pci-addressses ()
     ls -l /sys/bus/pci/drivers/qla2xxx
 }
 
+dellnvme-list-controllers ()
+{
+    nvme  list-subsys| sed -n '/+-/p' | cut -d ' ' -f 3|while read c ; do 
+        cntlid_line=$(nvme id-ctrl /dev/$c|grep cntlid);
+        cntlid=$(echo $cntlid_line | awk -F ":" '{print $2}')
+        cntlid=$(($cntlid))
+        echo "$c $cntlid_line $cntlid"  ; 
+    done |column -t | sed 's/://g' | sort -V
+}
+alias dellnvme-list-controllers-by-cntlid='dellnvme-list-controllers | sort -k4,4n'
+
+_dellnvme-list-controllers-by-node ()
+{
+   local node_name="$1"
+   local pattern="$2"
+   echo "$node_name"
+   nvme list-subsys | awk -v pat="$pattern" '
+   $0 ~ pat {
+       match($0, /host_traddr=[^ ]+/)
+       host = substr($0, RSTART, RLENGTH)
+       line = $0
+       sub(/^.*\+- /, "", line)
+       sub(/ host_traddr=.*/, "", line)
+       controllers[host] = controllers[host] "          +-- " line "\n"
+       if (!seen[host]++)
+           hosts[++n] = host
+   }
+   END {
+       for (i = 1; i <= n; i++) {
+           host = hosts[i]
+           print "  +--" host
+           printf "%s", controllers[host]
+       }
+   }'
+   echo
+}
+
+dellnvme-list-controllers-by-node ()
+{
+    _dellnvme-list-controllers-by-node "node-a" "58ccf090"
+    _dellnvme-list-controllers-by-node "node-b" "58ccf098"
+}
+
 alias bsc-fc-showtable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
 alias bsc-fc-showtable-nvme='bsc-fc-showtable | grep "NVME\|Slot Port\|---"'
 alias bsc-fc-showtable-scsi='bsc-fc-showtable | grep "SCSI\|Slot Port\|---"'
