@@ -1380,6 +1380,7 @@ debuc-command ()
 alias debuc-data-collect='debuc-command "log data collect"';
 
 alias debuc-log-version='debuc-command "log version"';
+alias debuc-log-get='debuc-command "log get"';
 alias debuc-log-auth-enable='debuc-command "log auth enable"';
 alias debuc-log-auth-disable='debuc-command "log auth disable"';
 
@@ -1389,6 +1390,8 @@ alias debuc-log-page-enable='debuc-command "log logpage enable"';
 alias debuc-log-page-disable='debuc-command "log logpage disable"';
 alias debuc-log-stat-enable='debuc-command "log stat 10"';
 alias debuc-log-stat-disable='debuc-command "log stat 0"';
+alias debuc-log-cns-enable='debuc-command "log cns enable"';
+alias debuc-log-cns-disable='debuc-command "log cns disable"';
 alias debuc-log-stat='debuc-log-stat-enable;sleep 3 ; debuc-log-stat-disable';
 
 alias debuc-host-add='debuc-command "add hostgroup"';
