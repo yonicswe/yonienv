@@ -214,6 +214,7 @@
 #   }; f"
  
     cherrypickfrombranch = !git-cherrypick.sh
+    herrypickfrombranchremote = !git-cherrypickfromremotebranch.sh
     cherrypickstatus = "!f(){ \
 		echo "if in the middle of a sequence cat the sequencer/todo file"; \
 		echo "if in pdr submodule then try this e.g. for nt"; \
