@@ -2600,9 +2600,11 @@ dellclusterinstallimage-with-autoinstall ()
         fi;
     fi;
 
-    ask_user_default_no "flavor is debug ?"
-    if [ $? -eq 1 ] ; then
-        flavor=debug;
+    if [[ $(echo ${image} | grep retail | wc -l) == 0 ]] ; then
+        ask_user_default_no "flavor is debug ?"
+        if [ $? -eq 1 ] ; then
+            flavor=debug;
+        fi;
     fi;
 
     ask_user_default_no "would you like a feature flag ? ";
