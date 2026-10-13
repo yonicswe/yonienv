@@ -722,19 +722,21 @@ _dellpdr_git_sync_submodules ()
         echo "   +-- ${s}";
     done;
 
-    ask_user_default_yes "checkout ${pdr_branch} in the listed submodules ?";
-    if [ $? -eq 1 ] ; then
-        for m in ${pdr_submodules[@]} ; do
-            cd ${m};
-            echo -e "${YELLOW}git checkout ${pdr_branch}${NC}";
-            if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
-                echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
-                echo -e "${RED}you might need to git pull it${NC}";
-            fi;
-            git checkout ${pdr_branch};
-            cd - 1>/dev/null;
-        done;
-        return 0;
+    if [ ${#pdr_submodules[@]} -ne 0 ] ; then
+        ask_user_default_yes "checkout ${pdr_branch} in the listed submodules ?";
+        if [ $? -eq 1 ] ; then
+            for m in ${pdr_submodules[@]} ; do
+                cd ${m};
+                echo -e "${YELLOW}git checkout ${pdr_branch}${NC}";
+                if [[ $(git b | grep ${pdr_branch} | wc -l) -gt 0 ]] ; then
+                    echo -e "${REDBLINK}branch '${pdr_branch}' already exist${NC}";
+                    echo -e "${RED}you might need to git pull it${NC}";
+                fi;
+                git checkout ${pdr_branch};
+                cd - 1>/dev/null;
+            done;
+            return 0;
+        fi;
     fi;
 
     ask_user_default_no "sync all submodules ?";
