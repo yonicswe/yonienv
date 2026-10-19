@@ -595,13 +595,15 @@ _dellpdr_gitsmup ()
     #ask_user_default_no "reset the pdr before we start ? ";
     #[ $? -eq 1 ] && dellpdr-reset;
 
-    ask_user_default_yes "update the listed submodules ?";
-    if [ $? -eq 1 ] ; then
-        for s in ${pdr_submodules[@]} ; do
-            echo "git smupdate ${s}";
-            git smupdate ${s};
-        done;
-        return 0;
+    if [ ${#pdr_submodules[@]} -ne 0 ] ; then
+        ask_user_default_yes "update the listed submodules ?";
+        if [ $? -eq 1 ] ; then
+            for s in ${pdr_submodules[@]} ; do
+                echo "git smupdate ${s}";
+                git smupdate ${s};
+            done;
+            return 0;
+        fi;
     fi;
 
     #--------------------------------------
