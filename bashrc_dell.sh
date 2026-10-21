@@ -874,6 +874,26 @@ _dellpdr_show_branches ()
 
 }
 
+alias dellpdr-git-status='_dellpdr_git_status'
+_dellpdr_git_status ()
+{
+    submodules=(source/nt-nvmeof-frontend source/cyc_core source/third_party)
+
+    for sm in ${submodules[@]} ; do
+        st=$(git submodule status "$sm")
+
+        expected=$(git ls-tree HEAD "$sm" | awk '{print $3}')
+        actual=$(git -C "$sm" rev-parse HEAD 2>/dev/null)
+
+        case "${st:0:1}" in
+            " ") echo -e "${GREEN}\t$sm${NC}" ;;
+            "+") echo -e "${RED}\t$sm${NC}($actual -> should be $expected)" ;;
+            "-") echo "UNINITIALIZED $sm" ;;
+            "U") echo "CONFLICT $sm" ;;
+        esac
+    done
+}
+
 dellcyclonegitdeinit ()
 {
     git sm deinit -f source/bedrock
