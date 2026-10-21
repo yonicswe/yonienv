@@ -384,19 +384,110 @@ subtitle-series-sort-directories ()
 
 }
 
-unzip_all_files ()
-{
-    zip_files=$(ls *zip | wc -l);
-    while (( $zip_files != 0 )) ; do
+#unzip_all_files ()
+#{
+    #zip_files=$(ls *zip | wc -l);
+    #while (( $zip_files != 0 )) ; do
 
-        echo "zip_files : $zip_files";
-        for f in *zip ; do
-            7za x $f;
-            # rm -f $f;
-        done;
+        #echo "zip_files : $zip_files";
+        #for f in *zip ; do
+            #7za x $f;
+            ## rm -f $f;
+        #done;
 
-        zip_files=$(ls *zip | wc -l);
-    done;
+        #zip_files=$(ls *zip | wc -l);
+    #done;
+#}
+
+have() {
+    command -v "$1" >/dev/null 2>&1
+}
+# Find the best extraction command for a zip file
+zip_tool() {
+    if have unzip; then
+        echo unzip
+    elif have 7z; then
+        echo 7z
+    elif have bsdtar; then
+        echo bsdtar
+    else
+        return 1
+    fi
+}
+# Extract a single archive
+extract() {
+    local archive="$1"
+    if [[ ! -f "$archive" ]]; then
+        echo "File not found: $archive"
+        return 1
+    fi
+    local type
+    local outdir
+    type=$(file -b "$archive")
+    outdir="${archive##*/}.extracted"
+    mkdir -p "$outdir"
+    echo "Archive : $archive"
+    echo "Type    : $type"
+    echo "Output  : $outdir"
+    if [[ "$type" =~ Zip\ archive ]]; then
+        case "$(zip_tool)" in
+            unzip)
+                unzip -q "$archive" -d "$outdir"
+                ;;
+            7z)
+                7z x -y "$archive" "-o$outdir"
+                ;;
+            bsdtar)
+                bsdtar -xf "$archive" -C "$outdir"
+                ;;
+            *)
+                echo "No zip extractor found"
+                return 1
+                ;;
+        esac
+    elif [[ "$type" =~ 7-zip ]]; then
+        have 7z || { echo "7z not installed"; return 1; }
+        7z x -y "$archive" "-o$outdir"
+    elif [[ "$type" =~ tar\ archive ]]; then
+        tar -xf "$archive" -C "$outdir"
+    elif [[ "$type" =~ gzip ]]; then
+        if tar -tzf "$archive" >/dev/null 2>&1; then
+            tar -xzf "$archive" -C "$outdir"
+        elif have gunzip; then
+            cp "$archive" "$outdir/"
+            gunzip "$outdir/$(basename "$archive")"
+        fi
+    elif [[ "$type" =~ bzip2 ]]; then
+        if tar -tjf "$archive" >/dev/null 2>&1; then
+            tar -xjf "$archive" -C "$outdir"
+        elif have bunzip2; then
+            cp "$archive" "$outdir/"
+            bunzip2 "$outdir/$(basename "$archive")"
+        fi
+    elif [[ "$type" =~ XZ\ compressed ]]; then
+        if tar -tJf "$archive" >/dev/null 2>&1; then
+            tar -xJf "$archive" -C "$outdir"
+        elif have unxz; then
+            cp "$archive" "$outdir/"
+            unxz "$outdir/$(basename "$archive")"
+        fi
+    else
+        echo "Unsupported archive type"
+        return 1
+    fi
+}
+# Extract all archives in current directory
+extractall() {
+    local f
+    shopt -s nullglob
+    for f in *; do
+        [[ -f "$f" ]] || continue
+        case "$f" in
+            *.zip|*.ZIP|*.7z|*.7Z|*.tar|*.tgz|*.tar.gz|*.gz|*.bz2|*.tar.bz2|*.xz|*.tar.xz)
+                extract "$f"
+                ;;
+        esac
+    done
 }
 
 format_video_filename ()
