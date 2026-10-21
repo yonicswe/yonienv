@@ -392,7 +392,7 @@ unzip_all_files ()
         echo "zip_files : $zip_files";
         for f in *zip ; do
             7za x $f;
-            rm -f $f;
+            # rm -f $f;
         done;
 
         zip_files=$(ls *zip | wc -l);
