@@ -1388,6 +1388,8 @@ alias debuc-log-commands-enable='debuc-command "log commands enable"';
 alias debuc-log-commands-disable='debuc-command "log commands disable"';
 alias debuc-log-page-enable='debuc-command "log logpage enable"';
 alias debuc-log-page-disable='debuc-command "log logpage disable"';
+alias debuc-log-reservation-enable='debuc-command "log reservation enable"';
+alias debuc-log-reservation-disable='debuc-command "log reservation disable"';
 alias debuc-log-stat-enable='debuc-command "log stat 10"';
 alias debuc-log-stat-disable='debuc-command "log stat 0"';
 alias debuc-log-cns-enable='debuc-command "log cns enable"';
@@ -1404,6 +1406,7 @@ alias debuc-qos-delete-bucket-0='debuc-command "del qos bucket idx=0"'
 
 alias debuc-list-hosts='debuc-command "log hosts"'
 alias debuc-list-host-groups='debuc-command "log host groups"'
+alias debuc-list-ana-groups='debuc-command "log ana groups"'
 alias debuc-list-ports='debuc-command "log ports"'
 alias debuc-list-devices='debuc-command "log devices"';
 alias debuc-list-controllers='debuc-command "log controllers all"';
@@ -1417,6 +1420,7 @@ alias debuc-nullio-read-zero-disable='debuc-command "nullio read zero false"';
 
 alias bsclist-hosts=debuc-list-hosts
 alias bsclist-host-groups=debuc-list-host-groups
+alias bsclist-ana-groups=debuc-list-ana-groups
 alias bsclist-ports=debuc-list-ports
 alias bsclist-devices=debuc-list-devices
 alias bsclist-controllers=debuc-list-controllers
