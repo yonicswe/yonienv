@@ -673,7 +673,15 @@ dellnvme-list-controllers ()
         cntlid_line=$(nvme id-ctrl /dev/$c|grep cntlid);
         cntlid=$(echo $cntlid_line | awk -F ":" '{print $2}')
         cntlid=$(($cntlid))
-        echo "$c $cntlid_line $cntlid"  ; 
+        ana=$(nvme ana-log "/dev/$c" 2>/dev/null)
+        ngrps=$(echo "$ana" | awk -F: '/ngrps/ {gsub(/ /,"",$2); print $2}')
+        if [[ -n "$ngrps" && "$ngrps" -ne 0 ]]; then
+            grpid=$(echo "$ana" | awk -F: '/grpid/ {gsub(/ /,"",$2); print $2; exit}')
+            state=$(echo "$ana" | awk -F: '/state/ {gsub(/^[ \t]+/,"",$2); print $2; exit}')
+            echo "$c $cntlid_line $cntlid $grpid $state"  ;
+        else
+            echo "$c $cntlid_line $cntlid"  ;
+        fi
     done |column -t | sed 's/://g' | sort -V
 }
 alias dellnvme-list-controllers-by-cntlid='dellnvme-list-controllers | sort -k4,4n'
@@ -708,6 +716,22 @@ dellnvme-list-controllers-by-node ()
 {
     _dellnvme-list-controllers-by-node "node-a" "58ccf090"
     _dellnvme-list-controllers-by-node "node-b" "58ccf098"
+}
+
+dellnvme-list-namespaces ()
+{
+    declare -A seen
+    for dev in /dev/nvme*n*; do
+        out=$(nvme id-ns "$dev" 2>/dev/null) || continue
+        nsid=$(awk '/^NVME Identify Namespace/ {gsub(":", "", $4); print $4}' <<< "$out")
+        ana=$(awk '/^anagrpid/ {print $2}' <<< "$out")
+        nguid=$(awk '/^nguid/ {print $3}' <<< "$out")
+        [[ -z "$nguid" ]] && continue
+        if [[ -z "${seen[$nguid]}" ]]; then
+            seen[$nguid]=1
+            printf "NSID=%-4s ANA_GRPID=%-2s NGUID=%s\n" "$nsid" "$ana" "$nguid"
+        fi
+    done | sort -n -k1.6
 }
 
 alias bsc-fc-showtable='/cyc_host/cyc_bin/cyc_wwn_initializer -d'
