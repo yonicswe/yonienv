@@ -2392,12 +2392,28 @@ _getlastusedcluster ()
     fi;
 
     if [ -z "${cluster}" ] ; then 
-        cluster="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --border=rounded --height='20' | awk -F: '{print $1}')"
+        selection="$(printf "%s\n" ${trident_cluster_list[@]} | fzf -0 -1 --print-query --border=rounded --height='20' | awk -F: '{print $1}')"
+
+        if [ -z "${selection}" ] ; then
+            return -1; 
+        fi;
+
+        yelp "selection : $selection"
+        query=$(head -1 <<< "${selection}");
+        selected=$(tail -1 <<< "${selection}")
+
+        yelp "query : $query"
+        yelp "selected : $selected"
+
+        if [[ "${query}" ==  "${selection}" ]] ; then
+            # user typed a new value
+            cluster="${query}";
+        else
+            # user selected an existing entry
+            cluster="${selected}";
+        fi
     fi;
 
-    if [ -z "${cluster}" ] ; then
-       return -1; 
-    fi;
 
     echo ${cluster};
     return 0;
